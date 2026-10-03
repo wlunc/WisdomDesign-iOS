@@ -35,9 +35,10 @@ struct WDTokensTests {
         _ = color.resolve(in: EnvironmentValues())
     }
 
-    @Test("渐变至少有两点")
+    @Test("渐变至少有两点，且浅深两端 stop 数量一致")
     func gradientsHaveStops() {
         #expect(WDGradient.surface.stops.count >= 2)
-        #expect(WDGradient.fillLight.stops.count >= 2)
+        #expect(WDGradient.fill.stops.count >= 2)
+        #expect(WDGradient.surface.stops.count == WDGradient.fill.stops.count)
     }
 }

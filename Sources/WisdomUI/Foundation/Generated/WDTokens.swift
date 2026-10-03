@@ -74,27 +74,20 @@ public enum WDColor {
     }
 }
 
-/// 渐变。用 stops 描述，避免把角度写死在不同平台各不相同。
+/// 渐变。stop 本身是浅深成对的动态色，所以一条令牌即可覆盖两种外观。
 public enum WDGradient {
     public static let surface = WDGradientSpec(
         angleDegrees: 135,
         stops: [
-            (color: Color(wd: 0xB0D5DF), location: 0.00),
-            (color: Color(wd: 0x7EC4CF), location: 1.00)
+            (color: Color(wdLight: 0xB0D5DF, dark: 0x123449), location: 0.00),
+            (color: Color(wdLight: 0x7EC4CF, dark: 0x0F4055), location: 1.00)
         ]
     )
-    public static let fillLight = WDGradientSpec(
+    public static let fill = WDGradientSpec(
         angleDegrees: 135,
         stops: [
-            (color: Color(wd: 0x8FCFDD), location: 0.00),
-            (color: Color(wd: 0x63BAD2), location: 1.00)
-        ]
-    )
-    public static let fillDark = WDGradientSpec(
-        angleDegrees: 135,
-        stops: [
-            (color: Color(wd: 0x1677B3), location: 0.00),
-            (color: Color(wd: 0x2A5CAA), location: 1.00)
+            (color: Color(wdLight: 0x8FCFDD, dark: 0x1677B3), location: 0.00),
+            (color: Color(wdLight: 0x63BAD2, dark: 0x2A5CAA), location: 1.00)
         ]
     )
     public static let mid = WDGradientSpec(
@@ -104,18 +97,11 @@ public enum WDGradient {
             (color: Color(wd: 0x1685A9), location: 1.00)
         ]
     )
-    public static let deep = WDGradientSpec(
+    public static let destructive = WDGradientSpec(
         angleDegrees: 135,
         stops: [
-            (color: Color(wd: 0x065279), location: 0.00),
-            (color: Color(wd: 0x1E3B7A), location: 1.00)
-        ]
-    )
-    public static let abyss = WDGradientSpec(
-        angleDegrees: 135,
-        stops: [
-            (color: Color(wd: 0x0E3A56), location: 0.00),
-            (color: Color(wd: 0x0A1D2E), location: 1.00)
+            (color: Color(wd: 0xB8564D), location: 0.00),
+            (color: Color(wd: 0xA94A42), location: 1.00)
         ]
     )
     public static let sunrise = WDGradientSpec(

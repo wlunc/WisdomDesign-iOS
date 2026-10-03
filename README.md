@@ -31,7 +31,8 @@ WDCard { ... }             // 组件（M2 起）
 ```
 
 令牌分五个命名空间：`WDColor` `WDType` `WDSpacing` `WDRadius` `WDSize`，
-另有 `WDGradient` `WDElevation` `WDMotion`。深浅色由 `Color` 自动跟随系统，不需要主题对象。
+另有 `WDGradient`（浅深成对的动态色，一条令牌覆盖两种外观）`WDElevation` `WDMotion`。
+深浅色由 `Color` 自动跟随系统，不需要主题对象。
 
 ## 令牌来源
 
