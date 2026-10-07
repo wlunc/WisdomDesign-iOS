@@ -69,7 +69,7 @@
 | ② | **SPEC R3-d**：`contracts/WDCheckbox.yaml` 的 `params[].name` **不得在 Android 改完前冻结**（Android 侧 14 行改名进度） | `WDCheckbox` 的**契约名**冻结（iOS 侧已改名为 `isChecked`，实现不受影响） | android-lead 完成改名 |
 | ③ | `contracts/*.yaml` 库未落库（M0-5） | I-2 的"`params/slots/default` 入库"一项**按本表单代替**（I-2 原文允许） | M0-5 落库后回填 |
 
-## 4. 冻结会待决清单（请逐条给结论，不要默认通过）
+## 4. 冻结会待决清单（请逐条给结论，不要默认通过）—— **逐条建议见 §5**
 
 1. §1.2 的 **8 条提案签名**是否照原样冻结？（逐件确认，尤其 `WDIconButtonVariant` 的 case 集与 `WDAvatar` 是否有直径档）
 2. `WDAvatarValue` / `WDBadgeValue` 的成员（§1.3）是否按提案冻结？
@@ -81,3 +81,140 @@
 
 > **本表单不做的事**：不改 SPEC、不改 C-15、不代拟任何 SPEC 未授权的成员（避免"凭空发明的 API"进入 `api/WisdomUI.api.json` 基线 —— 冒烟段注释对此有明确纪律）。
 > 冻结会通过后，逐件开工的入口判据（I-1…I-5）才算齐备。
+
+## 5. 冻结会逐条确认稿（2026-10-07 版）
+
+> 用法：**先过 §5.0 的三条通用规则**（一次定完可省掉逐条重复讨论），再逐件在 §5.1 的「结论」栏勾选。
+> 会议结束后：把结论回填到 §1.1/§1.2（把「提案」改成「已冻结」并标注日期与签字人），并在 §5.4 留档。
+> **纪律**：本稿不发明 SPEC 未给的档位/参数（通则 R3）；凡与契约名相关的取舍都以"I-3① 逐行比对能过"为准绳。
+
+### 5.0 先定三条通用规则（建议一次通过）
+
+| # | 规则 | 理由 | 例外 |
+| --- | --- | --- | --- |
+| **R1** | 单槽位组件的 `init` 用**带标签**形参（`label:`/`icon:`/`value:`/`content:`），**不用 `_` 无标签** | I-3① 的判据是 "C-15 与 `contracts/<component>.yaml` 的 `params[].name` **逐行比对 0 不一致**"；无标签形参在契约里**没有对应的 name** ⇒ 这条机器断言会失配 | `WDButton` 已有的 `_ text: LocalizedStringKey` 是**便利重载**、不承载受控值名 ✅；M2 不新增同类 |
+| **R2** | `label`/`icon`/`content` 一类**槽位一律无默认值**（必填） | L-B：文案与读屏标签由调用方给；与 SPEC:869（`WDIconButton` 的 `accessibilityLabel: Text` **无默认值**）同一条纪律 | 无 |
+| **R3** | §2.10 **未给的档位/参数一律不加** | 不发明 API；将来新增 case 或"带默认值的新参数"属**非破坏**（F-20 / §2.9 规则 1） | 无 |
+
+### 5.1 逐件确认（8 件）
+
+> 每件的「结论」栏请勾一个：☐ **照原样冻结** ｜ ☐ **修改为**（写明）
+
+**① `WDIconButton`**（§2.10-#02）
+```swift
+public enum WDIconButtonVariant: String, CaseIterable, Sendable, Equatable { case plain }
+public struct WDIconButton: View {
+  public init(icon: WDIconName, accessibilityLabel: Text,
+              variant: WDIconButtonVariant = .plain,
+              size: WDButtonSize = .md,
+              isLoading: Bool = false,
+              action: @escaping () -> Void)
+}
+```
+- 依据：§2.10-#02（受控值 `isLoading`；槽位 `icon` + **a11y 标签必填**；特例 `.plain`）+ SPEC:869（`accessibilityLabel: Text` 无默认值）+ C-15。
+- 待决：**(i)** `WDIconButtonVariant` 的 case 集 —— **建议只 `plain`**（§2.10 只钉了这一档；其余等设计依据，R3）；**(ii)** `size` —— **建议复用 `WDButtonSize`**（一档尺寸体系优于两套）。
+- 结论：☐
+
+**② `WDSwitch`**（§2.10-#05）
+```swift
+public struct WDSwitch: View {
+  public init(isOn: Binding<Bool>, label: Text)
+}
+```
+- 依据：§2.10-#05（受控值 `isOn` ✓；槽位 `label`）+ C-15。
+- 待决：`label` 既是**可见文本**又兼作读屏标签 —— **建议是**（槽位词表对开关只有 `label` 一个槽；再要一个独立 a11y 标签属发明，R3）。
+- 结论：☐
+
+**③ `WDCheckbox`**（§2.10-#06）
+```swift
+public struct WDCheckbox: View {
+  public init(isChecked: Binding<Bool>, label: Text)
+}
+```
+- 依据：§2.10-#06 + SPEC:12（"正文旧、结论新"：**以 `isChecked` 为准**）+ C-15（iOS 侧唯一改名）。
+- 待决：**契约名**冻结有前置（SPEC **R3-d**：Android 14 行改名未完成前 `contracts/WDCheckbox.yaml` 的 `params[].name` 不得冻结）—— **建议：先冻结 iOS 实现形态（`isChecked`），契约 `params[].name` 标注"待 Android"**。
+- 结论：☐
+
+**④ `WDBadge`**（§2.10-#11）
+```swift
+public struct WDBadge: View {
+  public init(label: Text)
+}
+```
+- 依据：§2.10-#11（受控值 —；槽位 `label`；特例"4 汉字"= 宽度上限，属**实现约束、不进签名**）。
+- 待决：是否要色调/档位 —— **建议不加**（§2.10 未给，R3）。
+- 结论：☐
+
+**⑤ `WDAvatar` + `WDAvatarValue`**（§2.10-#12）
+```swift
+public struct WDAvatarValue: Sendable, Equatable {
+  public init(icon: WDIconName)
+  public init(label: Text)
+}
+public struct WDAvatar: View {
+  public init(value: WDAvatarValue)
+}
+```
+- 依据：§2.10-#12（槽位 `icon`,`label`；无障碍"读成员名"⇒ label 本身即读屏文本，**不需要第二个 a11y 参数**；特例"直径锁死"）。
+- 待决：**(i)** 值类型**保持 `struct`**（冒烟段已声明 `struct`；改 `enum` 属类型形变更）—— **建议保持**；**(ii)** 是否要尺寸档 —— **建议不加**（§2.10 只给"直径锁死"）。
+- 结论：☐
+
+**⑥ `WDDivider`**（§2.10-#14）
+```swift
+public struct WDDivider: View {
+  public init()
+}
+```
+- 依据：§2.10-#14（槽位"无"；装饰 `accessibilityHidden`、不进树 ⇒ 属**实现**）。
+- 待决：是否要 `orientation`/`inset` —— **建议不加**（R3）。
+- 结论：☐
+
+**⑦ `WDCard`**（§2.10-#17；**唯一有权威签名块的一件**）
+```swift
+public enum WDCardStyle: String, CaseIterable, Sendable, Equatable { case elevated, outlined, glass }
+public struct WDCard<Content: View>: View {
+  public init(style: WDCardStyle = .elevated, @ViewBuilder content: () -> Content)
+}
+```
+- 依据：**SPEC §2.11** 已给枚举声明、case、默认值 `.elevated` 与参数连接式 `WDCard(style: WDCardStyle = .elevated, …)`；§2.10-#17 槽位 `content`、容器 `contain`；快照渲染器表含 **`WDCard(.glass)`**（⇒ `glass` 必需）。
+- 待决：**无** —— 建议照原样冻结（本件不是提案，是誊录）。
+- 结论：☐
+
+**⑧ `WDIcon` + `WDIconSize`**（§2.10-#20）
+```swift
+public enum WDIconSize: String, CaseIterable, Sendable, Equatable { case sm, md, lg, xl }
+public struct WDIcon: View {
+  public init(icon: WDIconName, size: WDIconSize = .md)
+}
+```
+- 依据：§2.10-#20（槽位 `icon`；装饰：不进树）；设计仓 `08-icons.md` §2 的**四档**（16/20/24/28 + 线宽）⇒ 档位**来自设计、非发明**；`WDIconSize` 为 **public**（已定）。
+- 待决：默认档 —— **建议 `.md`**（设计文档：md=20 用于"表单前缀、列表、工具栏"，是主用档）。
+- 结论：☐
+
+### 5.2 值类型成员（同属本次冻结范围）
+
+| 类型 | 提案 | 理由 | 结论 |
+| --- | --- | --- | --- |
+| `WDAvatarValue` | 见 §5.1-⑤（两个 `init`：`icon:` / `label:`） | 对应 §2.10-#12 的两个槽位 | ☐ |
+| `WDBadgeValue` | `public struct WDBadgeValue: Sendable, Equatable { public init(label: Text) }` | 它是 `WDListRowTrailing.badge(WDBadgeValue)` 的**值形态**，与 `WDBadge` 同源 | ☐ |
+
+### 5.3 阻塞处置（二选一）
+
+| 选项 | 内容 | 代价 |
+| --- | --- | --- |
+| (a) 等生成物 | 等 `contracts/icons.json` + 生成器产出 `WDIconName.swift` 落地后再开工全部 8 件受影响件 | M2 全线停在契约管道上 |
+| **(b) 建议** | **先开工不依赖图标的 6 件**：`WDSwitch` / `WDCheckbox` / `WDBadge` / `WDDivider` / `WDCard` + `WDTextField`（其 `Prefix.icon` 一个 case 延后）；把 `WDButton` / `WDListRow` / `WDAvatar` / `WDIconButton` / `WDIcon` 留到生成物到位 | 需要维护一份"延后清单"（已在本表列明） |
+
+### 5.4 决议记录表（会上填写；会后回填 §1 并留档）
+
+| # | 决策项 | 结论 | 签字 | 日期 |
+| --- | --- | --- | --- | --- |
+| R1 | 单槽位用带标签 `init` | ☐ 通过 ☐ 否决 | | |
+| R2 | 槽位必填（无默认值） | ☐ 通过 ☐ 否决 | | |
+| R3 | 未给档位不发明 | ☐ 通过 ☐ 否决 | | |
+| ①–⑧ | §5.1 逐件 | ☐ 全部照原样 ☐ 逐件修改（见各件） | | |
+| 5.2 | 两个值类型成员 | ☐ 通过 ☐ 修改 | | |
+| 5.3 | 阻塞处置 | ☐ (a) 等 ☐ (b) 先开工 6 件 | | |
+| 5.5 | `WDIconName` 形态（见下） | ☐ rawValue = 语义名 ☐ 其他 | | |
+
+**5.5 `WDIconName` 的形态**（解堵时要用，先记结论）：**建议 rawValue = 语义名**（契约键的代码镜像；Apple 改名/换符号时契约键稳定），语义名到 SF Symbols 的映射表**放生成物**（纯字符串表、无需 Swift 类型构造 ⇒ 与 `WDColorValues` 那种手写层不同；详见 `docs/ICON-PIPELINE.md` §4）。
