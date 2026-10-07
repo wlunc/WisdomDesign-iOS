@@ -186,7 +186,7 @@ PY
 
 > **批前签名冻结（I-2）**：表单 = `docs/M2-SIGNATURE-FREEZE.md`（2026-10-07，**待 ios-lead 签名 + 架构师确认**）。
 > 其中 **3 件已冻结**（`WDButton`/`WDTextField`/`WDListRow`，誊录自 M0-11 冒烟段）、**8 件为提案待确认**；
-> **2 条阻塞**：① `WDIconName` 的 44 条语义名未产出（I-M0-h）⇒ 8 件受影响；② `WDCheckbox` 的**契约名**冻结依赖 Android 侧 14 行改名（SPEC R3-d）。
+> **2 条阻塞**：① `WDIconName` 的 44 条语义名未产出（I-M0-h）⇒ 8 件受影响 —— **名单不缺**（设计仓 `08-icons.md` §4 已给 44 条，iOS 侧实测 44/44 SF Symbol 存在），缺的是**契约层管道**，设计稿见 `docs/ICON-PIPELINE.md`；② `WDCheckbox` 的**契约名**冻结依赖 Android 侧 14 行改名（SPEC R3-d）。
 
 **本端任务**：该批 11 件组件实现 + 六态快照 + 无障碍断言 + 该批性能数字（**只报不拦**）。
 **入口判据**：I-2（**批前签名冻结**：11 件的完整签名 + 契约条目入库）。
