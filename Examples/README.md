@@ -15,6 +15,8 @@
   `xcodebuild -project …` 单独编（见各自 README）。但**格式门禁的清单包含本目录**的
   `.swift`（除非显式排除）⇒ 这里的代码同样要过 `--strict`。
 - **基线改动单独提交**并在 `CHANGELOG.md` 标注：分母变了，历史体积数字之间就不可比。
+- **审计视口内避免 11pt（`caption2`）**：系统无障碍审计把它判为 Dynamic Type 不支持（连纯 SwiftUI
+  `.font(.caption2)` 也一样），与库实现无关 —— 证据与待裁决见 `docs/DEV-PLAN.md` §8.1 的 **U-10**。
 - **demo 只能依赖 `WisdomUI` 这一个 product**（F-10）：`WisdomUIPreviews` 没有进 `products`，
   外部 Xcode 工程看不到它（实测报 `Missing package product 'WisdomUIPreviews'`）。
   ⇒ 画廊留在包内（预览 + 快照用），demo 自建展示内容。

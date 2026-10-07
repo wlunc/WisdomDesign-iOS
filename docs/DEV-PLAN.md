@@ -176,7 +176,7 @@ PY
 
 ### 2.2 M1 — 基础设施（无组件交付）
 
-**本端任务**：① `wdFont(_:)` 单入口 + 行盒度量（`WDLineBoxTest` + 字高 fixtures，含 zh/en natural 值）—— **已交付（2026-10-07，commit `9c1fa37`）**：字阶层三件（`WDTypographyMapping`/`WDFontMetrics`/`WDFont`）+ 实测 fixture（12 字阶 × {en, zh} × {默认, AX3, AX5}，两层）+ U5-a/b/c 与漂移检查，`passed=11 failed=0`；② 六态截图入库（浅/深 × 默认/AX3 × LTR/RTL）—— **已交付（2026-10-07）**：`WisdomUIPreviews`（令牌/字阶画廊）+ `WisdomUISnapshotTests`（8 态矩阵、玻璃类渲染器显式表、PNG 字节 + 逐像素差双判、manifest 含工具链与设备）+ **16 张基线入库**；快照目标单独跑 4 tests passed；矩阵计数偏差见 **P15**；③ 真机 `fontScale 2.0` / AX3 观感采样；④ **弹簧 μ=1.0 并排评审 = 设计确认关**；⑤ §5 的三件套（玻璃 × 配额 × 对比度）**首轮参数化单测骨架**；⑥ demo 含**运行时 scheme 切换入口**（换已生成的另一套 scheme，主题值变更触发重组/重算且**不重启进程**）—— **已交付（2026-10-07）**：`Examples/WisdomUIDemo`（app + `WisdomUIDemoUITests` + 本地包依赖 + xcconfig 占位）+ **主题层**（`WDTheme` / `wdTheme` / `wdColors` 只读派生 / 写入口集中 `WDEnvironment.swift`）+ 4 条单元用例（派生、运行时切换、scheme 清单、主题驱动渲染取像素）。**【未验证】**：`WisdomUIDemoUITests` 的首次模拟器实跑未完成（沙箱升级审批超时），命令见 §4.2；夜间门禁的实际绿/红以首次实跑为准。
+**本端任务**：① `wdFont(_:)` 单入口 + 行盒度量（`WDLineBoxTest` + 字高 fixtures，含 zh/en natural 值）—— **已交付（2026-10-07，commit `9c1fa37`）**：字阶层三件（`WDTypographyMapping`/`WDFontMetrics`/`WDFont`）+ 实测 fixture（12 字阶 × {en, zh} × {默认, AX3, AX5}，两层）+ U5-a/b/c 与漂移检查，`passed=11 failed=0`；② 六态截图入库（浅/深 × 默认/AX3 × LTR/RTL）—— **已交付（2026-10-07）**：`WisdomUIPreviews`（令牌/字阶画廊）+ `WisdomUISnapshotTests`（8 态矩阵、玻璃类渲染器显式表、PNG 字节 + 逐像素差双判、manifest 含工具链与设备）+ **16 张基线入库**；快照目标单独跑 4 tests passed；矩阵计数偏差见 **P15**；③ 真机 `fontScale 2.0` / AX3 观感采样；④ **弹簧 μ=1.0 并排评审 = 设计确认关**；⑤ §5 的三件套（玻璃 × 配额 × 对比度）**首轮参数化单测骨架**；⑥ demo 含**运行时 scheme 切换入口**（换已生成的另一套 scheme，主题值变更触发重组/重算且**不重启进程**）—— **已交付（2026-10-07）**：`Examples/WisdomUIDemo`（app + `WisdomUIDemoUITests` + 本地包依赖 + xcconfig 占位）+ **主题层**（`WDTheme` / `wdTheme` / `wdColors` 只读派生 / 写入口集中 `WDEnvironment.swift`）+ 4 条单元用例（派生、运行时切换、scheme 清单、主题驱动渲染取像素）。**已实跑通过（2026-10-07）**：`WisdomUIDemoUITests` = 2 tests / 0 failures（方案切换用例 + 无障碍审计四类目，**严格模式不吞 issue**）；库侧 `ci.sh pr` 全绿（`passed=17 failed=0`）。
 **入口判据**：I-1（M0 出口已判定）＋ I-3（令牌含 `schemes` 维度）＋ I-4。
 **出口判据**：① 行盒 fixtures（zh/en）绿；② 12 条性能预算有数（本端报告 + `.build/perf/{date}.json`）；③ demo 与 `WisdomUIDemoUITests` 可跑；④ 运行时 scheme 切换用例通过；⑤ 三件套单测骨架存在且能红/能绿。
 **门禁强度**：`PR`（demo 无障碍审计项 `M1 起` 才可跑，见 §4.2）。
@@ -518,6 +518,7 @@ awk '/^\|/{if(!b){k++;n=0;f=NR} b=1;n++; if(n==2 && $0 !~ /^\|[-: |]*-[-: |]*\|[
 | U-06 | 快照渲染器/金标设备矩阵（玻璃类与普通类的渲染器已定，设备矩阵未定） | 两端 + tech-lead | M1 前 | nightly 门禁可用性 |
 | U-07 | 三枚举与 `isChecked` 改名的 **CI 级编译验证** | ios-dev | M0/M2 交界 | M2 首批签名冻结 |
 | U-08 | SPM `Package.resolved` pin 后"移动 tag"的失败模式 | ios-lead | M6 发布前 | 发布纪律的自证 |
+| **U-10** | **系统无障碍审计把 11pt（`caption2`）文本判为 "Dynamic Type unsupported"** —— 2026-10-07 实测定位 | ios-lead + tech-lead | M2 批前（组件大量用 caption2 之前） | nightly-2 的 4 类目审计。**证据（同一视口内的字号阶梯对照）**：`.font(.caption2)`（纯 SwiftUI）／`wdFont(.caption2)`／`wdFont(.caption2)` 观测标签**全部被报**；`.font(.caption)`(12pt)／`.font(.footnote)`(13pt)／`wdFont(.footnote)`／`wdFont(.footnote)` **全部通过**；`ScrollView` 内的 caption2 未参与本轮检查。**结论**：与 `wdFont` 实现无关，是系统审计口径。**当前处置**：demo 的审计视口内不用 11pt（观测标签用 footnote），审计**保持严格**（不开例外）。**待裁决**：组件（`WDBadge`/`WDChip`/辅助文案）若必须在审计视口用 caption2 ⇒ 需要一条**带理由的窄例外**或与设计确认改档，不得全局关掉 `.dynamicType` 类别 |
 | U-09 | **归档体积增量与体积门槛值**（M3 出口"体积门槛值定"目前只是待定项） | ios-lead | **M3 出口** | 发布前层的体积断言 |
 
 ### 8.2 技术与协作风险（本端相关）

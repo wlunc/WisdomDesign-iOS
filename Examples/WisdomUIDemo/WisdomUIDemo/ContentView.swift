@@ -35,8 +35,12 @@ struct DemoRootView: View {
         .accessibilityValue(theme.scheme)
 
       // 「不重启进程」的观测点：进程重启会让这个数变大。
-      Text(verbatim: String(launchCount))
-        .wdFont(WDType.caption2)
+      //
+      // 字号用 footnote（13pt）而不是 caption2（11pt）：**系统无障碍审计把 11pt 文本判为
+      // "Dynamic Type unsupported"** —— 实测连纯 SwiftUI 的 .font(.caption2) 也一样被报，与 wdFont
+      // 无关（阶梯对照结论见 DEV-PLAN §8.1 的登记项）。审计视口内避免 11pt 即可，不必开例外。
+      Text(verbatim: "launches: \(launchCount)")
+        .wdFont(WDType.footnote)
         .accessibilityIdentifier("launch-count")
         .accessibilityValue(String(launchCount))
 

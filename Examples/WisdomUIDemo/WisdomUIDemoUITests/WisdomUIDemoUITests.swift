@@ -34,10 +34,26 @@ final class WisdomUIDemoUITests: XCTestCase {
   }
 
   /// 无障碍审计四类目（contrast / hitRegion / textClipped / dynamicType）。
+  ///
+  /// 用 `issueHandler` 逐条**打印**违规明细（auditType + 描述 + 元素）后再让它失败：
+  /// 默认实现只抛一句 "Dynamic Type font sizes are partially unsupported"，定位不到元素。
   func testAccessibilityAudit() throws {
     let app = XCUIApplication()
     app.launch()
     XCTAssertTrue(app.staticTexts["scheme-label"].waitForExistence(timeout: 20))
-    try app.performAccessibilityAudit(for: [.contrast, .hitRegion, .textClipped, .dynamicType])
+    try app.performAccessibilityAudit(for: [.contrast, .hitRegion, .textClipped, .dynamicType]) {
+      issue in
+      print(
+        """
+        AUDIT-ISSUE type=\(issue.auditType) \
+        element=\(issue.element?.identifier ?? "-")/\(issue.element.map { String(describing: $0.elementType) } ?? "-") \
+        frame=\(issue.element?.frame.debugDescription ?? "-") \
+        compact=\(issue.compactDescription) \
+        detail=\(issue.detailedDescription)
+        """
+      )
+      // **严格模式**：返回 false = 不吞任何 issue（打印只是为了失败时能定位到元素）。
+      return false
+    }
   }
 }
