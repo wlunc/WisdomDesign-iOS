@@ -9,15 +9,22 @@ import UIKit
 ///   · **库不设默认上限**，允许调用方自己封顶；
 ///   · `natural` = **缩放后字体**的 `lineHeight`（先 `scaledFont(for:)` 再读）。
 public enum WDFontMetrics {
-  /// 该字阶在该动态字体档下的 `UIFont`（已按 `UIFontMetrics` 缩放）。
+  /// 该字阶在该动态字体档下的 `UIFont`。
+  ///
+  /// **字号来源 = 系统的 preferred font**（`UIFont.preferredFont(forTextStyle:compatibleWith:)`），
+  /// **不是**"拿设计字号再 `UIFontMetrics.scaledFont` 手算" —— 两者不相等（实测 AX3：body 手算 37pt
+  /// vs 系统 40pt、callout 35 vs 38、title1 47 vs 48），系统对每个 text style 有各自的放大曲线；
+  /// 手算会让放大档整体偏小 2–3pt（M1 首版即如此，被 `WDFontMetricsTests` 抓到）。
+  /// **字重仍取设计值**（系统 headline 默认 semibold、caption2 默认 regular，而设计要 medium）。
   public static func uiFont(for style: WDTextStyle, dynamicTypeSize: DynamicTypeSize) -> UIFont {
-    let base = UIFont.systemFont(ofSize: style.size, weight: uiWeight(style.weight))
-    let metrics = UIFontMetrics(
-      forTextStyle: uiTextStyle(WDTypographyMapping.textStyle(for: style)))
     let traits = UITraitCollection(
       preferredContentSizeCategory: category(for: dynamicTypeSize)
     )
-    return metrics.scaledFont(for: base, compatibleWith: traits)
+    let system = UIFont.preferredFont(
+      forTextStyle: uiTextStyle(WDTypographyMapping.textStyle(for: style)),
+      compatibleWith: traits
+    )
+    return UIFont.systemFont(ofSize: system.pointSize, weight: uiWeight(style.weight))
   }
 
   /// 缩放后的字号（pt）。

@@ -27,10 +27,12 @@ private struct WDFontModifier: ViewModifier {
   func body(content: Content) -> some View {
     content
       .font(
-        .system(
-          size: WDFontMetrics.scaledSize(for: style, dynamicTypeSize: dynamicTypeSize),
-          weight: style.weight
-        )
+        // **按 text style 取字体**（不是 `.system(size:)`）：后者在 SwiftUI 里是"固定字号"，
+        // 系统无障碍审计判它 "Dynamic Type ... unsupported"（实测：demo 的
+        // performAccessibilityAudit(.dynamicType) 就是被这条拦下的），
+        // 即使我们自己按 dynamicTypeSize 算过缩放 —— AX 树上仍看不到缩放能力。
+        // 设计字号 == 系统同名档默认字号，由 WDFontMetricsTests 钉住（不等就红）。
+        .system(style.textStyle, design: .default, weight: style.weight)
       )
       .tracking(style.letterSpacing)
   }
