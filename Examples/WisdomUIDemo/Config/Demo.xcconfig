@@ -1,0 +1,11 @@
+// WisdomUIDemo 的可覆盖配置（SPEC §1.6 的 I20）。
+//
+// 纪律：**不检入 team / bundle id 的真值**。本文件只放占位与变量名；
+// 真值写进 Demo.local.xcconfig（已在 .gitignore 里），由下面的 #include? 可选引入。
+//
+// 用法：cp Demo.xcconfig Demo.local.xcconfig 后填 WD_DEMO_TEAM / WD_DEMO_BUNDLE_ID。
+
+WD_DEMO_TEAM =
+WD_DEMO_BUNDLE_ID = com.example.wisdomuidemo
+
+#include? "Demo.local.xcconfig"
