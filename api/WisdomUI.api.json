@@ -24,6 +24,24 @@
   "symbols" : [
     {
       "access" : "public",
+      "decl" : "var wdColors: WDColorValues { get }",
+      "kind" : "swift.property",
+      "path" : "EnvironmentValues.wdColors"
+    },
+    {
+      "access" : "public",
+      "decl" : "var wdTheme: WDTheme { get set }",
+      "kind" : "swift.property",
+      "path" : "EnvironmentValues.wdTheme"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "View.wdColors(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
       "kind" : "swift.method",
       "path" : "View.wdFont(_:)"
@@ -39,6 +57,18 @@
       "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
       "kind" : "swift.method",
       "path" : "View.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "View.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "View.wdTheme(scheme:)"
     },
     {
       "access" : "public",
@@ -1719,6 +1749,60 @@
       "decl" : "let weight: Font.Weight",
       "kind" : "swift.property",
       "path" : "WDTextStyle.weight"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDTheme",
+      "kind" : "swift.struct",
+      "path" : "WDTheme"
+    },
+    {
+      "access" : "public",
+      "decl" : "let colors: WDColorValues",
+      "kind" : "swift.property",
+      "path" : "WDTheme.colors"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let dark: WDTheme",
+      "kind" : "swift.type.property",
+      "path" : "WDTheme.dark"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let `default`: WDTheme",
+      "kind" : "swift.type.property",
+      "path" : "WDTheme.default"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(colors: WDColorValues)",
+      "kind" : "swift.init",
+      "path" : "WDTheme.init(colors:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(scheme: String, colors: WDColorValues)",
+      "kind" : "swift.init",
+      "path" : "WDTheme.init(scheme:colors:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let light: WDTheme",
+      "kind" : "swift.type.property",
+      "path" : "WDTheme.light"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func named(_ scheme: String) -> WDTheme?",
+      "kind" : "swift.type.method",
+      "path" : "WDTheme.named(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let scheme: String",
+      "kind" : "swift.property",
+      "path" : "WDTheme.scheme"
     },
     {
       "access" : "public",
