@@ -176,7 +176,7 @@ PY
 
 ### 2.2 M1 — 基础设施（无组件交付）
 
-**本端任务**：① `wdFont(_:)` 单入口 + 行盒度量（`WDLineBoxTest` + 字高 fixtures，含 zh/en natural 值）—— **已交付（2026-10-07，commit `9c1fa37`）**：字阶层三件（`WDTypographyMapping`/`WDFontMetrics`/`WDFont`）+ 实测 fixture（12 字阶 × {en, zh} × {默认, AX3, AX5}，两层）+ U5-a/b/c 与漂移检查，`passed=11 failed=0`；② 六态截图入库（浅/深 × 默认/AX3 × LTR/RTL）；③ 真机 `fontScale 2.0` / AX3 观感采样；④ **弹簧 μ=1.0 并排评审 = 设计确认关**；⑤ §5 的三件套（玻璃 × 配额 × 对比度）**首轮参数化单测骨架**；⑥ demo 含**运行时 scheme 切换入口**（换已生成的另一套 scheme，主题值变更触发重组/重算且**不重启进程**）。
+**本端任务**：① `wdFont(_:)` 单入口 + 行盒度量（`WDLineBoxTest` + 字高 fixtures，含 zh/en natural 值）—— **已交付（2026-10-07，commit `9c1fa37`）**：字阶层三件（`WDTypographyMapping`/`WDFontMetrics`/`WDFont`）+ 实测 fixture（12 字阶 × {en, zh} × {默认, AX3, AX5}，两层）+ U5-a/b/c 与漂移检查，`passed=11 failed=0`；② 六态截图入库（浅/深 × 默认/AX3 × LTR/RTL）—— **已交付（2026-10-07）**：`WisdomUIPreviews`（令牌/字阶画廊）+ `WisdomUISnapshotTests`（8 态矩阵、玻璃类渲染器显式表、PNG 字节 + 逐像素差双判、manifest 含工具链与设备）+ **16 张基线入库**；快照目标单独跑 4 tests passed；矩阵计数偏差见 **P15**；③ 真机 `fontScale 2.0` / AX3 观感采样；④ **弹簧 μ=1.0 并排评审 = 设计确认关**；⑤ §5 的三件套（玻璃 × 配额 × 对比度）**首轮参数化单测骨架**；⑥ demo 含**运行时 scheme 切换入口**（换已生成的另一套 scheme，主题值变更触发重组/重算且**不重启进程**）。
 **入口判据**：I-1（M0 出口已判定）＋ I-3（令牌含 `schemes` 维度）＋ I-4。
 **出口判据**：① 行盒 fixtures（zh/en）绿；② 12 条性能预算有数（本端报告 + `.build/perf/{date}.json`）；③ demo 与 `WisdomUIDemoUITests` 可跑；④ 运行时 scheme 切换用例通过；⑤ 三件套单测骨架存在且能红/能绿。
 **门禁强度**：`PR`（demo 无障碍审计项 `M1 起` 才可跑，见 §4.2）。
@@ -475,6 +475,7 @@ awk '/^\|/{if(!b){k++;n=0;f=NR} b=1;n++; if(n==2 && $0 !~ /^\|[-: |]*-[-: |]*\|[
 | **P11**（行高键形） | `02-ios-spec.md` §1.4.1 第 3 行 | 行高由"双键"改**单值键** `size.row-height.{comfortable,compact}` = 60/44（两端同值），并注明"Android 的 48 是布局盒、**不新增令牌键**" | ios-lead + 架构师 | M0-1 冻结前（最迟 M2 批前签名冻结） | **已回写** |
 | **P12**（pathspec 写法） | 跨端计划（已退役）§2.2-A⑧ 与 §8.3 工作流 C | 门禁命令的 pathspec 用**仓内相对**写法（`-- .`），不用 `-- iOS/` | tech-lead | M0-1 | **已修正** |
 | **P13**（生成物目录大小写） | `docs/SPEC.md`（§1.1/§1.1.2/§1.2.2/§1.3/§1.5.1/§1.5.5/§3.2/§9.2 与 I41/I15/E3/F2.4/F5.4/O-12/D-21 行）、`docs/ARCHITECTURE.md`（目录树 + 两张图）、`AGENTS.md`（§0/§1/§4.1/§5/§7/§9/§10）、`README.md`、`CONTRIBUTING.md` | 生成物目录 = `Sources/WisdomUI/Foundation/generated/`（**小写**，M0-2 生成器目标态）；格式清单排除模式写 `'/Foundation/[Gg]enerated/'`（两种拼写都覆盖——大小写不敏感文件系统上写死一种会**静默失效**） | ios-lead + 架构师 | M0（I-M0-h 同批） | **已回写（本轮）**；⚠️ **顺序与 XR-12 相反**：目录纯移动依**用户裁决**先执行、文档文本已成**事实错误**，登记紧随其后——记为本条一次性例外，**不构成先例** |
+| **P15**（快照矩阵的计数词） | `docs/DEV-PLAN.md` §2.2 / §15.1-⑦ / §9（验收矩阵行）、`docs/ARCHITECTURE.md` 的验证矩阵行 | 写作「**六态**：浅/深 × 默认/AX3 × LTR/RTL」，但三个轴相乘 = **8 态**（「六态」是 U6 交互态的词，被借用到快照矩阵上） | 改成「**八态**（浅/深 × 默认/AX3 × LTR/RTL）」或直接去掉计数词，只留括号里的三轴 | ios-lead | M1 出口前 | **待回写**（本端实现已按括号里的三轴执行 8 态：`SnapshotSupport` 头注 + 矩阵计数断言 `matrix.count == 8`） |
 | **P14**（行盒放大概判据的 `⌈⌉`） | `docs/SPEC.md` §2.6.3 的 U5-c 行与「U5 定稿措辞」段 | 放大档判据由「`renderedLineBox ≥ ⌈natural × n⌉`」改为「`≥ natural × n − 0.5pt`」：**`⌈⌉` 对非整数自然高不可满足**（实测 caption2/AX3/n=2：自然高 35.83 ⇒ `⌈71.67⌉ = 72`，真实渲染恰为 71.67pt）。**本意（不裁切）不变**，只去掉向上取整引入的 0.33–1pt 假红 | ios-lead + 架构师 | M1 出口前 | **待回写**（本端实现已按新形式落地并登记于 `WDLineBoxTest.swift` 头注；SPEC 文本未改） |
 | **P10**（设计侧行高句） | `09-layout.md` :101 | "整行 = 48 布局盒（可见 44 + 上下各 2dp 内边距）；热区 = 该布局盒、不覆盖相邻行" | 设计 + 架构师 | M0-1 | **待回写（设计侧，不阻塞本端实现）** |
 | **P7 / P8**（Android 侧） | `12-android-spec.md` §2.3/§3.1.2/§3.3.1 与 :1880 | 行高/热区与 U12 = 32 槽位 | android-lead | M0-1 冻结前 | **非本端**（登记在此仅为闭环视图） |

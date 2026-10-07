@@ -38,10 +38,27 @@ let package = Package(
     ),
     // 测试 target 依赖分离（I08）：WisdomUITests 只依赖 WisdomUI；
     // WisdomUISnapshotTests（依赖 WisdomUIPreviews + Baselines 资源）随 M1 快照交付物加入。
+    // 预览支撑（不进 products；只带共享视图，不携带资源）。
+    .target(
+      name: "WisdomUIPreviews",
+      dependencies: ["WisdomUI"],
+      path: "Sources/WisdomUIPreviews",
+      swiftSettings: [
+        .swiftLanguageMode(.v6)
+      ]
+    ),
     .testTarget(
       name: "WisdomUITests",
       dependencies: ["WisdomUI"],
       path: "Tests/WisdomUITests"
+    ),
+    // 快照 target 依赖分离（I08）：只有它依赖 WisdomUIPreviews；
+    // resources 只出现在测试 target（快照基线），主 target 永远 resources: []。
+    .testTarget(
+      name: "WisdomUISnapshotTests",
+      dependencies: ["WisdomUI", "WisdomUIPreviews"],
+      path: "Tests/WisdomUISnapshotTests",
+      resources: [.copy("Baselines")]
     ),
   ],
   // 包级语言模式：与上面的 target 级 .swiftLanguageMode(.v6) 互为双保险。

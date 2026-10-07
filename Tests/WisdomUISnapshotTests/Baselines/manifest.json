@@ -1,0 +1,28 @@
+{
+  "environment": {
+    "deviceType": "iPhone18,4",
+    "runtime": "iOS 26.5",
+    "runtimeIdentifier": "com.apple.CoreSimulator.SimRuntime.iOS-26-5",
+    "sdk": "26.5",
+    "xcode": "Xcode 26.6"
+  },
+  "pixelDiffTolerance": 0.002,
+  "sha256": {
+    "slots-dark-ax3-ltr": "7e2ee470be6ec69b2969239739992f4647bb695447b98062f44b2f46f287b729",
+    "slots-dark-ax3-rtl": "5f6d22101e50ba6c7f7d987c7bfe37058a21a03081f7ed83a28d432ab26e65c0",
+    "slots-dark-default-ltr": "c2bf4943575e0637b56ac06ea953b8aad9eabb46530b574417cec7df2f305c15",
+    "slots-dark-default-rtl": "ee7b4099543fc8be9e158228587d210346039a8fb32ce147ec0ac8c864597e93",
+    "slots-light-ax3-ltr": "8e20ce20fceb41051c486d4de88c7c699a3e4ebf4d212e1f65466fe2f57c3211",
+    "slots-light-ax3-rtl": "98295fcc08e927aaaf21894ac3f08d5b79ee4147728673eaee1eaf4cb1c735d5",
+    "slots-light-default-ltr": "0addb24258e25107d0dfd072ac28af1c6faa0cc2f0226d104bb2b709b5be4542",
+    "slots-light-default-rtl": "b4b96d10f90fbdf42321782e60abc0fe21199eef51382fa513653524d8e25542",
+    "typography-dark-ax3-ltr": "c0407b6f1ddd2991fdc5c02f09f2c18118b92ce18b0945b39b8ca46581866067",
+    "typography-dark-ax3-rtl": "6f9c3f1fe3891df479f452241d191d88a0e02f7526d78802001e0f3b36e5ff95",
+    "typography-dark-default-ltr": "11e910602e3463db3a697e8250b165df4a7aaabdd30b577dc98fd6fc9886fdc2",
+    "typography-dark-default-rtl": "857954fd1f243b34640bdc9934986127729b3848b9c23bcc00e06ac3cda350b1",
+    "typography-light-ax3-ltr": "1b8204cc88a82b638ed824c8de57810de513a51c0a5385b613c922dd3f7e5ccb",
+    "typography-light-ax3-rtl": "c409794bb3ca3debd1e40bcf60c69dfe72c82b99a224d6285a81ef6ab5bf78f7",
+    "typography-light-default-ltr": "3670a6d69958cd1304d68cc57b71e6b7d2a8fa01a61f472ac04af8809eb868e6",
+    "typography-light-default-rtl": "2eaa3da1a52d523f2b57e00449c75358d03ed52308bf8e73c141fc4b107933a0"
+  }
+}
