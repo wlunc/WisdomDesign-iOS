@@ -24,6 +24,18 @@
   "symbols" : [
     {
       "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "View.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "View.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
       "kind" : "swift.method",
       "path" : "View.wdShadow(_:)"
@@ -1080,6 +1092,48 @@
     },
     {
       "access" : "public",
+      "decl" : "enum WDFontMetrics",
+      "kind" : "swift.enum",
+      "path" : "WDFontMetrics"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func lineBoxHeight(for style: WDTextStyle, dynamicTypeSize: DynamicTypeSize) -> CGFloat",
+      "kind" : "swift.type.method",
+      "path" : "WDFontMetrics.lineBoxHeight(for:dynamicTypeSize:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func lineSpacing(for style: WDTextStyle, dynamicTypeSize: DynamicTypeSize) -> CGFloat",
+      "kind" : "swift.type.method",
+      "path" : "WDFontMetrics.lineSpacing(for:dynamicTypeSize:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func naturalLineHeight(for style: WDTextStyle, dynamicTypeSize: DynamicTypeSize) -> CGFloat",
+      "kind" : "swift.type.method",
+      "path" : "WDFontMetrics.naturalLineHeight(for:dynamicTypeSize:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func scaleRatio(for style: WDTextStyle, dynamicTypeSize: DynamicTypeSize) -> CGFloat",
+      "kind" : "swift.type.method",
+      "path" : "WDFontMetrics.scaleRatio(for:dynamicTypeSize:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func scaledSize(for style: WDTextStyle, dynamicTypeSize: DynamicTypeSize) -> CGFloat",
+      "kind" : "swift.type.method",
+      "path" : "WDFontMetrics.scaledSize(for:dynamicTypeSize:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func uiFont(for style: WDTextStyle, dynamicTypeSize: DynamicTypeSize) -> UIFont",
+      "kind" : "swift.type.method",
+      "path" : "WDFontMetrics.uiFont(for:dynamicTypeSize:)"
+    },
+    {
+      "access" : "public",
       "decl" : "enum WDGradient",
       "kind" : "swift.enum",
       "path" : "WDGradient"
@@ -1656,6 +1710,12 @@
     },
     {
       "access" : "public",
+      "decl" : "var textStyle: Font.TextStyle { get }",
+      "kind" : "swift.property",
+      "path" : "WDTextStyle.textStyle"
+    },
+    {
+      "access" : "public",
       "decl" : "let weight: Font.Weight",
       "kind" : "swift.property",
       "path" : "WDTextStyle.weight"
@@ -1779,6 +1839,18 @@
       "decl" : "static let title3: WDTextStyle",
       "kind" : "swift.type.property",
       "path" : "WDType.title3"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDTypographyMapping",
+      "kind" : "swift.enum",
+      "path" : "WDTypographyMapping"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func textStyle(for style: WDTextStyle) -> Font.TextStyle",
+      "kind" : "swift.type.method",
+      "path" : "WDTypographyMapping.textStyle(for:)"
     }
   ]
 }
