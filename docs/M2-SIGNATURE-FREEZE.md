@@ -65,7 +65,7 @@
 
 | # | 阻塞 | 影响 | 解除条件 |
 | --- | --- | --- | --- |
-| ① | **`WDIconName` 的 44 条语义名未产出**（I-M0-h：生成器尚未产出 icon 产物；冒烟段只有占位 case） | **8 件受影响**：凡签名或槽位引用 `WDIconName` 的件（`WDButton`/`WDIconButton`/`WDListRow`/`WDAvatar`/`WDIcon` 直接引用；`WDTextFieldPrefix.icon` 间接）+ 值类型 `WDAvatarValue`/`WDBadgeValue` 成员未定 ⇒ `WDListRow` 的 `.avatar`/`.badge` 槽位无法实现 | 设计仓 `contracts/` 给出 44 条语义名 → 生成器产出 `generated/WDIconName.swift` → 同 PR 删除冒烟段占位 |
+| ① | **`WDIconName` 的 44 条语义名未产出**（I-M0-h：生成器尚未产出 icon 产物；冒烟段只有占位 case）—— **注意：名单本身不缺**。2026-10-07 核实：设计仓 `../wisdomdesign/docs/08-icons.md` §4「语义对照表」**已给全 44 条**（导航 7 + 操作 12 + 状态 8 + 表单 6 + 内容分类 11），每条含 SF Symbols 与 Material Symbols 两端名；图标尺寸阶梯（`sm 16 / md 20 / lg 24 / xl 28`）亦在该文档 §2。**缺的是两段管道**：设计仓 `contracts/`（M0-5）收录 + 生成器产出产物。`mirrorsInRTL` 在该文档出现 0 次，但 F-07 规定它只用于契约断言（渲染靠 SF Symbols 自带镜像元数据）⇒ 可机械推导，不必等设计 | **8 件受影响**：凡签名或槽位引用 `WDIconName` 的件（`WDButton`/`WDIconButton`/`WDListRow`/`WDAvatar`/`WDIcon` 直接引用；`WDTextFieldPrefix.icon` 间接）+ 值类型 `WDAvatarValue`/`WDBadgeValue` 成员未定 ⇒ `WDListRow` 的 `.avatar`/`.badge` 槽位无法实现 | 设计仓 `contracts/` 给出 44 条语义名 → 生成器产出 `generated/WDIconName.swift` → 同 PR 删除冒烟段占位 |
 | ② | **SPEC R3-d**：`contracts/WDCheckbox.yaml` 的 `params[].name` **不得在 Android 改完前冻结**（Android 侧 14 行改名进度） | `WDCheckbox` 的**契约名**冻结（iOS 侧已改名为 `isChecked`，实现不受影响） | android-lead 完成改名 |
 | ③ | `contracts/*.yaml` 库未落库（M0-5） | I-2 的"`params/slots/default` 入库"一项**按本表单代替**（I-2 原文允许） | M0-5 落库后回填 |
 
@@ -73,7 +73,8 @@
 
 1. §1.2 的 **8 条提案签名**是否照原样冻结？（逐件确认，尤其 `WDIconButtonVariant` 的 case 集与 `WDAvatar` 是否有直径档）
 2. `WDAvatarValue` / `WDBadgeValue` 的成员（§1.3）是否按提案冻结？
-3. 阻塞 ①（`WDIconName`）的处置：**等生成物**（推荐）还是**先冻结其余 10 件、`WDIcon` 单独排**？（注意：`WDButton` 等的 `leadingIcon` 参数也依赖它）
+3. 阻塞 ①（`WDIconName`）的处置：名单已在设计仓 `08-icons.md` §4（44 条，**无需设计再给**）⇒ 剩下的是**管道**（`contracts/` 收录 + 生成器产出）。请在两条里二选一：**(a) 等生成物**，再开工全部 8 件受影响件；**(b) 先开工不依赖图标的 5 件**（`WDSwitch`/`WDCheckbox`/`WDBadge`/`WDDivider`/`WDCard`）+ `WDTextField`（其 `Prefix.icon` 一个 case 延后），把 `WDButton`/`WDListRow`/`WDAvatar`/`WDIconButton`/`WDIcon` 留到生成物到位
+4. `WDIconName` 的形态：**rawValue 用语义名还是 SF Symbol 名**？语义名到 SF Symbols 的映射表放**生成物**还是手写？（F-07 的口径 = 契约只统一语义名、iOS 按名取 SF Symbols）
 4. 阻塞 ②（`WDCheckbox` 契约名）是否**只冻结 iOS 实现形态**、契约名留空待 Android？
 
 ---
