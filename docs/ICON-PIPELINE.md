@@ -112,6 +112,11 @@ public enum WDIconName: String, CaseIterable, Sendable {
 | 步 | 谁 | 产物 | 验收 |
 | --- | --- | --- | --- |
 | ① | 设计 + 架构师 | `contracts/icons.json`（44 条，含 id/semantic/两端符号/mirrorsInRTL）+ `contracts/README.md` 收录人读表 | 条数 44；id 无重复 |
+
+> **责任归属（照抄 DEV-PLAN §9 的依赖表）**：**图标语义名清单 = 设计 + 架构师**；**契约 `params`/`slots`/`default` = 架构师 + 两端 lead**；**生成器 = 架构师**。
+> **本端不写它**：DEV-PLAN §9 顶部明写「**不在本端范围**：契约文件库（M0-5 起真源迁入设计仓的 `contracts/README.md`；本端按只读副本执行）」⇒ 跨仓写入零容忍。
+> ⚠️ **接手人尚未点名**：本仓 `AGENTS.md` §11 与 DEV-PLAN §9 都记着「**架构师与设计需要点名到人**」是唯一未决项，且「不点名 ⇒ M0 出口 ②③④ 与 **M2 批前签名冻结**顺延」。
+> ⇒ **本步的真实阻塞是「人」，不是「工作量」**：规格已在本文件写全（§3 JSON 形状 / §7① 交付顺序 / §10 现成 44 行），接手人只需「审 44 行 id + 建 JSON + 改生成器 + 跑 `--check`」。
 | ② | 设计仓工具 | `build.js` 加契约输入 + `WDIconName.{swift,kt}` + `dist/contracts.manifest.json` | `build.js --check` 绿 |
 | ③ | 设计仓 | 令牌加 `size.icon.*` 并重生成 | `--check` 绿 |
 | ④ | **iOS（我）** | 删冒烟占位；加姊妹溯源模式；`Foundation/Icons/` 手写尺寸映射 + §7 的验证网；快照加图标 LTR/RTL 对；`api/WisdomUI.api.json` 随成因更新 | `ci.sh pr` 全绿 |
