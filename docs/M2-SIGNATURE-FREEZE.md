@@ -26,7 +26,10 @@
 | `WDTextField` | `init(text: Binding<String>, label: Text, appearance: WDTextFieldAppearance = .init(), isEditable: Bool = true, onSubmit: (() -> Void)? = nil, onEditingChanged: ((Bool) -> Void)? = nil)`；`WDTextFieldAppearance`（`variant/placeholder/prefix/accessory/helper/isSecure/submitLabel`，全参数有默认值，**只 `Sendable`**）；`enum WDTextFieldPrefix { none, icon(WDIconName), text(Text) }`；`WDTextFieldAccessory { none, unit(Text), clear(accessibilityLabel:), reveal(hiddenAccessibilityLabel:shownAccessibilityLabel:), count(current:limit:) }`；`WDTextFieldHelper { none, hint(Text), error(Text) }` | 冒烟段（SPEC §2.3 专节） |
 | `WDListRow` | `init(title: Text, subtitle: Text? = nil, leading: WDListRowLeading = .none, trailing: WDListRowTrailing = .none, isSelected: Bool = false, swipeAction: WDListRowSwipeAction = .none, showsSeparator: Bool = true, action: (() -> Void)? = nil)`；`WDListRowLeading { none, icon(WDIconName), avatar(WDAvatarValue), checkbox, selectionIndicator }`；`WDListRowTrailing { none, value(Text), badge(WDBadgeValue), avatar(WDAvatarValue), disclosure }`；`@MainActor enum WDListRowSwipeAction { none, delete(title:onDelete:) }`（含闭包 ⇒ 不声明 `Equatable`） | 冒烟段（SPEC §2.4 专节） |
 
-### 1.2 提案（**待冻结会确认**；据 §2.10 形态行 + C-15 逐字推导）
+### 1.2 提案（**2026-10-07 冻结会通过 R1–R3 后按建议冻结**；据 §2.10 形态行 + C-15 逐字推导）
+
+> **结论（2026-10-07）**：R1/R2/R3 已由 ios-lead 裁决（见 §5.0 与 §5.4）。本表 8 条的**唯一待决点都已由 R1–R3 或建议解决** ⇒ 按建议冻结。
+> 其中 3 项属**判断项**（非规则推出）：**①@@size@@ 复用 @@WDButtonSize@@**、**⑤值类型保持 @@struct@@**、**⑧@@WDIconSize@@ 默认 @@.md@@** —— 已按建议记录，**可一句话推翻**（推翻需同步改本表与 §5.1）。
 
 | 件 | 提案签名 | 推导依据 | 待决点 |
 | --- | --- | --- | --- |
@@ -93,7 +96,7 @@
 | # | 规则 | 理由 | 例外 |
 | --- | --- | --- | --- |
 | **R1** | 单槽位组件的 `init` 用**带标签**形参（`label:`/`icon:`/`value:`/`content:`），**不用 `_` 无标签** | I-3① 的判据是 "C-15 与 `contracts/<component>.yaml` 的 `params[].name` **逐行比对 0 不一致**"；无标签形参在契约里**没有对应的 name** ⇒ 这条机器断言会失配 | `WDButton` 已有的 `_ text: LocalizedStringKey` 是**便利重载**、不承载受控值名 ✅；M2 不新增同类 |
-| **R2** | **非可选**槽位（`label: Text` / `icon: WDIconName` / `content: () -> C`）**不得有默认值**；「没有这个槽」用**可选类型** `Text? = nil` 表达 | L-B：文案与读屏标签由调用方给；与 SPEC:869（`WDIconButton` 的 `accessibilityLabel: Text` **无默认值**）同一条纪律 | `WDListRow.subtitle: Text? = nil` 这类**可选槽**不受本规则限制（它表达「没有」，不是「默认文案」） |
+| **R2（2026-10-07 裁决：放宽）** | **允许 `Text("")` 作为槽位默认值**（"给不给文案"由**使用方**决定）；「没有这个槽」仍用**可选类型** `Text? = nil` 表达。**一处例外**：`WDIconButton.accessibilityLabel` —— SPEC:869 明文"无默认值"（防"忘传标签"），本放宽**未覆盖**该处 | L-B：文案与读屏标签由调用方给；与 SPEC:869（`WDIconButton` 的 `accessibilityLabel: Text` **无默认值**）同一条纪律 | `WDListRow.subtitle: Text? = nil` 这类**可选槽**不受本规则限制（它表达「没有」，不是「默认文案」） |
 | **R3** | §2.10 **未给的档位/参数一律不加** | 不发明 API。**但延后不是免费的，代价要如实写**：① **新增枚举 case = 源级 breaking**（F-20：minor + Breaking 段 + 迁移片段；枚举非 `frozen` ⇒ 二进制不受影响，破坏的是消费方的穷举 `switch`）；② **给既有公开 `init` 追加带默认值的参数** = 破坏符号快照连续性（§2.9 规则 1：需显式基线更新 + CHANGELOG）。两笔代价都**远小于**「现在发明未经设计确认的档位」——那会要么被设计否决、要么长期背一个没人要的 API | 无 |
 
 ### 5.1 逐件确认（8 件）
@@ -210,9 +213,9 @@ public struct WDIcon: View {
 
 | # | 决策项 | 结论 | 签字 | 日期 |
 | --- | --- | --- | --- | --- |
-| R1 | 单槽位用带标签 `init` | ☐ 通过 ☐ 否决 | | |
-| R2 | 槽位必填（无默认值） | ☐ 通过 ☐ 否决 | | |
-| R3 | 未给档位不发明 | ☐ 通过 ☐ 否决 | | |
+| R1 | 单槽位用带标签 `init` | ✅ **通过**（带标签） | ios-lead | 2026-10-07 |
+| R2 | 槽位默认值 | ⚠️ **修改后通过**：**允许 `Text("")`**（由使用方决定）；可选槽仍用 `Text? = nil`；`accessibilityLabel` 按 SPEC:869 保持无默认值 | ios-lead | 2026-10-07 |
+| R3 | 未给档位不发明 | ✅ **通过**（按建议：只冻结 §2.10 给出的档位；延后的两笔代价见 §5.0-R3） | ios-lead | 2026-10-07 |
 | ①–⑧ | §5.1 逐件 | ☐ 全部照原样 ☐ 逐件修改（见各件） | | |
 | 5.2 | 两个值类型成员 | ☐ 通过 ☐ 修改 | | |
 | 5.3 | 阻塞处置 | ☐ (a) 等 ☐ (b) 先开工 6 件 | | |
