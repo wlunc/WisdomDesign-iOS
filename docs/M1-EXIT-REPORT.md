@@ -47,7 +47,7 @@
 
 | # | 项 | 现状 | 依赖谁 / 何时 |
 | --- | --- | --- | --- |
-| ① | **M1-③ 真机 `fontScale 2.0` / AX3 观感采样** | **未采样**。真机链路已打通到装包（签名、证书信任、开发者模式、配对全部 ✅），但 UI 测试 runner 无法 bootstrap（`exited with code 74 before establishing connection`；**设备无任何 runner/App 崩溃日志** ⇒ 根本没启动；同时 `notification_proxy` 报 `The device is passcode protected`）。**待澄清**：iOS 无 `fontScale` 旋钮，设计说的 2.0 对应哪个内容字号档 | 设备**保持解锁 + 屏幕常亮**后重跑；或由人在 Xcode GUI 里 ⌘U 跑一次。观感结论必须**人**给 |
+| ① | **M1-③ 真机 `fontScale 2.0` / AX3 观感采样** | **未采样**。真机链路已打通到装包（签名、证书信任、开发者模式、配对全部 ✅），但 UI 测试 runner 无法 bootstrap（`exited with code 74 before establishing connection`；**设备无任何 runner/App 崩溃日志** ⇒ 根本没启动；同时 `notification_proxy` 报 `The device is passcode protected`）。**根因已定位（2026-10-07）**：设备为**无线连接**（`devicectl` 的 `transportType = localNetwork`、隧道走 tcp；`system_profiler SPUSBDataType` 里没有 iPhone）—— **XCUITest 的 runner 在真机上需要 USB 直连**，而 `⌘R` 跑 app 不受影响，与实测现象（直接运行正常 / 跑测试失败）完全一致。**待澄清**：iOS 无 `fontScale` 旋钮，设计说的 2.0 对应哪个内容字号档 | **USB 直连**后重跑（兜底：设置 → 开发者 → 启用 UI 自动化）。观感结论必须**人**给 |
 | ② | **M1-④ 弹簧 μ=1.0 并排评审（设计确认关）** | **未做**。阻塞点不是"没人签字"，而是**没有评审对象**：动效层（`WDMotion`）尚未实现 | M4 动效落地 → 出并排材料 → 设计确认 |
 | ③ | **12 条性能预算（组件级）** | 只有门禁耗时；渲染/内存预算**无组件可测** | M2 首批 11 件落地后补测 |
 | ④ | U-03 / U-04 | ✅ **已闭合**（本端实测 zh/en 两层；12 档 × 12 字阶） | — |
