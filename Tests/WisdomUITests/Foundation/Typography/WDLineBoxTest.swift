@@ -33,11 +33,9 @@ struct WDLineBoxTest {
     ("overline", WDType.overline),
   ]
 
-  static let sizeCases: [(LanguageLineBoxFixture.Size, DynamicTypeSize)] = [
-    (.default, .large),
-    (.ax3, .accessibility3),
-    (.ax5, .accessibility5),
-  ]
+  /// **12 档全集**（U-04 的口径：12 档 × 12 字阶）；U5-a/b 只看默认档，U5-c 遍历放大档。
+  static let sizeCases: [(LanguageLineBoxFixture.Size, DynamicTypeSize)] =
+    LanguageLineBoxFixture.Size.allCases.map { ($0, $0.dynamicTypeSize) }
 
   static let scripts: [(LanguageLineBoxFixture.Script, String)] = [(.en, "Ag"), (.zh, "汉字")]
 
@@ -61,7 +59,7 @@ struct WDLineBoxTest {
       for (name, style) in Self.styles {
         guard
           let entry = LanguageLineBoxFixture.measurement(
-            script: script, style: name, size: .default)
+            script: script, style: name, size: .large)
         else {
           Issue.record("fixture 缺失（缺失 = fail）：\(script.rawValue)/\(name)/default")
           continue
@@ -82,7 +80,7 @@ struct WDLineBoxTest {
       for (name, style) in Self.styles {
         guard
           let entry = LanguageLineBoxFixture.measurement(
-            script: script, style: name, size: .default)
+            script: script, style: name, size: .large)
         else {
           Issue.record("fixture 缺失（缺失 = fail）：\(script.rawValue)/\(name)/default")
           continue
@@ -106,7 +104,7 @@ struct WDLineBoxTest {
   func accessibilityDoesNotClip() {
     for (script, sample) in Self.scripts {
       for (name, style) in Self.styles {
-        for (size, dynamicTypeSize) in Self.sizeCases where size != .default {
+        for (size, dynamicTypeSize) in Self.sizeCases where size.isAccessibilitySize {
           guard
             let entry = LanguageLineBoxFixture.measurement(script: script, style: name, size: size)
           else {
