@@ -701,7 +701,11 @@ func makeRules() -> [Rule] {
     "extension\\s+(ButtonStyle|ToggleStyle|ViewModifier)\\b[\\s\\S]*?where\\s+Self\\s*==")
   let testableImport = Regex("(?<![A-Za-z0-9_])@testable\\s+import\\s+([A-Za-z_][A-Za-z0-9_]*)")
   let frameToken = Regex(#"\.frame\(\s*(?:height|width)\s*:\s*WD"#)
-  let staticTokenEntry = Regex("(?<![A-Za-z0-9_])(WDColor|WDType)\\.")
+  // R10 只禁**可主题化**的静态令牌入口（颜色/渐变/材质一类）。
+  // 字阶（WDType.*）**不在禁列**：§3.1 明写字号/间距/尺寸/时长**不可主题化**，
+  // 且组件取字体的唯一入口 `wdFont(_:)` 需要一个 `WDTextStyle` —— 禁掉 WDType 会让合法写法不存在
+  //（R11 已单独拦 `.font(WDType.` 这种绕过 wdFont 的写法）。
+  let staticTokenEntry = Regex("(?<![A-Za-z0-9_])WDColor\\.")
   let fontEntry = Regex(
     #"\.font\(\s*\.system\(|(?<![A-Za-z0-9_])Font\.system\(|\.font\(\s*WDType\."#)
   let uikitImport = Regex("(?m)^[ \\t]*import[ \\t]+UIKit\\b")
@@ -951,7 +955,7 @@ func makeRules() -> [Rule] {
     Rule(
       id: "R10",
       severity: .error,
-      summary: "Components/** 禁静态令牌入口 WDColor./WDType."
+      summary: "Components/** 禁静态令牌入口 WDColor.（可主题化槽位必须走 @Environment(\\.wdColors)）"
     ) { file, _ in
       guard componentsScope(file) else { return [] }
       return collect(staticTokenEntry, in: file) { token in

@@ -120,84 +120,10 @@
     }
   }
 
-  /// 字段外观档位（SPEC §2.3）。
-  public enum WDTextFieldVariant: String, CaseIterable, Sendable, Equatable {
-    case inset, outline, glass
-  }
-
-  /// 字段前缀槽（SPEC §2.3）。
-  public enum WDTextFieldPrefix: Sendable, Equatable {
-    case none
-    case icon(WDIconName)
-    case text(Text)
-  }
-
-  /// 字段尾部附件槽（SPEC §2.3；`clear` 独立可达、不合并）。
-  public enum WDTextFieldAccessory: Sendable, Equatable {
-    case none
-    case unit(Text)
-    case clear(accessibilityLabel: Text)
-    case reveal(hiddenAccessibilityLabel: Text, shownAccessibilityLabel: Text)
-    case count(current: Int, limit: Int)
-  }
-
-  /// 字段辅助文案槽（SPEC §2.3）。
-  public enum WDTextFieldHelper: Sendable, Equatable {
-    case none
-    case hint(Text)
-    case error(Text)
-  }
-
-  /// 字段外观对象（★ 只 `Sendable`：`SubmitLabel` 不 `Equatable`；SPEC §2.3）。
-  public struct WDTextFieldAppearance: Sendable {
-    /// 档位。
-    public var variant: WDTextFieldVariant = .inset
-    /// 占位串（由调用方给）。
-    public var placeholder: Text? = nil
-    /// 前缀。
-    public var prefix: WDTextFieldPrefix = .none
-    /// 尾部附件。
-    public var accessory: WDTextFieldAccessory = .none
-    /// 辅助文案。
-    public var helper: WDTextFieldHelper = .none
-    /// 是否密文。
-    public var isSecure: Bool = false
-    /// 回车键类型。
-    public var submitLabel: SubmitLabel = .done
-
-    /// 构造（全参数默认值）。
-    public init(
-      variant: WDTextFieldVariant = .inset,
-      placeholder: Text? = nil,
-      prefix: WDTextFieldPrefix = .none,
-      accessory: WDTextFieldAccessory = .none,
-      helper: WDTextFieldHelper = .none,
-      isSecure: Bool = false,
-      submitLabel: SubmitLabel = .done
-    ) {
-      fatalError()
-    }
-  }
-
-  /// 输入字段（SPEC §2.3；字段盒 46 的验收锚点在 M2）。
-  public struct WDTextField: View {
-    /// 构造。
-    public init(
-      text: Binding<String>,
-      label: Text,
-      appearance: WDTextFieldAppearance = .init(),
-      isEditable: Bool = true,
-      onSubmit: (() -> Void)? = nil,
-      onEditingChanged: ((Bool) -> Void)? = nil
-    ) {
-      fatalError()
-    }
-
-    /// 真实渲染在 M2；此处只锁签名。
-    public var body: some View {
-      fatalError()
-    }
-  }
+  // WDTextField 全家（Variant / Prefix / Accessory / Helper / Appearance / WDTextField）
+  // **已由 M2 首批实现**（Components/Primitives/WDTextField/WDTextField.swift），故从此冒烟段删除。
+  // 其中 Prefix.icon / Accessory.clear / Accessory.reveal 三项因 WDIconName 未落地而延后，
+  // 见 docs/M2-SIGNATURE-FREEZE.md §6 的延后清单。
 
   /// 列表行行首槽（SPEC §2.4）。
   public enum WDListRowLeading: Sendable, Equatable {

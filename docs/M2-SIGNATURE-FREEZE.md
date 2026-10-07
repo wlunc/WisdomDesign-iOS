@@ -222,3 +222,15 @@ public struct WDIcon: View {
 | 5.5 | `WDIconName` 形态（见下） | ☐ rawValue = 语义名 ☐ 其他 | | |
 
 **5.5 `WDIconName` 的形态**（解堵时要用，先记结论）：**建议 rawValue = 语义名**（契约键的代码镜像；Apple 改名/换符号时契约键稳定），语义名到 SF Symbols 的映射表**放生成物**（纯字符串表、无需 Swift 类型构造 ⇒ 与 `WDColorValues` 那种手写层不同；详见 `docs/ICON-PIPELINE.md` §4）。
+
+## 6. 延后清单（因 `WDIconName` 未落地；对应 §5.3 选项 (b)）
+
+| 延后项 | 属于 | 落地条件 |
+| --- | --- | --- |
+| `WDTextFieldPrefix.icon(WDIconName)` | SPEC §2.3 冻结签名里的一个 case | `WDIconName` 生成物 |
+| `WDTextFieldAccessory.clear(accessibilityLabel:)` | 同上（视觉需要 `xmark.circle.fill`） | 同上 |
+| `WDTextFieldAccessory.reveal(hiddenAccessibilityLabel:shownAccessibilityLabel:)` | 同上（视觉需要 `eye` / `eye.slash`） | 同上 |
+| `WDButton` / `WDListRow` / `WDAvatar` / `WDIconButton` / `WDIcon` 五件 | M2 受影响件 | 同上 |
+
+> **纪律**：延后项**不写进代码** —— 不硬编码 SF Symbol 名（F-07：图标名以契约为准）。落地时按 §1 的已冻结签名回填，并更新 `api/WisdomUI.api.json` 基线。
+> **实现现状（2026-10-07）**：`WDTextField` 已实现除上表三项之外的全部成员；其冒烟段已退役（`WDAPISurface.swift`）。
