@@ -156,7 +156,7 @@ let rules: [Rule] = [r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13a, r1
 | R7 | **数值字面量必须可追溯到令牌**（扩围，I04） | `Components/**` + `Foundation/**`（白名单 `generated/`/`Tokens/`/`Internal/`/`Tests/`/`*+Previews.swift`）出现 `\b\d+(\.\d+)?\b`（豁免 `0/1/-1`、`.opacity(`、`zIndex`、`lineLimit`、数组索引、`#available` 版本号） | warning → **M3 起 error** |
 | R8 | `Tests/**` 镜像被测层 | 目录形状 + `@testable import` 引用层 | error |
 | R9 | 组件禁 `.frame(height:`/`.frame(width:` 绑令牌常量 | `\.frame\((height\|width):\s*WD` | error |
-| R10 | `Components/**` 禁静态令牌入口 `WDColor.`/`WDType.` | 正则 + 白名单 | error |
+| R10 | `Components/**` 禁**可主题化**的静态令牌入口 `WDColor.`（**字阶 `WDType.*` 已移出禁列**，见 P16） | 正则 + 白名单 | error |
 | R11 | `Components/**` 禁 `.font(.system(`/`Font.system(`/`.font(WDType.` | 正则（必须走 `wdFont`/`wdLineBox`） | error |
 | R12 | `generated/` 只允许生成器写入 | 首 2 行 banner 固定串 | error |
 | **R13a** | 禁**带初始化器的** `static var`（存储型静态可变状态）与 `AnyView` | `\bstatic var\b\s*\w+\s*=`、`\bAnyView\b` | error |

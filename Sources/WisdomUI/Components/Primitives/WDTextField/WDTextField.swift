@@ -9,20 +9,21 @@ public enum WDTextFieldVariant: String, CaseIterable, Sendable, Equatable {
 
 /// 字段前缀槽（SPEC §2.3）。
 ///
-/// ⚠️ **延后项**：`case icon(WDIconName)` 尚未落地 —— `WDIconName` 的生成物未产出（见 `docs/ICON-PIPELINE.md`），
-/// 且**不得自造符号名**（F-07：图标名以契约为准）。落地后按 §M2-DEFERRALS 回填。
+/// 语义名由契约承载（`WDIconName`，生成物）；iOS 按名取 SF Symbols（F-07）。
 public enum WDTextFieldPrefix: Sendable, Equatable {
   case none
+  case icon(WDIconName)
   case text(Text)
 }
 
 /// 字段尾部附件槽（SPEC §2.3）。
 ///
-/// ⚠️ **延后项**：`case clear` / `case reveal` 需要图标符号（`xmark.circle.fill` / `eye` / `eye.slash`）——
-/// 硬编码 SF Symbol 名等于绕开契约（F-07），故与 `WDIconName` 同批落地。
+/// 附件按钮独立可达、**不合并不可达**（SPEC §2.3）；图标符号取自契约（`WDIconName.clear` / `.reveal` / `.hidePassword`）。
 public enum WDTextFieldAccessory: Sendable, Equatable {
   case none
   case unit(Text)
+  case clear(accessibilityLabel: Text)
+  case reveal(hiddenAccessibilityLabel: Text, shownAccessibilityLabel: Text)
   case count(current: Int, limit: Int)
 }
 
@@ -135,6 +136,9 @@ public struct WDTextField: View {
     switch appearance.prefix {
     case .none:
       EmptyView()
+    case .icon(let icon):
+      WDIcon(icon: icon, size: .md)
+        .foregroundStyle(colors.textTertiary)
     case .text(let prefix):
       prefix
         .wdFont(WDType.body)
@@ -182,6 +186,20 @@ public struct WDTextField: View {
     switch appearance.accessory {
     case .none:
       EmptyView()
+    case .clear(let accessibilityLabel):
+      accessoryButton(accessibilityLabel: accessibilityLabel) {
+        WDIcon(icon: .clear, size: .md)
+      } action: {
+        text = ""
+      }
+    case .reveal(let hiddenAccessibilityLabel, let shownAccessibilityLabel):
+      accessoryButton(
+        accessibilityLabel: isRevealed ? shownAccessibilityLabel : hiddenAccessibilityLabel
+      ) {
+        WDIcon(icon: isRevealed ? .hidePassword : .showPassword, size: .md)
+      } action: {
+        isRevealed.toggle()
+      }
     case .unit(let unit):
       unit
         .wdFont(WDType.body)
@@ -190,6 +208,20 @@ public struct WDTextField: View {
     case .count(let current, let limit):
       countView(current: current, limit: limit)
     }
+  }
+
+  /// 尾部附件按钮（独立可达、独立标签；热区 = 触控下限令牌）。
+  private func accessoryButton<Icon: View>(
+    accessibilityLabel: Text,
+    @ViewBuilder icon: () -> Icon,
+    action: @escaping () -> Void
+  ) -> some View {
+    Button(action: action) {
+      icon()
+        .frame(minWidth: WDSize.touchTargetMin, minHeight: WDSize.touchTargetMin)
+    }
+    .buttonStyle(.plain)
+    .accessibilityLabel(accessibilityLabel)
   }
 
   /// 计数附件（≥90% 换 `status.warning`；阈值来自 SPEC §2.3 的裁决，非令牌值）。

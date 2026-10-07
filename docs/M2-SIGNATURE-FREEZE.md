@@ -96,7 +96,7 @@
 | # | 规则 | 理由 | 例外 |
 | --- | --- | --- | --- |
 | **R1** | 单槽位组件的 `init` 用**带标签**形参（`label:`/`icon:`/`value:`/`content:`），**不用 `_` 无标签** | I-3① 的判据是 "C-15 与 `contracts/<component>.yaml` 的 `params[].name` **逐行比对 0 不一致**"；无标签形参在契约里**没有对应的 name** ⇒ 这条机器断言会失配 | `WDButton` 已有的 `_ text: LocalizedStringKey` 是**便利重载**、不承载受控值名 ✅；M2 不新增同类 |
-| **R2（2026-10-07 裁决：放宽）** | **允许 `Text("")` 作为槽位默认值**（"给不给文案"由**使用方**决定）；「没有这个槽」仍用**可选类型** `Text? = nil` 表达。**一处例外**：`WDIconButton.accessibilityLabel` —— SPEC:869 明文"无默认值"（防"忘传标签"），本放宽**未覆盖**该处 | L-B：文案与读屏标签由调用方给；与 SPEC:869（`WDIconButton` 的 `accessibilityLabel: Text` **无默认值**）同一条纪律 | `WDListRow.subtitle: Text? = nil` 这类**可选槽**不受本规则限制（它表达「没有」，不是「默认文案」） |
+| **R2（2026-10-07 裁决：放宽）** | **允许 `Text("")` 作为槽位默认值**（"给不给文案"由**使用方**决定）；「没有这个槽」仍用**可选类型** `Text? = nil` 表达。**两处例外**（由冻结值 F-08 定死，非本次可放宽项）：`WDIconButton.accessibilityLabel` 与 `WDTextField.label` —— SPEC:869 明文"无默认值"，`AGENTS.md` §6-F-08 亦把二者列为**必填**（防"忘传标签"⇒ 读屏读不出） | L-B：文案与读屏标签由调用方给；与 SPEC:869（`WDIconButton` 的 `accessibilityLabel: Text` **无默认值**）同一条纪律 | `WDListRow.subtitle: Text? = nil` 这类**可选槽**不受本规则限制（它表达「没有」，不是「默认文案」） |
 | **R3** | §2.10 **未给的档位/参数一律不加** | 不发明 API。**但延后不是免费的，代价要如实写**：① **新增枚举 case = 源级 breaking**（F-20：minor + Breaking 段 + 迁移片段；枚举非 `frozen` ⇒ 二进制不受影响，破坏的是消费方的穷举 `switch`）；② **给既有公开 `init` 追加带默认值的参数** = 破坏符号快照连续性（§2.9 规则 1：需显式基线更新 + CHANGELOG）。两笔代价都**远小于**「现在发明未经设计确认的档位」——那会要么被设计否决、要么长期背一个没人要的 API | 无 |
 
 ### 5.1 逐件确认（8 件）
@@ -234,4 +234,4 @@ public struct WDIcon: View {
 
 > **纪律**：延后项**不写进代码** —— 不硬编码 SF Symbol 名（F-07：图标名以契约为准）。落地时按 §1 的已冻结签名回填，并更新 `api/WisdomUI.api.json` 基线。
 > **实现现状（2026-10-07）**：`WDTextField` 已实现除上表三项之外的全部成员；其冒烟段已退役（`WDAPISurface.swift`）。
-> **2026-10-07 更新**：`WDIconName` 生成物**已落地**（设计仓生成器产出，44 条；冒烟占位已退役）⇒ **上表延后项现已可回填**，回填时按本表 §1 的已冻结签名补齐，并同步更新 `api/WisdomUI.api.json`。
+> **2026-10-07 更新**：`WDIconName` 生成物**已落地**（设计仓生成器产出，44 条；冒烟占位已退役）⇒ **上表三项已全部回填**：`Prefix.icon` / `Accessory.clear` / `Accessory.reveal` 均已实现（附件按钮独立可达、独立标签、热区 = `WDSize.touchTargetMin`）。同批新增 **`WDIcon` + `WDIconSize`**（M2 ⑧）与手写映射 `WDIconMetrics`。

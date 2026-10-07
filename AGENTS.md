@@ -369,7 +369,7 @@ scope ∈ {foundation, tokens, typography, theme, motion, material, a11y, icons,
 | `static var` **存储型**静态可变状态 | R13a；Swift 6 下本就报错；计算型工厂（`extension ButtonStyle where Self == …`）例外（R13b） |
 | `Components/**` 里 `import UIKit` | R14；UIKit 只允许出现在 `Foundation/Typography/` 与 `Internal/` |
 | `.frame(height:/width:)` 绑令牌常量 | R9；动态字体必须靠 `minHeight` 增长 |
-| `Components/**` 里的静态令牌入口（`WDColor.*`/`WDType.*`） | R10；必须走 `@Environment(\.wdColors)` |
+| `Components/**` 里的静态令牌入口 `WDColor.*`（**可主题化**；必须走 `@Environment(\.wdColors)`） | R10。**字阶 `WDType.*` 不在禁列**（P16）：字号/间距/尺寸/时长不可主题化（§3.1），且 `wdFont(_:)` 唯一参数就是 `WDTextStyle` —— 禁掉会让合法写法不存在；`.font(WDType.` 这种绕过 `wdFont` 的写法仍由 **R11** 拦 |
 | `.font(.system(` / `Font.system(` / `.font(WDType.` | R11；唯一入口 `wdFont(_:)` |
 | 组件里写 Environment（`.environment(`、`\.wdDensity =`、`\.wdEffectsBudget =`） | R18；写入口只在 `Foundation/Theme/WDEnvironment.swift` 的修饰符 |
 | 覆写平台设置（`.preferredColorScheme`、`.environment(\.dynamicTypeSize…)` 出现在库内） | R16；库不覆写系统无障碍设置（预览/测试/demo 例外） |
