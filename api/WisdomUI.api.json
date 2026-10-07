@@ -1,0 +1,1784 @@
+{
+  "manifest" : {
+    "excludedSources" : [
+      "Sources/WisdomUI/APISurface/WDAPISurface.swift"
+    ],
+    "generator" : "Scripts/canonicalize-api.swift",
+    "module" : "WisdomUI",
+    "notes" : "只保留 kind/path/decl/access；丢弃 usr/location/docComment/mixins/relationships/accessibility/spi",
+    "sdk" : {
+      "name" : "iphonesimulator26.5"
+    },
+    "sourceRoots" : [
+      "Sources/WisdomUI"
+    ],
+    "swift" : {
+      "version" : "6.3.3"
+    },
+    "target" : "arm64-apple-ios17.0-simulator",
+    "xcode" : {
+      "build" : "17F113",
+      "version" : "26.6"
+    }
+  },
+  "symbols" : [
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "View.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDColor",
+      "kind" : "swift.enum",
+      "path" : "WDColor"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum Derived",
+      "kind" : "swift.enum",
+      "path" : "WDColor.Derived"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let fillLight1: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Derived.fillLight1"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let fillLight2: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Derived.fillLight2"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let fillMid1: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Derived.fillMid1"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let fillMid2: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Derived.fillMid2"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let textOnFill: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Derived.textOnFill"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let textOnSoft: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Derived.textOnSoft"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum Neutral",
+      "kind" : "swift.enum",
+      "path" : "WDColor.Neutral"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let su0: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Neutral.su0"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let su100: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Neutral.su100"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let su200: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Neutral.su200"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let su300: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Neutral.su300"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let su400: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Neutral.su400"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let su50: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Neutral.su50"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let su500: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Neutral.su500"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let su600: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Neutral.su600"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let su700: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Neutral.su700"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let su800: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Neutral.su800"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let su900: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Neutral.su900"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let su950: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Neutral.su950"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum Palette",
+      "kind" : "swift.enum",
+      "path" : "WDColor.Palette"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let abyss: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Palette.abyss"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let blue: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Palette.blue"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let cyan: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Palette.cyan"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let indigo: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Palette.indigo"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let lake: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Palette.lake"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let mist: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Palette.mist"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let navy: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Palette.navy"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let navyDeep: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Palette.navyDeep"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let slate: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.Palette.slate"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let bgCanvas: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.bgCanvas"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let bgGrouped: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.bgGrouped"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let borderGlassTop: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.borderGlassTop"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let borderHairline: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.borderHairline"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let borderHairlineStrong: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.borderHairlineStrong"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let fillField: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.fillField"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let fillPressed: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.fillPressed"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let statusDanger: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.statusDanger"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let statusInfo: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.statusInfo"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let statusSoftDanger: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.statusSoftDanger"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let statusSoftInfo: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.statusSoftInfo"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let statusSoftSuccess: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.statusSoftSuccess"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let statusSoftWarning: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.statusSoftWarning"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let statusSuccess: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.statusSuccess"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let statusWarning: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.statusWarning"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let surfaceCard: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.surfaceCard"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let surfaceCardSolid: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.surfaceCardSolid"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let surfaceCardSunken: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.surfaceCardSunken"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let surfaceGlass: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.surfaceGlass"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let surfaceGlassStrong: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.surfaceGlassStrong"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let surfaceTint: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.surfaceTint"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let textBrand: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.textBrand"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let textDisabled: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.textDisabled"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let textOnDark: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.textOnDark"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let textOnFill: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.textOnFill"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let textOnLightPrimary: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.textOnLightPrimary"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let textOnLightSecondary: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.textOnLightSecondary"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let textOnLightTertiary: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.textOnLightTertiary"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let textOnSoft: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.textOnSoft"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let textPrimary: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.textPrimary"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let textSecondary: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.textSecondary"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let textTertiary: Color",
+      "kind" : "swift.type.property",
+      "path" : "WDColor.textTertiary"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDColorOverrides",
+      "kind" : "swift.struct",
+      "path" : "WDColorOverrides"
+    },
+    {
+      "access" : "public",
+      "decl" : "var bgCanvas: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.bgCanvas"
+    },
+    {
+      "access" : "public",
+      "decl" : "var bgGrouped: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.bgGrouped"
+    },
+    {
+      "access" : "public",
+      "decl" : "var borderGlassTop: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.borderGlassTop"
+    },
+    {
+      "access" : "public",
+      "decl" : "var borderHairline: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.borderHairline"
+    },
+    {
+      "access" : "public",
+      "decl" : "var borderHairlineStrong: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.borderHairlineStrong"
+    },
+    {
+      "access" : "public",
+      "decl" : "var fillField: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.fillField"
+    },
+    {
+      "access" : "public",
+      "decl" : "var fillPressed: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.fillPressed"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(bgCanvas: Color? = nil, bgGrouped: Color? = nil, surfaceCard: Color? = nil, surfaceCardSolid: Color? = nil, surfaceCardSunken: Color? = nil, surfaceTint: Color? = nil, surfaceGlass: Color? = nil, surfaceGlassStrong: Color? = nil, textPrimary: Color? = nil, textSecondary: Color? = nil, textTertiary: Color? = nil, textDisabled: Color? = nil, textOnLightPrimary: Color? = nil, textOnLightSecondary: Color? = nil, textOnLightTertiary: Color? = nil, textOnSoft: Color? = nil, textOnFill: Color? = nil, textOnDark: Color? = nil, textBrand: Color? = nil, borderHairline: Color? = nil, borderHairlineStrong: Color? = nil, borderGlassTop: Color? = nil, fillField: Color? = nil, fillPressed: Color? = nil, statusSuccess: Color? = nil, statusInfo: Color? = nil, statusWarning: Color? = nil, statusDanger: Color? = nil, statusSoftSuccess: Color? = nil, statusSoftInfo: Color? = nil, statusSoftWarning: Color? = nil, statusSoftDanger: Color? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDColorOverrides.init(bgCanvas:bgGrouped:surfaceCard:surfaceCardSolid:surfaceCardSunken:surfaceTint:surfaceGlass:surfaceGlassStrong:textPrimary:textSecondary:textTertiary:textDisabled:textOnLightPrimary:textOnLightSecondary:textOnLightTertiary:textOnSoft:textOnFill:textOnDark:textBrand:borderHairline:borderHairlineStrong:borderGlassTop:fillField:fillPressed:statusSuccess:statusInfo:statusWarning:statusDanger:statusSoftSuccess:statusSoftInfo:statusSoftWarning:statusSoftDanger:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "var statusDanger: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.statusDanger"
+    },
+    {
+      "access" : "public",
+      "decl" : "var statusInfo: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.statusInfo"
+    },
+    {
+      "access" : "public",
+      "decl" : "var statusSoftDanger: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.statusSoftDanger"
+    },
+    {
+      "access" : "public",
+      "decl" : "var statusSoftInfo: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.statusSoftInfo"
+    },
+    {
+      "access" : "public",
+      "decl" : "var statusSoftSuccess: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.statusSoftSuccess"
+    },
+    {
+      "access" : "public",
+      "decl" : "var statusSoftWarning: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.statusSoftWarning"
+    },
+    {
+      "access" : "public",
+      "decl" : "var statusSuccess: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.statusSuccess"
+    },
+    {
+      "access" : "public",
+      "decl" : "var statusWarning: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.statusWarning"
+    },
+    {
+      "access" : "public",
+      "decl" : "var surfaceCard: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.surfaceCard"
+    },
+    {
+      "access" : "public",
+      "decl" : "var surfaceCardSolid: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.surfaceCardSolid"
+    },
+    {
+      "access" : "public",
+      "decl" : "var surfaceCardSunken: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.surfaceCardSunken"
+    },
+    {
+      "access" : "public",
+      "decl" : "var surfaceGlass: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.surfaceGlass"
+    },
+    {
+      "access" : "public",
+      "decl" : "var surfaceGlassStrong: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.surfaceGlassStrong"
+    },
+    {
+      "access" : "public",
+      "decl" : "var surfaceTint: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.surfaceTint"
+    },
+    {
+      "access" : "public",
+      "decl" : "var textBrand: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.textBrand"
+    },
+    {
+      "access" : "public",
+      "decl" : "var textDisabled: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.textDisabled"
+    },
+    {
+      "access" : "public",
+      "decl" : "var textOnDark: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.textOnDark"
+    },
+    {
+      "access" : "public",
+      "decl" : "var textOnFill: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.textOnFill"
+    },
+    {
+      "access" : "public",
+      "decl" : "var textOnLightPrimary: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.textOnLightPrimary"
+    },
+    {
+      "access" : "public",
+      "decl" : "var textOnLightSecondary: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.textOnLightSecondary"
+    },
+    {
+      "access" : "public",
+      "decl" : "var textOnLightTertiary: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.textOnLightTertiary"
+    },
+    {
+      "access" : "public",
+      "decl" : "var textOnSoft: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.textOnSoft"
+    },
+    {
+      "access" : "public",
+      "decl" : "var textPrimary: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.textPrimary"
+    },
+    {
+      "access" : "public",
+      "decl" : "var textSecondary: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.textSecondary"
+    },
+    {
+      "access" : "public",
+      "decl" : "var textTertiary: Color?",
+      "kind" : "swift.property",
+      "path" : "WDColorOverrides.textTertiary"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDColorSlot",
+      "kind" : "swift.enum",
+      "path" : "WDColorSlot"
+    },
+    {
+      "access" : "public",
+      "decl" : "case bgCanvas",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.bgCanvas"
+    },
+    {
+      "access" : "public",
+      "decl" : "case bgGrouped",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.bgGrouped"
+    },
+    {
+      "access" : "public",
+      "decl" : "case borderGlassTop",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.borderGlassTop"
+    },
+    {
+      "access" : "public",
+      "decl" : "case borderHairline",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.borderHairline"
+    },
+    {
+      "access" : "public",
+      "decl" : "case borderHairlineStrong",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.borderHairlineStrong"
+    },
+    {
+      "access" : "public",
+      "decl" : "case fillField",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.fillField"
+    },
+    {
+      "access" : "public",
+      "decl" : "case fillPressed",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.fillPressed"
+    },
+    {
+      "access" : "public",
+      "decl" : "case statusDanger",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.statusDanger"
+    },
+    {
+      "access" : "public",
+      "decl" : "case statusInfo",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.statusInfo"
+    },
+    {
+      "access" : "public",
+      "decl" : "case statusSoftDanger",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.statusSoftDanger"
+    },
+    {
+      "access" : "public",
+      "decl" : "case statusSoftInfo",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.statusSoftInfo"
+    },
+    {
+      "access" : "public",
+      "decl" : "case statusSoftSuccess",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.statusSoftSuccess"
+    },
+    {
+      "access" : "public",
+      "decl" : "case statusSoftWarning",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.statusSoftWarning"
+    },
+    {
+      "access" : "public",
+      "decl" : "case statusSuccess",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.statusSuccess"
+    },
+    {
+      "access" : "public",
+      "decl" : "case statusWarning",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.statusWarning"
+    },
+    {
+      "access" : "public",
+      "decl" : "case surfaceCard",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.surfaceCard"
+    },
+    {
+      "access" : "public",
+      "decl" : "case surfaceCardSolid",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.surfaceCardSolid"
+    },
+    {
+      "access" : "public",
+      "decl" : "case surfaceCardSunken",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.surfaceCardSunken"
+    },
+    {
+      "access" : "public",
+      "decl" : "case surfaceGlass",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.surfaceGlass"
+    },
+    {
+      "access" : "public",
+      "decl" : "case surfaceGlassStrong",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.surfaceGlassStrong"
+    },
+    {
+      "access" : "public",
+      "decl" : "case surfaceTint",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.surfaceTint"
+    },
+    {
+      "access" : "public",
+      "decl" : "case textBrand",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.textBrand"
+    },
+    {
+      "access" : "public",
+      "decl" : "case textDisabled",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.textDisabled"
+    },
+    {
+      "access" : "public",
+      "decl" : "case textOnDark",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.textOnDark"
+    },
+    {
+      "access" : "public",
+      "decl" : "case textOnFill",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.textOnFill"
+    },
+    {
+      "access" : "public",
+      "decl" : "case textOnLightPrimary",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.textOnLightPrimary"
+    },
+    {
+      "access" : "public",
+      "decl" : "case textOnLightSecondary",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.textOnLightSecondary"
+    },
+    {
+      "access" : "public",
+      "decl" : "case textOnLightTertiary",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.textOnLightTertiary"
+    },
+    {
+      "access" : "public",
+      "decl" : "case textOnSoft",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.textOnSoft"
+    },
+    {
+      "access" : "public",
+      "decl" : "case textPrimary",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.textPrimary"
+    },
+    {
+      "access" : "public",
+      "decl" : "case textSecondary",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.textSecondary"
+    },
+    {
+      "access" : "public",
+      "decl" : "case textTertiary",
+      "kind" : "swift.enum.case",
+      "path" : "WDColorSlot.textTertiary"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDColorValues",
+      "kind" : "swift.struct",
+      "path" : "WDColorValues"
+    },
+    {
+      "access" : "public",
+      "decl" : "let bgCanvas: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.bgCanvas"
+    },
+    {
+      "access" : "public",
+      "decl" : "let bgGrouped: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.bgGrouped"
+    },
+    {
+      "access" : "public",
+      "decl" : "let borderGlassTop: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.borderGlassTop"
+    },
+    {
+      "access" : "public",
+      "decl" : "let borderHairline: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.borderHairline"
+    },
+    {
+      "access" : "public",
+      "decl" : "let borderHairlineStrong: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.borderHairlineStrong"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let dark: WDColorValues",
+      "kind" : "swift.type.property",
+      "path" : "WDColorValues.dark"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let `default`: WDColorValues",
+      "kind" : "swift.type.property",
+      "path" : "WDColorValues.default"
+    },
+    {
+      "access" : "public",
+      "decl" : "let fillField: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.fillField"
+    },
+    {
+      "access" : "public",
+      "decl" : "let fillPressed: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.fillPressed"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(_ patch: WDColorOverrides)",
+      "kind" : "swift.init",
+      "path" : "WDColorValues.init(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let light: WDColorValues",
+      "kind" : "swift.type.property",
+      "path" : "WDColorValues.light"
+    },
+    {
+      "access" : "public",
+      "decl" : "let statusDanger: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.statusDanger"
+    },
+    {
+      "access" : "public",
+      "decl" : "let statusInfo: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.statusInfo"
+    },
+    {
+      "access" : "public",
+      "decl" : "let statusSoftDanger: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.statusSoftDanger"
+    },
+    {
+      "access" : "public",
+      "decl" : "let statusSoftInfo: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.statusSoftInfo"
+    },
+    {
+      "access" : "public",
+      "decl" : "let statusSoftSuccess: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.statusSoftSuccess"
+    },
+    {
+      "access" : "public",
+      "decl" : "let statusSoftWarning: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.statusSoftWarning"
+    },
+    {
+      "access" : "public",
+      "decl" : "let statusSuccess: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.statusSuccess"
+    },
+    {
+      "access" : "public",
+      "decl" : "let statusWarning: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.statusWarning"
+    },
+    {
+      "access" : "public",
+      "decl" : "let surfaceCard: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.surfaceCard"
+    },
+    {
+      "access" : "public",
+      "decl" : "let surfaceCardSolid: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.surfaceCardSolid"
+    },
+    {
+      "access" : "public",
+      "decl" : "let surfaceCardSunken: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.surfaceCardSunken"
+    },
+    {
+      "access" : "public",
+      "decl" : "let surfaceGlass: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.surfaceGlass"
+    },
+    {
+      "access" : "public",
+      "decl" : "let surfaceGlassStrong: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.surfaceGlassStrong"
+    },
+    {
+      "access" : "public",
+      "decl" : "let surfaceTint: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.surfaceTint"
+    },
+    {
+      "access" : "public",
+      "decl" : "let textBrand: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.textBrand"
+    },
+    {
+      "access" : "public",
+      "decl" : "let textDisabled: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.textDisabled"
+    },
+    {
+      "access" : "public",
+      "decl" : "let textOnDark: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.textOnDark"
+    },
+    {
+      "access" : "public",
+      "decl" : "let textOnFill: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.textOnFill"
+    },
+    {
+      "access" : "public",
+      "decl" : "let textOnLightPrimary: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.textOnLightPrimary"
+    },
+    {
+      "access" : "public",
+      "decl" : "let textOnLightSecondary: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.textOnLightSecondary"
+    },
+    {
+      "access" : "public",
+      "decl" : "let textOnLightTertiary: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.textOnLightTertiary"
+    },
+    {
+      "access" : "public",
+      "decl" : "let textOnSoft: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.textOnSoft"
+    },
+    {
+      "access" : "public",
+      "decl" : "let textPrimary: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.textPrimary"
+    },
+    {
+      "access" : "public",
+      "decl" : "let textSecondary: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.textSecondary"
+    },
+    {
+      "access" : "public",
+      "decl" : "let textTertiary: Color",
+      "kind" : "swift.property",
+      "path" : "WDColorValues.textTertiary"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let wdDefaultScheme: String",
+      "kind" : "swift.type.property",
+      "path" : "WDColorValues.wdDefaultScheme"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let wdSchemeNames: [String]",
+      "kind" : "swift.type.property",
+      "path" : "WDColorValues.wdSchemeNames"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDElevation",
+      "kind" : "swift.enum",
+      "path" : "WDElevation"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let brand: [WDShadowLayer]",
+      "kind" : "swift.type.property",
+      "path" : "WDElevation.brand"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let e0: [WDShadowLayer]",
+      "kind" : "swift.type.property",
+      "path" : "WDElevation.e0"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let e1: [WDShadowLayer]",
+      "kind" : "swift.type.property",
+      "path" : "WDElevation.e1"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let e2: [WDShadowLayer]",
+      "kind" : "swift.type.property",
+      "path" : "WDElevation.e2"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let e3: [WDShadowLayer]",
+      "kind" : "swift.type.property",
+      "path" : "WDElevation.e3"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDGradient",
+      "kind" : "swift.enum",
+      "path" : "WDGradient"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let destructive: WDGradientSpec",
+      "kind" : "swift.type.property",
+      "path" : "WDGradient.destructive"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let fill: WDGradientSpec",
+      "kind" : "swift.type.property",
+      "path" : "WDGradient.fill"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let mid: WDGradientSpec",
+      "kind" : "swift.type.property",
+      "path" : "WDGradient.mid"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let sunrise: WDGradientSpec",
+      "kind" : "swift.type.property",
+      "path" : "WDGradient.sunrise"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let surface: WDGradientSpec",
+      "kind" : "swift.type.property",
+      "path" : "WDGradient.surface"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDGradientSpec",
+      "kind" : "swift.struct",
+      "path" : "WDGradientSpec"
+    },
+    {
+      "access" : "public",
+      "decl" : "let angleDegrees: Double",
+      "kind" : "swift.property",
+      "path" : "WDGradientSpec.angleDegrees"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(angleDegrees: Double, stops: [(color: Color, location: Double)])",
+      "kind" : "swift.init",
+      "path" : "WDGradientSpec.init(angleDegrees:stops:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "var linearGradient: LinearGradient { get }",
+      "kind" : "swift.property",
+      "path" : "WDGradientSpec.linearGradient"
+    },
+    {
+      "access" : "public",
+      "decl" : "let stops: [(color: Color, location: Double)]",
+      "kind" : "swift.property",
+      "path" : "WDGradientSpec.stops"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDMotion",
+      "kind" : "swift.enum",
+      "path" : "WDMotion"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum Duration",
+      "kind" : "swift.enum",
+      "path" : "WDMotion.Duration"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let base: Double",
+      "kind" : "swift.type.property",
+      "path" : "WDMotion.Duration.base"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let fast: Double",
+      "kind" : "swift.type.property",
+      "path" : "WDMotion.Duration.fast"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let instant: Double",
+      "kind" : "swift.type.property",
+      "path" : "WDMotion.Duration.instant"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let reduced: Double",
+      "kind" : "swift.type.property",
+      "path" : "WDMotion.Duration.reduced"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let slow: Double",
+      "kind" : "swift.type.property",
+      "path" : "WDMotion.Duration.slow"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let slower: Double",
+      "kind" : "swift.type.property",
+      "path" : "WDMotion.Duration.slower"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum Spring",
+      "kind" : "swift.enum",
+      "path" : "WDMotion.Spring"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let bouncy: Animation",
+      "kind" : "swift.type.property",
+      "path" : "WDMotion.Spring.bouncy"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let gentle: Animation",
+      "kind" : "swift.type.property",
+      "path" : "WDMotion.Spring.gentle"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let snappy: Animation",
+      "kind" : "swift.type.property",
+      "path" : "WDMotion.Spring.snappy"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDRadius",
+      "kind" : "swift.enum",
+      "path" : "WDRadius"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let checkbox: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDRadius.checkbox"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let fab: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDRadius.fab"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let full: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDRadius.full"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let lg: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDRadius.lg"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let md: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDRadius.md"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let sm: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDRadius.sm"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let xl: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDRadius.xl"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let xs: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDRadius.xs"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let xxl: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDRadius.xxl"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDShadowLayer",
+      "kind" : "swift.struct",
+      "path" : "WDShadowLayer"
+    },
+    {
+      "access" : "public",
+      "decl" : "let blur: CGFloat",
+      "kind" : "swift.property",
+      "path" : "WDShadowLayer.blur"
+    },
+    {
+      "access" : "public",
+      "decl" : "let color: Color",
+      "kind" : "swift.property",
+      "path" : "WDShadowLayer.color"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(x: CGFloat, y: CGFloat, blur: CGFloat, color: Color)",
+      "kind" : "swift.init",
+      "path" : "WDShadowLayer.init(x:y:blur:color:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let x: CGFloat",
+      "kind" : "swift.property",
+      "path" : "WDShadowLayer.x"
+    },
+    {
+      "access" : "public",
+      "decl" : "let y: CGFloat",
+      "kind" : "swift.property",
+      "path" : "WDShadowLayer.y"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDSize",
+      "kind" : "swift.enum",
+      "path" : "WDSize"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let avatarLg: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.avatarLg"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let avatarMd: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.avatarMd"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let avatarSm: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.avatarSm"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let avatarXl: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.avatarXl"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let avatarXs: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.avatarXs"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let avatarXxl: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.avatarXxl"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let cardPaddingComfortable: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.cardPaddingComfortable"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let cardPaddingCompact: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.cardPaddingCompact"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let checkbox: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.checkbox"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let controlLg: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.controlLg"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let controlMd: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.controlMd"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let controlSm: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.controlSm"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let fieldHeight: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.fieldHeight"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let fieldMinWidth: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.fieldMinWidth"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let iconLg: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.iconLg"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let iconMd: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.iconMd"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let iconSm: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.iconSm"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let iconXl: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.iconXl"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let navbarCompact: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.navbarCompact"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let navbarStandard: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.navbarStandard"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let rowHeightComfortable: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.rowHeightComfortable"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let rowHeightCompact: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.rowHeightCompact"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let sheetCornerRadius: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.sheetCornerRadius"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let sheetDetentHalf: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.sheetDetentHalf"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let sheetDetentLarge: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.sheetDetentLarge"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let sheetHandleHeight: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.sheetHandleHeight"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let sheetHandleTopOffset: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.sheetHandleTopOffset"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let sheetHandleWidth: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.sheetHandleWidth"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let sheetMaxWidth: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.sheetMaxWidth"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let tabbarHeight: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.tabbarHeight"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let touchTargetMin: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.touchTargetMin"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDSpacing",
+      "kind" : "swift.enum",
+      "path" : "WDSpacing"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let s1: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSpacing.s1"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let s10: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSpacing.s10"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let s2: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSpacing.s2"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let s3: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSpacing.s3"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let s4: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSpacing.s4"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let s5: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSpacing.s5"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let s6: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSpacing.s6"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let s7: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSpacing.s7"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let s8: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSpacing.s8"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let s9: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSpacing.s9"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDState",
+      "kind" : "swift.enum",
+      "path" : "WDState"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let disabledAlpha: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDState.disabledAlpha"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let focusRingAlpha: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDState.focusRingAlpha"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let focusRingWidth: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDState.focusRingWidth"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let hoverBrightness: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDState.hoverBrightness"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let pressedBrightness: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDState.pressedBrightness"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDTextStyle",
+      "kind" : "swift.struct",
+      "path" : "WDTextStyle"
+    },
+    {
+      "access" : "public",
+      "decl" : "var font: Font { get }",
+      "kind" : "swift.property",
+      "path" : "WDTextStyle.font"
+    },
+    {
+      "access" : "public",
+      "decl" : "let letterSpacing: CGFloat",
+      "kind" : "swift.property",
+      "path" : "WDTextStyle.letterSpacing"
+    },
+    {
+      "access" : "public",
+      "decl" : "let lineHeight: CGFloat",
+      "kind" : "swift.property",
+      "path" : "WDTextStyle.lineHeight"
+    },
+    {
+      "access" : "public",
+      "decl" : "var lineHeightRatio: CGFloat { get }",
+      "kind" : "swift.property",
+      "path" : "WDTextStyle.lineHeightRatio"
+    },
+    {
+      "access" : "public",
+      "decl" : "var lineSpacing: CGFloat { get }",
+      "kind" : "swift.property",
+      "path" : "WDTextStyle.lineSpacing"
+    },
+    {
+      "access" : "public",
+      "decl" : "let size: CGFloat",
+      "kind" : "swift.property",
+      "path" : "WDTextStyle.size"
+    },
+    {
+      "access" : "public",
+      "decl" : "func text(_ value: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTextStyle.text(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let weight: Font.Weight",
+      "kind" : "swift.property",
+      "path" : "WDTextStyle.weight"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDTokensVersion",
+      "kind" : "swift.enum",
+      "path" : "WDTokensVersion"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let colorSlotCount: Int",
+      "kind" : "swift.type.property",
+      "path" : "WDTokensVersion.colorSlotCount"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let defaultScheme: String",
+      "kind" : "swift.type.property",
+      "path" : "WDTokensVersion.defaultScheme"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let schemes: [String]",
+      "kind" : "swift.type.property",
+      "path" : "WDTokensVersion.schemes"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let sha12: String",
+      "kind" : "swift.type.property",
+      "path" : "WDTokensVersion.sha12"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let sha256: String",
+      "kind" : "swift.type.property",
+      "path" : "WDTokensVersion.sha256"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let version: String",
+      "kind" : "swift.type.property",
+      "path" : "WDTokensVersion.version"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDType",
+      "kind" : "swift.enum",
+      "path" : "WDType"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let body: WDTextStyle",
+      "kind" : "swift.type.property",
+      "path" : "WDType.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let callout: WDTextStyle",
+      "kind" : "swift.type.property",
+      "path" : "WDType.callout"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let caption1: WDTextStyle",
+      "kind" : "swift.type.property",
+      "path" : "WDType.caption1"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let caption2: WDTextStyle",
+      "kind" : "swift.type.property",
+      "path" : "WDType.caption2"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let footnote: WDTextStyle",
+      "kind" : "swift.type.property",
+      "path" : "WDType.footnote"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let headline: WDTextStyle",
+      "kind" : "swift.type.property",
+      "path" : "WDType.headline"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let largeTitle: WDTextStyle",
+      "kind" : "swift.type.property",
+      "path" : "WDType.largeTitle"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let overline: WDTextStyle",
+      "kind" : "swift.type.property",
+      "path" : "WDType.overline"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let subheadline: WDTextStyle",
+      "kind" : "swift.type.property",
+      "path" : "WDType.subheadline"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let title1: WDTextStyle",
+      "kind" : "swift.type.property",
+      "path" : "WDType.title1"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let title2: WDTextStyle",
+      "kind" : "swift.type.property",
+      "path" : "WDType.title2"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let title3: WDTextStyle",
+      "kind" : "swift.type.property",
+      "path" : "WDType.title3"
+    }
+  ]
+}

@@ -1,10 +1,11 @@
 // 本文件由 wisdomdesign/tools/token-build/build.js 生成，请勿手改。
 // 修改请编辑 wisdomdesign/tokens/wisdom.tokens.json 后重新生成。
-
+// tokens v1.0.0 · sha256:e552bb87e270
 
 import SwiftUI
 
 /// 语义色。界面只允许引用这一层。
+/// 浅深成对：明色方案 = light，暗色方案 = dark（schemes 维度）。
 public enum WDColor {
     public static let bgCanvas = Color(wdLight: 0xF1F8FA, dark: 0x0A1B26)
     public static let bgGrouped = Color(wdLight: 0xE8F2F7, dark: 0x0D2331)
@@ -17,6 +18,7 @@ public enum WDColor {
     public static let textPrimary = Color(wdLight: 0x0A1B24, dark: 0xE6F1F6)
     public static let textSecondary = Color(wdLight: 0x3E5764, dark: 0xA4BCCB)
     public static let textTertiary = Color(wdLight: 0x4C616D, dark: 0x839EB0)
+    public static let textDisabled = Color(wdLight: 0x6A7B85, dark: 0x6E8798)
     public static let textOnLightPrimary = Color(wdLight: 0x0A1B24, dark: 0x0A1B24)
     public static let textOnLightSecondary = Color(wdLight: 0x3E5764, dark: 0x3E5764)
     public static let textOnLightTertiary = Color(wdLight: 0x4C616D, dark: 0x4C616D)
@@ -79,6 +81,7 @@ public enum WDColor {
 }
 
 /// 渐变。stop 本身是浅深成对的动态色，所以一条令牌即可覆盖两种外观。
+/// 注：>2 套 scheme 的静态渐变色值随 M1 的主题类型扩展（M0-1 只冻结 light/dark）。
 public enum WDGradient {
     public static let surface = WDGradientSpec(
         angleDegrees: 135,
@@ -144,12 +147,18 @@ public enum WDRadius {
     public static let fab: CGFloat = 19
 }
 
-/// 组件尺寸。
+/// 组件尺寸。U8：触控只生成本端常量（iOS 44）。
 public enum WDSize {
     public static let controlSm: CGFloat = 32
     public static let controlMd: CGFloat = 44
     public static let controlLg: CGFloat = 52
     public static let touchTargetMin: CGFloat = 44
+    public static let rowHeightComfortable: CGFloat = 60
+    public static let rowHeightCompact: CGFloat = 44
+    public static let cardPaddingComfortable: CGFloat = 16
+    public static let cardPaddingCompact: CGFloat = 12
+    public static let fieldHeight: CGFloat = 46
+    public static let fieldMinWidth: CGFloat = 190
     public static let checkbox: CGFloat = 26
     public static let iconSm: CGFloat = 16
     public static let iconMd: CGFloat = 20
@@ -161,28 +170,36 @@ public enum WDSize {
     public static let avatarLg: CGFloat = 40
     public static let avatarXl: CGFloat = 56
     public static let avatarXxl: CGFloat = 72
+    public static let sheetDetentHalf: CGFloat = 0.5
+    public static let sheetDetentLarge: CGFloat = 0.92
+    public static let sheetMaxWidth: CGFloat = 480
+    public static let sheetCornerRadius: CGFloat = 32
+    public static let sheetHandleWidth: CGFloat = 36
+    public static let sheetHandleHeight: CGFloat = 5
+    public static let sheetHandleTopOffset: CGFloat = 8
     public static let tabbarHeight: CGFloat = 56
     public static let navbarCompact: CGFloat = 44
     public static let navbarStandard: CGFloat = 56
 }
 
 /// 字阶。size 与 lineHeight 分开给，行高比由设计决定，不交给系统默认。
+/// WDTextStyle 由手写层提供（4 存储字段 + internal init，I-M0-h）；本文件只 emit 常量。
 public enum WDType {
-    public static let largeTitle = WDTextStyle(size: 34, lineHeight: 41, weight: .bold)
-    public static let title1 = WDTextStyle(size: 28, lineHeight: 34, weight: .bold)
-    public static let title2 = WDTextStyle(size: 22, lineHeight: 28, weight: .semibold)
-    public static let title3 = WDTextStyle(size: 20, lineHeight: 25, weight: .semibold)
-    public static let headline = WDTextStyle(size: 17, lineHeight: 22, weight: .semibold)
-    public static let body = WDTextStyle(size: 17, lineHeight: 22, weight: .regular)
-    public static let callout = WDTextStyle(size: 16, lineHeight: 21, weight: .regular)
-    public static let subheadline = WDTextStyle(size: 15, lineHeight: 20, weight: .regular)
-    public static let footnote = WDTextStyle(size: 13, lineHeight: 18, weight: .regular)
-    public static let caption1 = WDTextStyle(size: 12, lineHeight: 16, weight: .regular)
-    public static let caption2 = WDTextStyle(size: 11, lineHeight: 13, weight: .medium)
-    public static let overline = WDTextStyle(size: 12, lineHeight: 16, weight: .medium)
+    public static let largeTitle = WDTextStyle(size: 34, lineHeight: 41, weight: .bold, letterSpacing: 0)
+    public static let title1 = WDTextStyle(size: 28, lineHeight: 34, weight: .bold, letterSpacing: 0)
+    public static let title2 = WDTextStyle(size: 22, lineHeight: 28, weight: .semibold, letterSpacing: 0)
+    public static let title3 = WDTextStyle(size: 20, lineHeight: 25, weight: .semibold, letterSpacing: 0)
+    public static let headline = WDTextStyle(size: 17, lineHeight: 22, weight: .semibold, letterSpacing: 0)
+    public static let body = WDTextStyle(size: 17, lineHeight: 22, weight: .regular, letterSpacing: 0)
+    public static let callout = WDTextStyle(size: 16, lineHeight: 21, weight: .regular, letterSpacing: 0)
+    public static let subheadline = WDTextStyle(size: 15, lineHeight: 20, weight: .regular, letterSpacing: 0)
+    public static let footnote = WDTextStyle(size: 13, lineHeight: 18, weight: .regular, letterSpacing: 0)
+    public static let caption1 = WDTextStyle(size: 12, lineHeight: 16, weight: .regular, letterSpacing: 0)
+    public static let caption2 = WDTextStyle(size: 11, lineHeight: 13, weight: .medium, letterSpacing: 0)
+    public static let overline = WDTextStyle(size: 12, lineHeight: 16, weight: .medium, letterSpacing: 0.6)
 }
 
-/// 高度。每层阴影按顺序叠加，禁止单层重阴影。
+/// 高度。每层阴影按顺序叠加，禁止单层重阴影。出口档位 e0/e1/e2/e3/brand。
 public enum WDElevation {
     public static let e0: [WDShadowLayer] = [
     ]
@@ -204,6 +221,7 @@ public enum WDElevation {
 }
 
 /// 动效。进场慢、出场快；位移越长时长越长。
+/// 弹簧 canonical = response + dampingRatio；iOS 映射 SwiftUI 的 dampingFraction，**不生成 stiffness**。
 public enum WDMotion {
     public enum Duration {
         public static let instant: Double = 0.10
@@ -211,6 +229,7 @@ public enum WDMotion {
         public static let base: Double = 0.24
         public static let slow: Double = 0.34
         public static let slower: Double = 0.50
+        public static let reduced: Double = 0.15
     }
 
     public enum Spring {
@@ -218,4 +237,13 @@ public enum WDMotion {
         public static let snappy = Animation.spring(response: 0.28, dampingFraction: 0.82)
         public static let bouncy = Animation.spring(response: 0.42, dampingFraction: 0.68)
     }
+}
+
+/// 交互状态视觉值（U6 / F45）。百分数按 0–100 原样给，使用时除 100；ring-width 单位 pt。
+public enum WDState {
+    public static let hoverBrightness: CGFloat = 98
+    public static let pressedBrightness: CGFloat = 96
+    public static let focusRingWidth: CGFloat = 3
+    public static let focusRingAlpha: CGFloat = 32
+    public static let disabledAlpha: CGFloat = 40
 }
