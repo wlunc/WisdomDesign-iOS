@@ -373,46 +373,9 @@
 
   // MARK: - ④ 主题 / 材质 / 动效公开面（SPEC §3.2 / §3.5）
 
-  /// 平台外观快照（字段名 + `WDGlassResolution` = U10 契约真源；IOS-11）。
-  public struct WDAppearance: Sendable, Equatable {
-    /// 亮/暗。
-    public let colorScheme: ColorScheme
-    /// 对比度（`.standard` / `.increased`）。
-    public let contrast: ColorSchemeContrast
-    /// 降低透明度。
-    public let reduceTransparency: Bool
-    /// 不依赖颜色的区分。
-    public let differentiateWithoutColor: Bool
-    /// 减弱动效。
-    public let reduceMotion: Bool
-  }
-
-  /// 玻璃解析结果（U10 输出：`opaque` / `glass` / `glassStrong`）。
-  public enum WDGlassResolution: Sendable, Equatable {
-    case opaque
-    case glass
-    case glassStrong
-  }
-
-  /// 文字级别（U10 输入之一）。
-  public enum WDTextLevel: Sendable, Equatable {
-    case primary
-    case secondary
-    case tertiary
-  }
-
-  /// 玻璃解析器（§3.2；`contrast == .increased` / `reduceTransparency` ⇒ `opaque`）。
-  public enum WDGlass {
-    /// 解析档位。
-    public static func resolve(
-      textLevel: WDTextLevel,
-      appearance: WDAppearance,
-      capabilities: WDGlassCapabilities,
-      budget: WDEffectsBudget
-    ) -> WDGlassResolution {
-      fatalError()
-    }
-  }
+  // U10 的 `WDAppearance` / `WDGlassResolution` / `WDTextLevel` / `WDGlass.resolve`
+  // 与 `WDGlassCapabilities` / `WDEffectsBudget` **已由 M1-⑤ 实现**（`Foundation/Material/`），
+  // 故从此冒烟段删除（冒烟只放尚未实现的声明 —— 实现落地即删，SPEC §9.2-I-M0-d 的口径）。
 
   /// 动效令牌协议（§3.5；成员待 M1 定，此处只锁约束名）。
   public protocol WDMotionToken {}
@@ -450,10 +413,8 @@
   /// 徽标值（真实声明落 M2/M5）。
   public struct WDBadgeValue: Sendable, Equatable {}
 
-  /// 玻璃能力集合（U10 输入；成员待 M1/M4 定）。
-  public struct WDGlassCapabilities: Sendable, Equatable {}
-
-  /// 效果配额（U10 输入；§12.2 的 7 条硬上限在 M4 编码）。
-  public struct WDEffectsBudget: Sendable, Equatable {}
+// U10 的 `WDGlassCapabilities` 与 `WDEffectsBudget` **已由 M1-⑤ 实现**
+//（`Foundation/Material/`：能力只有 supportsGlass 一项；预算已编码 §12.2 的 7 条硬上限），
+// 故从此冒烟段删除。
 
 #endif

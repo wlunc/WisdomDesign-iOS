@@ -24,9 +24,21 @@
   "symbols" : [
     {
       "access" : "public",
+      "decl" : "var wdAppearance: WDAppearance { get }",
+      "kind" : "swift.property",
+      "path" : "EnvironmentValues.wdAppearance"
+    },
+    {
+      "access" : "public",
       "decl" : "var wdColors: WDColorValues { get }",
       "kind" : "swift.property",
       "path" : "EnvironmentValues.wdColors"
+    },
+    {
+      "access" : "public",
+      "decl" : "var wdEffectsBudget: WDEffectsBudget { get set }",
+      "kind" : "swift.property",
+      "path" : "EnvironmentValues.wdEffectsBudget"
     },
     {
       "access" : "public",
@@ -39,6 +51,12 @@
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "View.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "View.wdEffectsBudget(_:)"
     },
     {
       "access" : "public",
@@ -69,6 +87,48 @@
       "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
       "kind" : "swift.method",
       "path" : "View.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDAppearance",
+      "kind" : "swift.struct",
+      "path" : "WDAppearance"
+    },
+    {
+      "access" : "public",
+      "decl" : "let colorScheme: ColorScheme",
+      "kind" : "swift.property",
+      "path" : "WDAppearance.colorScheme"
+    },
+    {
+      "access" : "public",
+      "decl" : "let contrast: ColorSchemeContrast",
+      "kind" : "swift.property",
+      "path" : "WDAppearance.contrast"
+    },
+    {
+      "access" : "public",
+      "decl" : "let differentiateWithoutColor: Bool",
+      "kind" : "swift.property",
+      "path" : "WDAppearance.differentiateWithoutColor"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(colorScheme: ColorScheme, contrast: ColorSchemeContrast, reduceTransparency: Bool, differentiateWithoutColor: Bool, reduceMotion: Bool)",
+      "kind" : "swift.init",
+      "path" : "WDAppearance.init(colorScheme:contrast:reduceTransparency:differentiateWithoutColor:reduceMotion:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let reduceMotion: Bool",
+      "kind" : "swift.property",
+      "path" : "WDAppearance.reduceMotion"
+    },
+    {
+      "access" : "public",
+      "decl" : "let reduceTransparency: Bool",
+      "kind" : "swift.property",
+      "path" : "WDAppearance.reduceTransparency"
     },
     {
       "access" : "public",
@@ -1086,6 +1146,138 @@
     },
     {
       "access" : "public",
+      "decl" : "enum WDContrast",
+      "kind" : "swift.enum",
+      "path" : "WDContrast"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let bodyTextThreshold: Double",
+      "kind" : "swift.type.property",
+      "path" : "WDContrast.bodyTextThreshold"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func composite(_ top: Color, over bottom: Color) -> Color",
+      "kind" : "swift.type.method",
+      "path" : "WDContrast.composite(_:over:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let graphicsThreshold: Double",
+      "kind" : "swift.type.property",
+      "path" : "WDContrast.graphicsThreshold"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func meetsBodyText(_ ratio: Double) -> Bool",
+      "kind" : "swift.type.method",
+      "path" : "WDContrast.meetsBodyText(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func meetsGraphics(_ ratio: Double) -> Bool",
+      "kind" : "swift.type.method",
+      "path" : "WDContrast.meetsGraphics(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func ratio(_ lhs: Color, _ rhs: Color) -> Double",
+      "kind" : "swift.type.method",
+      "path" : "WDContrast.ratio(_:_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func relativeLuminance(_ color: Color) -> Double",
+      "kind" : "swift.type.method",
+      "path" : "WDContrast.relativeLuminance(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func rgba(_ color: Color) -> (r: Double, g: Double, b: Double, a: Double)",
+      "kind" : "swift.type.method",
+      "path" : "WDContrast.rgba(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDEffectsBudget",
+      "kind" : "swift.struct",
+      "path" : "WDEffectsBudget"
+    },
+    {
+      "access" : "public",
+      "decl" : "let animatedRings: Int",
+      "kind" : "swift.property",
+      "path" : "WDEffectsBudget.animatedRings"
+    },
+    {
+      "access" : "public",
+      "decl" : "let blurSurfaces: Int",
+      "kind" : "swift.property",
+      "path" : "WDEffectsBudget.blurSurfaces"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let `default`: WDEffectsBudget",
+      "kind" : "swift.type.property",
+      "path" : "WDEffectsBudget.default"
+    },
+    {
+      "access" : "public",
+      "decl" : "func downgraded(to other: WDEffectsBudget) -> WDEffectsBudget",
+      "kind" : "swift.method",
+      "path" : "WDEffectsBudget.downgraded(to:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let hapticsPerAction: Int",
+      "kind" : "swift.property",
+      "path" : "WDEffectsBudget.hapticsPerAction"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(blurSurfaces: Int, washes: Int, sheens: Int, skeletonShimmers: Int, strongElevations: Int, animatedRings: Int, hapticsPerAction: Int)",
+      "kind" : "swift.init",
+      "path" : "WDEffectsBudget.init(blurSurfaces:washes:sheens:skeletonShimmers:strongElevations:animatedRings:hapticsPerAction:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let minimal: WDEffectsBudget",
+      "kind" : "swift.type.property",
+      "path" : "WDEffectsBudget.minimal"
+    },
+    {
+      "access" : "public",
+      "decl" : "func reduced(blurSurfaces: Int? = nil, washes: Int? = nil, sheens: Int? = nil, skeletonShimmers: Int? = nil, strongElevations: Int? = nil, animatedRings: Int? = nil, hapticsPerAction: Int? = nil) -> WDEffectsBudget",
+      "kind" : "swift.method",
+      "path" : "WDEffectsBudget.reduced(blurSurfaces:washes:sheens:skeletonShimmers:strongElevations:animatedRings:hapticsPerAction:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let sheens: Int",
+      "kind" : "swift.property",
+      "path" : "WDEffectsBudget.sheens"
+    },
+    {
+      "access" : "public",
+      "decl" : "let skeletonShimmers: Int",
+      "kind" : "swift.property",
+      "path" : "WDEffectsBudget.skeletonShimmers"
+    },
+    {
+      "access" : "public",
+      "decl" : "let strongElevations: Int",
+      "kind" : "swift.property",
+      "path" : "WDEffectsBudget.strongElevations"
+    },
+    {
+      "access" : "public",
+      "decl" : "let washes: Int",
+      "kind" : "swift.property",
+      "path" : "WDEffectsBudget.washes"
+    },
+    {
+      "access" : "public",
       "decl" : "enum WDElevation",
       "kind" : "swift.enum",
       "path" : "WDElevation"
@@ -1161,6 +1353,102 @@
       "decl" : "static func uiFont(for style: WDTextStyle, dynamicTypeSize: DynamicTypeSize) -> UIFont",
       "kind" : "swift.type.method",
       "path" : "WDFontMetrics.uiFont(for:dynamicTypeSize:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDGlass",
+      "kind" : "swift.enum",
+      "path" : "WDGlass"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func resolve(textLevel: WDTextLevel, appearance: WDAppearance, capabilities: WDGlassCapabilities, budget: WDEffectsBudget, level: WDGlassLevel? = nil) -> WDGlassResolution",
+      "kind" : "swift.type.method",
+      "path" : "WDGlass.resolve(textLevel:appearance:capabilities:budget:level:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDGlassCapabilities",
+      "kind" : "swift.struct",
+      "path" : "WDGlassCapabilities"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(supportsGlass: Bool)",
+      "kind" : "swift.init",
+      "path" : "WDGlassCapabilities.init(supportsGlass:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let supportsGlass: Bool",
+      "kind" : "swift.property",
+      "path" : "WDGlassCapabilities.supportsGlass"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDGlassLevel",
+      "kind" : "swift.enum",
+      "path" : "WDGlassLevel"
+    },
+    {
+      "access" : "public",
+      "decl" : "case regular",
+      "kind" : "swift.enum.case",
+      "path" : "WDGlassLevel.regular"
+    },
+    {
+      "access" : "public",
+      "decl" : "case sheen",
+      "kind" : "swift.enum.case",
+      "path" : "WDGlassLevel.sheen"
+    },
+    {
+      "access" : "public",
+      "decl" : "case thick",
+      "kind" : "swift.enum.case",
+      "path" : "WDGlassLevel.thick"
+    },
+    {
+      "access" : "public",
+      "decl" : "case thin",
+      "kind" : "swift.enum.case",
+      "path" : "WDGlassLevel.thin"
+    },
+    {
+      "access" : "public",
+      "decl" : "case tinted",
+      "kind" : "swift.enum.case",
+      "path" : "WDGlassLevel.tinted"
+    },
+    {
+      "access" : "public",
+      "decl" : "case ultraThin",
+      "kind" : "swift.enum.case",
+      "path" : "WDGlassLevel.ultraThin"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDGlassResolution",
+      "kind" : "swift.enum",
+      "path" : "WDGlassResolution"
+    },
+    {
+      "access" : "public",
+      "decl" : "case glass",
+      "kind" : "swift.enum.case",
+      "path" : "WDGlassResolution.glass"
+    },
+    {
+      "access" : "public",
+      "decl" : "case glassStrong",
+      "kind" : "swift.enum.case",
+      "path" : "WDGlassResolution.glassStrong"
+    },
+    {
+      "access" : "public",
+      "decl" : "case opaque",
+      "kind" : "swift.enum.case",
+      "path" : "WDGlassResolution.opaque"
     },
     {
       "access" : "public",
@@ -1689,6 +1977,30 @@
       "decl" : "static let pressedBrightness: CGFloat",
       "kind" : "swift.type.property",
       "path" : "WDState.pressedBrightness"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDTextLevel",
+      "kind" : "swift.enum",
+      "path" : "WDTextLevel"
+    },
+    {
+      "access" : "public",
+      "decl" : "case primary",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextLevel.primary"
+    },
+    {
+      "access" : "public",
+      "decl" : "case secondary",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextLevel.secondary"
+    },
+    {
+      "access" : "public",
+      "decl" : "case tertiary",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextLevel.tertiary"
     },
     {
       "access" : "public",
