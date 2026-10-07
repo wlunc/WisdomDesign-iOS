@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "lineLength": 100,
+  "indentation": { "spaces": 2 },
+  // I11：顶层对象，且覆盖 #if 块内的 import
+  "orderedImports": { "includeConditionalImports": true },
+  "rules": {
+    // 唯一需要显式开启的键（默认 false，I03）；Generated/ 靠 check-format.sh 的显式清单排除
+    "AllPublicDeclarationsHaveDocumentation": true
+  }
+}

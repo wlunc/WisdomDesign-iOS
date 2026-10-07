@@ -1,0 +1,107 @@
+# .github/workflows/ci.yml —— I-M0-f 交付物：把三层门禁接到 GitHub Actions
+#
+# 口径：iOS/docs/SPEC.md §1.5（三层门禁）+ iOS/docs/DEV-PLAN.md §4（命令与门禁）。
+# 纪律：本文件**只调用** Scripts/ci.sh，不复制门禁命令 —— 门禁的真源是脚本，CI 只是它的一个执行器。
+#
+# 运行环境（[外部事实] 2026-10-06 查 actions/runner-images 的 README 得到）：
+#   · macOS 26（arm64）的 YAML 标签 = macos-26（同时是 macos-latest）；该镜像自带 Xcode 26。
+#   · 本仓要求 Xcode ≥ 26（glassEffect 需 SDK 26，SPEC §1.5.1 I12）⇒ 下面有"工具链断言"这一步，
+#     镜像换代导致 Xcode < 26 时**直接红**，而不是编译到一半报一个难懂的错。
+#   · 【未验证】本文件所在仓库尚无一次 GitHub Actions 实跑；镜像标签与默认 Xcode 版本属外部事实，
+#     首次实跑后回填（对应 SPEC §8.2 的未闭合验证项）。
+#
+# 与 ci.sh 的分工：
+#   · PR 门禁 = ci.sh pr（PR-0 host → PR-1 模拟器 → PR-2 API 冻结 → 覆盖率）；
+#   · nightly = ci.sh nightly（设备编译 + 六态快照；demo 无障碍审计 M1 起）。
+#   · 家目录缓存：GH runner 的家目录可写，ci.sh 默认仍把缓存钉进 .build/home（确定性优先）；
+#     需要时用 WD_USER_HOME_PIN=0 关掉（见 Scripts/ci.sh 文件头）。
+
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  # schedule:  # ← M1 交付 Tests/WisdomUISnapshotTests 后打开：ci.sh nightly 的前置是六态快照套件
+  #   - cron: "0 18 * * *"   # UTC 18:00 = 北京 02:00；在 M1 前打开会让每夜都红（DEV-PLAN §4.2 标注该项 "M1 起"）
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pr:
+    name: PR 门禁（Scripts/ci.sh pr）
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 工具链断言（Xcode ≥ 26）
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          v="$(xcodebuild -version | head -1 | awk '{print $2}')"
+          major="${v%%.*}"
+          if [ "$major" -lt 26 ]; then
+            echo "::error::需要 Xcode ≥ 26（glassEffect / SDK 26，SPEC §1.5.1 I12），当前 $v"
+            exit 1
+          fi
+
+      - name: 运行门禁
+        run: Scripts/ci.sh pr
+
+      - name: 存档门禁报告（阶段耗时 / 覆盖率 / 测试结论 / 日志）
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-pr-reports
+          if-no-files-found: warn
+          path: |
+            .build/perf/*.json
+            .build/logs/*.log
+
+  nightly:
+    name: nightly（设备编译 + 六态快照）
+    # 手动触发才跑；schedule 在 M1 之后打开（见文件头的 schedule 注释）。
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 工具链断言（Xcode ≥ 26）
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          v="$(xcodebuild -version | head -1 | awk '{print $2}')"
+          major="${v%%.*}"
+          if [ "$major" -lt 26 ]; then
+            echo "::error::需要 Xcode ≥ 26（glassEffect / SDK 26，SPEC §1.5.1 I12），当前 $v"
+            exit 1
+          fi
+
+      - name: 运行 nightly
+        run: Scripts/ci.sh nightly
+
+      - name: 存档 nightly 报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-nightly-reports
+          if-no-files-found: warn
+          path: |
+            .build/perf/*.json
+            .build/logs/*.log
+
+# 【接线清单】
+#   · **M0-g 起（已生效，必须先接线）**：PR-0 会跑 Scripts/check-structure.sh --tokens-trace，
+#     它默认读 ../wisdomdesign/dist/tokens.manifest.json ⇒ 本 workflow 必须把设计仓
+#     checkout 到与 iOS 仓同级的 wisdomdesign/（或设 WD_TOKENS_MANIFEST 指向它）；
+#     否则按 SPEC §1.5.4-3「manifest 缺失 = fail」**直接红**（有意为之，不是 bug）。
+#   · M0-5 起：契约真源迁入设计仓 contracts/ ⇒ 再导出
+#     WD_CONTRACTS_DIR=${{ github.workspace }}/wisdomdesign/contracts（SPEC §1.5.4-2）。
+#   · M0-k 起：Scripts/ci.sh measure 的冷/温/净三态由人手动跑，**不进 CI**（预算不是门槛）。
+#   · M1 起：nightly 的 demo 无障碍审计需要 Examples/WisdomUIDemo（Xcode 工程）。
