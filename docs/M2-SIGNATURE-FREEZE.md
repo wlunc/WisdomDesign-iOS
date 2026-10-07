@@ -93,8 +93,8 @@
 | # | 规则 | 理由 | 例外 |
 | --- | --- | --- | --- |
 | **R1** | 单槽位组件的 `init` 用**带标签**形参（`label:`/`icon:`/`value:`/`content:`），**不用 `_` 无标签** | I-3① 的判据是 "C-15 与 `contracts/<component>.yaml` 的 `params[].name` **逐行比对 0 不一致**"；无标签形参在契约里**没有对应的 name** ⇒ 这条机器断言会失配 | `WDButton` 已有的 `_ text: LocalizedStringKey` 是**便利重载**、不承载受控值名 ✅；M2 不新增同类 |
-| **R2** | `label`/`icon`/`content` 一类**槽位一律无默认值**（必填） | L-B：文案与读屏标签由调用方给；与 SPEC:869（`WDIconButton` 的 `accessibilityLabel: Text` **无默认值**）同一条纪律 | 无 |
-| **R3** | §2.10 **未给的档位/参数一律不加** | 不发明 API；将来新增 case 或"带默认值的新参数"属**非破坏**（F-20 / §2.9 规则 1） | 无 |
+| **R2** | **非可选**槽位（`label: Text` / `icon: WDIconName` / `content: () -> C`）**不得有默认值**；「没有这个槽」用**可选类型** `Text? = nil` 表达 | L-B：文案与读屏标签由调用方给；与 SPEC:869（`WDIconButton` 的 `accessibilityLabel: Text` **无默认值**）同一条纪律 | `WDListRow.subtitle: Text? = nil` 这类**可选槽**不受本规则限制（它表达「没有」，不是「默认文案」） |
+| **R3** | §2.10 **未给的档位/参数一律不加** | 不发明 API。**但延后不是免费的，代价要如实写**：① **新增枚举 case = 源级 breaking**（F-20：minor + Breaking 段 + 迁移片段；枚举非 `frozen` ⇒ 二进制不受影响，破坏的是消费方的穷举 `switch`）；② **给既有公开 `init` 追加带默认值的参数** = 破坏符号快照连续性（§2.9 规则 1：需显式基线更新 + CHANGELOG）。两笔代价都**远小于**「现在发明未经设计确认的档位」——那会要么被设计否决、要么长期背一个没人要的 API | 无 |
 
 ### 5.1 逐件确认（8 件）
 
@@ -113,6 +113,7 @@ public struct WDIconButton: View {
 ```
 - 依据：§2.10-#02（受控值 `isLoading`；槽位 `icon` + **a11y 标签必填**；特例 `.plain`）+ SPEC:869（`accessibilityLabel: Text` 无默认值）+ C-15。
 - 待决：**(i)** `WDIconButtonVariant` 的 case 集 —— **建议只 `plain`**（§2.10 只钉了这一档；其余等设计依据，R3）；**(ii)** `size` —— **建议复用 `WDButtonSize`**（一档尺寸体系优于两套）。
+- **附带说明（不在本次签名范围，但实现时必须钉住）**：`WDButtonSize` 是**控件档**（盒高 sm/md/lg），`WDIconSize` 是**图形档**（16/20/24/28），两者**不是同一套**。「控件档 → 图标档」的映射（例如 `.lg` 按钮里用几号图标）属**实现内部的既定映射**，实现时要写进文档并加断言；若设计另有口径，届时按设计改。
 - 结论：☐
 
 **② `WDSwitch`**（§2.10-#05）
