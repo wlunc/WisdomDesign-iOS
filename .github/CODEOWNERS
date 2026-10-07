@@ -1,0 +1,28 @@
+# .github/CODEOWNERS —— 评审归属（SPEC §1.4 / §9.2 的 I-M0-i）
+#
+# 【未验证】角色 → GitHub 账号的映射尚未点名到人（DEV-PLAN §9 的"跨端依赖"未决项）。
+# 本文件先统一挂仓库 owner @wlunc，**每条规则上方用注释写清它对应哪个角色**；
+# 角色点名后只改等号右边，不改规则本身。
+
+# 默认：仓库 owner
+*                                               @wlunc
+
+# 生成物：只允许生成器（wisdomdesign/tools/token-build/build.js）写。
+# 人工改动一律拒（R12 校验 banner）。角色 = tools/token-build 维护者。
+/Sources/WisdomUI/Foundation/Generated/         @wlunc
+
+# 公开 API 基线：与成因同提交，禁止跨提交漂移（AGENTS §9 的第 2 条纪律）。角色 = ios-lead
+/api/                                           @wlunc
+
+# 工程与门禁：改动会影响所有批次的出口判据。角色 = ios-lead
+/Package.swift                                  @wlunc
+/Scripts/                                       @wlunc
+/.swift-format                                  @wlunc
+/.github/workflows/                             @wlunc
+
+# Foundation 层与规格/计划：触及 Foundation 或公开签名需 ios-lead；
+# 触及 U 系列还需 android-lead + tech-lead 确认（AGENTS §9）。
+/Sources/WisdomUI/Foundation/                   @wlunc
+/docs/SPEC.md                                   @wlunc
+/docs/DEV-PLAN.md                               @wlunc
+/AGENTS.md                                      @wlunc

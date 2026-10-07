@@ -12,18 +12,18 @@
 
 ## 0. 30 秒上手
 
-> ⚠️ **本仓处于 M0 前状态**：§5 的脚本（`Scripts/check-structure.sh`、`check-format.sh`、`test-checker.sh`、`dump-api.sh`、`ci.sh`）与 `.github/workflows/ci.yml`、`api/WisdomUI.api.json` 都**尚不存在**——它们由 **§4.1 的 I-M0-b / I-M0-c / I-M0-e / I-M0-f** 产出。M0 前唯一能跑的是 §5.0 的三条命令。
+> ✅ **M0 进行中（2026-10-06 快照）**：§5 的脚本（`check-structure.sh`/`check-format.sh`/`test-checker.sh`/`dump-api.sh`/`ci.sh`）、`.github/workflows/ci.yml`、`api/WisdomUI.api.json` **均已落地**；**`Scripts/ci.sh pr` 已首次全绿**（PR-0 规则+格式+令牌溯源 → PR-1a 编译+签名冒烟 → PR-1b 单测 `passed=6` → PR-2 API 零 diff → 覆盖率报告）。**M0 的 11 项任务已全部交付**（a–k）。**仍有两处外部依赖不阻塞收尾**：I-M0-g 的三个契约读取入口（等设计仓 `contracts/`，M0-5）与 I-M0-h 的 `WDIconName.swift`（生成器尚未产出 icon 产物）。**收尾动作**（由项目负责人决定）：`api/WisdomUI.api.json` 入库（M0 出口④）与 M0 出口 6 条的判定。
 
 1. **不要跑 `swift build` / `swift test`**——本包只声明 `.iOS(.v17)`，host 侧编译必然失败（218 错）。门禁一律 `xcodebuild` + 模拟器（硬约束 7，用户决策链 `08` §2-7）。
-2. **不要手改生成物**：`Sources/WisdomUI/Foundation/Generated/**` 只允许 `../wisdomdesign/tools/token-build/build.js` 写入（R12 校验文件头 banner，`docs/SPEC.md` §1.1.1）。
+2. **不要手改生成物**：`Sources/WisdomUI/Foundation/generated/**` 只允许 `../wisdomdesign/tools/token-build/build.js` 写入（R12 校验文件头 banner，`docs/SPEC.md` §1.1.1）。
 3. **不要跨仓写**：`../android/**`、`../wisdomdesign/**` 一律只读（跨仓写入零容忍）。
 4. **动手前先看两张表**：§3 进程骨架（能不能开工/能不能结批）与 §6 冻结值（哪些值已经定死）。
 5. **不确定就升级**：§11 的升级路径。
 
 ```bash
-# 秒级自检（host，不需要 Xcode）—— ⚠️ 需要 M0-b/M0-c 先产出脚本；M0 前请用 §5.0 的三条命令
+# 秒级自检（host，不需要 Xcode）（脚本已由 I-M0-b/c 落地；仅在脚本缺失的历史状态下才需要 §5.0 的三条命令）
 cd iOS && Scripts/check-structure.sh      # R1–R21 结构/依赖/字面量/令牌溯源
-cd iOS && Scripts/check-format.sh         # swift-format（显式清单，排除 Generated/）
+cd iOS && Scripts/check-format.sh         # swift-format（显式清单，排除 generated/）
 ```
 
 ---
@@ -41,7 +41,7 @@ cd iOS && Scripts/check-format.sh         # swift-format（显式清单，排除
 | `Sources/wd-structure-check/**` | ✅ | host 检查器可执行 target；**只 import Foundation，不得依赖 `WisdomUI`**（`docs/SPEC.md` §1.1.1） |
 | `Tests/**`、`api/WisdomUI.api.json` | ✅ | 测试与符号快照基线（快照必须与成因同提交，§9） |
 | `Scripts/**`、`.github/**`、`Package.swift`、`README.md`、`CONTRIBUTING.md`、`CHANGELOG.md`、`Examples/**` | ✅ | 工程与文档 |
-| `Sources/WisdomUI/Foundation/Generated/**` | ❌ | **只允许生成器写**；人工改动会被 R12 拦（banner 校验） |
+| `Sources/WisdomUI/Foundation/generated/**` | ❌ | **只允许生成器写**；人工改动会被 R12 拦（banner 校验） |
 | `Sources/WisdomUI/Resources/**` | ❌ | **不得创建**（库内零资源，硬约束 5；目录存在即 error） |
 | `Components/Patterns/**` | ❌ | 已删（37 = 20 + 17）；存在即 error（R4） |
 | `../android/**`、`../wisdomdesign/**` | ❌ | 跨仓写入零容忍（需要改令牌 → 走设计仓变更集，§9） |
@@ -120,12 +120,12 @@ M0-1 令牌冻结 → M0-2 生成器 → M0-3/4 生成物 + apiDump（apiCheck �
 | --- | --- | --- | --- |
 | I-M0-a | `Package.swift` 改造（`swiftLanguageModes: [.v6]`、去 `plugins:`、拆测试依赖、加检查器） | `Package.swift` | `xcodebuild -list`（跑通后固化 scheme） |
 | I-M0-b | 结构检查器 R1–R21（注释/字符串剥离、标识符边界、豁免语法） | `Sources/wd-structure-check/`、`Scripts/check-structure.sh` | `Scripts/test-checker.sh`（各一正一反） |
-| I-M0-c | 格式门禁 | `.swift-format`、`Scripts/check-format.sh` | `Scripts/check-format.sh`（排除 `Generated/`） |
+| I-M0-c | 格式门禁 | `.swift-format`、`Scripts/check-format.sh` | `Scripts/check-format.sh`（排除 `generated/`） |
 | I-M0-d | **M0-11 签名冒烟**（`#if WD_API_SMOKE`，只放尚未实现的声明） | `Sources/WisdomUI/APISurface/WDAPISurface.swift` | 并入 `ci.sh pr` 的 `build-for-testing` 同一次调用 |
 | I-M0-e | API 冻结链路 | `Scripts/{dump-api.sh,canonicalize-api.swift}`、`api/WisdomUI.api.json` | `Scripts/dump-api.sh && git diff --exit-code -- api/WisdomUI.api.json` |
 | I-M0-f | 门禁脚本与 workflow | `Scripts/ci.sh`、`.github/workflows/ci.yml` | `Scripts/ci.sh pr` 首次全绿 |
 | I-M0-g | 契约读取与跨仓自证 | `Tests/WisdomUITests/Support/WDContracts.swift`、`--tokens-trace` | `sha12` 相等；manifest 缺失 = fail |
-| I-M0-h | 令牌冻结的 iOS 落点（等设计仓 M0-1/M0-2 完成后同批） | `Foundation/Generated/{WDTokensVersion,WDColorSlots,WDIconName}.swift`、`Foundation/Tokens/WDTokenTypes.swift` | `build.js --check` 绿 + `--tokens-trace` 绿 |
+| I-M0-h | 令牌冻结的 iOS 落点（等设计仓 M0-1/M0-2 完成后同批） | `Foundation/generated/{WDTokensVersion,WDColorSlots,WDIconName}.swift`、`Foundation/Tokens/WDTokenTypes.swift` | `build.js --check` 绿 + `--tokens-trace` 绿 |
 | I-M0-i | README/CONTRIBUTING/PR 模板/CODEOWNERS | `README.md`（删 `swift build/test`）、`.github/**` | **仓内正确 pathspec（t46 实测）**：`git grep -nE 'swift (build\|test)' -- . \| grep -v -- '-product wd-structure-check'` —— **实测当前命中 `README.md:51`（`swift build`）与 `:52`（`swift test`）**，M0-i 删掉这两行后应为**空**；错的写法（`-- iOS/`）实测**0 命中（假绿）** |
 | I-M0-j | 版本治理 | `CHANGELOG.md`、`Examples/BaselineShell/` | 发布 checklist 可勾 |
 | I-M0-k | 门禁预算测量 | `Scripts/ci.sh measure` → `README.md` + `docs/SPEC.md` §1.5.2 | 三次中位数写回；**未测不写预算** |
@@ -157,8 +157,8 @@ M0-1 令牌冻结 → M0-2 生成器 → M0-3/4 生成物 + apiDump（apiCheck �
 ### 5.0 M0 前唯一可跑回路（**现状：现成**，不依赖任何待产出脚本）
 
 ```bash
-xcodebuild -list                                   # 看 scheme/target（I-M0-a 后才有 WisdomUI-Package）
-xcodebuild build -scheme "${WD_SCHEME:-WisdomUI-Package}" -destination 'generic/platform=iOS' \
+xcodebuild -list                                   # 看 scheme/target（I-M0-a 后才有 WisdomDesign-iOS-Package）
+xcodebuild build -scheme "${WD_SCHEME:-WisdomDesign-iOS-Package}" -destination 'generic/platform=iOS' \
   -derivedDataPath .build/dd -quiet                 # 设备编译（不需要模拟器，也不跑测试）
 node ../wisdomdesign/tools/token-build/build.js --check   # 令牌与生成物一致（需要设计仓可读）
 ```
@@ -166,7 +166,7 @@ node ../wisdomdesign/tools/token-build/build.js --check   # 令牌与生成物�
 **变量准备**（**只有手工执行下面的命令才需要设**；`Scripts/ci.sh pr` **内部自解析**同样的两个值，不需要先 export）：
 
 ```bash
-export WD_SCHEME="WisdomUI-Package"   # 候选名（`docs/SPEC.md` §1.5.1 四条纪律第 3 条）；首次跑通后固化进 README 与 ci.sh 常量
+export WD_SCHEME="WisdomDesign-iOS-Package"   # 实测固化值（D-19 已回填）；包级聚合 scheme = <包名>-Package（`docs/SPEC.md` §1.5.1 四条纪律第 3 条）
 export WD_SIM_ID="$(xcrun simctl list -j devices available | python3 -c '
 import json,sys
 d=json.load(sys.stdin)
@@ -180,7 +180,7 @@ print(c[-1][1]["udid"])')"            # 取最新可用运行时的 UDID；禁�
 ```bash
 # ① host 侧，秒级（不需要 Xcode）
 Scripts/check-structure.sh                  # R1–R21 + 令牌溯源 + 契约清单
-Scripts/check-format.sh                     # swift-format（显式文件清单，排除 Generated/）
+Scripts/check-format.sh                     # swift-format（显式文件清单，排除 generated/）
 
 # ② 编译 + 单测 + 签名冒烟（一次模拟器会话；PR 只编模拟器一张编译图）
 xcodebuild build-for-testing -scheme "$WD_SCHEME" -destination "$WD_SIM_ID" \
@@ -198,7 +198,7 @@ Scripts/dump-api.sh && git diff --exit-code -- api/WisdomUI.api.json
 mkdir -p .build/perf && xcrun xccov view --report --json .build/dd/pr.xcresult > .build/perf/coverage.json
 ```
 
-**一步版**（等价）：`Scripts/ci.sh pr`。scheme 与 destination 由脚本解析：scheme 默认 `WisdomUI-Package`（**首次跑通后固化**，不得"取第一个 scheme"），destination **按 UDID**（`xcrun simctl list -j devices available` 取最新可用运行时），**禁止按设备名硬编码**（`docs/SPEC.md` §1.5.1 四条纪律）。
+**一步版**（等价）：`Scripts/ci.sh pr`。scheme 与 destination 由脚本解析：scheme 默认 `WisdomDesign-iOS-Package`（**首次跑通后固化**，不得"取第一个 scheme"），destination **按 UDID**（`xcrun simctl list -j devices available` 取最新可用运行时），**禁止按设备名硬编码**（`docs/SPEC.md` §1.5.1 四条纪律）。
 
 ### 5.2 nightly（每批强制；连续 3 日绿才算批出口）—— **现状：M0 后可用**（`ci.sh nightly` 与快照套件由 I-M0-f/M1 交付）
 
@@ -226,7 +226,7 @@ git describe --tags --exact-match            # 必须 == WDTokensVersion.version
 ```bash
 Scripts/check-structure.sh                  # 规则自检
 Scripts/test-checker.sh                     # 检查器自身正反样本（R1–R21）
-xcrun swift-format lint --strict --parallel $(git ls-files '*.swift' | grep -v '/Foundation/Generated/')
+xcrun swift-format lint --strict --parallel $(git ls-files '*.swift' | grep -vE '/Foundation/[Gg]enerated/')
 ```
 
 ### 5.5 环境前提
@@ -295,8 +295,8 @@ xcrun swift-format lint --strict --parallel $(git ls-files '*.swift' | grep -v '
 
 | # | 未验证项 | 谁回填 | 时点 | 阻塞什么 |
 | --- | --- | --- | --- | --- |
-| U-01 | **`xcodebuild` 全链路**：scheme 名（候选 `WisdomUI-Package`）、PR-0/PR-1/PR-2 真实耗时、覆盖率报告 | ios-lead | **M0 出口前** | M0 出口③④；M2 起无 PR 门禁 |
-| U-02 | **M0-11 签名冒烟的首次 CI 级实跑**（`swiftc` 级验证 ≠ CI 级验证） | ios-lead | M0 出口前 | M0 出口③ |
+| U-01 | **`xcodebuild` 全链路**：scheme 名、PR-0/PR-1/PR-2 真实耗时、覆盖率报告 —— **2026-10-06 部分回填** | ios-lead | **M0 出口前** | M0 出口③④；M2 起无 PR 门禁。**2026-10-07 全部回填（本项闭合）**：scheme = `WisdomDesign-iOS-Package`、`ci.sh pr` 首次全绿、覆盖率报告已产出，三态耗时中位数 = **warm 7.98 / clean 14.46 / cold 58.88 s**（n=3） |
+| U-02 | **M0-11 签名冒烟的首次 CI 级实跑**（`swiftc` 级验证 ≠ CI 级验证）—— **2026-10-06 已回填** | ios-lead | M0 出口前 | M0 出口③；实测 = `ci.sh pr` 的 PR-1a 带 `WD_API_SMOKE` 编译通过、PR-1b `passed=6 failed=0`（2026-10-07 复核） |
 | U-03 | **字体自然行高 iOS 侧实测**（N-7：SF 1.178em / PingFang 1.400em 是组长在 macOS 侧的测量，非 iOS 结论） | ios-dev | **M1 出口前** | M1 fixture 与行盒断言 |
 | U-04 | **AX3 ≈ 175% 的真机/模拟器 `UIFontMetrics` 实测**（N-1，12 档 × 12 字阶） | ios-dev | M1 出口前 | U5 验收档与 `DynamicTypeFixture` |
 | U-05 | 真机 fontScale 2.0 观感、缩放手感（V1） | 两端 | M1 出口 | U7 上界验收 |
@@ -377,7 +377,7 @@ scope ∈ {foundation, tokens, typography, theme, motion, material, a11y, icons,
 | 库内文案/标点/语序模板；`Resources/`；asset catalog；字体文件 | R15 + 硬约束 5（L-B） |
 | `GeometryReader` 包内容；`minimumScaleFactor`；`Mode.Fixed`/`lineHeightMultiple`；自造 `DragGesture(minimumDistance: 0)`；`matchedGeometryEffect` 作库功能；`withAnimation` 包整 body；无 value 的 `.animation(_:)`；组件自建计时器 | `docs/SPEC.md` §2.7/§2.8/§3.4/§3.5 |
 | 原地给公开 `init` 追加带默认值的参数（不经基线更新流程） | `docs/SPEC.md` §2.9 规则 1 |
-| 手改 `Foundation/Generated/**`；创建 `Resources/`；创建 `Components/Patterns/` | R12/R4 + 硬约束 5 |
+| 手改 `Foundation/generated/**`；创建 `Resources/`；创建 `Components/Patterns/` | R12/R4 + 硬约束 5 |
 | 跨仓写入（`../android/**`、`../wisdomdesign/**`） | 跨仓一致性靠变更集，不靠手改 |
 
 **允许例外的方式**：检查器豁免必须**同行给理由**（`// wd-structure-check:disable R1 — 理由`），且 reviewer 按"豁免必须有理由"审；**不要**通过放宽规则或改规格文本来绕过。

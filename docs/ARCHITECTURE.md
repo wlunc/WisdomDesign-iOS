@@ -39,7 +39,7 @@ flowchart TD
   Prev["WisdomUIPreviews<br/>（不进 products）"]
   Cmp["Components/Primitives（20）+ Composites（17）<br/>一组件一目录、三分法文件"]
   Int["Internal/**（零 public）"]
-  Fnd["Foundation/**<br/>Generated / Tokens / Typography / Theme /<br/>Layout / Motion / Material / Accessibility / Icons"]
+  Fnd["Foundation/**<br/>generated / Tokens / Typography / Theme /<br/>Layout / Motion / Material / Accessibility / Icons"]
   Sys["系统框架：SwiftUI / UIKit（白名单）/ Accessibility"]
 
   App --> Cmp
@@ -65,13 +65,13 @@ flowchart TD
         Internal/**（零 public）   （同层不得反向依赖 Composites）
              │
              ▼
-   Foundation/**（Generated/Tokens/Typography/Theme/Layout/Motion/Material/Accessibility/Icons）
+   Foundation/**（generated/Tokens/Typography/Theme/Layout/Motion/Material/Accessibility/Icons）
              │
              ▼
    SwiftUI / UIKit（仅 Typography 与 Internal 白名单）/ Accessibility
 ```
 
-**边界与理由**：① 拆多个 product 会让消费方变成多行 import，且不改跨目录依赖仍需脚本（iOS 首轮评审链 `01` §1.1.1-E2；已退役）；② 生成物 `Foundation/Generated/**` **必须 public**（消费方读令牌），因此 R6"零 public"只约束 `Internal/`（`SPEC.md` §1.1）；③ host 工具 `wd-structure-check` **不得依赖 `WisdomUI`**，否则 host 编译会撞 218 错（`SPEC.md` §1.1.1）。
+**边界与理由**：① 拆多个 product 会让消费方变成多行 import，且不改跨目录依赖仍需脚本（iOS 首轮评审链 `01` §1.1.1-E2；已退役）；② 生成物 `Foundation/generated/**` **必须 public**（消费方读令牌），因此 R6"零 public"只约束 `Internal/`（`SPEC.md` §1.1）；③ host 工具 `wd-structure-check` **不得依赖 `WisdomUI`**，否则 host 编译会撞 218 错（`SPEC.md` §1.1.1）。
 
 ---
 
@@ -85,7 +85,7 @@ iOS/
 ├── AGENTS.md                         施工手册（先读它）
 ├── README.md                          安装 + 门禁 + 预览限制（删 swift build/test）
 ├── CHANGELOG.md                       Keep a Changelog + Breaking 段 + 迁移片段
-├── .swift-format                      格式规则（显式列规则；Generated/ 走文件清单排除）
+├── .swift-format                      格式规则（显式列规则；generated/ 走文件清单排除）
 ├── .github/{workflows/ci.yml, pull_request_template.md, CODEOWNERS}
 ├── Scripts/{ci.sh, check-structure.sh, check-format.sh, test-checker.sh,
 │            dump-api.sh, canonicalize-api.swift, Fixtures/{pass,fail}/**}
@@ -93,7 +93,7 @@ iOS/
 ├── Sources/
 │   ├── WisdomUI/
 │   │   ├── Foundation/
-│   │   │   ├── Generated/              仅生成器写：WDTokens.swift / WDTokensVersion.swift /
+│   │   │   ├── generated/              仅生成器写：WDTokens.swift / WDTokensVersion.swift /
 │   │   │   │                           WDColorSlots.swift / WDIconName.swift
 │   │   │   ├── Tokens/                 WDTokenTypes.swift（WDTextStyle 4 存储字段）等手写适配
 │   │   │   ├── Typography/             WDFontMetrics.swift / wdFont / WDTypographyMapping.swift
@@ -110,12 +110,12 @@ iOS/
 ├── Tests/
 │   ├── WisdomUITests/{Foundation,Components/{Primitives,Composites},Support}   一次渲染多类断言
 │   └── WisdomUISnapshotTests/{SnapshotSupport.swift, Baselines/*.png, Baselines/manifest.json}
-└── Examples/                                              ← planned（M0/M1 产出）
+└── Examples/                                              ← 部分已交付（M0/M1 产出）
     ├── WisdomUIDemo/{WisdomUIDemo.xcodeproj, WisdomUIDemoUITests}     ← planned（M1）
-    └── BaselineShell/                                                ← planned（I-M0-j 空壳基线）
+    └── BaselineShell/{BaselineShell.xcodeproj, BaselineShell}          ← 已交付（I-M0-j 空壳基线）
 ```
 
-**图例**：`← planned（M0/M1 产出）` = **当前尚不存在**，由 M0/M1 任务产出：`Scripts/**`、`.github/**`、`api/WisdomUI.api.json`、`.swift-format`、`CHANGELOG.md`、`CONTRIBUTING.md`、`Sources/WisdomUI/{Components,Internal,APISurface}/**`、`Sources/WisdomUIPreviews/**`、`Sources/wd-structure-check/**`、`Tests/WisdomUISnapshotTests/**`、`Examples/**`。**其余 = 已存在**：`Package.swift`、`README.md`、`LICENSE`、`Sources/WisdomUI/Foundation/{Generated/WDTokens.swift, WDColor+Hex.swift, WDTokenTypes.swift}`、`Tests/WisdomUITests/WDTokensTests.swift`（即 M0 前仓内只有"令牌类型 + 生成物"这一层）。
+**图例**：`← planned（M0/M1 产出）` = **当前尚不存在**，由 M0/M1 任务产出：`Scripts/**`、`.github/**`、`api/WisdomUI.api.json`、`.swift-format`、`CHANGELOG.md`、`CONTRIBUTING.md`、`Sources/WisdomUI/{Components,Internal,APISurface}/**`、`Sources/WisdomUIPreviews/**`、`Sources/wd-structure-check/**`、`Tests/WisdomUISnapshotTests/**`、`Examples/**`。**其余 = 已存在**：`Package.swift`、`README.md`、`LICENSE`、`Sources/WisdomUI/Foundation/{generated/WDTokens.swift, WDColor+Hex.swift, WDTokenTypes.swift}`、`Tests/WisdomUITests/WDTokensTests.swift`（即 M0 前仓内只有"令牌类型 + 生成物"这一层）。
 
 **文件组织纪律**：组件目录**三分法且不许多**（实现 / Style / `+Previews`）；跨组件共享内部件一律落 `Internal/`，**不得**在 `Components/` 下建 `Common/`（`SPEC.md` §1.3）。预览文件由 `#if WD_PREVIEWS` 守卫（**不是 `#if DEBUG`**），release 编译产物零预览符号（`SPEC.md` §1.6；`07` §2.3-3）。
 
@@ -123,16 +123,16 @@ iOS/
 
 ## 3. 令牌流水线与生成物
 
-**决策**：令牌**唯一真源** = `../wisdomdesign/tokens/wisdom.tokens.json`（DTCG 格式）；生成器 = `../wisdomdesign/tools/token-build/build.js`；iOS 侧产物 = `Sources/WisdomUI/Foundation/Generated/**`（**只允许生成器写**，R12 校验文件头 banner）（`08` §2-1/§2-8；`SPEC.md` §1.2/§1.4.1；`DEV-PLAN.md` §5.1）。
+**决策**：令牌**唯一真源** = `../wisdomdesign/tokens/wisdom.tokens.json`（DTCG 格式）；生成器 = `../wisdomdesign/tools/token-build/build.js`；iOS 侧产物 = `Sources/WisdomUI/Foundation/generated/**`（**只允许生成器写**，R12 校验文件头 banner）（`08` §2-1/§2-8；`SPEC.md` §1.2/§1.4.1；`DEV-PLAN.md` §5.1）。
 **用户决策 #3/#8 后新增两个维度**：① `WDColorSlot` **32 槽位**（含 `text.disabled`）；② **`schemes: {light, dark, …}`**（多套 scheme + 生成器 `--schemes`）。
 
 ```mermaid
 flowchart LR
   Tok["tokens/wisdom.tokens.json<br/>（设计真源；切 schemes {light, dark, …}）"]
   Gen["tools/token-build/build.js<br/>--check / --emit-manifest / --schemes"]
-  S1["iOS Generated/WDTokens.swift<br/>（WDType / WDColor / WDSize / WDMotion…）"]
-  S2["iOS Generated/WDTokensVersion.swift<br/>（version + sha256 前 12 位）"]
-  S3["iOS Generated/WDColorSlots.swift（32 槽位）<br/>WDIconName.swift（44 语义名 + mirrorsInRTL）"]
+  S1["iOS generated/WDTokens.swift<br/>（WDType / WDColor / WDSize / WDMotion…）"]
+  S2["iOS generated/WDTokensVersion.swift<br/>（version + sha256 前 12 位）"]
+  S3["iOS generated/WDColorSlots.swift（32 槽位）<br/>WDIconName.swift（44 语义名 + mirrorsInRTL）"]
   Man["dist/tokens.manifest.json<br/>（跨仓自证：version + sha256 + artifacts）"]
   And["Android: foundation/generated/**（对端）"]
   T["测试断言：--tokens-trace（sha12 相等）<br/>缺失 = fail，不得 skip"]
@@ -158,10 +158,10 @@ wisdomdesign/tokens/wisdom.tokens.json         (设计真源；schemes: light/da
         ▼
 tools/token-build/build.js  --check / --emit-manifest / --schemes
         │
-        ├──► iOS  Foundation/Generated/WDTokens.swift
-        ├──► iOS  Foundation/Generated/WDTokensVersion.swift   (version + sha12)
-        ├──► iOS  Foundation/Generated/WDColorSlots.swift      (32 槽位)
-        ├──► iOS  Foundation/Generated/WDIconName.swift        (44 语义名 + mirrorsInRTL)
+        ├──► iOS  Foundation/generated/WDTokens.swift
+        ├──► iOS  Foundation/generated/WDTokensVersion.swift   (version + sha12)
+        ├──► iOS  Foundation/generated/WDColorSlots.swift      (32 槽位)
+        ├──► iOS  Foundation/generated/WDIconName.swift        (44 语义名 + mirrorsInRTL)
         ├──► Android foundation/generated/**                   (对端)
         └──► dist/tokens.manifest.json                         (version + sha256 + artifacts)
                      │
@@ -169,7 +169,7 @@ tools/token-build/build.js  --check / --emit-manifest / --schemes
         测试：--tokens-trace 断言 sha12 相等（缺失 = fail）
 ```
 
-**生成物纪律**：① **数值型**令牌字段缺省 **emit `0`**（当前仅 `letterSpacing`；不 emit 缺省值歧义）；**非数值字段缺省视为错误**，由 `--check` 报红；② banner 两行含工具版本与令牌 hash，R12 比对；③ `Generated/**` 全 `public`（消费方读令牌），因此 `swift-format` 的"公开声明必须有文档"规则要用**显式文件清单排除** `Generated/`（`SPEC.md` §1.3/§1.5.1）；④ `WDTextStyle` = 4 存储字段（`size`/`lineHeight`/`weight`/`letterSpacing`），`lineHeightRatio` 与 `textStyle` 是**手写 extension 的只读派生**（不进令牌）（`SPEC.md` §2.1）。
+**生成物纪律**：① **数值型**令牌字段缺省 **emit `0`**（当前仅 `letterSpacing`；不 emit 缺省值歧义）；**非数值字段缺省视为错误**，由 `--check` 报红；② banner 两行含工具版本与令牌 hash，R12 比对；③ `generated/**` 全 `public`（消费方读令牌），因此 `swift-format` 的"公开声明必须有文档"规则要用**显式文件清单排除** `generated/`（`SPEC.md` §1.3/§1.5.1）；④ `WDTextStyle` = 4 存储字段（`size`/`lineHeight`/`weight`/`letterSpacing`），`lineHeightRatio` 与 `textStyle` 是**手写 extension 的只读派生**（不进令牌）（`SPEC.md` §2.1）。
 
 ---
 
@@ -279,7 +279,7 @@ flowchart TD
 
 ## 7. 门禁与 CI 拓扑
 
-**决策**：三层门禁（PR 必过 / nightly / 发布前），命令一律 `xcodebuild` + 模拟器；**PR 只编模拟器一张编译图**（设备编译下沉 nightly）；destination 按 **UDID** 解析；scheme 名首次跑通后固化（候选 `WisdomUI-Package`）；覆盖率必须有 `-enableCodeCoverage YES -resultBundlePath` 才有输入；**门禁日历**（每批 nightly 连续 3 日绿）= `DEV-PLAN.md` §2.1 的 `+3 工作日/批`（`07` §6.4；`SPEC.md` §1.5.1/§1.5.2；`DEV-PLAN.md` §2/§3.4）。
+**决策**：三层门禁（PR 必过 / nightly / 发布前），命令一律 `xcodebuild` + 模拟器；**PR 只编模拟器一张编译图**（设备编译下沉 nightly）；destination 按 **UDID** 解析；scheme 名首次跑通后固化（候选 `WisdomDesign-iOS-Package`）；覆盖率必须有 `-enableCodeCoverage YES -resultBundlePath` 才有输入；**门禁日历**（每批 nightly 连续 3 日绿）= `DEV-PLAN.md` §2.1 的 `+3 工作日/批`（`07` §6.4；`SPEC.md` §1.5.1/§1.5.2；`DEV-PLAN.md` §2/§3.4）。
 
 ```mermaid
 flowchart LR
@@ -313,7 +313,7 @@ sequenceDiagram
   participant U as 消费方
   D->>D: 令牌 + 契约冻结；打设计仓 tag
   D->>G: tokens/wisdom.tokens.json（含 schemes）
-  G->>I: Foundation/Generated/**（含 WDTokensVersion.sha12）
+  G->>I: Foundation/generated/**（含 WDTokensVersion.sha12）
   G->>A: foundation/generated/**（对端）
   I->>I: 同一提交带上生成物 + api/WisdomUI.api.json
   A->>A: 同一提交带上生成物 + api/wisdom-ui.api

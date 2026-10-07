@@ -99,7 +99,7 @@
 
 | 层/目录 | 允许依赖 | 可见性 |
 | --- | --- | --- |
-| `Sources/WisdomUI/Foundation/`（`Generated/`、`Tokens/`、`Typography/`、`Theme/`、`Layout/`、`Motion/`、`Material/`、`Accessibility/`、`Icons/`） | 仅系统框架：`SwiftUI` / `UIKit`（**限 R15 白名单目录**）/ `Accessibility` | `public` |
+| `Sources/WisdomUI/Foundation/`（`generated/`、`Tokens/`、`Typography/`、`Theme/`、`Layout/`、`Motion/`、`Material/`、`Accessibility/`、`Icons/`） | 仅系统框架：`SwiftUI` / `UIKit`（**限 R15 白名单目录**）/ `Accessibility` | `public` |
 | `Sources/WisdomUI/Components/Primitives/`（20 个，一组件一目录、三分法文件） | `Foundation` + `Internal` | 组件 `public`，同目录内部件 `internal` |
 | `Sources/WisdomUI/Components/Composites/`（17 个） | `Foundation` + `Primitives` + `Internal` | 同上 |
 | `Sources/WisdomUI/Internal/` | `Foundation`，不得依赖 `Composites` | **零 `public`** |
@@ -153,23 +153,23 @@ let rules: [Rule] = [r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13a, r1
 | R4 | 不得存在 `Components/Patterns/` | 目录存在即 violation（`07-summary.md:164` 已删） | error |
 | R5 | `Internal/**` 不得依赖 `Composites` | — | error |
 | R6 | `Internal/**` 不得出现 `public` | 剥离注释后 `\bpublic\b` | error |
-| R7 | **数值字面量必须可追溯到令牌**（扩围，I04） | `Components/**` + `Foundation/**`（白名单 `Generated/`/`Tokens/`/`Internal/`/`Tests/`/`*+Previews.swift`）出现 `\b\d+(\.\d+)?\b`（豁免 `0/1/-1`、`.opacity(`、`zIndex`、`lineLimit`、数组索引、`#available` 版本号） | warning → **M3 起 error** |
+| R7 | **数值字面量必须可追溯到令牌**（扩围，I04） | `Components/**` + `Foundation/**`（白名单 `generated/`/`Tokens/`/`Internal/`/`Tests/`/`*+Previews.swift`）出现 `\b\d+(\.\d+)?\b`（豁免 `0/1/-1`、`.opacity(`、`zIndex`、`lineLimit`、数组索引、`#available` 版本号） | warning → **M3 起 error** |
 | R8 | `Tests/**` 镜像被测层 | 目录形状 + `@testable import` 引用层 | error |
 | R9 | 组件禁 `.frame(height:`/`.frame(width:` 绑令牌常量 | `\.frame\((height\|width):\s*WD` | error |
 | R10 | `Components/**` 禁静态令牌入口 `WDColor.`/`WDType.` | 正则 + 白名单 | error |
 | R11 | `Components/**` 禁 `.font(.system(`/`Font.system(`/`.font(WDType.` | 正则（必须走 `wdFont`/`wdLineBox`） | error |
-| R12 | `Generated/` 只允许生成器写入 | 首 2 行 banner 固定串 | error |
+| R12 | `generated/` 只允许生成器写入 | 首 2 行 banner 固定串 | error |
 | **R13a** | 禁**带初始化器的** `static var`（存储型静态可变状态）与 `AnyView` | `\bstatic var\b\s*\w+\s*=`、`\bAnyView\b` | error |
 | **R13b** | `static var` 仅允许出现在 `extension (ButtonStyle\|ToggleStyle\|ViewModifier) where Self == …` 的**计算型工厂**（无 `=`） | 反例：`extension ButtonStyle where Self == WDButtonStyle` 内的 `static var wdFilled { .init(...) }` **合法** | error（其余位置） |
 | **R14** | `Components/**` 禁 `import UIKit` | `^import UIKit` | error |
-| **R15** | **L-B 机器化**：`Sources/WisdomUI/**`（白名单 `Generated/`/`Tests/`/`*+Previews.swift`/`Internal/` 的日志）出现标点字符（`，。、；：！？,.;:!?`）或词序模板（`第`/`共`/`关闭`/` of `）即 violation | 采纳 §5.1/§5.5-1 | error |
+| **R15** | **L-B 机器化**：`Sources/WisdomUI/**`（白名单 `generated/`/`Tests/`/`*+Previews.swift`/`Internal/` 的日志）出现标点字符（`，。、；：！？,.;:!?`）或词序模板（`第`/`共`/`关闭`/` of `）即 violation | 采纳 §5.1/§5.5-1 | error |
 | **R16** | 库不覆写平台设置：`Sources/WisdomUI/**` 禁 `.preferredColorScheme(`、`.environment(\.colorScheme`、`.environment(\.dynamicTypeSize` | 预览/测试/demo 白名单 | error |
 | **R17** | 公开类型若含 `Text`/`Label`/`SubmitLabel` 存储字段，**不得声明 `Hashable`** | B1 的防复发（`Hashable` 亦可软提示 `Equatable` 冗余） | error |
 | **R18** | `Components/**` 禁写 Environment：`.environment(`、`\.wdDensity =`、`\.wdEffectsBudget =` | 写入口只允许 `Foundation/Theme/WDEnvironment.swift` 的 `View` 修饰符 | error |
 | **R19** | 只允许 `WDColorOverrides`/`WDGradientOverrides`/`WDMaterialOverrides` 三类 `*Overrides` 类型 | 防"槽位覆盖"扩大成"万主题" | error |
 | **R20** | 公开协议不得既 `Sendable` 又要求 `@MainActor` 实现 | 检查器只能软提示（`warning`），主靠 §1.2 的**隔离注解表** + 单测 | warning |
 | **R21** | **文本容器必须有令牌 `minHeight`**：`Components/**` 里出现 `Text` 的最近容器缺少 `minHeight:` 令牌或 `.wdLineBox(...)` | §2.6.3/F3.4 的连带硬约束 | warning → **M3 起 error** |
-| R1–R21 通用 | 白名单目录：`Generated/`、`Tokens/`、`Internal/`、`Tests/`、`*+Previews.swift` | — | — |
+| R1–R21 通用 | 白名单目录：`generated/`、`Tokens/`、`Internal/`、`Tests/`、`*+Previews.swift` | — | — |
 
 > **R7 的服务对象**：它把草案里会"静默变成 iOS 专属魔数"的 5 类值挡在门外，并强制它们进令牌或进 F 系列登记表（见 §1.4 的冻结清单）：`WDBottomSheet` 的 `.fraction(0.5)/.fraction(0.92)`、密度行高 60/44、状态视觉值 98%/96%/32%/40%、Reduce Motion 的 150ms、`maxWidth: 480`。
 > **R15/R21/R7 的升级路径**：M0–M2 为 `warning`（打印但不拦），**M3 起转 `error`**（与 §1.5.5 的覆盖率转门槛同一时点）。
@@ -239,7 +239,7 @@ let package = Package(
 | `public struct WDShadowLayer` | 同上 `:37` |
 | `public struct WDGradientSpec` | 同上 `:68` |
 | `public extension View { func wdShadow(_:) }` | 同上 `:53` |
-| `Generated/**` 的**全部**类型（`WDColor`/`WDType`/`WDSpacing`/`WDRadius`/`WDSize`/`WDGradient`/`WDElevation`/`WDMotion` 及各 `WDTextStyle` 常量） | `Sources/WisdomUI/Foundation/Generated/WDTokens.swift`（`public enum WDElevation` 在 `:186`、`public enum WDMotion` 在 `:207`） |
+| `generated/**` 的**全部**类型（`WDColor`/`WDType`/`WDSpacing`/`WDRadius`/`WDSize`/`WDGradient`/`WDElevation`/`WDMotion` 及各 `WDTextStyle` 常量） | `Sources/WisdomUI/Foundation/generated/WDTokens.swift`（`public enum WDElevation` 在 `:186`、`public enum WDMotion` 在 `:207`） |
 
 ⇒ smoke 文件只写 **§2.2–§2.5 的组件/弹层公开声明 + §2.6.2/§3.2/§3.5 中尚未存在的主题与无障碍公开声明**（`WDButton`/`WDTextField`/`WDListRow`/`.wdSheet`/`.wdActionSheet`/`WDSemantics`/`WDAnnouncing`/`WDAppearance`/`WDGlass`/`WDMotion.Spring`），文本与本文逐字一致。
 
@@ -284,25 +284,25 @@ xcodebuild build-for-testing -scheme "$SCHEME" -destination "$DEST" -derivedData
 
 **纪律（I11 采纳）**：
 1. 其余规则**沿用工具默认**；**Xcode 升级时把默认变化视作漂移**，单独一个 PR（与 REL-7 同纪律）；
-2. 配置文件**没有 `exclude` 键**（`[组长实测]`）⇒ `Generated/` 靠**显式文件清单**排除：
+2. 配置文件**没有 `exclude` 键**（`[组长实测]`）⇒ `generated/` 靠**显式文件清单**排除：
 
 ```bash
 # iOS/Scripts/check-format.sh
-FILES=$(git ls-files '*.swift' | grep -v '/Foundation/Generated/' || true)
+FILES=$(git ls-files '*.swift' | grep -vE '/Foundation/[Gg]enerated/' || true)
 [ -z "$FILES" ] && { echo "no swift files"; exit 0; }
 xcrun swift-format lint --strict --parallel $FILES
 ```
 3. **基线格式化提交必须早于 `api/WisdomUI.api.json` 首次入库**，否则两个巨大 diff 缠在一起不可审（E3 的建议③）。
 
 **命名 / 文件组织 / 导入顺序 / 注释纪律**：沿用 `00-ios-draft.md` §1.3（已被 ratify），补两条：
-- `AllPublicDeclarationsHaveDocumentation` 开启后 `Generated/` 会大面积红 ⇒ 二选一：**生成器为每个 `public` 成员 emit `///`**（首选，与 R12 banner 同批）或用上面的显式清单排除（M0 采用后者，M1 生成器改造后切前者）；
+- `AllPublicDeclarationsHaveDocumentation` 开启后 `generated/` 会大面积红 ⇒ 二选一：**生成器为每个 `public` 成员 emit `///`**（首选，与 R12 banner 同批）或用上面的显式清单排除（M0 采用后者，M1 生成器改造后切前者）；
 - **`@inlinable` 视为签名级变更**（I09）：会扩大 ABI 面并让符号快照对实现细节敏感 ⇒ 只允许出现在 `Foundation/` 的纯计算属性（如 `WDTextStyle.lineHeightRatio`），PR 里逐条点名。
 
 ### 1.4 提交、分支、PR 与 Review
 
 **提交信息 / 分支模型**：沿用 `00-ios-draft.md` §1.4（Conventional Commits + trunk-based + tag 只增不改），补两条（I13/I15）：
 - **squash-merge 会压掉"纯移动 / 语义变化"两个提交的区分** ⇒ 对这两类改动要求 **rebase-merge（保留两个 commit）**，PR 模板加复选框"本 PR 需要保留提交历史（跨层移动 / API 冻结）"；
-- 新增 `iOS/.github/CODEOWNERS`：`Sources/WisdomUI/Foundation/Generated/**` 只能由生成器 PR 触碰（owner = `tools/token-build` 的维护者），人工改动一律拒。
+- 新增 `iOS/.github/CODEOWNERS`：`Sources/WisdomUI/Foundation/generated/**` 只能由生成器 PR 触碰（owner = `tools/token-build` 的维护者），人工改动一律拒。
 
 **机器化的提交纪律**（E4 采纳）：`Scripts/check-commit.sh` 校验 `^[a-z]+(\([a-z0-9/-]+\))?: `；`main` 禁 force-push 由仓库分支保护 + CODEOWNERS 保证。
 
@@ -385,7 +385,7 @@ xcrun swift-format lint --strict --parallel $FILES
 set -euo pipefail
 cd "$(dirname "$0")/.."
 DD=.build/dd
-SCHEME="${WD_SCHEME:-WisdomUI-Package}"        # 首次跑通后固化进 README 与脚本常量，不再运行时猜（B6）
+SCHEME="${WD_SCHEME:-WisdomDesign-iOS-Package}"        # 首次跑通后固化进 README 与脚本常量，不再运行时猜（B6）
 export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"   # I12：glassEffect 需 Xcode ≥26
 
 resolve_sim() {  # 按 UDID + 运行时解析，禁止按设备名硬编码（B6）；依赖 python3（见 §1.6 的运行时依赖行）
@@ -402,7 +402,7 @@ echo "scheme=$SCHEME destination=$DEST xcode=$(xcodebuild -version | head -1)"
 case "${1:-pr}" in
 pr)
   Scripts/check-structure.sh                      # R1–R21 + 令牌溯源 + 契约清单（host，秒级）
-  Scripts/check-format.sh                         # 显式文件清单，排除 Generated/
+  Scripts/check-format.sh                         # 显式文件清单，排除 generated/
   # ★ 一次编译同时产出测试 host 与 M0-11 签名冒烟（IOS-10：不再有第二次 xcodebuild build）
   xcodebuild build-for-testing -scheme "$SCHEME" -destination "$DEST" -derivedDataPath "$DD" -quiet \
     -enableCodeCoverage YES -resultBundlePath "$DD/pr.xcresult" \
@@ -429,22 +429,22 @@ esac
 **四条纪律（I16/F2.1 采纳）**：
 1. **PR 只编模拟器一张编译图**——草案的 `generic/platform=iOS`（PR-1）+ 模拟器（PR-2）是两张图，`≤90s+≤120s` 实际要乘 ~1.5–2；设备构建移到 nightly；
 2. destination **按 UDID**；**金标设备**（快照/审计）另行固定并写进 `Baselines/manifest.json`；
-3. scheme 名**首次跑通后固化**（候选 `WisdomUI-Package`；不采用"取第一个 scheme"，那可能取到 `wd-structure-check`）；
+3. scheme 名**首次跑通后固化**（候选 `WisdomDesign-iOS-Package`；不采用"取第一个 scheme"，那可能取到 `wd-structure-check`）；
 4. **`-enableCodeCoverage YES -resultBundlePath`** 必须有，否则 `xccov` 没有输入（I17）。
 
 #### 1.5.2 门禁强度表（最终）
 
 | 层 | 内容 | 命令 | 预算 |
 | --- | --- | --- | --- |
-| **PR-0**（host，秒级） | R1–R21 + 令牌溯源 + 契约清单 + 格式 + 预览守卫文本检查 | `Scripts/check-structure.sh`、`Scripts/check-format.sh` | 【待实测】，`measure` 后回填 |
-| **PR-1**（模拟器） | **一次 `build-for-testing`**（含 `WD_API_SMOKE` 签名冒烟，IOS-10）+ 逻辑单测（`WisdomUITests`）+ 覆盖率报告 | 见 ci.sh `pr` | 【待实测】；**口径 = 单次模拟器会话**（`build-for-testing` + `test-without-building` + 冒烟），不含 nightly |
-| **PR-2** | API 冻结：规范化符号快照 diff | `Scripts/dump-api.sh && git diff --exit-code -- api/WisdomUI.api.json` | 复用 PR-1 的 DerivedData |
+| **PR-0**（host，秒级） | R1–R21 + 令牌溯源 + 契约清单 + 格式 + 预览守卫文本检查 | `Scripts/check-structure.sh`、`Scripts/check-format.sh` | **实测（2026-10-07，n=3 中位数）：warm 1.49 s / clean 1.48 s / cold 2.16 s** |
+| **PR-1**（模拟器） | **一次 `build-for-testing`**（含 `WD_API_SMOKE` 签名冒烟，IOS-10）+ 逻辑单测（`WisdomUITests`）+ 覆盖率报告 | 见 ci.sh `pr` | **实测（2026-10-07，n=3 中位数）：PR-1a 1.39 / 7.79 / 7.48 s；PR-1b 2.88 / 2.82 / 2.90 s（warm/clean/cold）**；**口径 = 单次模拟器会话**（`build-for-testing` + `test-without-building` + 冒烟），不含 nightly |
+| **PR-2** | API 冻结：规范化符号快照 diff | `Scripts/dump-api.sh && git diff --exit-code -- api/WisdomUI.api.json` | 复用 PR-1 的 DerivedData；**实测：warm 1.61 / clean 1.78 / cold 45.51 s** —— cold 那 45 s 是 `swift Scripts/canonicalize-api.swift` 的**宿主模块缓存被清后重编译**（每轮都付），不是 API 逻辑变慢 |
 | **nightly-1** | 设备编译（`generic/platform=iOS`）+ 六态快照 | ci.sh `nightly` | — |
 | **nightly-2** | demo 无障碍审计（4 类目，`XCUITest`） | `-only-testing:WisdomUIDemoUITests` | — |
 | **nightly-3**（**改口径**） | **模拟器相对量**：渲染 1 次 × N 循环的 `XCTClockMetric`/`XCTMemoryMetric`，写 `.build/perf/{date}.json` | — | §1.5.5 |
 | **发布前** | **真机** hitch（`scrollDecelerationMetric`）、首帧（`XCTApplicationLaunchMetric`）、归档 Thinning 增量、tag 校验 | 真机 + `xcodebuild archive` | — |
 | **过程成本** | `ci.sh measure` 各阶段耗时（PR-0/PR-1/PR-2 分别计时） | 报告，**不做质量门槛**（P-4 已裁） | `Scripts/ci.sh measure` |
-| **预算回填责任（IOS-16）** | PR-0/PR-1/PR-2 各跑 3 次取中位数（cold/warm/clean 三态） | `Scripts/ci.sh measure` → 本表 + `iOS/README.md` | **回填责任 = ios-lead**；**M0 出口前必须回填**，未回填 = §9.3 的出口判定③④未达成（与本表交叉引用） |
+| **预算回填责任（IOS-16）** | PR-0/PR-1/PR-2 各跑 3 次取中位数（cold/warm/clean 三态） | `Scripts/ci.sh measure 3 --states=warm,clean,cold` → 本表 + `iOS/README.md` | **回填责任 = ios-lead** —— **2026-10-07 已回填**（原始数据 `.build/perf/ci-measure-20261007.json`）。**合计中位数：warm 7.98 s / clean 14.46 s / cold 58.88 s**，与 AGENTS §3.2 的"PR ≤10 min / warm ≤5 min"预算比**余量充足** |
 
 #### 1.5.3 API 冻结（B5/F1.1：规范化后入库）
 
@@ -502,7 +502,7 @@ CI 侧导出 `WD_CONTRACTS_DIR=$GITHUB_WORKSPACE/wisdomdesign/contracts`；**解
 
 报告格式固定：`.build/perf/{date}.json` + `docs/perf-ios.md` 一张表（否则 M4 转门槛时没有可比基线）。
 
-**覆盖率**：`Foundation/**` ≥ 80%（**排除 `Generated/`**，否则被生成物稀释成假达标），M3 起转门槛；`Components/**` 不设行覆盖率，改**契约覆盖率**（每组件有名用例 + acceptance 条目 + 基线文件）。
+**覆盖率**：`Foundation/**` ≥ 80%（**排除 `generated/`**，否则被生成物稀释成假达标），M3 起转门槛；`Components/**` 不设行覆盖率，改**契约覆盖率**（每组件有名用例 + acceptance 条目 + 基线文件）。
 
 **构建产物校验（I18 采纳，替换草案的 `-dry-run`）**：
 1. **文本级**（PR-0，秒级）：每个 `*+Previews.swift` 首行 `#if WD_PREVIEWS`、末行 `#endif`；
@@ -527,7 +527,7 @@ CI 侧导出 `WD_CONTRACTS_DIR=$GITHUB_WORKSPACE/wisdomdesign/contracts`；**解
 ### 2.1 `WDTextStyle` 定稿（A1 采纳：4 存储字段 + 2 手写派生）
 
 ```swift
-// Sources/WisdomUI/Foundation/Generated/WDTokens.swift（生成物）
+// Sources/WisdomUI/Foundation/generated/WDTokens.swift（生成物）
 public struct WDTextStyle: Sendable, Equatable {
     public let size: CGFloat            // 令牌 fontSize
     public let lineHeight: CGFloat      // 令牌 lineHeight（总行盒高，绝对值）
@@ -1032,7 +1032,7 @@ public enum WDBannerVariant: String, CaseIterable, Sendable, Equatable {
 public struct WDColorValues: Sendable, Equatable {
     public let textPrimary: Color                 // 32 槽位（含 text.disabled）= semantic.{light,dark} 的**叶子路径**（text.primary → textPrimary）
     // … 其余 31 个
-    public static let `default`: WDColorValues    // 由 Generated/WDColorSlots.swift 提供
+    public static let `default`: WDColorValues    // 由 generated/WDColorSlots.swift 提供
     public init(_ patch: WDColorOverrides)
 }
 public struct WDColorOverrides: Sendable { public var textPrimary: Color? /* … 32 个可选 */ }
@@ -1068,7 +1068,7 @@ public enum WDGlass {
 - **P9 落地条目（scheme 维度；口径来源 = `30-dev-plan.md` §5.8，用户决策 #8 = 层一）**：
   - **支持**：**多套生成 scheme + 运行时选择**——设计侧在令牌真源里给多套 scheme（`schemes: {light, dark, …}`），生成器**一次产出多套**；iOS 侧用 **`wdTheme` 环境键**在运行时选择其中一套（`EnvironmentValues.wdTheme` / `.wdTheme(_:)`，§2.7）。**换皮肤 = 换用"已生成"的一套 scheme**：主题值变更触发依赖该值的视图**重算/重组**，**不重启进程**；换肤动作属低频路径（见下"性能纪律"）。
   - **不支持（硬边界，不得实现）**：运行时加载任意 `token.json`、服务端下发皮肤、逐槽位任意覆盖——这三件事都等于"运行时可自由构造主题"，与本条相反；契约与实现都按"只能选已生成的 scheme"写。
-  - **生成器侧要求（M0-1 一次性冻结，与 §1.4.1 的 17 行清单同批；不新增行号）**：① `../wisdomdesign/tokens/wisdom.tokens.json` 增 **`schemes: {light, dark, …}`** 维度；② `build.js` 支持 **`--schemes` 开关 + 多套输出**（产物仍只落 `Sources/WisdomUI/Foundation/Generated/**`，R12 不变）；③ **`WDColorSlot` = 32 槽位**（含新增 `text.disabled`，已决，见 §1.4.1-#17/§3.1）；④ 冻结窗口只开一次——scheme 维度与 32 槽位**一次落完**，二次变更 = breaking。
+  - **生成器侧要求（M0-1 一次性冻结，与 §1.4.1 的 17 行清单同批；不新增行号）**：① `../wisdomdesign/tokens/wisdom.tokens.json` 增 **`schemes: {light, dark, …}`** 维度；② `build.js` 支持 **`--schemes` 开关 + 多套输出**（产物仍只落 `Sources/WisdomUI/Foundation/generated/**`，R12 不变）；③ **`WDColorSlot` = 32 槽位**（含新增 `text.disabled`，已决，见 §1.4.1-#17/§3.1）；④ 冻结窗口只开一次——scheme 维度与 32 槽位**一次落完**，二次变更 = breaking。
   - **不变量**：`Q-A2` **不重开**；语义色从 31 扩容到 32（新增槽位）**仍非 breaking**（`WDColorSlot` 是 `CaseIterable` 非 `@frozen` 枚举，新增 case 不影响消费方已写代码，§2.9）。
   - **代价（写进 README 与 CHANGELOG）**：换品牌必须先回设计仓库改 scheme → 重新生成 → 发版；**调用方不能自助加品牌**（这是"层一"的明确取舍，不是缺陷）。
   - **性能纪律（与 Android 侧 `staticCompositionLocalOf` 值变化 = 整树重组同源）**：主题值变更会让所有读主题的视图失效与重算 ⇒ **切换动作不得放进高频路径**（滚动 / 动画 / 输入回调里禁止切换主题）；§3.1 的 nightly"主题注入"用例（注入一次后滚动 200 帧断言无重算）即该纪律的回归网。
@@ -1138,7 +1138,7 @@ extension View {
 | 日期/数字 | 尊重系统 locale；库不做格式化（R14）；`WDListRow` 尾部值文本 `.monospacedDigit()`（`[SDK]` `SwiftUI:16727`） |
 | 相对日期 | 不用 `RelativeDateTimeFormatter` 默认相对量（会输出"1 天后"）；调用方用绝对/半绝对模板；`l10n-fixtures.json` 共享 |
 | RTL | 只用 `leading`/`trailing`；图标镜像依赖 SF Symbols 自带元数据（`mirrorsInRTL` 仅契约断言用）；**品牌渐变与色晕不镜像**；验收含 LTR/RTL 两态 |
-| **字符串字面量白名单（I41）** | 白名单目录 `Generated/`、`Tests/`、`*+Previews.swift`、`Internal/`（日志）；其余只允许"标识符/键名"；与 R15 同批实现 |
+| **字符串字面量白名单（I41）** | 白名单目录 `generated/`、`Tests/`、`*+Previews.swift`、`Internal/`（日志）；其余只允许"标识符/键名"；与 R15 同批实现 |
 
 ---
 
@@ -1235,7 +1235,7 @@ extension View {
 | --- | --- | --- | --- |
 | E1 插件 attach | **采纳** | `Package.swift` 不写 `plugins:`；插件保留但 M0 不启用；唯一强制入口 = `Scripts/check-structure.sh`；`07:271` 的"编译期报错"注释列入待回写 | §1.1.1、§1.2 |
 | E2 四层 + 规则 | **采纳（含 I01–I03 的实现修正）** | 见下三行 | §1.1 |
-| E3 swift-format | **部分采纳** | ① 措辞改为"键存在，默认 false，我们显式置 true"（已改）；② `Generated/` 的 `public` 文档告警：**M0 用显式文件清单排除，M1 生成器 emit `///` 后切换**——理由：生成器改造属 M0-2 范围，避免 M0 出口项膨胀；③ `--parallel` 已加；④ 基线格式化提交**先于** `api/WisdomUI.api.json` 首次入库（已写为纪律） | §1.3 |
+| E3 swift-format | **部分采纳** | ① 措辞改为"键存在，默认 false，我们显式置 true"（已改）；② `generated/` 的 `public` 文档告警：**M0 用显式文件清单排除，M1 生成器 emit `///` 后切换**——理由：生成器改造属 M0-2 范围，避免 M0 出口项膨胀；③ `--parallel` 已加；④ 基线格式化提交**先于** `api/WisdomUI.api.json` 首次入库（已写为纪律） | §1.3 |
 | E4 提交/PR | **采纳** | 新增 `Scripts/check-commit.sh`、`CODEOWNERS`、branch protection；PR 模板命令统一为 `Scripts/*.sh` + `$WD_SCHEME`/`$WD_SIM_ID`；新增 L-B 自检段；新增 rebase-merge 复选框 | §1.4 |
 | E5 门禁 | **采纳** | 整套 `ci.sh` 重写（B6） | §1.5 |
 | E6 快照渲染器 | **采纳** | 6 个玻璃类组件清单写进 `SnapshotSupport.swift` 的显式表 | §1.6 |
@@ -1253,8 +1253,8 @@ extension View {
 | I12 版本钉死 | **采纳** | `ci.sh` 导出 `DEVELOPER_DIR`；README 写明 `glassEffect` 需 Xcode ≥26（SDK 26） | §1.5.1 |
 | I13 squash vs 历史 | **采纳** | 跨层移动/API 冻结类 PR 要求 **rebase-merge** + 模板复选框 | §1.4 |
 | I14 PR 模板 | **采纳** | 命令统一、`-destination "$WD_SIM_ID"`、新增"L-B 自检"段 | §1.4 |
-| I15 CODEOWNERS | **采纳** | `Generated/**` 只允许生成器 PR 触碰 | §1.4 |
-| I16 单编译图 | **采纳** | PR 只编模拟器；设备构建移 nightly；destination 按 UDID；scheme 首次跑通后固化（候选 `WisdomUI-Package`） | §1.5.1 |
+| I15 CODEOWNERS | **采纳** | `generated/**` 只允许生成器 PR 触碰 | §1.4 |
+| I16 单编译图 | **采纳** | PR 只编模拟器；设备构建移 nightly；destination 按 UDID；scheme 首次跑通后固化（候选 `WisdomDesign-iOS-Package`） | §1.5.1 |
 | I17 覆盖率/契约路径 | **采纳** | `-enableCodeCoverage YES -resultBundlePath`；`WDContracts.locate()`；契约读 JSON 镜像 | §1.5.2、§1.5.4 |
 | I18 产物校验 | **部分采纳** | 采纳两条替换（文本级 `#if WD_PREVIEWS` 检查 + Release symbolgraph 断言不含 `*Preview*`）；**偏差**：第二条标 **【待实测】**（依赖 PR-3 的工具链复用），`nm` 检查**降级为趋势**（已按建议） | §1.5.5 |
 | I19 host 工具闭包 | **采纳** | 断言 `wd-structure-check` 的依赖闭包不含 `WisdomUI`（`swift package show-dependencies`） | §1.2 |
@@ -1301,7 +1301,7 @@ extension View {
 | I38 手势验收层 | **采纳** | 多选/长按验收放 demo 层（组件不实现），与 O-8 同批 | §3.4、§8 |
 | I39 动画 | **采纳** | `WDMotion.Spring` 字段名 = `response`/`dampingRatio`（`dampingFraction` 只在映射调用点）；"转场由系统控制"白名单进 U11 断言排除清单 | §3.5 |
 | I40 无障碍 | **采纳** | `WDSemantics` 重写（零标点/零语序）；`@MainActor protocol WDAnnouncing`（去 `Sendable`）；错误态走 F22；新增 `WDA11yFocusID`（`AccessibilityFocusState` 需要 `Hashable`，`Text` 不行） | §2.6.2、§3.6 |
-| I41 i18n | **采纳** | 字符串字面量白名单 = `Generated/`/`Tests/`/`*+Previews.swift`/`Internal/`（日志）；其余只允许标识符/键名；与 R15 同批 | §3.7、§1.1.2 |
+| I41 i18n | **采纳** | 字符串字面量白名单 = `generated/`/`Tests/`/`*+Previews.swift`/`Internal/`（日志）；其余只允许标识符/键名；与 R15 同批 | §3.7、§1.1.2 |
 
 ### 5.4 差异、改判项、未决项（§1.4）
 
@@ -1336,7 +1336,7 @@ extension View {
 | O-9 高对比补偿 | 只做第 1 条；第 2/3 排 M4 + 设计签发 | §3.2 |
 | O-10 `WDTextStyle` 构造器 | internal；`WDType.*` 仍 public | §2.1 |
 | O-11 契约落库 | 四文件只读 + **JSON 镜像** + 槽位词表 + 类型名清单 | §1.5.4、§2.10 |
-| O-12 覆盖率转门槛 | M3；`Foundation/**` ≥80% **排除 `Generated/`**；`Components/**` 走契约覆盖率 | §1.5.5 |
+| O-12 覆盖率转门槛 | M3；`Foundation/**` ≥80% **排除 `generated/`**；`Components/**` 走契约覆盖率 | §1.5.5 |
 | O-13 深色 Tab 栏 | 不透明表面；由 `WDGlass.resolve` 实现 + 单测 | §2.10-#34 |
 
 ### 5.6 §2 深挖五类返工陷阱（全部采纳）
@@ -1349,7 +1349,7 @@ extension View {
 | F2.1 destination/scheme | **采纳** | 按 UDID 解析；scheme 固化；PR 单编译图 | §1.5.1 |
 | F2.2 预算先测再写 | **采纳** | `ci.sh measure` 三次取中位数回填；**未测不写预算**（§1.5.2 的预算列保持【待实测】） | §1.5.1、§1.5.2 |
 | F2.3 Swift Testing | **采纳（V-1 降级）** | `Testing.framework` 已在模拟器平台；剩余 = scheme test action 接线 + 一次真跑；快照 suite `.serialized` + `@MainActor`，逻辑用例并行 | §3.6、§8.1 |
-| F2.4 覆盖率/结果包 | **采纳** | `-enableCodeCoverage YES -resultBundlePath`；`Generated/` 排除 | §1.5.5 |
+| F2.4 覆盖率/结果包 | **采纳** | `-enableCodeCoverage YES -resultBundlePath`；`generated/` 排除 | §1.5.5 |
 | F3.1 机制事实 | **采纳** | `.lineSpacing` 只影响行间 ⇒ 单行盒高不由它决定 | §2.6.3 |
 | F3.2 `wdLineBox` + U5-a…d | **采纳** | 行盒唯一入口；四张验收断言；**删除**草案的两个自造阈值（`1.15 ≤ ratio ≤ 1.40` 移入生成器 `--check`；`0 ≤ lineSpacing ≤ 0.35×scaledSize` 删除） | §2.6.3 |
 | F3.3 `WDFontMetrics` 约束 | **采纳** | `natural` 取缩放后字体；M1 不缓存；`@ScaledMetric` 只作对照测试 | §2.6.3 |
@@ -1358,7 +1358,7 @@ extension View {
 | F5.1 YAML → JSON 镜像 | **采纳** | `--emit-contracts-json` → `contracts/dist/*.json`；M0-5 交付物清单加该项 | §1.5.4 |
 | F5.2 `WDContracts.locate()` | **采纳** | env → `#filePath` 上溯 → 抛错；CI 导出 `WD_CONTRACTS_DIR` | §1.5.4 |
 | F5.3 token manifest | **采纳** | `tokens.manifest.json` + `sha12 == WDTokensVersion.hash`；缺失 = fail | §1.5.4 |
-| F5.4 swift-format 排除 | **采纳** | `git ls-files | grep -v '/Foundation/Generated/'` | §1.3 |
+| F5.4 swift-format 排除 | **采纳** | `git ls-files | grep -vE '/Foundation/[Gg]enerated/'` | §1.3 |
 
 ---
 
@@ -1371,7 +1371,7 @@ extension View {
 | 1 | 令牌 schema 冻结窗口只有一次（M0 D1） | **§1.4.1 的 M0-1 清单（17 行）**（`size.field-height`/`size.field-min-width`/`size.row-height.*`/`size.sheet.*`/`motion.duration.reduced`/`state.*`/触控双键/`letterSpacing` 单位…），每行二选一：进令牌 or 进 F 系列同值表 | M0-1 变更集一次落完；`build.js --check` 绿 | 补全清单（B4）；`size.row-height.*` 已在 M0-1 ✓ |
 | 2 | 行高：真源保留绝对值 + `letterSpacing` 槽位；行盒 = `max(设计值×缩放, 自然行高)`；两端各自实现 | `WDTextStyle` 4 字段（§2.1）+ `wdLineBox`/`WDFontMetrics`（§2.6.3） | **带容差 `max` 断言** + 分语种 fixture（U5-a…d）；**禁止**"两端行高一致（22pt）" | ① 断言改形式（B7/D2）；② 删两个自造阈值；③ 修正 `07:190` 的"+2 余量"口径（拉丁侧最小余量 = `caption2` +0.04pt） |
 | 3 | 弹簧 canonical = `response` + `dampingRatio`；`stiffness` 由生成器推导；禁 `massFactor` | `WDMotion.Spring{response,dampingRatio}`；iOS 直接 `Animation.spring(response:dampingFraction:)`；**iOS 产物不生成 `stiffness`/`stiffnessMultiplier`** | 字段名与 canonical 同名；单测断言两值与令牌一致 | 补"`dampingFraction` 只出现在映射调用点"（I39） |
-| 4 | 图标：只统一语义名 + `mirrorsInRTL`；Android 不新增库内资源 | `Generated/WDIconName.swift`（44 条 `String` rawValue，值 = SF Symbols 名）+ `mirrorsInRTL` **仅契约断言**；不建 asset catalog | `icons.json` 语义名集合 = `WDIconName.allCases`；检查器断言 `Sources/WisdomUI/Resources/` 不存在 | — |
+| 4 | 图标：只统一语义名 + `mirrorsInRTL`；Android 不新增库内资源 | `generated/WDIconName.swift`（44 条 `String` rawValue，值 = SF Symbols 名）+ `mirrorsInRTL` **仅契约断言**；不建 asset catalog | `icons.json` 语义名集合 = `WDIconName.allCases`；检查器断言 `Sources/WisdomUI/Resources/` 不存在 | — |
 | 5 | 文案：库内零资源 + 零文案（L-B） | `WDSemantics` 只做结构（§2.6.2）；`closeButtonAccessibilityLabel` 必填；`Package.swift` 不加 `resources:` | **R15**（标点/词序字面量 error）+ `WDSemanticsTests` 用非中文分隔符 | **修正草案的两处违规**（B2/D5） |
 | 6 | Android 玻璃降级为默认；`Modifier.blur` 不是背景模糊 | iOS：`WDGlass.resolve(textLevel:appearance:capabilities:budget:)`（§3.2），iOS 26 `glassEffect` / 17–25 材质 + hairline | 单测：`reduceTransparency == true → opaque`；`contrast == .increased → opaque`（第 1 条）；**两端玻璃截图不放同一次并排比较** | `contrast` 进输入集合（**走 U10 改判**，§7-CR6）；另登记（Android 侧）：`android/README.md:22` 的"Android 12+ 走背景模糊"与 P-1 矛盾，M0 改写 |
 | 7 | iOS 门禁 = `xcodebuild` + 模拟器；`swift build/test` 不作门禁 | `Scripts/ci.sh`（§1.5.1）；`iOS/README.md` 的 `swift build/test` 必须删除；`Package.swift` 不加 macOS 平台 | `xcodebuild build-for-testing/test-without-building` 绿；**禁止的是"库/测试的门禁命令"**：`git grep -nE 'swift (build\|test)' -- . \| grep -v -- '-product wd-structure-check'` 零命中（**t46 实测**：修前写法 `-- iOS/` 在本仓**假绿 0 命中**；正确写法当前命中 `README.md:51-52`，M0-i 删除后应为空）；`check-structure.sh` 里 host 工具的 `swift build --package-path . --product wd-structure-check` 为**显式白名单**；范围含 `README.md`/`CONTRIBUTING.md`/`Examples/**`/`.github/**` | IOS-07 统一口径（原"全仓零命中"与 §1.1.1 自相矛盾 ⇒ 门禁恒红） |
@@ -1464,9 +1464,9 @@ extension View {
 | D-16 | Q-i1/Q-i2 的设计复核 | 设计 | 否（默认已执行） | 见 §7.3 |
 | D-17 | 金标设备选型（快照/审计固定机型与运行时） | tech-lead | 否（nightly 前） | 先按 `resolve_sim` 取最新可用设备跑 PR；金标另写 `Baselines/manifest.json` |
 | D-18 | D-i2 验收句"不得要求 iOS 侧恢复状态"进 acceptance | 架构师 | 否（但 M0-5 同批最省） | 随 M0-5 一起落 |
-| **D-19** | **门禁命令首次跑通后固化 scheme 名** | iOS + tech-lead | **是**（M0 出口项⑧"门禁生效"依赖它） | 候选 `WisdomUI-Package`；跑通后写进 README 与 `ci.sh` 常量 |
+| **D-19** | **门禁命令首次跑通后固化 scheme 名** | iOS + tech-lead | **是**（M0 出口项⑧"门禁生效"依赖它） | **2026-10-06 已回填**：实测固化 = `WisdomDesign-iOS-Package`（包级聚合 scheme = <包名>-Package；原候选名 `WisdomUI-Package` **不存在**）；已写进 README 的「三个已固化的值」与 `Scripts/ci.sh` 常量 |
 | D-20 | Android 侧 `label` 改必填（CR-9） | android-lead | 否（跨端一致，M0-5 前） | iOS 保持必填；Android 侧同批改 |
-| D-21 | 覆盖率转门槛时点与 `Generated/` 排除 | tech-lead | 否（M3） | M3 起门槛；`Foundation/**` ≥80%（排除 `Generated/`） |
+| D-21 | 覆盖率转门槛时点与 `generated/` 排除 | tech-lead | 否（M3） | M3 起门槛；`Foundation/**` ≥80%（排除 `generated/`） |
 | D-22 | `verification-metadata`/供应链（仅 Android 相关） | android-lead | 否 | 与 iOS 无关，本文不展开 |
 
 ### 8.2 未闭合验证项（跑不了、只能推导；**不得在下游写成结论**）
@@ -1474,7 +1474,7 @@ extension View {
 | # | 项 | 归属角色 | **是否阻塞 M0** | 验证动作 |
 | --- | --- | --- | --- | --- |
 | N-1 | `docs/06-accessibility.md:118` 的"AX3 ≈ 175%" | iOS | 否（阻塞 M1 的 fixture） | 真机/模拟器用 `UIFontMetrics` 实测 12 档 × 12 字阶系数表，固化 `DynamicTypeFixture.swift`；**禁止写死百分比** |
-| N-2 | `xcodebuild` 门禁从未跑通 | iOS | **是**（M0 出口项⑧） | 在可写环境跑一次 `Scripts/ci.sh pr`；`01-ios-review.md` §7-5 已定位失败点 = SwiftPM manifest 缓存（`~/Library/Caches/org.swift.swiftpm/manifests/ManifestLoading/ios.dia`）⇒ 脚本显式固化缓存/派生目录 |
+| N-2 | `xcodebuild` 门禁从未跑通 —— **2026-10-06 已跑通（本项闭合）** | iOS | **是**（M0 出口项⑧） | 实测：`Scripts/ci.sh pr` EXIT=0（PR-1b `passed=4 failed=0`）；**根因与修法已固化进脚本**（SwiftPM manifest 缓存写在家目录、受限环境不可写 ⇒ `CFFIXED_USER_HOME` 钉进 `.build/home/`，见 `Scripts/ci.sh` 文件头差异①）。历史定位：`01-ios-review.md` §7-5 已定位失败点 = SwiftPM manifest 缓存（`~/Library/Caches/org.swift.swiftpm/manifests/ManifestLoading/ios.dia`）⇒ 脚本显式固化缓存/派生目录 |
 | N-6 | SPM tag 移动的失败模式（REL-5） | iOS | 否（发布前） | 政策无条件成立；失败模式（解析失败 vs 静默换版）需一次实验 |
 | N-7 | **iOS 侧**字体自然行高实测（review §7-14 是 macOS 侧，同一字体文件但以 iOS fixture 为准） | iOS | 否（**阻塞 M1** 的 U5 fixture） | `LanguageLineBoxFixture.swift` 的字体级 + 渲染级两步测量（§2.6.3） |
 | N-8 | `swift-format` 规则集跨 Xcode 版本漂移 | iOS | 否 | 记录工具链版本；升级时格式漂移单独 PR |
@@ -1488,7 +1488,7 @@ extension View {
 | V-8 | 检查器实现的边界行为（macOS 10.13 API 约束、正则、注释剥离） | iOS | 否（随 PR-0 交付） | `Scripts/Fixtures/{pass,fail}/*.swift` + `Scripts/test-checker.sh`：R1–R21 各一正一反；归属已核（`onGeometryChange`/`phaseAnimator`/`Layout` 在 SwiftUICore；`containerRelativeFrame` 在 SwiftUI） |
 | V-9 | `ButtonStyle` 内直接 `@Environment` 的注入行为（I19） | iOS | 否 | 已用 `_WDButtonChrome` 安全形态兜住；验证只影响能否简化 |
 | V-10 | `orderedImports` 对 `#if` 块内 import 的实际行为（I11） | iOS | 否 | 首次 `check-format.sh` 跑通时确认 |
-| V-11 | 真实耗时（`ci.sh measure` 三次中位数） | iOS | **是**（M0 出口项的门禁预算表） | 跑 `Scripts/ci.sh measure`，把 cold/warm/clean 三态写进 `iOS/README.md` 与 §1.5.2（**未测之前不写"预算"**） |
+| V-11 | 真实耗时（`ci.sh measure` 三次中位数）—— **2026-10-07 已跑通（本项闭合）** | iOS | **是**（M0 出口项的门禁预算表） | 实测：`Scripts/ci.sh measure 3 --states=warm,clean,cold`，三态各自 n=3 中位数 = **7.98 / 14.46 / 58.88 s**，已写进 `iOS/README.md` 与 §1.5.2；原始数据 `.build/perf/ci-measure-20261007.json` |
 
 > **未闭合项的处理纪律**：以上任一项在 M0 出口验收时若仍无法跑通，**按"未验证"记入 M0 出口报告**（不隐瞒、不用"待定"掩盖），并按 §8.1 的默认执行项继续推进后续里程碑——**唯一例外是 N-2/D-19/V-11（门禁首次跑通）**，它们是 M0 出口项⑧的直接依赖，必须先解决。
 
@@ -1530,13 +1530,13 @@ extension View {
 | --- | --- | --- | --- | --- |
 | **I-M0-a** | `Package.swift` 改造：`swiftLanguageModes: [.v6]` + `swiftSettings`、**去掉 `plugins:`**、拆测试 target 依赖、加 `wd-structure-check` | `iOS/Package.swift` | — | `xcodebuild -list`（首次跑通后固化 scheme） |
 | **I-M0-b** | 结构检查器实现：R1–R21 + 注释/字符串剥离 + 标识符边界 + 豁免语法 | `iOS/Sources/wd-structure-check/main.swift`、`iOS/Scripts/check-structure.sh` | I-M0-a | `Scripts/test-checker.sh`（`Scripts/Fixtures/{pass,fail}` 各一正一反） |
-| **I-M0-c** | 格式门禁 | `iOS/.swift-format`、`iOS/Scripts/check-format.sh` | — | `Scripts/check-format.sh`（显式清单排除 `Generated/`） |
-| **I-M0-d** | 签名冒烟（**M0-11**，IOS-01/IOS-10） | `iOS/Sources/WisdomUI/APISurface/WDAPISurface.swift`（`#if WD_API_SMOKE`，**只放尚未实现的声明**，排除 `WDTextStyle`/`WDShadowLayer`/`WDGradientSpec`/`Generated/**` 全部类型，见 §1.2.2 排除清单） | 本文 §2–§3 | **并入 PR-1 的 `build-for-testing` 同一次调用**（`SWIFT_ACTIVE_COMPILATION_CONDITIONS='$(inherited) WD_API_SMOKE'`），不新增编译；退役规则见 §1.2.2 |
+| **I-M0-c** | 格式门禁 | `iOS/.swift-format`、`iOS/Scripts/check-format.sh` | — | `Scripts/check-format.sh`（显式清单排除 `generated/`） |
+| **I-M0-d** | 签名冒烟（**M0-11**，IOS-01/IOS-10） | `iOS/Sources/WisdomUI/APISurface/WDAPISurface.swift`（`#if WD_API_SMOKE`，**只放尚未实现的声明**，排除 `WDTextStyle`/`WDShadowLayer`/`WDGradientSpec`/`generated/**` 全部类型，见 §1.2.2 排除清单） | 本文 §2–§3 | **并入 PR-1 的 `build-for-testing` 同一次调用**（`SWIFT_ACTIVE_COMPILATION_CONDITIONS='$(inherited) WD_API_SMOKE'`），不新增编译；退役规则见 §1.2.2 |
 | **I-M0-e** | API 冻结链路 | `iOS/Scripts/{dump-api.sh,canonicalize-api.swift}`、`iOS/api/WisdomUI.api.json` | I-M0-a | `Scripts/dump-api.sh && git diff --exit-code -- api/WisdomUI.api.json` |
 | **I-M0-f** | 门禁脚本与 workflow | `iOS/Scripts/ci.sh`、`iOS/.github/workflows/ci.yml` | I-M0-b/c/e | `Scripts/ci.sh pr`（首次跑通 = N-2/D-19/V-11 闭合） |
 | **I-M0-g** | 契约读取与跨仓自证 | `iOS/Tests/WisdomUITests/Support/WDContracts.swift`、`Scripts/check-structure.sh` 的 `--tokens-trace` | 架构师的 `contracts/dist/*.json` + `tokens.manifest.json` | `WDContracts.tokenManifest()` 断言 `sha12` 相等；缺失 = fail |
-| **I-M0-h** | 令牌冻结的 iOS 落点（等 M0-1/M0-2 完成后同批） | `Foundation/Generated/{WDTokensVersion.swift, WDColorSlots.swift, WDIconName.swift}`、`Foundation/Tokens/WDTokenTypes.swift`（`WDTextStyle` 4 字段） | 设计仓 M0-1/M0-2 | `build.js --check` 绿 + `--tokens-trace` 绿 |
-| **I-M0-i** | README/CONTRIBUTING/PR 模板/CODEOWNERS | `iOS/README.md`（删 `swift build/test`、写门禁与预览限制）、`iOS/.github/{pull_request_template.md,CODEOWNERS}` | — | `git grep -nE 'swift (build\|test)' -- . \| grep -v -- '-product wd-structure-check'` 为空（**t46 实测**：当前命中 `README.md:51-52`；M0-i 删除后应为空） |
+| **I-M0-h** | 令牌冻结的 iOS 落点（等 M0-1/M0-2 完成后同批） | `Foundation/generated/{WDTokensVersion.swift, WDColorSlots.swift, WDIconName.swift}`、`Foundation/Tokens/WDTokenTypes.swift`（`WDTextStyle` 4 字段） | 设计仓 M0-1/M0-2 | `build.js --check` 绿 + `--tokens-trace` 绿 |
+| **I-M0-i** | README/CONTRIBUTING/PR 模板/CODEOWNERS | `iOS/README.md`（删 `swift build/test`、写门禁与预览限制）、`iOS/.github/{pull_request_template.md,CODEOWNERS}` | — | `git grep -nE 'swift (build\|test)' -- . \| grep -v -- '-product wd-structure-check'` 为空（**t46 实测**：当时命中 `README.md:51-52`；**本轮已删** ⇒ 本条判据的范围 = `README.md`/`CONTRIBUTING.md`/`Examples/**`/`.github/**`，实测 **0 命中**）。**判据范围注**：写成 `-- .` 会把 `AGENTS.md`/`docs/**` 的**正文**命中（"不要跑 X"这类说明文字）一并算入，该写法**恒非空**；按 §6.1-7 给的范围执行才是本条 |
 | **I-M0-j** | 版本治理 | `iOS/CHANGELOG.md`（Keep a Changelog + Breaking 段）、`Examples/BaselineShell/`（空壳基线） | — | 发布 checklist 可勾 |
 | **I-M0-k** | 门禁预算测量 | `Scripts/ci.sh measure` → `iOS/README.md` + 本文 §1.5.2 | I-M0-f | 三次中位数写回；**未测不写预算** |
 
