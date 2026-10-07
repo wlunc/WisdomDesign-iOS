@@ -325,13 +325,8 @@
   // 落地清单：`WDIconName` = I-M0-h（生成物）⚠️；`WDAvatarValue` / `WDBadgeValue` = M2/M5；
   // `WDGlassCapabilities` / `WDEffectsBudget` = M1/M4；`WDMotionToken` 成员 = M1。
 
-  /// 图标语义名（44 条语义名由生成物承载）。
-  /// ⚠️ **`Generated/WDIconName.swift` 落地（I-M0-h）时必须同 PR 删除本段**，否则重复声明。
-  /// `placeholder` 是 smoke 占位 case（raw-value 枚举不能零 case）；不代表任何真实图标语义。
-  public enum WDIconName: String, CaseIterable, Sendable, Equatable {
-    /// smoke 占位（随本段一并删除）。
-    case placeholder
-  }
+  // `WDIconName` **已由设计仓生成器产出**（Foundation/generated/WDIconName.swift，契约源 = contracts/icons.json），
+  // 故从此冒烟段删除（I-M0-h 落地）。
 
   /// 头像值（真实声明落 M2/M5）。
   public struct WDAvatarValue: Sendable, Equatable {}

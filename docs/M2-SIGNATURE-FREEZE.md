@@ -234,3 +234,4 @@ public struct WDIcon: View {
 
 > **纪律**：延后项**不写进代码** —— 不硬编码 SF Symbol 名（F-07：图标名以契约为准）。落地时按 §1 的已冻结签名回填，并更新 `api/WisdomUI.api.json` 基线。
 > **实现现状（2026-10-07）**：`WDTextField` 已实现除上表三项之外的全部成员；其冒烟段已退役（`WDAPISurface.swift`）。
+> **2026-10-07 更新**：`WDIconName` 生成物**已落地**（设计仓生成器产出，44 条；冒烟占位已退役）⇒ **上表延后项现已可回填**，回填时按本表 §1 的已冻结签名补齐，并同步更新 `api/WisdomUI.api.json`。

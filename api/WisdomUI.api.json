@@ -1518,6 +1518,294 @@
     },
     {
       "access" : "public",
+      "decl" : "enum WDIconName",
+      "kind" : "swift.enum",
+      "path" : "WDIconName"
+    },
+    {
+      "access" : "public",
+      "decl" : "case add",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.add"
+    },
+    {
+      "access" : "public",
+      "decl" : "case back",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.back"
+    },
+    {
+      "access" : "public",
+      "decl" : "case bill",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.bill"
+    },
+    {
+      "access" : "public",
+      "decl" : "case calendar",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.calendar"
+    },
+    {
+      "access" : "public",
+      "decl" : "case chore",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.chore"
+    },
+    {
+      "access" : "public",
+      "decl" : "case clear",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.clear"
+    },
+    {
+      "access" : "public",
+      "decl" : "case close",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.close"
+    },
+    {
+      "access" : "public",
+      "decl" : "case date",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.date"
+    },
+    {
+      "access" : "public",
+      "decl" : "case delete",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.delete"
+    },
+    {
+      "access" : "public",
+      "decl" : "case disclose",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.disclose"
+    },
+    {
+      "access" : "public",
+      "decl" : "case doNotDisturb",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.doNotDisturb"
+    },
+    {
+      "access" : "public",
+      "decl" : "case done",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.done"
+    },
+    {
+      "access" : "public",
+      "decl" : "case duplicate",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.duplicate"
+    },
+    {
+      "access" : "public",
+      "decl" : "case edit",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.edit"
+    },
+    {
+      "access" : "public",
+      "decl" : "case expand",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.expand"
+    },
+    {
+      "access" : "public",
+      "decl" : "case filter",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.filter"
+    },
+    {
+      "access" : "public",
+      "decl" : "case health",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.health"
+    },
+    {
+      "access" : "public",
+      "decl" : "case hidePassword",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.hidePassword"
+    },
+    {
+      "access" : "public",
+      "decl" : "case home",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.home"
+    },
+    {
+      "access" : "public",
+      "decl" : "case inProgress",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.inProgress"
+    },
+    {
+      "access" : "public",
+      "decl" : "case meal",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.meal"
+    },
+    {
+      "access" : "public",
+      "decl" : "case members",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.members"
+    },
+    {
+      "access" : "public",
+      "decl" : "var mirrorsInRTL: Bool { get }",
+      "kind" : "swift.property",
+      "path" : "WDIconName.mirrorsInRTL"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let mirrorsInRTLNames: Set<WDIconName>",
+      "kind" : "swift.type.property",
+      "path" : "WDIconName.mirrorsInRTLNames"
+    },
+    {
+      "access" : "public",
+      "decl" : "case more",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.more"
+    },
+    {
+      "access" : "public",
+      "decl" : "case offline",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.offline"
+    },
+    {
+      "access" : "public",
+      "decl" : "case overdue",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.overdue"
+    },
+    {
+      "access" : "public",
+      "decl" : "case pet",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.pet"
+    },
+    {
+      "access" : "public",
+      "decl" : "case photo",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.photo"
+    },
+    {
+      "access" : "public",
+      "decl" : "case plant",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.plant"
+    },
+    {
+      "access" : "public",
+      "decl" : "case profile",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.profile"
+    },
+    {
+      "access" : "public",
+      "decl" : "case redo",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.redo"
+    },
+    {
+      "access" : "public",
+      "decl" : "case reminder",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.reminder"
+    },
+    {
+      "access" : "public",
+      "decl" : "case search",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.search"
+    },
+    {
+      "access" : "public",
+      "decl" : "case share",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.share"
+    },
+    {
+      "access" : "public",
+      "decl" : "case shopping",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.shopping"
+    },
+    {
+      "access" : "public",
+      "decl" : "case showPassword",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.showPassword"
+    },
+    {
+      "access" : "public",
+      "decl" : "case sort",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.sort"
+    },
+    {
+      "access" : "public",
+      "decl" : "case study",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.study"
+    },
+    {
+      "access" : "public",
+      "decl" : "var symbolName: String { get }",
+      "kind" : "swift.property",
+      "path" : "WDIconName.symbolName"
+    },
+    {
+      "access" : "public",
+      "decl" : "case synced",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.synced"
+    },
+    {
+      "access" : "public",
+      "decl" : "case task",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.task"
+    },
+    {
+      "access" : "public",
+      "decl" : "case time",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.time"
+    },
+    {
+      "access" : "public",
+      "decl" : "case todo",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.todo"
+    },
+    {
+      "access" : "public",
+      "decl" : "case travel",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.travel"
+    },
+    {
+      "access" : "public",
+      "decl" : "case unassigned",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.unassigned"
+    },
+    {
+      "access" : "public",
+      "decl" : "case undo",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconName.undo"
+    },
+    {
+      "access" : "public",
       "decl" : "enum WDMotion",
       "kind" : "swift.enum",
       "path" : "WDMotion"
@@ -1977,6 +2265,210 @@
       "decl" : "static let pressedBrightness: CGFloat",
       "kind" : "swift.type.property",
       "path" : "WDState.pressedBrightness"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor struct WDTextField",
+      "kind" : "swift.struct",
+      "path" : "WDTextField"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDTextField.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(text: Binding<String>, label: Text, appearance: WDTextFieldAppearance = .init(), isEditable: Bool = true, onSubmit: (() -> Void)? = nil, onEditingChanged: ((Bool) -> Void)? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDTextField.init(text:label:appearance:isEditable:onSubmit:onEditingChanged:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDTextFieldAccessory",
+      "kind" : "swift.enum",
+      "path" : "WDTextFieldAccessory"
+    },
+    {
+      "access" : "public",
+      "decl" : "case count(current: Int, limit: Int)",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextFieldAccessory.count(current:limit:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "case none",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextFieldAccessory.none"
+    },
+    {
+      "access" : "public",
+      "decl" : "case unit(Text)",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextFieldAccessory.unit(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDTextFieldAppearance",
+      "kind" : "swift.struct",
+      "path" : "WDTextFieldAppearance"
+    },
+    {
+      "access" : "public",
+      "decl" : "var accessory: WDTextFieldAccessory",
+      "kind" : "swift.property",
+      "path" : "WDTextFieldAppearance.accessory"
+    },
+    {
+      "access" : "public",
+      "decl" : "var helper: WDTextFieldHelper",
+      "kind" : "swift.property",
+      "path" : "WDTextFieldAppearance.helper"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(variant: WDTextFieldVariant = .inset, placeholder: Text? = nil, prefix: WDTextFieldPrefix = .none, accessory: WDTextFieldAccessory = .none, helper: WDTextFieldHelper = .none, isSecure: Bool = false, submitLabel: SubmitLabel = .done)",
+      "kind" : "swift.init",
+      "path" : "WDTextFieldAppearance.init(variant:placeholder:prefix:accessory:helper:isSecure:submitLabel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "var isSecure: Bool",
+      "kind" : "swift.property",
+      "path" : "WDTextFieldAppearance.isSecure"
+    },
+    {
+      "access" : "public",
+      "decl" : "var placeholder: Text?",
+      "kind" : "swift.property",
+      "path" : "WDTextFieldAppearance.placeholder"
+    },
+    {
+      "access" : "public",
+      "decl" : "var prefix: WDTextFieldPrefix",
+      "kind" : "swift.property",
+      "path" : "WDTextFieldAppearance.prefix"
+    },
+    {
+      "access" : "public",
+      "decl" : "var submitLabel: SubmitLabel",
+      "kind" : "swift.property",
+      "path" : "WDTextFieldAppearance.submitLabel"
+    },
+    {
+      "access" : "public",
+      "decl" : "var variant: WDTextFieldVariant",
+      "kind" : "swift.property",
+      "path" : "WDTextFieldAppearance.variant"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDTextFieldHelper",
+      "kind" : "swift.enum",
+      "path" : "WDTextFieldHelper"
+    },
+    {
+      "access" : "public",
+      "decl" : "case error(Text)",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextFieldHelper.error(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "case hint(Text)",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextFieldHelper.hint(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "case none",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextFieldHelper.none"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDTextFieldPrefix",
+      "kind" : "swift.enum",
+      "path" : "WDTextFieldPrefix"
+    },
+    {
+      "access" : "public",
+      "decl" : "case none",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextFieldPrefix.none"
+    },
+    {
+      "access" : "public",
+      "decl" : "case text(Text)",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextFieldPrefix.text(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDTextFieldVariant",
+      "kind" : "swift.enum",
+      "path" : "WDTextFieldVariant"
+    },
+    {
+      "access" : "public",
+      "decl" : "case glass",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextFieldVariant.glass"
+    },
+    {
+      "access" : "public",
+      "decl" : "case inset",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextFieldVariant.inset"
+    },
+    {
+      "access" : "public",
+      "decl" : "case outline",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextFieldVariant.outline"
     },
     {
       "access" : "public",
