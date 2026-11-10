@@ -188,9 +188,9 @@ PY
 > 其中 **3 件已冻结**（`WDButton`/`WDTextField`/`WDListRow`，誊录自 M0-11 冒烟段）、**8 件按建议冻结**（2026-11-10）；
 > **2 条阻塞**：① `WDIconName` 的 44 条语义名未产出（I-M0-h）—— **已解除**（2026-10-07：`9b899dc` 接入 44 条生成物，`7bb77d6` 回填 `WDIcon` 与三个延后成员）；② `WDCheckbox` 的**契约名**冻结依赖 Android 侧 14 行改名（SPEC R3-d）—— **仍待 Android，不阻 iOS 实现**（`isChecked` 形态已冻结）。
 >
-> **当前进度（2026-11-10 · P1 收尾）**：**代码 2/11**（`WDTextField`、`WDIcon`）；**六类断言两件均已补齐**——组件测试 10 条（字段盒 46±1、三态等高、辅助行、最小宽、AX3 生长、计数阈值、AX5 不缩放）、`+Previews.swift` ×2、8 态快照 ×2 = **16 张新基线**、`api` 零 diff。`Scripts/ci.sh pr` 复核**全绿**（`passed=51 failed=0`、符号 471、覆盖率 **52.63%**；`WDTextField` 行覆盖 72.2%、`WDIcon` 100%）。
+> **当前进度（2026-11-10 · P1 收尾 + a11y 层）**：**代码 2/11**（`WDTextField`、`WDIcon`）；**六类断言两件均已补齐**——组件测试 10 条（字段盒 46±1、三态等高、辅助行、最小宽、AX3 生长、计数阈值、AX5 不缩放）、`+Previews.swift` ×2、8 态快照 ×2 = **16 张新基线**、`api` 零 diff。**Foundation 无障碍层同步落地**（`WDSemantics` / `WDAnnouncementPriority` / `WDAnnouncing` / `WDSystemAnnouncer` / `WDAnnouncementThrottle` / `WDA11yFocusID`，冒烟段 §2.6.2 退役，`api` +16 符号）。`Scripts/ci.sh pr` 复核**全绿**（`passed=60 failed=0`、符号 488、覆盖率 **54.08%**；`WDTextField` 72.2%、`WDIcon` 100%、Foundation 67.28%）。
 > **两条登记未闭合**（§13.1 两行因此仍为 🚧，不写 ✅）：
-> ① **错误态 assertive 播报**：§2.10-#03 要求"错误出现时播报（assertive，一次）"，但 `Text` 无法取串，组件只能按 F22 的另一条路径挂 `accessibilityHint`；真正的播报依赖**尚未实现的 `WDAnnouncing` 层**（现在仍在 M0-11 冒烟段）+ 调用方注入。owner = ios-lead + 架构师，时点 = **M2 出口前**。
+> ① **错误态 assertive 播报**：§2.10-#03 要求"错误出现时播报（assertive，一次）"。`Text` 无法取串 ⇒ 组件按 F22 的另一条路径挂 `accessibilityHint`；**播报层已于 2026-11-10 落地**（`WDSystemAnnouncer` / `WDAnnouncementThrottle`，冒烟段已退役），但 `WDTextField` 的冻结签名**没有 announcer 注入点**。待裁决：**调用方播报**（demo/上层持 `WDSystemAnnouncer`，验收移到 demo 层）还是**组件注入**（改签名或加环境键 ⇒ 走 U 项/契约流程）。owner = ios-lead + 架构师，时点 = **M2 出口前**。
 > ② **显隐切换的 selection 位置**：iOS 17 无 `TextField(text:selection:)`（SPEC §2.3 裁决 2 的单实例方案不可用）⇒ 按该条**降级路径**实现"焦点回填"，光标位置由系统落在末尾；需设计/组长确认可接受。owner = ios-lead，时点 = **M2 出口前**。
 > ③ 快照渲染器表待回写 = **P17**（`WDTextField` 归 `UIHostingController` 渲染器：`ImageRenderer` 对它实测输出全透明），见 §6。
 
@@ -510,6 +510,7 @@ awk '/^\|/{if(!b){k++;n=0;f=NR} b=1;n++; if(n==2 && $0 !~ /^\|[-: |]*-[-: |]*\|[
 | D-5 | 减弱动效时长（150 vs 160ms） | **默认 = 150ms**（160ms 不采用）；**待设计裁决** | 设计 | M0-1 | 否 |
 | D-6 | sheet 面板圆角 32 | **默认 = 32**（iOS 用 `.continuous`） | 设计 + ios-lead | M0-1 | 否 |
 | D-7 | 其余设计值项（圆角/间距/字号阶梯、同心圆角、平台补偿 `+2`、图标尺寸阶梯、状态"第二信号"…） | **不自行补**：等设计给值；实现只用已进令牌的值 | 设计 | 逐项 | 否（但 M0-1 清单不缩表） |
+| D-8 | **释放播报的最小间隔**（`WDAnnouncementThrottle.shouldAnnounceAfterRelease`） | **默认 = 1 秒**（跨端 fixture `announcement-cases.json` 未落库；先冻结，改值只改 `minimumReleaseInterval` 一处） | tech-lead + 设计 | M2 出口前 | 否（默认动作可先行） |
 
 **纪律**：**清单不缩表**——未给值行保留"待设计给值 + 责任人 + 时点"，按默认执行项先冻结、逐行记入版本台账的 deferral 表，并在 CHANGELOG 标注。
 

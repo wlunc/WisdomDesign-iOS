@@ -2,7 +2,7 @@
 
 > **这份文件回答三件事**：仓库里的文档**在哪**、**怎么读**、**哪些还没验证**。
 > 它**不是**开发计划本身——计划在 [`DEV-PLAN.md`](DEV-PLAN.md)，规格在 [`SPEC.md`](SPEC.md)，结构在 [`ARCHITECTURE.md`](ARCHITECTURE.md)，操作手册在 [`../AGENTS.md`](../AGENTS.md)。
-> 状态快照（**2026-11-10**）：**M0、M1 已交付**（M1 出口报告 = `M1-EXIT-REPORT.md`，判定人签字仍待 ios-lead）；**M2 进行中：代码 2/11**（`WDTextField`、`WDIcon`），六类断言两件已补齐（含 2 条登记未闭合）；`Scripts/ci.sh pr` 复核**全绿**（51 tests / 符号 471 零 diff / 覆盖率 52.63%）。文档改动以 `git log` 为准。
+> 状态快照（**2026-11-10**）：**M0、M1 已交付**（M1 出口报告 = `M1-EXIT-REPORT.md`，判定人签字仍待 ios-lead）；**M2 进行中：代码 2/11**（`WDTextField`、`WDIcon`），六类断言两件已补齐（含 2 条登记未闭合）；`Scripts/ci.sh pr` 复核**全绿**（60 tests / 符号 488 零 diff / 覆盖率 54.08%）。文档改动以 `git log` 为准。
 
 ---
 
@@ -66,6 +66,7 @@
 | 冒烟首发 | ✅ **已回填**：`#if WD_API_SMOKE` 随 `ci.sh pr` 的 PR-1a/PR-1b 实跑 |
 | 真机视觉 | **未验证**：真机自然行盒、AX3 与 2.0 档观感、玻璃真机观感（**需 USB 直连**，U-05） |
 | 快照基线 | M1 的 16 张 + M2 两件的 16 张（8 态 × 2）**已入库**；其余 9 件待补 |
+| 读屏 / 播报 | **未验证（人审）**：`WDSystemAnnouncer` 的音频效果无法机检；真机 VoiceOver 走查属 M6 |
 | 体积 | 归档体积增量与体积门槛值（**U-09**，M3 出口） |
 | 分发 | SPM tag 实验、发布流程实操（M6） |
 
