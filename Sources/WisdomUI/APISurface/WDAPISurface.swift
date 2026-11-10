@@ -264,7 +264,7 @@
   //
   // 下面这些类型被上面的签名引用，但 SPEC 未给定义（或由生成物承载）。此处**只锁类型名与必要约束**，
   // 不代拟任何成员——避免把凭空发明的 API 写进 `api/WisdomUI.api.json` 符号快照基线。
-  // 落地清单：`WDIconName` = I-M0-h（生成物）⚠️；`WDAvatarValue` / `WDBadgeValue` = M2/M5；
+  // 落地清单：`WDIconName`（I-M0-h）与 `WDBadgeValue`（M2）**已落地**；`WDAvatarValue` = M2/M5。
   // `WDGlassCapabilities` / `WDEffectsBudget` = M1/M4；`WDMotionToken` 成员 = M1。
 
   // `WDIconName` **已由设计仓生成器产出**（Foundation/generated/WDIconName.swift，契约源 = contracts/icons.json），
@@ -273,8 +273,8 @@
   /// 头像值（真实声明落 M2/M5）。
   public struct WDAvatarValue: Sendable, Equatable {}
 
-  /// 徽标值（真实声明落 M2/M5）。
-  public struct WDBadgeValue: Sendable, Equatable {}
+// `WDBadgeValue` 已由 M2 的 WDBadge 实现（`Components/Primitives/WDBadge/WDBadge.swift`），
+// 故此冒烟段删除。
 
 // U10 的 `WDGlassCapabilities` 与 `WDEffectsBudget` **已由 M1-⑤ 实现**
 //（`Foundation/Material/`：能力只有 supportsGlass 一项；预算已编码 §12.2 的 7 条硬上限），
