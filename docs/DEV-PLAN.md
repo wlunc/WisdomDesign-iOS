@@ -193,6 +193,7 @@ PY
 > ① **错误态 assertive 播报**：§2.10-#03 要求"错误出现时播报（assertive，一次）"。`Text` 无法取串 ⇒ 组件按 F22 的另一条路径挂 `accessibilityHint`；**播报层已于 2026-11-10 落地**（`WDSystemAnnouncer` / `WDAnnouncementThrottle`，冒烟段已退役），但 `WDTextField` 的冻结签名**没有 announcer 注入点**。待裁决：**调用方播报**（demo/上层持 `WDSystemAnnouncer`，验收移到 demo 层）还是**组件注入**（改签名或加环境键 ⇒ 走 U 项/契约流程）。owner = ios-lead + 架构师，时点 = **M2 出口前**。
 > ② **显隐切换的 selection 位置**：iOS 17 无 `TextField(text:selection:)`（SPEC §2.3 裁决 2 的单实例方案不可用）⇒ 按该条**降级路径**实现"焦点回填"，光标位置由系统落在末尾；需设计/组长确认可接受。owner = ios-lead，时点 = **M2 出口前**。
 > ③ 快照渲染器表待回写 = **P17**（`WDTextField` 归 `UIHostingController` 渲染器：`ImageRenderer` 对它实测输出全透明），见 §6。
+> ④ **`WDA11yFocusID` 无公开构造器**：按 SPEC §2.6.2 的冻结形态落地（只有 `public let rawValue`，模块外无法自造 ID）。M4 的弹层"焦点归还"若需要调用方构造，属签名变更 → 走 U/契约流程。owner = ios-lead + 架构师，时点 = **M4 批前冻结**。
 
 **本端任务**：该批 11 件组件实现 + 六态快照 + 无障碍断言 + 该批性能数字（**只报不拦**）。
 **入口判据**：I-2（**批前签名冻结**：11 件的完整签名 + 契约条目入库）。
