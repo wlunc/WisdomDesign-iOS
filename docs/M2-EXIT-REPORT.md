@@ -64,13 +64,15 @@
 
 ## 5. 冻结签名的差异登记（`docs/DEV-PLAN.md` §2.3 ①–⑬）
 
-累计 **13 条**，全部是"冻结签名表达不了设计稿"的取舍（不是实现缺陷），逐条带 owner 与"**M2 出口前**"时点：
+累计 **14 条**，全部是"冻结签名表达不了设计稿"的取舍（不是实现缺陷），逐条带 owner 与"**M2 出口前**"时点。
+**逐条裁决清单（含建议与代价）= [`docs/M2-DEVIATIONS.md`](M2-DEVIATIONS.md)**：
 
 - ①–④：`WDTextField` 播报归属 / 显隐切换 selection / 渲染器表 P17 / `WDA11yFocusID` 无公开构造器；
 - ⑤–⑦：`WDBadge` 变体、`WDDivider` 内缩档、`WDAvatar` 五档/配色/在线态；
 - ⑧–⑪：`WDSwitch` 紧凑档/描述位、`WDCheckbox` 半选/紧凑档、`WDCard` sunken/media/可点、
   `WDIconButton` 其余四变体；
-- ⑫–⑬：`WDButton` 字号/图标档近似与聚焦光环、`WDListRow` 徽标朗读合并/`selectionIndicator` 语义。
+- ⑫–⑭：`WDButton` 字号/图标档近似与聚焦光环、`WDListRow` 徽标朗读合并/`selectionIndicator` 语义、
+  行的选中底改不透明 `surface.tint`（审计可证明优先）。
 
 ## 6. 放行建议
 
