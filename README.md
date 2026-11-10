@@ -102,3 +102,9 @@ cold 的 PR-2 那 45 s 是 `swift Scripts/canonicalize-api.swift` 的**宿主模
 1. **需要宿主 app target** —— 预览不能只靠包本身；
 2. **release 不编译** —— `WD_PREVIEWS` 只在 debug 配置下定义；
 3. **材质/玻璃在预览里与真机不一致** —— `Material` / `glassEffect` 的观感不能作为验收依据（玻璃类的六态快照走 `UIHostingController` + `drawHierarchy`，见 `docs/SPEC.md` §1.6）。
+
+### 快速查看组件（三条路，按上手速度）
+
+1. **demo app（推荐：可交互 + 可审计）**：`open Examples/WisdomUIDemo/WisdomUIDemo.xcodeproj`，选 `WisdomUIDemo` scheme 跑模拟器；顶部分段控件切「主题 / 组件」，「组件」页是 M2 11 件的审计视口（也是 nightly 无障碍审计的输入）。
+2. **快照画廊（不用 Xcode）**：`Scripts/preview-components.sh` —— 从 `Tests/WisdomUISnapshotTests/Baselines/` 生成 `.build/component-gallery.html` 并在浏览器打开（11 件 × 8 态）。
+3. **Xcode SwiftUI 预览**：打开 `Package.swift` 后在组件文件的 `#Preview` 里看；**需要宿主 app**（本仓用 demo），且 release 不编译预览。
