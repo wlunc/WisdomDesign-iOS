@@ -192,6 +192,78 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor struct WDBadge",
+      "kind" : "swift.struct",
+      "path" : "WDBadge"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDBadge.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(label: Text)",
+      "kind" : "swift.init",
+      "path" : "WDBadge.init(label:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDBadgeValue",
+      "kind" : "swift.struct",
+      "path" : "WDBadgeValue"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(label: Text)",
+      "kind" : "swift.init",
+      "path" : "WDBadgeValue.init(label:)"
+    },
+    {
+      "access" : "public",
       "decl" : "enum WDColor",
       "kind" : "swift.enum",
       "path" : "WDColor"
@@ -1257,6 +1329,66 @@
       "decl" : "static func rgba(_ color: Color) -> (r: Double, g: Double, b: Double, a: Double)",
       "kind" : "swift.type.method",
       "path" : "WDContrast.rgba(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor struct WDDivider",
+      "kind" : "swift.struct",
+      "path" : "WDDivider"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDDivider.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init()",
+      "kind" : "swift.init",
+      "path" : "WDDivider.init()"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdTheme(scheme:)"
     },
     {
       "access" : "public",
