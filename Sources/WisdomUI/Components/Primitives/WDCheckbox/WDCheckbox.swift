@@ -79,10 +79,23 @@ private struct WDCheckboxToggleStyle: ToggleStyle {
     .accessibilityElement(children: .combine)
   }
 
-  @ViewBuilder private func box(_ configuration: Configuration) -> some View {
+  private func box(_ configuration: Configuration) -> some View {
+    WDCheckboxBox(isChecked: configuration.isOn)
+  }
+}
+
+/// 复选框的方框（内部复用：`WDListRow` 的 `.checkbox` 前导槽直接用它，保持同一套视觉）。
+struct WDCheckboxBox: View {
+  let isChecked: Bool
+
+  @Environment(\.wdColors) private var colors
+
+  private typealias Metrics = WDCheckbox.Metrics
+
+  var body: some View {
     let shape = RoundedRectangle(cornerRadius: Metrics.corner, style: .continuous)
     ZStack {
-      if configuration.isOn {
+      if isChecked {
         shape.fill(WDGradient.mid.linearGradient)
         WDCheckmarkShape()
           .trim(from: 0, to: 1)
@@ -92,7 +105,7 @@ private struct WDCheckboxToggleStyle: ToggleStyle {
               lineWidth: Metrics.checkStroke, lineCap: .round, lineJoin: .round)
           )
           .frame(width: Metrics.checkWidth, height: Metrics.checkHeight)
-          .animation(.easeOut(duration: WDMotion.Duration.base), value: configuration.isOn)
+          .animation(.easeOut(duration: WDMotion.Duration.base), value: isChecked)
       } else {
         shape.fill(colors.fillField)
         shape.stroke(colors.borderHairlineStrong, lineWidth: Metrics.stroke)

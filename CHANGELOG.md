@@ -24,6 +24,13 @@
   规范化器丢弃 USR/绝对路径等易漂移字段）。
 - **归档体积基线** `Examples/BaselineShell/`（E3-iOS-a 的分母：同构、不引入本库）。
 - 协作文件：`CONTRIBUTING.md`、`.github/pull_request_template.md`、`.github/CODEOWNERS`。
+- **M2 组件（收尾）**：`WDButton`（6 变体 × 3 尺寸；按下 0.97 + 轻触觉；加载态宽度不变、
+  标签留在无障碍树且 `loadingAccessibilityText` 必填；公开 `WDButtonStyle` + `.wdFilled` / `.wd(_:size:)`；
+  `filled`/`destructive` 用渐变 + brand 阴影，`glass` 走 `WDGlass.resolve` + iOS 26 `glassEffect`）
+  与 `WDListRow`（行高 44/60/76 = `max(密度下限, 槽位派生)`；前导 5 种 / 尾部 5 种；选中 3pt 品牌条 +
+  8% 底；分隔线按 62 内缩；可点行走真 `Button` + pressed 底；左滑删除 + 自定义无障碍删除操作）。
+  冻结签名差异（按钮字号档/聚焦光环、行的徽标朗读合并/selectionIndicator 语义）登记
+  `docs/DEV-PLAN.md` §2.3；组件测试 6 条 + 两件 8 态快照（16 张基线）。**M2 11/11 代码全部落地**。
 - **M2 组件（续四）**：`WDCheckbox`（方框 26 / 圆角 9 / 勾用描边路径；两态；切换轻触觉 ×1）、
   `WDCard`（elevated / outlined / glass 三档；内距 16 固定、圆角 24；玻璃走 `WDGlass.resolve` +
   iOS 26 `glassEffect`、17–25 纯色降级）、`WDIconButton`（plain 档；sm 32 / md 44 / lg 52 视觉、
@@ -90,6 +97,9 @@
 - **API 基线随 WDCheckbox/WDCard/WDIconButton 更新**：`api/WisdomUI.api.json` **+43 符号**
   （`WDCheckbox`、`WDCard`/`WDCardStyle`、`WDIconButton`/`WDIconButtonVariant`、`WDButtonSize`
   及其 View 扩展入口）；无移除。
+- **API 基线随 WDButton/WDListRow 更新**：`api/WisdomUI.api.json` **+53 符号**（`WDButton` 全家、
+  `WDButtonStyle`、`ButtonStyle` 工厂、`WDListRow` 全家及其 View 扩展入口）；无移除 ⇒
+  **M2 的 11 件公开面全部进入基线**。
 
 ### Breaking
 
