@@ -188,7 +188,7 @@ PY
 > 其中 **3 件已冻结**（`WDButton`/`WDTextField`/`WDListRow`，誊录自 M0-11 冒烟段）、**8 件按建议冻结**（2026-11-10）；
 > **2 条阻塞**：① `WDIconName` 的 44 条语义名未产出（I-M0-h）—— **已解除**（2026-10-07：`9b899dc` 接入 44 条生成物，`7bb77d6` 回填 `WDIcon` 与三个延后成员）；② `WDCheckbox` 的**契约名**冻结依赖 Android 侧 14 行改名（SPEC R3-d）—— **仍待 Android，不阻 iOS 实现**（`isChecked` 形态已冻结）。
 >
-> **当前进度（2026-11-10 · P1 收尾 + a11y 层 + P2 前三件）**：**代码 5/11**（`WDTextField`、`WDIcon`、`WDBadge`、`WDDivider`、`WDAvatar`）；**五件的六类断言均已补齐**——组件测试 **19 条**、`+Previews.swift` ×5、8 态快照 ×5 = **40 张新基线**、`api` 零 diff。**Foundation 无障碍层同步落地**（`WDSemantics` / `WDAnnouncementPriority` / `WDAnnouncing` / `WDSystemAnnouncer` / `WDAnnouncementThrottle` / `WDA11yFocusID`，冒烟段 §2.6.2 退役，`api` +16 符号）。`Scripts/ci.sh pr` 复核**全绿**（`passed=69 failed=0`、符号 523、覆盖率 **52.20%**；`WDTextField` 72.2%、`WDIcon`/`WDBadge`/`WDDivider`/`WDAvatar` 均 100%、Foundation 67.28%）。
+> **当前进度（2026-11-10 · P1 收尾 + a11y 层 + P2 前四件）**：**代码 6/11**（`WDTextField`、`WDIcon`、`WDBadge`、`WDDivider`、`WDAvatar`、`WDSwitch`）；**六件的六类断言均已补齐**——组件测试 **27 条**、`+Previews.swift` ×6、8 态快照 ×6 = **48 张新基线**、`api` 零 diff。**基础件同步落地**：Foundation 无障碍层（`WDSemantics` / `WDAnnouncing` / `WDAnnouncementThrottle` / `WDA11yFocusID`，冒烟段 §2.6.2 退役）、布局密度（`WDLayoutDensity` + `wdDensity`，F44）、触觉网关（`Internal/WDHaptics`，可注入 sink + 预算闸门）。`Scripts/ci.sh pr` 复核**全绿**（`passed=77 failed=0`、符号 545、覆盖率 **55.13%**；`WDTextField` 72.2%、`WDIcon`/`WDBadge`/`WDDivider`/`WDAvatar`/`WDLayoutDensity` 100%、`WDSwitch` 86%）。
 > **两条登记未闭合**（§13.1 两行因此仍为 🚧，不写 ✅）：
 > ① **错误态 assertive 播报**：§2.10-#03 要求"错误出现时播报（assertive，一次）"。`Text` 无法取串 ⇒ 组件按 F22 的另一条路径挂 `accessibilityHint`；**播报层已于 2026-11-10 落地**（`WDSystemAnnouncer` / `WDAnnouncementThrottle`，冒烟段已退役），但 `WDTextField` 的冻结签名**没有 announcer 注入点**。待裁决：**调用方播报**（demo/上层持 `WDSystemAnnouncer`，验收移到 demo 层）还是**组件注入**（改签名或加环境键 ⇒ 走 U 项/契约流程）。owner = ios-lead + 架构师，时点 = **M2 出口前**。
 > ② **显隐切换的 selection 位置**：iOS 17 无 `TextField(text:selection:)`（SPEC §2.3 裁决 2 的单实例方案不可用）⇒ 按该条**降级路径**实现"焦点回填"，光标位置由系统落在末尾；需设计/组长确认可接受。owner = ios-lead，时点 = **M2 出口前**。
@@ -197,6 +197,7 @@ PY
 > ⑤ **`WDBadge` 的设计变体不可表达**：冻结签名只有 `label`（无 variant/计数/圆点/0 隐藏/99+ 参数）⇒ 只实现状态胶囊的 `shared` 中性配色；六种状态变体与计数/圆点形态待签名扩展。owner = ios-lead + 设计，时点 = **M2 出口前**。
 > ⑥ **`WDDivider` 的内缩档不可表达**：冻结签名 `init()` 无 variant ⇒ 只实现全宽档；列表行的内缩 62 由 `WDListRow` 自带分隔线负责。owner = ios-lead + 设计，时点 = **M2 出口前**。
 > ⑦ **`WDAvatar` 的五档/配色/在线态不可表达**：冻结签名只有 `value`（无 size/成员 ID/在线状态/照片参数）⇒ 只实现 **md 32** 的文字/图标形态，底色用中性 `surface.tint`；五档直径、按成员 ID 固定配色、在线点、停用态与照片形态待签名扩展。owner = ios-lead + 设计，时点 = **M2 出口前**。
+> ⑧ **`WDSwitch` 的紧凑档/描述位/按下放大不可表达**：冻结签名只有 `isOn` + `label` ⇒ 只做标准档、无描述行；按下时滑块 1.06 放大未实现；动效时长用令牌近似（设计 260/300ms 未入令牌）。owner = ios-lead + 设计，时点 = **M2 出口前**。
 
 **本端任务**：该批 11 件组件实现 + 六态快照 + 无障碍断言 + 该批性能数字（**只报不拦**）。
 **入口判据**：I-2（**批前签名冻结**：11 件的完整签名 + 契约条目入库）。
@@ -648,7 +649,7 @@ awk '/^\|/{if(!b){k++;n=0;f=NR} b=1;n++; if(n==2 && $0 !~ /^\|[-: |]*-[-: |]*\|[
 | `WDIconButton` | ☐ | M2 | 否 | `Components/Primitives/WDIconButton/`（`WDIconButton.swift` + `WDIconButton+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#02 | 受控值 `loading` / `isLoading`；槽位 `icon`,**a11y 标签（必填）**；特例 `.plain` | 快照 = `ImageRenderer`（普通类）；无障碍：×1 | 同批（§3 批内顺序） |
 | `WDTextField` | 🚧 | M2 | **是** | `Components/Primitives/WDTextField/`（`WDTextField.swift` + `WDTextField+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#03（专节 §2.3） | 受控值 `text` / `Binding<String>` ✓；槽位 `label`,`prefix`,`accessory`,`helper`；特例 `.inset` | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行 + 错误 1 行；无障碍：错误出现时播报（assertive，一次） | —（M2 首件） |
 | `WDSearchField` | ☐ | M5 | 否 | `Components/Primitives/WDSearchField/`（`WDSearchField.swift` + `WDSearchField+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#04 | 受控值 `text` / `Binding<String>` ✓；槽位 `placeholder`,`leadingIcon`,`label`（取消）；特例 — | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：**结果数变化 polite**（阈值由调用方） | 同批（§3 批内顺序） |
-| `WDSwitch` | ☐ | M2 | 否 | `Components/Primitives/WDSwitch/`（`WDSwitch.swift` + `WDSwitch+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#05 | 受控值 `on` / `isOn` ✓；槽位 `label`；特例 — | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：切换轻 ×1 | 同批（§3 批内顺序） |
+| `WDSwitch` | ✅ | M2 | 否 | `Components/Primitives/WDSwitch/`（`WDSwitch.swift` + `WDSwitch+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#05 | 受控值 `on` / `isOn` ✓；槽位 `label`；特例 — | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：切换轻 ×1 | 同批（§3 批内顺序） |
 | `WDCheckbox` | ☐ | M2 | 否 | `Components/Primitives/WDCheckbox/`（`WDCheckbox.swift` + `WDCheckbox+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#06 | 受控值 `checked` / **`isChecked`** ✓；槽位 `label`；特例 — | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：轻 ×1 | 同批（§3 批内顺序） |
 | `WDRadio` | ☐ | M5 | 否 | `Components/Primitives/WDRadio/`（`WDRadio.swift` + `WDRadio+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#07 | 受控值 `selection` ✓；槽位 `label`（组）,`options`；特例 — | 快照 = `ImageRenderer`（普通类）；行盒断言：2 行允许；无障碍：轻 ×1 | 同批（§3 批内顺序） |
 | `WDSlider` | ☐ | M5 | 否 | `Components/Primitives/WDSlider/`（`WDSlider.swift` + `WDSlider+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#08 | 受控值 `value` ✓；槽位 `label`；特例 — | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：**松手后播报一次** | 同批（§3 批内顺序） |

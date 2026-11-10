@@ -73,7 +73,7 @@ Scripts/ci.sh measure   # 过程成本测量（分阶段计时；**未测不写�
 ### 门禁现状（**未验证的一律照实写**）
 
 - `Scripts/ci.sh pr`：**首次全绿**（2026-10-06；Xcode 26.6 + iOS 26.5 模拟器）。
-- `Scripts/ci.sh pr`：**2026-11-10 复核全绿**（M2 两件补齐六类断言后；`passed=69 failed=0`、符号 523 零 diff、`WisdomUI` 覆盖率 **52.20%**、warm 54.15 s——**n=1 复核值，不替换下表的三态预算**）。
+- `Scripts/ci.sh pr`：**2026-11-10 复核全绿**（M2 两件补齐六类断言后；`passed=77 failed=0`、符号 545 零 diff、`WisdomUI` 覆盖率 **55.13%**、warm 26.47 s——**n=1 复核值，不替换下表的三态预算**）。
 
 **门禁预算（实测，2026-10-07；`Scripts/ci.sh measure 3 --states=warm,clean,cold`，每态 n=3 取中位数；单位 = 秒）**：
 
@@ -89,7 +89,7 @@ Scripts/ci.sh measure   # 过程成本测量（分阶段计时；**未测不写�
 口径：**warm** = 复用现有缓存；**clean** = 每轮删 DerivedData；**cold** = 连 SwiftPM manifest 缓存与 module-cache 一起删。
 cold 的 PR-2 那 45 s 是 `swift Scripts/canonicalize-api.swift` 的**宿主模块缓存被清后重编译**（每轮都付），不是 API 逻辑慢。
 原始数据：`.build/perf/ci-measure-20261007.json`。**测法变了要重测**（改 `ci.sh` 的 PR 阶段、换 Xcode 大版本、换金标设备）。
-- **覆盖率**：最近一次门禁 `WisdomUI` **52.19%**（2026-11-10；`WDTextField` 72.2%、`WDIcon`/`WDBadge`/`WDDivider`/`WDAvatar` 100%、`Foundation/**` 67.28%，其余组件未开工）；M3 起 `Foundation/**` ≥ 80% 才转门槛（排除 `generated/`、组件 `+Previews` 不参与该门槛）。
+- **覆盖率**：最近一次门禁 `WisdomUI` **52.19%**（2026-11-10；`WDTextField` 72.2%、`WDSwitch` 86%、`WDIcon`/`WDBadge`/`WDDivider`/`WDAvatar`/`WDLayoutDensity` 100%、`Foundation/**` 67.28%，其余组件未开工）；M3 起 `Foundation/**` ≥ 80% 才转门槛（排除 `generated/`、组件 `+Previews` 不参与该门槛）。
 - `Scripts/ci.sh nightly`：前置物已齐（`Tests/WisdomUISnapshotTests` 的 16 张基线 + demo 无障碍审计已在 M1 实跑 2/0）；**连续 3 日绿的记录尚未建立**（M2 出口要求）。
 - `.github/workflows/ci.yml`：**【未验证】** 本仓尚无一次 GitHub Actions 实跑（macOS 26 镜像标签与自带 Xcode 版本属外部事实）。
 
