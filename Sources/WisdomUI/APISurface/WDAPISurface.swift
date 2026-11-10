@@ -260,21 +260,21 @@
     }
   }
 
-  // MARK: - smoke 专用最小替身（真实声明落地时**同 PR 删除本段**）
-  //
-  // 下面这些类型被上面的签名引用，但 SPEC 未给定义（或由生成物承载）。此处**只锁类型名与必要约束**，
-  // 不代拟任何成员——避免把凭空发明的 API 写进 `api/WisdomUI.api.json` 符号快照基线。
-  // 落地清单：`WDIconName`（I-M0-h）与 `WDBadgeValue`（M2）**已落地**；`WDAvatarValue` = M2/M5。
-  // `WDGlassCapabilities` / `WDEffectsBudget` = M1/M4；`WDMotionToken` 成员 = M1。
+// MARK: - smoke 专用最小替身（真实声明落地时**同 PR 删除本段**）
+//
+// 下面这些类型被上面的签名引用，但 SPEC 未给定义（或由生成物承载）。此处**只锁类型名与必要约束**，
+// 不代拟任何成员——避免把凭空发明的 API 写进 `api/WisdomUI.api.json` 符号快照基线。
+// 落地清单：`WDIconName`（I-M0-h）、`WDBadgeValue` 与 `WDAvatarValue`（M2）**均已落地**。
+// `WDGlassCapabilities` / `WDEffectsBudget` = M1/M4；`WDMotionToken` 成员 = M1。
 
-  // `WDIconName` **已由设计仓生成器产出**（Foundation/generated/WDIconName.swift，契约源 = contracts/icons.json），
-  // 故从此冒烟段删除（I-M0-h 落地）。
+// `WDIconName` **已由设计仓生成器产出**（Foundation/generated/WDIconName.swift，契约源 = contracts/icons.json），
+// 故从此冒烟段删除（I-M0-h 落地）。
 
-  /// 头像值（真实声明落 M2/M5）。
-  public struct WDAvatarValue: Sendable, Equatable {}
+// `WDAvatarValue` 已由 M2 的 WDAvatar 实现（`Components/Primitives/WDAvatar/WDAvatar.swift`），
+// 故从此冒烟段删除。
 
 // `WDBadgeValue` 已由 M2 的 WDBadge 实现（`Components/Primitives/WDBadge/WDBadge.swift`），
-// 故此冒烟段删除。
+// 故此前已从冒烟段删除。
 
 // U10 的 `WDGlassCapabilities` 与 `WDEffectsBudget` **已由 M1-⑤ 实现**
 //（`Foundation/Material/`：能力只有 supportsGlass 一项；预算已编码 §12.2 的 7 条硬上限），

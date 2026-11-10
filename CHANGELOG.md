@@ -24,6 +24,10 @@
   规范化器丢弃 USR/绝对路径等易漂移字段）。
 - **归档体积基线** `Examples/BaselineShell/`（E3-iOS-a 的分母：同构、不引入本库）。
 - 协作文件：`CONTRIBUTING.md`、`.github/pull_request_template.md`、`.github/CODEOWNERS`。
+- **M2 组件（续二）**：`WDAvatar` + `WDAvatarValue`（圆底 + 首字/图标；默认 md 32、首字号 12 固定；
+  文字形态把 `label` 作为无障碍标签，图标形态是装饰）。冻结签名无 size/ID/在线态/照片参数 ⇒
+  五档直径、按成员 ID 固定配色、在线点、停用态不可表达，差异登记在 `docs/DEV-PLAN.md` §2.3；
+  组件测试 3 条 + 组件级 8 态快照（8 张基线）。
 - **M2 组件（续）**：`WDDivider`（全宽 1pt `border.hairline`、无状态、不进树）与
   `WDBadge` + `WDBadgeValue`（状态胶囊高 24 / 内距 10 / 固定 11pt·600；中性 shared 配色；
   不进入焦点序列）。冻结签名无 variant/计数参数 ⇒ 只实现状态胶囊与全宽档，差异登记在
@@ -68,6 +72,8 @@
 - **API 基线随 WDBadge/WDDivider 更新**：`api/WisdomUI.api.json` **+22 符号**（`WDBadge`、
   `WDDivider`、`WDBadgeValue` 及其 View 扩展入口）——两件从冒烟段/提案落地后首次进入公开面；
   无移除。
+- **API 基线随 WDAvatar 更新**：`api/WisdomUI.api.json` **+13 符号**（`WDAvatar`、`WDAvatarValue`
+  及其 View 扩展入口）——从冒烟段落地后首次进入公开面；无移除。
 
 ### Breaking
 
