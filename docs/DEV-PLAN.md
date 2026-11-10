@@ -188,12 +188,14 @@ PY
 > 其中 **3 件已冻结**（`WDButton`/`WDTextField`/`WDListRow`，誊录自 M0-11 冒烟段）、**8 件按建议冻结**（2026-11-10）；
 > **2 条阻塞**：① `WDIconName` 的 44 条语义名未产出（I-M0-h）—— **已解除**（2026-10-07：`9b899dc` 接入 44 条生成物，`7bb77d6` 回填 `WDIcon` 与三个延后成员）；② `WDCheckbox` 的**契约名**冻结依赖 Android 侧 14 行改名（SPEC R3-d）—— **仍待 Android，不阻 iOS 实现**（`isChecked` 形态已冻结）。
 >
-> **当前进度（2026-11-10 · P1 收尾 + a11y 层）**：**代码 2/11**（`WDTextField`、`WDIcon`）；**六类断言两件均已补齐**——组件测试 10 条（字段盒 46±1、三态等高、辅助行、最小宽、AX3 生长、计数阈值、AX5 不缩放）、`+Previews.swift` ×2、8 态快照 ×2 = **16 张新基线**、`api` 零 diff。**Foundation 无障碍层同步落地**（`WDSemantics` / `WDAnnouncementPriority` / `WDAnnouncing` / `WDSystemAnnouncer` / `WDAnnouncementThrottle` / `WDA11yFocusID`，冒烟段 §2.6.2 退役，`api` +16 符号）。`Scripts/ci.sh pr` 复核**全绿**（`passed=60 failed=0`、符号 488、覆盖率 **54.08%**；`WDTextField` 72.2%、`WDIcon` 100%、Foundation 67.28%）。
+> **当前进度（2026-11-10 · P1 收尾 + a11y 层 + P2 前两件）**：**代码 4/11**（`WDTextField`、`WDIcon`、`WDBadge`、`WDDivider`）；**四件的六类断言均已补齐**——组件测试 **16 条**、`+Previews.swift` ×4、8 态快照 ×4 = **32 张新基线**、`api` 零 diff。**Foundation 无障碍层同步落地**（`WDSemantics` / `WDAnnouncementPriority` / `WDAnnouncing` / `WDSystemAnnouncer` / `WDAnnouncementThrottle` / `WDA11yFocusID`，冒烟段 §2.6.2 退役，`api` +16 符号）。`Scripts/ci.sh pr` 复核**全绿**（`passed=66 failed=0`、符号 510、覆盖率 **52.19%**；`WDTextField` 72.2%、`WDIcon` 100%、`WDBadge` 100%、`WDDivider` 100%、Foundation 67.28%）。
 > **两条登记未闭合**（§13.1 两行因此仍为 🚧，不写 ✅）：
 > ① **错误态 assertive 播报**：§2.10-#03 要求"错误出现时播报（assertive，一次）"。`Text` 无法取串 ⇒ 组件按 F22 的另一条路径挂 `accessibilityHint`；**播报层已于 2026-11-10 落地**（`WDSystemAnnouncer` / `WDAnnouncementThrottle`，冒烟段已退役），但 `WDTextField` 的冻结签名**没有 announcer 注入点**。待裁决：**调用方播报**（demo/上层持 `WDSystemAnnouncer`，验收移到 demo 层）还是**组件注入**（改签名或加环境键 ⇒ 走 U 项/契约流程）。owner = ios-lead + 架构师，时点 = **M2 出口前**。
 > ② **显隐切换的 selection 位置**：iOS 17 无 `TextField(text:selection:)`（SPEC §2.3 裁决 2 的单实例方案不可用）⇒ 按该条**降级路径**实现"焦点回填"，光标位置由系统落在末尾；需设计/组长确认可接受。owner = ios-lead，时点 = **M2 出口前**。
 > ③ 快照渲染器表待回写 = **P17**（`WDTextField` 归 `UIHostingController` 渲染器：`ImageRenderer` 对它实测输出全透明），见 §6。
 > ④ **`WDA11yFocusID` 无公开构造器**：按 SPEC §2.6.2 的冻结形态落地（只有 `public let rawValue`，模块外无法自造 ID）。M4 的弹层"焦点归还"若需要调用方构造，属签名变更 → 走 U/契约流程。owner = ios-lead + 架构师，时点 = **M4 批前冻结**。
+> ⑤ **`WDBadge` 的设计变体不可表达**：冻结签名只有 `label`（无 variant/计数/圆点/0 隐藏/99+ 参数）⇒ 只实现状态胶囊的 `shared` 中性配色；六种状态变体与计数/圆点形态待签名扩展。owner = ios-lead + 设计，时点 = **M2 出口前**。
+> ⑥ **`WDDivider` 的内缩档不可表达**：冻结签名 `init()` 无 variant ⇒ 只实现全宽档；列表行的内缩 62 由 `WDListRow` 自带分隔线负责。owner = ios-lead + 设计，时点 = **M2 出口前**。
 
 **本端任务**：该批 11 件组件实现 + 六态快照 + 无障碍断言 + 该批性能数字（**只报不拦**）。
 **入口判据**：I-2（**批前签名冻结**：11 件的完整签名 + 契约条目入库）。
@@ -651,10 +653,10 @@ awk '/^\|/{if(!b){k++;n=0;f=NR} b=1;n++; if(n==2 && $0 !~ /^\|[-: |]*-[-: |]*\|[
 | `WDSlider` | ☐ | M5 | 否 | `Components/Primitives/WDSlider/`（`WDSlider.swift` + `WDSlider+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#08 | 受控值 `value` ✓；槽位 `label`；特例 — | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：**松手后播报一次** | 同批（§3 批内顺序） |
 | `WDStepper` | ☐ | M5 | 否 | `Components/Primitives/WDStepper/`（`WDStepper.swift` + `WDStepper+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#09 | 受控值 `value` ✓；槽位 `label`；特例 — | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：**高频不给触觉** | 同批（§3 批内顺序） |
 | `WDChip` | ☐ | M5 | 否 | `Components/Primitives/WDChip/`（`WDChip.swift` + `WDChip+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#10 | 受控值 `selected` / `isSelected` ✓；槽位 `label`,`leadingIcon`；特例 删除叉独立可达 | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：— | 同批（§3 批内顺序） |
-| `WDBadge` | ☐ | M2 | 否 | `Components/Primitives/WDBadge/`（`WDBadge.swift` + `WDBadge+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#11 | 受控值 —；槽位 `label`；特例 4 汉字 | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：不播报 | 同批（§3 批内顺序） |
+| `WDBadge` | ✅ | M2 | 否 | `Components/Primitives/WDBadge/`（`WDBadge.swift` + `WDBadge+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#11 | 受控值 —；槽位 `label`；特例 4 汉字 | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：不播报 | 同批（§3 批内顺序） |
 | `WDAvatar` | ☐ | M2 | 否 | `Components/Primitives/WDAvatar/`（`WDAvatar.swift` + `WDAvatar+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#12 | 受控值 —；槽位 `icon`,`label`；特例 直径锁死 | 快照 = `ImageRenderer`（普通类）；无障碍：读成员名 | 同批（§3 批内顺序） |
 | `WDAvatarStack` | ☐ | M5 | 否 | `Components/Primitives/WDAvatarStack/`（`WDAvatarStack.swift` + `WDAvatarStack+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#13 | 受控值 —；槽位 `items`；特例 `children: .combine` | 快照 = `ImageRenderer`（普通类）；无障碍：一次读完 | 同批（§3 批内顺序） |
-| `WDDivider` | ☐ | M2 | 否 | `Components/Primitives/WDDivider/`（`WDDivider.swift` + `WDDivider+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#14 | 受控值 —；槽位 无；特例 装饰：`accessibilityHidden` | 快照 = `ImageRenderer`（普通类）；无障碍：不进树 | 同批（§3 批内顺序） |
+| `WDDivider` | ✅ | M2 | 否 | `Components/Primitives/WDDivider/`（`WDDivider.swift` + `WDDivider+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#14 | 受控值 —；槽位 无；特例 装饰：`accessibilityHidden` | 快照 = `ImageRenderer`（普通类）；无障碍：不进树 | 同批（§3 批内顺序） |
 | `WDProgressBar` | ☐ | M4 | 否 | `Components/Primitives/WDProgressBar/`（`WDProgressBar.swift` + `WDProgressBar+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#15 | 受控值 `value`；槽位 `label`,`valueText`；特例 — | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：**只跨 25/50/75/100** | 同批（§3 批内顺序） |
 | `WDProgressRing` | ☐ | M4 | 否 | `Components/Primitives/WDProgressRing/`（`WDProgressRing.swift` + `WDProgressRing+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#16 | 受控值 `value`；槽位 同上；特例 环径锁死 | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：同上 | 同批（§3 批内顺序） |
 | `WDCard` | ☐ | M2 | 否 | `Components/Primitives/WDCard/`（`WDCard.swift` + `WDCard+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#17 | 受控值 —；槽位 `content`；特例 `.elevated` | 快照 = `UIHostingController`+`drawHierarchy`（玻璃类 6 个之一）；无障碍：容器 `contain` | 同批（§3 批内顺序） |
