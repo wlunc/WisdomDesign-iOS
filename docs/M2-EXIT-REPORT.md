@@ -57,7 +57,7 @@
 | ① | **nightly 连续 3 日绿** | 第 **1/3** 日绿（2026-11-10：设备编译 6.7s + 快照 15 tests + demo 审计 50.8s） | 2026-11-11、11-12 各再跑一次；owner = ios-dev |
 | ② | **组件无障碍审计的窄例外** | 审计已覆盖 11 件（两页签）；放行 6 条并逐条点名：固定字号（头像首字 12pt ×2、徽标 11pt）与行的单行截断（×3）。**语音播报的音频效果仍不可机检**（靠代码级实现 + 人工 review） | ios-lead 裁决例外是否接受 / M2 出口前 |
 | ③ | **错误态 assertive 播报** | `WDTextField` 只挂 `accessibilityHint`；播报层（`WDSystemAnnouncer`）已落地，但组件无注入点 ⇒ 需裁决"调用方播报 vs 组件注入" | ios-lead + 架构师 / M2 出口前 |
-| ④ | **契约 `contracts/*.yaml`** | 未落库；I-2 以冻结表单代替；架构师确认仍待 | 架构师 / M2 出口前 |
+| ④ | **契约 `contracts/*.yaml`** | 未落库；I-2 以冻结表单代替；架构师确认仍待（**确认请求与可回复文本 = `docs/CONTRACTS-CONFIRMATION-REQUEST.md`**） | 架构师 / M2 出口前 |
 | ⑤ | **真机采样（U-05）** | 设备无线连接，XCUITest runner 无法 bootstrap；`⌘R` 不受影响。观感结论必须人给（USB 直连后重跑） | 用户 + ios-dev / M1 遗留，M2 出口随批复核 |
 | ⑥ | **U-10（caption2 审计）** | 系统审计把 11pt 文本判为 Dynamic Type unsupported；组件若在审计视口用 caption2 需窄例外或改档 | ios-lead + tech-lead / 挂 demo 审计前 |
 | ⑦ | **M1 出口报告签字** | `M1-EXIT-REPORT.md` 判定人仍"待签字" | ios-lead / 与 M2 出口一并 |

@@ -225,6 +225,9 @@ PY
 ### 2.4 M3 — 封板批次（1 件 + 公开 API 冻结）
 
 **本端任务**：`WDListSection`（第 20 件 primitive 中的最后一件列入本批）＋ **公开 API 冻结**（符号快照入库）＋ 覆盖率转门槛 ＋ 体积门槛定值。
+
+> **开工前准备（只读，2026-11-10）**：`docs/M3-PREP-LISTSECTION.md` —— 入口判据现状、五个签名待决点
+> （items 形态/selection 类型/headerAction/卡片容器/空组隐藏）、六类断言计划与风险。**签名未冻结前不得开写。**
 **入口判据**：I-2；另需 M2 出口全绿。
 **出口判据（6 条）**：① `api/WisdomUI.api.json` 入库且 `git diff --exit-code` 绿；② 命名与枚举规则内联表 §5.3 全部对齐；③ 快照与契约用例全绿；④ 覆盖率转门槛：`Foundation/**` ≥ **80%**（排除 `generated/`）；⑤ **体积门槛值**定为"P50 + 10%（或绝对上限）"并写进 `README.md`/`CHANGELOG.md`；⑥ 封板批 12 件 primitives（M2 的 11 + 本批 1）在出口报告中占位、无缺件 —— **其余 primitives 按其所在批的"批前签名冻结"执行**，20/20 primitives 完成于 M5 出口。
 **门禁强度**：`PR+nightly₃+发布前`。
@@ -559,7 +562,7 @@ awk '/^\|/{if(!b){k++;n=0;f=NR} b=1;n++; if(n==2 && $0 !~ /^\|[-: |]*-[-: |]*\|[
 | U-07 | 三枚举与 `isChecked` 改名的 **CI 级编译验证** | ios-dev | M0/M2 交界 | M2 首批签名冻结 |
 | U-08 | SPM `Package.resolved` pin 后"移动 tag"的失败模式 | ios-lead | M6 发布前 | 发布纪律的自证 |
 | **U-10** | **系统无障碍审计把 11pt（`caption2`）文本判为 "Dynamic Type unsupported"** —— 2026-10-07 实测定位 | ios-lead + tech-lead | M2 批前（组件大量用 caption2 之前） | nightly-2 的 4 类目审计。**证据（同一视口内的字号阶梯对照）**：`.font(.caption2)`（纯 SwiftUI）／`wdFont(.caption2)`／`wdFont(.caption2)` 观测标签**全部被报**；`.font(.caption)`(12pt)／`.font(.footnote)`(13pt)／`wdFont(.footnote)`／`wdFont(.footnote)` **全部通过**；`ScrollView` 内的 caption2 未参与本轮检查。**结论**：与 `wdFont` 实现无关，是系统审计口径。**当前处置**：demo 的审计视口内不用 11pt（观测标签用 footnote），审计**保持严格**（不开例外）。**待裁决**：组件（`WDBadge`/`WDChip`/辅助文案）若必须在审计视口用 caption2 ⇒ 需要一条**带理由的窄例外**或与设计确认改档，不得全局关掉 `.dynamicType` 类别 |
-| U-09 | **归档体积增量与体积门槛值**（M3 出口"体积门槛值定"目前只是待定项） | ios-lead | **M3 出口** | 发布前层的体积断言 |
+| U-09 | **归档体积增量与体积门槛值**（M3 出口"体积门槛值定"目前只是待定项） | ios-lead | **M3 出口** | 发布前层的体积断言。**预测量（2026-11-10）**：BaselineShell 归档 86,016 B / demo 598,016 B（参考差值 512,000 B，**非同构**）；Thinning 与同构消费方仍缺，见 `docs/U09-SIZE-BASELINE.md` |
 
 ### 8.2 技术与协作风险（本端相关）
 
