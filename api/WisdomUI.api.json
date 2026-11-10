@@ -1518,6 +1518,66 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor struct WDIcon",
+      "kind" : "swift.struct",
+      "path" : "WDIcon"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDIcon.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(icon: WDIconName, size: WDIconSize = .md)",
+      "kind" : "swift.init",
+      "path" : "WDIcon.init(icon:size:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
       "decl" : "enum WDIconName",
       "kind" : "swift.enum",
       "path" : "WDIconName"
@@ -1803,6 +1863,36 @@
       "decl" : "case undo",
       "kind" : "swift.enum.case",
       "path" : "WDIconName.undo"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDIconSize",
+      "kind" : "swift.enum",
+      "path" : "WDIconSize"
+    },
+    {
+      "access" : "public",
+      "decl" : "case lg",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconSize.lg"
+    },
+    {
+      "access" : "public",
+      "decl" : "case md",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconSize.md"
+    },
+    {
+      "access" : "public",
+      "decl" : "case sm",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconSize.sm"
+    },
+    {
+      "access" : "public",
+      "decl" : "case xl",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconSize.xl"
     },
     {
       "access" : "public",
@@ -2334,6 +2424,12 @@
     },
     {
       "access" : "public",
+      "decl" : "case clear(accessibilityLabel: Text)",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextFieldAccessory.clear(accessibilityLabel:)"
+    },
+    {
+      "access" : "public",
       "decl" : "case count(current: Int, limit: Int)",
       "kind" : "swift.enum.case",
       "path" : "WDTextFieldAccessory.count(current:limit:)"
@@ -2343,6 +2439,12 @@
       "decl" : "case none",
       "kind" : "swift.enum.case",
       "path" : "WDTextFieldAccessory.none"
+    },
+    {
+      "access" : "public",
+      "decl" : "case reveal(hiddenAccessibilityLabel: Text, shownAccessibilityLabel: Text)",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextFieldAccessory.reveal(hiddenAccessibilityLabel:shownAccessibilityLabel:)"
     },
     {
       "access" : "public",
@@ -2433,6 +2535,12 @@
       "decl" : "enum WDTextFieldPrefix",
       "kind" : "swift.enum",
       "path" : "WDTextFieldPrefix"
+    },
+    {
+      "access" : "public",
+      "decl" : "case icon(WDIconName)",
+      "kind" : "swift.enum.case",
+      "path" : "WDTextFieldPrefix.icon(_:)"
     },
     {
       "access" : "public",

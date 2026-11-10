@@ -24,6 +24,15 @@
   规范化器丢弃 USR/绝对路径等易漂移字段）。
 - **归档体积基线** `Examples/BaselineShell/`（E3-iOS-a 的分母：同构、不引入本库）。
 - 协作文件：`CONTRIBUTING.md`、`.github/pull_request_template.md`、`.github/CODEOWNERS`。
+- **M1 基础设施**（2026-10-07 交付）：`wdFont(_:)` 单入口 + 行盒度量（12 档 × 12 字阶 × {en, zh} ×
+  {字体级, 渲染级} = **288 条 fixture**）；`WDTheme` / `wdTheme` / `wdColors` 运行时换肤（换已生成的
+  scheme，值变更触发重组、**不重启进程**）；三件套 `WDGlass` / `WDEffectsBudget` / `WDContrast` +
+  **34 条参数化用例**（含两条"必须红"用例）；`WisdomUIPreviews` 画廊 + `WisdomUISnapshotTests`
+  （8 态矩阵、**16 张基线**）；`Examples/WisdomUIDemo`（app + 无障碍审计 UITests）。
+- **M2 首批（进行中，2/11 代码落地）**：`WDTextField`（46pt 字段盒、label/prefix/accessory/helper
+  四槽位、附件按钮独立可达、密文/计数）；`WDIcon` + `WDIconMetrics`（四档 16/20/24/28，
+  **不随动态字体放大**、装饰件不进树）；`WDIconName` 生成物（44 条语义名 + SF Symbols 映射，
+  `contracts v1.0.0 · sha256:aab3bb93f508`）。
 
 ### Changed
 
@@ -33,6 +42,9 @@
 - `WDTextStyle` 改为 **4 存储字段**（新增 `letterSpacing`）、加 `Equatable`、
   构造器按 O-10 转 `internal`；新增派生 `lineHeightRatio`。
 - README 的"开发"段改为门禁口径（`Scripts/ci.sh`）+ 预览三限制；补齐 `Examples/` 说明。
+- **API 基线随 M2 两件回填**：`api/WisdomUI.api.json` **+18 符号**（`WDIcon` 全家、`WDIconSize` 四档、
+  `WDTextFieldPrefix.icon`、`WDTextFieldAccessory.clear/reveal`）。按 SPEC §1.5.3，基线变更单独提交
+  （`chore(api): …`），**不得**与实现提交混在一次提交里。
 
 ### Breaking
 
