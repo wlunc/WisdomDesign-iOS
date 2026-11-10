@@ -18,7 +18,7 @@ public enum WDTextFieldPrefix: Sendable, Equatable {
 
 /// 字段尾部附件槽（SPEC §2.3）。
 ///
-/// 附件按钮独立可达、**不合并不可达**（SPEC §2.3）；图标符号取自契约（`WDIconName.clear` / `.reveal` / `.hidePassword`）。
+/// 附件按钮独立可达、**不合并不可达**（SPEC §2.3）；图标符号取自契约（`WDIconName.clear` / `.showPassword` / `.hidePassword`）。
 public enum WDTextFieldAccessory: Sendable, Equatable {
   case none
   case unit(Text)
@@ -76,7 +76,16 @@ public struct WDTextFieldAppearance: Sendable {
 /// 输入字段（SPEC §2.3；M2 首件）。
 ///
 /// 结构（验收锚点）：`labelView` / 输入行（`frame(minHeight: WDSize.fieldHeight)` + `accessibilityIdentifier("wd-textfield-box")`）/ `helperView`。
-/// 字段盒 = **46 ± 1pt**，所有变体所有状态高度一致（**状态不得改变高度**）。
+/// 字段盒 = **46 ± 1pt**，所有变体所有状态高度一致（**状态不得改变高度**）；放大档由输入行的行盒撑开。
+///
+/// 视觉口径（设计 03 §3–§5，全部取已生成令牌）：
+///   · 圆角 `WDRadius.md` 14、水平内距 `WDSpacing.s4` 12、槽间距 `WDSpacing.s3` 8；
+///   · `inset` = `fill.field`；`outline` = 透明 + `border.hairline-strong`；`glass` 走 `WDGlass.resolve`（iOS 17–25 纯色降级）；
+///   · 聚焦 = `text.brand` 1.5pt 描边 + 18% 光环（`motion.duration.fast` 160ms）；错误 = `status.danger` 描边；
+///   · 禁用 = `@Environment(\.isEnabled)` ⇒ 整体 40%；只读 = `surface.card-sunken` + `text.secondary`（在 U6 之外）。
+///
+/// 无障碍（SPEC §2.6.2 / F22）：常驻标签从无障碍树隐藏并挂到输入区（读屏先读标签再读内容）；
+/// 错误文案走 `accessibilityHint`（库内零文案，文案与分隔符全部由调用方给）。
 public struct WDTextField: View {
   @Binding private var text: String
   private let label: Text
@@ -86,6 +95,9 @@ public struct WDTextField: View {
   private let onEditingChanged: ((Bool) -> Void)?
 
   @Environment(\.wdColors) private var colors
+  @Environment(\.wdAppearance) private var wdAppearance
+  @Environment(\.wdEffectsBudget) private var effectsBudget
+  @Environment(\.isEnabled) private var isEnabled
   @FocusState private var isFocused: Bool
   @State private var isRevealed = false
 
@@ -110,26 +122,41 @@ public struct WDTextField: View {
   public var body: some View {
     VStack(alignment: .leading, spacing: WDSpacing.s2) {
       labelView
-      HStack(spacing: WDSpacing.s3) {
-        prefixView
-        inputView
-        accessoryView
-      }
-      .frame(minHeight: WDSize.fieldHeight)
-      .accessibilityIdentifier("wd-textfield-box")
+      fieldRow
       helperView
     }
     .frame(minWidth: WDSize.fieldMinWidth, alignment: .leading)
+    .opacity(isEnabled ? 1 : disabledOpacity)
+    .animation(.linear(duration: WDMotion.Duration.fast), value: helperKind)
+    .animation(.linear(duration: WDMotion.Duration.fast), value: showsFocus)
   }
 
   // MARK: - 零件
 
-  /// 常驻标签（footnote；读屏第一顺位）。
+  /// 常驻标签（footnote；从树里隐藏，标签语义挂到输入区 —— 读屏先读标签再读内容）。
   private var labelView: some View {
     label
       .wdFont(WDType.footnote)
       .wdLineBox(WDType.footnote)
       .foregroundStyle(colors.textSecondary)
+      .accessibilityHidden(true)
+  }
+
+  /// 字段容器：变体底色 + 状态描边 + 聚焦光环；点任意位置聚焦输入区。
+  private var fieldRow: some View {
+    HStack(spacing: WDSpacing.s3) {
+      prefixView
+      inputView
+      accessoryView
+    }
+    .padding(.horizontal, WDSpacing.s4)
+    .frame(minHeight: WDSize.fieldHeight)
+    .background(fieldBackground)
+    .overlay(fieldBorder)
+    .overlay(focusHalo)
+    .contentShape(RoundedRectangle(cornerRadius: WDRadius.md, style: .continuous))
+    .onTapGesture { requestFocus() }
+    .accessibilityIdentifier("wd-textfield-box")
   }
 
   @ViewBuilder private var prefixView: some View {
@@ -149,29 +176,42 @@ public struct WDTextField: View {
 
   @ViewBuilder private var inputView: some View {
     if isEditable {
-      Group {
-        if appearance.isSecure && !isRevealed {
-          SecureField(text: $text) { placeholderView }
-        } else {
-          TextField(text: $text) { placeholderView }
-        }
+      fieldEntry
+    } else {
+      readOnlyText
+    }
+  }
+
+  /// 可编辑态：真 `TextField` / `SecureField`（pressed/focused 的唯一来源是系统控件本身）。
+  private var fieldEntry: some View {
+    Group {
+      if appearance.isSecure && !isRevealed {
+        SecureField(text: $text) { placeholderView }
+      } else {
+        TextField(text: $text) { placeholderView }
       }
+    }
+    .wdFont(WDType.body)
+    .wdLineBox(WDType.body)
+    .foregroundStyle(colors.textPrimary)
+    .textFieldStyle(.plain)
+    .submitLabel(appearance.submitLabel)
+    .focused($isFocused)
+    .onSubmit { onSubmit?() }
+    .onChange(of: isFocused) { _, focused in onEditingChanged?(focused) }
+    .accessibilityLabel(label)
+    .modifier(WDFieldHint(hint: errorText))
+  }
+
+  /// 只读态（**在 U6 六态之外**，SPEC §2.3 裁决 1）：用 `Text` + `textSelection`，**不是** `.disabled(true)`。
+  private var readOnlyText: some View {
+    Text(text)
       .wdFont(WDType.body)
       .wdLineBox(WDType.body)
-      .foregroundStyle(colors.textPrimary)
-      .textFieldStyle(.plain)
-      .submitLabel(appearance.submitLabel)
-      .focused($isFocused)
-      .onSubmit { onSubmit?() }
-      .onChange(of: isFocused) { _, focused in onEditingChanged?(focused) }
-    } else {
-      // 只读态（**在 U6 六态之外**，SPEC §2.3 裁决 1）：用 Text + textSelection，**不是** .disabled(true)
-      Text(text)
-        .wdFont(WDType.body)
-        .wdLineBox(WDType.body)
-        .foregroundStyle(colors.textPrimary)
-        .textSelection(.enabled)
-    }
+      .foregroundStyle(colors.textSecondary)
+      .textSelection(.enabled)
+      .accessibilityLabel(label)
+      .modifier(WDFieldHint(hint: errorText))
   }
 
   @ViewBuilder private var placeholderView: some View {
@@ -191,6 +231,7 @@ public struct WDTextField: View {
         WDIcon(icon: .clear, size: .md)
       } action: {
         text = ""
+        requestFocus()
       }
     case .reveal(let hiddenAccessibilityLabel, let shownAccessibilityLabel):
       accessoryButton(
@@ -199,6 +240,10 @@ public struct WDTextField: View {
         WDIcon(icon: isRevealed ? .hidePassword : .showPassword, size: .md)
       } action: {
         isRevealed.toggle()
+        // 显隐切换替换了控件类型（SecureField ⇄ TextField）。iOS 17 没有
+        // `TextField(text:selection:)`（SPEC §2.3 裁决 2 的单实例方案不可用）⇒ 按该条的降级路径：
+        // **焦点回填**（光标位置由系统落在末尾），并把差异登记在 M2 出口报告里。
+        requestFocus()
       }
     case .unit(let unit):
       unit
@@ -226,12 +271,21 @@ public struct WDTextField: View {
 
   /// 计数附件（≥90% 换 `status.warning`；阈值来自 SPEC §2.3 的裁决，非令牌值）。
   private func countView(current: Int, limit: Int) -> some View {
-    let isNearLimit = limit > 0 && Double(current) >= Double(limit) * Self.warnRatio
-    return Text(verbatim: "\(current)/\(limit)")
+    Text(verbatim: "\(current)/\(limit)")
       .wdFont(WDType.caption1)
       .wdLineBox(WDType.caption1)
-      .foregroundStyle(isNearLimit ? colors.statusWarning : colors.textTertiary)
+      .foregroundStyle(
+        Self.isCountNearLimit(current: current, limit: limit)
+          ? colors.statusWarning : colors.textTertiary
+      )
       .monospacedDigit()
+  }
+
+  /// 计数是否接近上限（`count` 附件的唯一规则）：`limit > 0 && current/limit ≥ 90%`。
+  ///
+  /// 这个判定是纯逻辑，单测直接钉它（渲染像素取色会漂移，不适合做判据）。
+  static func isCountNearLimit(current: Int, limit: Int) -> Bool {
+    limit > 0 && Double(current) >= Double(limit) * warnRatio
   }
 
   /// ≥90% 的阈值（SPEC §2.3 的 `count` 裁决）。
@@ -251,6 +305,138 @@ public struct WDTextField: View {
         .wdFont(WDType.caption1)
         .wdLineBox(WDType.caption1)
         .foregroundStyle(colors.statusDanger)
+    }
+  }
+
+  // MARK: - 状态与视觉
+
+  /// 变体底色（`glass` 走唯一入口 `WDGlass.resolve`：iOS 17–25 自动纯色降级）。
+  private var fieldFill: Color {
+    if !isEditable { return colors.surfaceCardSunken }
+    switch appearance.variant {
+    case .inset: return colors.fillField
+    case .outline: return .clear
+    case .glass: return glassFill
+    }
+  }
+
+  private var fieldBackground: some View {
+    RoundedRectangle(cornerRadius: WDRadius.md, style: .continuous)
+      .fill(fieldFill)
+  }
+
+  private var glassFill: Color {
+    switch WDGlass.resolve(
+      textLevel: .primary,
+      appearance: wdAppearance,
+      capabilities: WDGlassCapabilities(supportsGlass: Self.runtimeSupportsGlass()),
+      budget: effectsBudget,
+      level: .thick
+    ) {
+    case .glass: return colors.surfaceGlass
+    case .glassStrong: return colors.surfaceGlassStrong
+    case .opaque: return colors.surfaceCardSolid
+    }
+  }
+
+  /// 运行时是否支持玻璃（iOS 26+；DF-10 的默认执行项 = 17–25 纯色降级）。
+  private static func runtimeSupportsGlass() -> Bool {
+    if #available(iOS 26.0, *) { return true }
+    return false
+  }
+
+  /// 状态描边：错误 ＞ 聚焦 ＞ 变体默认（只读态无描边）。
+  private var fieldBorderColor: Color? {
+    if !isEditable { return nil }
+    if hasError { return colors.statusDanger }
+    if showsFocus { return colors.textBrand }
+    switch appearance.variant {
+    case .inset: return nil
+    case .outline: return colors.borderHairlineStrong
+    case .glass: return colors.borderHairline
+    }
+  }
+
+  private var fieldBorderWidth: CGFloat {
+    (hasError || showsFocus) ? Self.emphasizedBorderWidth : 1
+  }
+
+  @ViewBuilder private var fieldBorder: some View {
+    if let color = fieldBorderColor {
+      RoundedRectangle(cornerRadius: WDRadius.md, style: .continuous)
+        .stroke(color, lineWidth: fieldBorderWidth)
+    }
+  }
+
+  /// 聚焦光环（设计 03 §5：`text.brand` 18%；宽度用 `state.focus.ring-width` 3pt）。
+  @ViewBuilder private var focusHalo: some View {
+    if showsFocus {
+      RoundedRectangle(cornerRadius: WDRadius.md, style: .continuous)
+        .stroke(colors.textBrand.opacity(Self.focusHaloAlpha), lineWidth: WDState.focusRingWidth)
+        .allowsHitTesting(false)
+    }
+  }
+
+  /// 可聚焦 = 可编辑且未被禁用；只读态不可聚焦。
+  private var canFocus: Bool {
+    isEditable && isEnabled
+  }
+
+  private var showsFocus: Bool {
+    isFocused && canFocus
+  }
+
+  private func requestFocus() {
+    guard canFocus else { return }
+    isFocused = true
+  }
+
+  /// 错误文案（`accessibilityHint` 的输入；库内不拼任何文案与分隔符）。
+  private var errorText: Text? {
+    if case .error(let error) = appearance.helper { return error }
+    return nil
+  }
+
+  private var hasError: Bool {
+    errorText != nil
+  }
+
+  /// 辅助文案的形态（动画的 value：只有形态变化才触发 160ms 过渡）。
+  private enum HelperKind: Int {
+    case none
+    case hint
+    case error
+  }
+
+  private var helperKind: HelperKind {
+    switch appearance.helper {
+    case .none: return .none
+    case .hint: return .hint
+    case .error: return .error
+    }
+  }
+
+  /// 聚焦/错误描边宽度（设计 03 §5 的 1.5pt；令牌层没有这个值）。
+  private static let emphasizedBorderWidth: CGFloat = 1.5  // wd-structure-check:disable R7 — 设计值
+  /// 字段聚焦光环透明度（设计 03 §5 的 18%；`state.focus.ring-alpha` 是通用值 32%，字段档按设计）。
+  private static let focusHaloAlpha: CGFloat = 0.18  // wd-structure-check:disable R7 — 设计值
+  /// 禁用态整体不透明度（`state.disabled.alpha` = 40，百分数换算）。
+  private var disabledOpacity: CGFloat {
+    WDState.disabledAlpha / Self.percentScale
+  }
+  /// 百分数换算的分母。
+  private static let percentScale: CGFloat = 100  // wd-structure-check:disable R7 — 百分数
+}
+
+/// 错误态读屏（F22）：无 error trait ⇒ `accessibilityHint`（文案由调用方给）。
+private struct WDFieldHint: ViewModifier {
+  let hint: Text?
+
+  @ViewBuilder func body(content: Content) -> some View {
+    if let hint {
+      content.accessibilityHint(hint)
+    } else {
+      content
     }
   }
 }

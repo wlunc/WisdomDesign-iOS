@@ -71,6 +71,37 @@ enum SnapshotSupport {
     return renderer.uiImage?.pngData()
   }
 
+  /// 渲染成 PNG（UIKit 接管型视图：`TextField`/`Material` —— `ImageRenderer` 不渲染它们）。
+  ///
+  /// 用 `UIHostingController` + `drawHierarchy`：先挂到一个离屏 `UIWindow` 完成布局，
+  /// 否则 `afterScreenUpdates` 拿到的可能是空白图（M1 登记过这条口径，M4 的玻璃类同样用它）。
+  static func pngHierarchy(
+    _ view: some View, state: State, size: CGSize, scale: CGFloat = 2
+  ) -> Data? {
+    let content = styled(view, state: state)
+      .frame(width: size.width, height: size.height, alignment: .topLeading)
+    let controller = UIHostingController(rootView: content)
+    let window = UIWindow(frame: CGRect(origin: .zero, size: size))
+    window.rootViewController = controller
+    window.makeKeyAndVisible()
+    controller.view.frame = CGRect(origin: .zero, size: size)
+    controller.view.backgroundColor = .clear
+    controller.view.setNeedsLayout()
+    controller.view.layoutIfNeeded()
+    // 让 SwiftUI 把本轮布局提交到 layer 树，再按图层渲染（drawHierarchy 在无 scene 的测试进程里
+    // 会拿到全透明图，实测）。
+    RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.05))
+
+    let format = UIGraphicsImageRendererFormat()
+    format.scale = scale
+    format.opaque = false
+    let image = UIGraphicsImageRenderer(size: size, format: format).image { context in
+      controller.view.layer.render(in: context.cgContext)
+    }
+    window.isHidden = true
+    return image.pngData()
+  }
+
   /// 基线目录（源码目录；记录模式写它，普通模式读 bundle 资源）。
   static var sourceBaselineDirectory: URL {
     URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Baselines")
@@ -202,9 +233,18 @@ enum SnapshotSupport {
     )
   }
 
-  /// 校验一个状态：记录模式写盘 + 打印 base64；否则比对，缺失 = fail。
+  /// 校验一个状态（与基线比对；缺失 = fail 并写盘）。
   static func verify(name: String, view: some View, state: State, size: CGSize) {
-    guard let png = png(view, state: state, size: size) else {
+    verifyPNG(name: name, state: state, png: png(view, state: state, size: size))
+  }
+
+  /// 同 `verify`，但走 `UIHostingController` 渲染器（`TextField`/玻璃类）。
+  static func verifyHierarchy(name: String, view: some View, state: State, size: CGSize) {
+    verifyPNG(name: name, state: state, png: pngHierarchy(view, state: state, size: size))
+  }
+
+  private static func verifyPNG(name: String, state: State, png: Data?) {
+    guard let png else {
       Issue.record("快照渲染失败：\(name)（\(state.id)）")
       return
     }
