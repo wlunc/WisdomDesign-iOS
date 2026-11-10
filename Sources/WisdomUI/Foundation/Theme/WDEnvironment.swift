@@ -31,6 +31,19 @@ extension EnvironmentValues {
   public var wdColors: WDColorValues { wdTheme.colors }
 }
 
+/// 布局密度的环境键（组件只读；写入口 = 本文件的 `.wdDensity(_:)`，R18）。
+private struct WDLayoutDensityKey: EnvironmentKey {
+  static let defaultValue: WDLayoutDensity = .comfortable
+}
+
+extension EnvironmentValues {
+  /// 当前布局密度档（组件**只读**；默认 `comfortable`，设计 09-layout §4）。
+  public var wdDensity: WDLayoutDensity {
+    get { self[WDLayoutDensityKey.self] }
+    set { self[WDLayoutDensityKey.self] = newValue }
+  }
+}
+
 private struct WDEffectsBudgetKey: EnvironmentKey {
   static let defaultValue: WDEffectsBudget = .default
 }
@@ -55,6 +68,13 @@ extension EnvironmentValues {
 }
 
 extension View {
+  /// 注入布局密度（写入口；组件内不得调用 —— R18）。
+  ///
+  /// 只影响"下限"（行高一类），不改变字号（设计 09-layout §4：compact 不让文字变小）。
+  public func wdDensity(_ density: WDLayoutDensity) -> some View {
+    environment(\.wdDensity, density)
+  }
+
   /// 调低效果预算（写入口；组件内不得调用 —— R18）。
   /// **只降不升**：与当前环境取字段级下界，想升会得到原值（机器保证，不靠自觉）。
   public func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View {

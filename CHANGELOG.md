@@ -24,6 +24,12 @@
   规范化器丢弃 USR/绝对路径等易漂移字段）。
 - **归档体积基线** `Examples/BaselineShell/`（E3-iOS-a 的分母：同构、不引入本库）。
 - 协作文件：`CONTRIBUTING.md`、`.github/pull_request_template.md`、`.github/CODEOWNERS`。
+- **基础设施补齐**（2026-11-10；P2 的依赖项）：`WDLayoutDensity` + `wdDensity`（环境只读 +
+  唯一写入口；默认 `comfortable`，行高下限 60/44，F44）；`Internal/WDHaptics.swift`
+  （可注入 sink + `WDEffectsBudget` 的"一次操作最多一次"闸门；测试用捕获器断言次数，不真的震动）。
+- **M2 组件（续三）**：`WDSwitch`（标准档轨道 51×31、滑块 27、行程 20；开 `gradient.mid`、
+  关 hairline 描边；整行可点、切换轻触觉 ×1；角色由真 `Toggle` 提供，库内零"开/关"文案）。
+  冻结签名无紧凑档/描述位 ⇒ 差异登记 `docs/DEV-PLAN.md` §2.3；组件测试 3 条 + 8 态快照（8 张基线）。
 - **M2 组件（续二）**：`WDAvatar` + `WDAvatarValue`（圆底 + 首字/图标；默认 md 32、首字号 12 固定；
   文字形态把 `label` 作为无障碍标签，图标形态是装饰）。冻结签名无 size/ID/在线态/照片参数 ⇒
   五档直径、按成员 ID 固定配色、在线点、停用态不可表达，差异登记在 `docs/DEV-PLAN.md` §2.3；
@@ -74,6 +80,8 @@
   无移除。
 - **API 基线随 WDAvatar 更新**：`api/WisdomUI.api.json` **+13 符号**（`WDAvatar`、`WDAvatarValue`
   及其 View 扩展入口）——从冒烟段落地后首次进入公开面；无移除。
+- **API 基线随布局密度/WDSwitch 更新**：`api/WisdomUI.api.json` **+22 符号**（`WDLayoutDensity`、
+  `wdDensity` 读写入口、`WDSwitch` 及其 View 扩展入口）；无移除。
 
 ### Breaking
 
