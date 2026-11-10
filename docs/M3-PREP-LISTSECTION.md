@@ -10,9 +10,9 @@
 
 | # | 判据 | 现状 | 缺什么 |
 | --- | --- | --- | --- |
-| I-1 | 上一里程碑出口已判定 | **未** | M2 出口：nightly 第 2/3 日 + 契约确认 + 签字 |
+| I-1 | 上一里程碑出口已判定 | **未** | M2 出口：nightly 第 2/3 日 + 签字（**契约确认已于 2026-11-10 闭合**，见 `docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5；yaml 回填 = M3 出口前） |
 | I-2 | 批前签名冻结 | **未** | 本文件 §3 的待决点必须先裁决，产出冻结表 |
-| I-3 | 令牌/契约已冻结 | ✅（令牌 32 槽位/schemes 已冻结；契约以 M2 冻结表单代替） | 契约确认请求 = `docs/CONTRACTS-CONFIRMATION-REQUEST.md` |
+| I-3 | 令牌/契约已冻结 | ✅（令牌 32 槽位/schemes 已冻结；契约以 M2 冻结表单代替） | **已确认（2026-11-10，架构师）** = `docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5；本件 `WDListSection` 的契约仍按 I-2 另行冻结 |
 | I-4 | 门禁可跑且绿 | ✅（PR 全绿；nightly 第 1 日绿） | 第 2/3 日 |
 | I-5 | 未闭合前置有默认执行项 | ✅ | 本文件 §3/§6 |
 
@@ -123,7 +123,12 @@ public struct WDListSection<Item: Identifiable, Row: View, Footer: View>: View {
 1. **公开 API 封板**：`api/WisdomUI.api.json` 已零 diff（641 符号）；补"基线入库 + 签字 + CHANGELOG"即视为冻结；
 2. **覆盖率转门槛**：`Foundation/**` **97.69%** 已过 80%（2026-11-10 实测）；把"只打印"改成"门槛"即可；
 3. **体积门槛定值**：先按 `docs/U09-SIZE-BASELINE.md` 的缺口补"同构消费方 + 三次归档"，再按 P50+10% 定值，
-   写进 README/CHANGELOG（U-09）。
+   写进 README/CHANGELOG（U-09）；
+4. **契约回填（11 件 yaml）**：M2 判据②的**生效条件**（架构师 2026-11-10 确认）。
+   位置 = `../wisdomdesign/contracts/<Component>.yaml`（不是 iOS 仓）；内容/判定口径 = 
+   `docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5.3；**回填 = 誊录**，不得借机改签名/默认值/槽位/枚举。
+   前置确认（§5.5）：① android-lead 复核 `WDCheckbox` 的 `checked`（android SPEC §2.10 已记载改名，需书面确认一次）；
+   ② 默认值检出表述的 P21 回写（ios-lead）。
 
 ## 8. 执行顺序（M2 出口签字后）
 

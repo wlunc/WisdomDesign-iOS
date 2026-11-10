@@ -184,16 +184,16 @@ PY
 
 ### 2.3 M2 — 首批 11 件（**关键路径 2 件串行在前**）
 
-> **批前签名冻结（I-2）**：表单 = `docs/M2-SIGNATURE-FREEZE.md`（2026-10-07 填报；**2026-11-10 补签**：§5.4 的 ①–⑧ / 两个值类型 / §5.3 选 (b) / §5.5 rawValue = 语义名全部 ✅；**架构师的契约名确认仍待**，按 I-2 原文以本表单代替 `contracts/*.yaml`）。
+> **批前签名冻结（I-2）**：表单 = `docs/M2-SIGNATURE-FREEZE.md`（2026-10-07 填报；**2026-11-10 补签**：§5.4 的 ①–⑧ / 两个值类型 / §5.3 选 (b) / §5.5 rawValue = 语义名全部 ✅；**架构师契约副本确认已于 2026-11-10 落盘**（签署记录 = `docs/CONTRACTS-CONFIRMATION-REQUEST.md` 的「5. 架构师确认记录」），按 I-2 原文以本表单代替 `contracts/*.yaml`，回填时点 = M3 出口前）。
 > 其中 **3 件已冻结**（`WDButton`/`WDTextField`/`WDListRow`，誊录自 M0-11 冒烟段）、**8 件按建议冻结**（2026-11-10）；
-> **2 条阻塞**：① `WDIconName` 的 44 条语义名未产出（I-M0-h）—— **已解除**（2026-10-07：`9b899dc` 接入 44 条生成物，`7bb77d6` 回填 `WDIcon` 与三个延后成员）；② `WDCheckbox` 的**契约名**冻结依赖 Android 侧 14 行改名（SPEC R3-d）—— **仍待 Android，不阻 iOS 实现**（`isChecked` 形态已冻结）。
+> **2 条阻塞**：① `WDIconName` 的 44 条语义名未产出（I-M0-h）—— **已解除**（2026-10-07：`9b899dc` 接入 44 条生成物，`7bb77d6` 回填 `WDIcon` 与三个延后成员）；② `WDCheckbox` 的**契约名**冻结依赖 Android 侧 14 行改名（SPEC R3-d）—— **仍待 Android 书面复核，不阻 iOS 实现**（`isChecked` 形态已冻结；注：`android/docs/SPEC.md` §2.10 已记载 14 行改名结果，回填前由 android-lead 确认一次，见 `docs/CONTRACTS-CONFIRMATION-REQUEST.md` 的 5.5）。
 >
 > **当前进度（2026-11-10 · M2 11/11 代码落地；批出口未判）**：**11 件全部实现**（`WDTextField`、`WDListRow`、`WDButton`、`WDIconButton`、`WDSwitch`、`WDCheckbox`、`WDBadge`、`WDAvatar`、`WDDivider`、`WDCard`、`WDIcon`），**每件的六类断言均已补齐**——组件测试 **41 条**、`+Previews.swift` ×11、8 态快照 ×11 = **88 张新基线**、`api` 零 diff。**基础件同步落地**：Foundation 无障碍层、布局密度（F44）、触觉网关（`Internal/WDHaptics`）。`Scripts/ci.sh pr` 复核**全绿**（`passed=106 failed=0`、符号 641、覆盖率 **61.06%**；**`Foundation/**` 97.69%**，M3 的 80% 门槛已预达标）。
 > **M2 批出口尚未判定**（落盘件 = `docs/M2-EXIT-REPORT.md`，2026-11-10）：
 > ① nightly **第 1/3 日绿**（2026-11-10 重跑：设备编译 + 16 tests 快照 + demo 审计 47.0s，**审计已覆盖 11 件**），还差 2 日；
 > ② 性能数字已进报告（11 件渲染耗时，只报不拦）；③ 无障碍审计已覆盖组件视口，**6 条窄例外**逐条点名
 > （固定字号头像/徽标、行的单行截断），音频播报仍不可机检；④ 契约 `contracts/*.yaml` 未落库，
-> 按 I-2 以冻结表单代替（架构师确认仍待）。**判定人待签字。**
+> 按 I-2 以冻结表单代替；**架构师书面确认已于 2026-11-10 落盘**（签署记录 = `docs/CONTRACTS-CONFIRMATION-REQUEST.md` 的「5. 架构师确认记录」），回填时点 = M3 出口前。**判定人待签字。**
 > **两条登记未闭合**（§13.1 两行因此仍为 🚧，不写 ✅）：
 > ① **错误态 assertive 播报**：§2.10-#03 要求"错误出现时播报（assertive，一次）"。`Text` 无法取串 ⇒ 组件按 F22 的另一条路径挂 `accessibilityHint`；**播报层已于 2026-11-10 落地**（`WDSystemAnnouncer` / `WDAnnouncementThrottle`，冒烟段已退役），但 `WDTextField` 的冻结签名**没有 announcer 注入点**。待裁决：**调用方播报**（demo/上层持 `WDSystemAnnouncer`，验收移到 demo 层）还是**组件注入**（改签名或加环境键 ⇒ 走 U 项/契约流程）。owner = ios-lead + 架构师，时点 = **M2 出口前**。
 > ② **显隐切换的 selection 位置**：iOS 17 无 `TextField(text:selection:)`（SPEC §2.3 裁决 2 的单实例方案不可用）⇒ 按该条**降级路径**实现"焦点回填"，光标位置由系统落在末尾；需设计/组长确认可接受。owner = ios-lead，时点 = **M2 出口前**。
@@ -224,7 +224,7 @@ PY
 
 ### 2.4 M3 — 封板批次（1 件 + 公开 API 冻结）
 
-**本端任务**：`WDListSection`（第 20 件 primitive 中的最后一件列入本批）＋ **公开 API 冻结**（符号快照入库）＋ 覆盖率转门槛 ＋ 体积门槛定值。
+**本端任务**：`WDListSection`（第 20 件 primitive 中的最后一件列入本批）＋ **公开 API 冻结**（符号快照入库）＋ 覆盖率转门槛 ＋ 体积门槛定值 ＋ **`contracts/*.yaml` 回填**（11 件；M2 判据②的条件，位置/内容/判定口径 = `docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5.3，**不晚于 M3 出口**）。
 
 > **开工前准备（只读，2026-11-10）**：`docs/M3-PREP-LISTSECTION.md` —— 入口判据现状、五个签名待决点
 > （items 形态/selection 类型/headerAction/卡片容器/空组隐藏）、六类断言计划与风险。**签名未冻结前不得开写。**
@@ -519,6 +519,7 @@ awk '/^\|/{if(!b){k++;n=0;f=NR} b=1;n++; if(n==2 && $0 !~ /^\|[-: |]*-[-: |]*\|[
 | **P18**（行首指示器语义） | `docs/SPEC.md` §2.4 的追加裁决 | 补 `.selectionIndicator` 语义 = **单选指示**（未选空心圆、已选品牌内点；多选用 `.checkbox`） | ios-lead | M2 出口前 | **已回写（2026-11-10）**：SPEC §2.4 追加裁决 5 |
 | **P19**（行选中底色） | `docs/SPEC.md` §2.4 的追加裁决 | 选中底由"brand 8% 半透明"改为**不透明 `surface.tint`**（半透明底会被对比度审计按未合成色计算） | ios-lead + 设计 | M2 出口前 | **已回写（2026-11-10）**：SPEC §2.4 追加裁决 6；视觉差异以 8 态快照为准 |
 | **P20**（错误态播报归属） | `docs/SPEC.md` §2.3 的追加裁决 | 补"assertive 播报由**调用方**完成（库提供 `WDSystemAnnouncer`），组件只保证读屏 hint 与结构，不内置注入点" | ios-lead + 架构师 | M2 出口前 | **已回写（2026-11-10）**：SPEC §2.3 追加裁决 5 |
+| **P21**（默认值的检出表述） | `docs/SPEC.md` §2.9 与 `docs/DEV-PLAN.md` §9 | 原文称"默认值变化**不进**符号快照 ⇒ 查不出、只能靠契约"；**实测本仓 canonicalizer 的 `decl` 含默认值**（例 `size: WDButtonSize = .md`）⇒ 默认值漂移会体现为基线 diff。回写为"本仓口径可检出；跨端 ABI 语义不变"，并保留契约断言仍是唯一真源 | ios-lead + 架构师 | M3 出口前 | **待回写**（2026-11-10 架构师在 `docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5.2 末登记） |
 | **P10**（设计侧行高句） | `09-layout.md` :101 | "整行 = 48 布局盒（可见 44 + 上下各 2dp 内边距）；热区 = 该布局盒、不覆盖相邻行" | 设计 + 架构师 | M0-1 | **待回写（设计侧，不阻塞本端实现）** |
 | **P7 / P8**（Android 侧） | `12-android-spec.md` §2.3/§3.1.2/§3.3.1 与 :1880 | 行高/热区与 U12 = 32 槽位 | android-lead | M0-1 冻结前 | **非本端**（登记在此仅为闭环视图） |
 | **D-06**（历史项，已闭环） | `02-ios-spec.md` §6.1-7 / §9.2-I-M0-i / §9.3-6 / §5-I45 | 门禁 grep 的仓内正确 pathspec | ios-dev + ios-lead | M0-i（已完成） | **已回写**；注：曾有一次"绕过登记直接改"属**一次性授权、不构成先例** |

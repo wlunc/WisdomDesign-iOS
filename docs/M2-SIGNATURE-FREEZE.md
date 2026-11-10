@@ -1,8 +1,8 @@
 # M2 批前签名冻结表单（I-2）
 
-> 用途：满足 `docs/DEV-PLAN.md` §3.1 的入口判据 **I-2**（批前签名冻结）。
+> 用途：满足 `../AGENTS.md` §3.1 的入口判据 **I-2**（批前签名冻结）。
 > **时点说明（照抄 I-2 原文）**：`contracts/*.yaml` 库为 **M0-5 才落库**；在此之前该判据以**本表单**代替。
-> 填报日期：2026-10-07｜填报人：ios-agent｜**确认：2026-11-10 项目负责人按 §5 的建议逐条冻结（"收尾 P0"指示；§5.4 留档）；架构师的契约名确认仍待**（不阻实现，按 I-2 原文以本表单代替 `contracts/*.yaml`）
+> 填报日期：2026-10-07｜填报人：ios-agent｜**确认：2026-11-10 项目负责人按 §5 的建议逐条冻结（"收尾 P0"指示；§5.4 留档）；架构师的契约副本确认同日落盘**（契约副本 = **§1.1 + §5.1 + §5.2**；签署记录见 `docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5；按 I-2 原文以本表单代替 `contracts/*.yaml`，回填时点 = M3 出口前）
 > 批次：**M2 = 11 件**（`WDTextField`(C)、`WDListRow`(C)、`WDButton`、`WDIconButton`、`WDSwitch`、`WDCheckbox`、`WDBadge`、`WDAvatar`、`WDDivider`、`WDCard`、`WDIcon`）
 
 ## 0. 状态图例与依据
@@ -30,6 +30,8 @@
 
 > **结论（2026-10-07 定稿；2026-11-10 补签）**：R1/R2/R3 已由 ios-lead 裁决（见 §5.0 与 §5.4）。本表 8 条的**唯一待决点都已由 R1–R3 或建议解决** ⇒ 按建议冻结，2026-11-10 逐条补签（见 §5.4）。
 > 其中 3 项属**判断项**（非规则推出）：**①`size` 复用 `WDButtonSize`**、**⑤值类型保持 `struct`**、**⑧`WDIconSize` 默认 `.md`** —— 已按建议记录，**可一句话推翻**（推翻需同步改本表与 §5.1）。
+>
+> **⚠️ 本表是 2026-10-07 的提案底稿，已被 §5.1/§5.2 取代**：与 §5.1 不一致处一律以 §5.1 为准（例：`WDBadge` 用 `label:`、`WDAvatar` 用 `value:` 且无 `size`、`WDIcon` 用 `icon:size: = .md`）；契约副本取 **§1.1 + §5.1 + §5.2**（见 `docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5.1）。
 
 | 件 | 提案签名 | 推导依据 | 待决点 |
 | --- | --- | --- | --- |
@@ -237,4 +239,4 @@ public struct WDIcon: View {
 > **纪律**：延后项**不写进代码** —— 不硬编码 SF Symbol 名（F-07：图标名以契约为准）。落地时按 §1 的已冻结签名回填，并更新 `api/WisdomUI.api.json` 基线。
 > **实现现状（2026-10-07）**：`WDTextField` 已实现除上表三项之外的全部成员；其冒烟段已退役（`WDAPISurface.swift`）。
 > **2026-10-07 更新**：`WDIconName` 生成物**已落地**（设计仓生成器产出，44 条；冒烟占位已退役）⇒ **上表三项已全部回填**：`Prefix.icon` / `Accessory.clear` / `Accessory.reveal` 均已实现（附件按钮独立可达、独立标签、热区 = `WDSize.touchTargetMin`）。同批新增 **`WDIcon` + `WDIconSize`**（M2 ⑧）与手写映射 `WDIconMetrics`。
-> **2026-11-10 现状**：签名侧已全部冻结（§5.4）；**实现 2/11**。按 `docs/DEV-PLAN.md` §14.4 的六类断言，两件**均未完成**（缺组件测试、`+Previews.swift`、8 态快照）——这是 M2 出口必须补齐的欠账，不是签名问题。
+> **2026-11-10 现状**：签名侧已全部冻结（§5.4）；实现 **11/11**（41 条组件测试、11 个 `+Previews.swift`、88 张 8 态基线；见 `docs/M2-EXIT-REPORT.md` §2–§3）。原句「实现 2/11、两件均未完成」为 2026-10-07 时点遗留，已按出口报告更正。**契约副本已由架构师书面确认**（2026-11-10，见 `docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5）：`contracts/*.yaml` 回填时点 = **M3 出口前**。
