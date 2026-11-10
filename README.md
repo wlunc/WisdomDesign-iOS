@@ -73,6 +73,7 @@ Scripts/ci.sh measure   # 过程成本测量（分阶段计时；**未测不写�
 ### 门禁现状（**未验证的一律照实写**）
 
 - `Scripts/ci.sh pr`：**首次全绿**（2026-10-06；Xcode 26.6 + iOS 26.5 模拟器）。
+- `Scripts/ci.sh pr`：**2026-11-10 复核全绿**（M2 两件落地后；`passed=41 failed=0`、符号 471 零 diff、`WisdomUI` 覆盖率 46.78%、warm 22.40 s——**n=1 复核值，不替换下表的三态预算**）。
 
 **门禁预算（实测，2026-10-07；`Scripts/ci.sh measure 3 --states=warm,clean,cold`，每态 n=3 取中位数；单位 = 秒）**：
 
@@ -88,8 +89,8 @@ Scripts/ci.sh measure   # 过程成本测量（分阶段计时；**未测不写�
 口径：**warm** = 复用现有缓存；**clean** = 每轮删 DerivedData；**cold** = 连 SwiftPM manifest 缓存与 module-cache 一起删。
 cold 的 PR-2 那 45 s 是 `swift Scripts/canonicalize-api.swift` 的**宿主模块缓存被清后重编译**（每轮都付），不是 API 逻辑慢。
 原始数据：`.build/perf/ci-measure-20261007.json`。**测法变了要重测**（改 `ci.sh` 的 PR 阶段、换 Xcode 大版本、换金标设备）。
-- **覆盖率**：最近一次门禁 `WisdomUI` **12.70%**（令牌落地后模块体量增大、尚无组件用例 ⇒ 数字下降是分母变大，不是回退）；M3 起 `Foundation/**` ≥ 80% 才转门槛（排除 `generated/`）。
-- `Scripts/ci.sh nightly`：**M1 前不可绿**——前置 `Tests/WisdomUISnapshotTests`（六态快照）是 M1 交付物；缺失时脚本以退出码 3 明确失败，**不静默跳过**。
+- **覆盖率**：最近一次门禁 `WisdomUI` **46.78%**（2026-11-10；令牌落地后模块体量增大、尚无组件用例 ⇒ 组件文件仍为 0）；M3 起 `Foundation/**` ≥ 80% 才转门槛（排除 `generated/`）。
+- `Scripts/ci.sh nightly`：前置物已齐（`Tests/WisdomUISnapshotTests` 的 16 张基线 + demo 无障碍审计已在 M1 实跑 2/0）；**连续 3 日绿的记录尚未建立**（M2 出口要求）。
 - `.github/workflows/ci.yml`：**【未验证】** 本仓尚无一次 GitHub Actions 实跑（macOS 26 镜像标签与自带 Xcode 版本属外部事实）。
 
 贡献流程（提交纪律、评审归属、不能自行决定的事）见 [CONTRIBUTING.md](CONTRIBUTING.md)；PR 自检清单见 [.github/pull_request_template.md](.github/pull_request_template.md)。

@@ -2,7 +2,7 @@
 
 > 用途：满足 `docs/DEV-PLAN.md` §3.1 的入口判据 **I-2**（批前签名冻结）。
 > **时点说明（照抄 I-2 原文）**：`contracts/*.yaml` 库为 **M0-5 才落库**；在此之前该判据以**本表单**代替。
-> 填报日期：2026-10-07｜填报人：ios-agent｜**待确认人：ios-lead（签名）＋ 架构师（契约名）**
+> 填报日期：2026-10-07｜填报人：ios-agent｜**确认：2026-11-10 项目负责人按 §5 的建议逐条冻结（"收尾 P0"指示；§5.4 留档）；架构师的契约名确认仍待**（不阻实现，按 I-2 原文以本表单代替 `contracts/*.yaml`）
 > 批次：**M2 = 11 件**（`WDTextField`(C)、`WDListRow`(C)、`WDButton`、`WDIconButton`、`WDSwitch`、`WDCheckbox`、`WDBadge`、`WDAvatar`、`WDDivider`、`WDCard`、`WDIcon`）
 
 ## 0. 状态图例与依据
@@ -28,8 +28,8 @@
 
 ### 1.2 提案（**2026-10-07 冻结会通过 R1–R3 后按建议冻结**；据 §2.10 形态行 + C-15 逐字推导）
 
-> **结论（2026-10-07）**：R1/R2/R3 已由 ios-lead 裁决（见 §5.0 与 §5.4）。本表 8 条的**唯一待决点都已由 R1–R3 或建议解决** ⇒ 按建议冻结。
-> 其中 3 项属**判断项**（非规则推出）：**①@@size@@ 复用 @@WDButtonSize@@**、**⑤值类型保持 @@struct@@**、**⑧@@WDIconSize@@ 默认 @@.md@@** —— 已按建议记录，**可一句话推翻**（推翻需同步改本表与 §5.1）。
+> **结论（2026-10-07 定稿；2026-11-10 补签）**：R1/R2/R3 已由 ios-lead 裁决（见 §5.0 与 §5.4）。本表 8 条的**唯一待决点都已由 R1–R3 或建议解决** ⇒ 按建议冻结，2026-11-10 逐条补签（见 §5.4）。
+> 其中 3 项属**判断项**（非规则推出）：**①`size` 复用 `WDButtonSize`**、**⑤值类型保持 `struct`**、**⑧`WDIconSize` 默认 `.md`** —— 已按建议记录，**可一句话推翻**（推翻需同步改本表与 §5.1）。
 
 | 件 | 提案签名 | 推导依据 | 待决点 |
 | --- | --- | --- | --- |
@@ -117,7 +117,7 @@ public struct WDIconButton: View {
 - 依据：§2.10-#02（受控值 `isLoading`；槽位 `icon` + **a11y 标签必填**；特例 `.plain`）+ SPEC:869（`accessibilityLabel: Text` 无默认值）+ C-15。
 - 待决：**(i)** `WDIconButtonVariant` 的 case 集 —— **建议只 `plain`**（§2.10 只钉了这一档；其余等设计依据，R3）；**(ii)** `size` —— **建议复用 `WDButtonSize`**（一档尺寸体系优于两套）。
 - **附带说明（不在本次签名范围，但实现时必须钉住）**：`WDButtonSize` 是**控件档**（盒高 sm/md/lg），`WDIconSize` 是**图形档**（16/20/24/28），两者**不是同一套**。「控件档 → 图标档」的映射（例如 `.lg` 按钮里用几号图标）属**实现内部的既定映射**，实现时要写进文档并加断言；若设计另有口径，届时按设计改。
-- 结论：☐
+- 结论：✅ **照原样冻结**（2026-11-10；依据 = §5.0 的 R1–R3 + 本件建议）
 
 **② `WDSwitch`**（§2.10-#05）
 ```swift
@@ -127,7 +127,7 @@ public struct WDSwitch: View {
 ```
 - 依据：§2.10-#05（受控值 `isOn` ✓；槽位 `label`）+ C-15。
 - 待决：`label` 既是**可见文本**又兼作读屏标签 —— **建议是**（槽位词表对开关只有 `label` 一个槽；再要一个独立 a11y 标签属发明，R3）。
-- 结论：☐
+- 结论：✅ **照原样冻结**（2026-11-10；依据 = §5.0 的 R1–R3 + 本件建议）
 
 **③ `WDCheckbox`**（§2.10-#06）
 ```swift
@@ -137,7 +137,7 @@ public struct WDCheckbox: View {
 ```
 - 依据：§2.10-#06 + SPEC:12（"正文旧、结论新"：**以 `isChecked` 为准**）+ C-15（iOS 侧唯一改名）。
 - 待决：**契约名**冻结有前置（SPEC **R3-d**：Android 14 行改名未完成前 `contracts/WDCheckbox.yaml` 的 `params[].name` 不得冻结）—— **建议：先冻结 iOS 实现形态（`isChecked`），契约 `params[].name` 标注"待 Android"**。
-- 结论：☐
+- 结论：✅ **照原样冻结**（2026-11-10；依据 = §5.0 的 R1–R3 + 本件建议）
 
 **④ `WDBadge`**（§2.10-#11）
 ```swift
@@ -147,7 +147,7 @@ public struct WDBadge: View {
 ```
 - 依据：§2.10-#11（受控值 —；槽位 `label`；特例"4 汉字"= 宽度上限，属**实现约束、不进签名**）。
 - 待决：是否要色调/档位 —— **建议不加**（§2.10 未给，R3）。
-- 结论：☐
+- 结论：✅ **照原样冻结**（2026-11-10；依据 = §5.0 的 R1–R3 + 本件建议）
 
 **⑤ `WDAvatar` + `WDAvatarValue`**（§2.10-#12）
 ```swift
@@ -161,7 +161,7 @@ public struct WDAvatar: View {
 ```
 - 依据：§2.10-#12（槽位 `icon`,`label`；无障碍"读成员名"⇒ label 本身即读屏文本，**不需要第二个 a11y 参数**；特例"直径锁死"）。
 - 待决：**(i)** 值类型**保持 `struct`**（冒烟段已声明 `struct`；改 `enum` 属类型形变更）—— **建议保持**；**(ii)** 是否要尺寸档 —— **建议不加**（§2.10 只给"直径锁死"）。
-- 结论：☐
+- 结论：✅ **照原样冻结**（2026-11-10；依据 = §5.0 的 R1–R3 + 本件建议）
 
 **⑥ `WDDivider`**（§2.10-#14）
 ```swift
@@ -171,7 +171,7 @@ public struct WDDivider: View {
 ```
 - 依据：§2.10-#14（槽位"无"；装饰 `accessibilityHidden`、不进树 ⇒ 属**实现**）。
 - 待决：是否要 `orientation`/`inset` —— **建议不加**（R3）。
-- 结论：☐
+- 结论：✅ **照原样冻结**（2026-11-10；依据 = §5.0 的 R1–R3 + 本件建议）
 
 **⑦ `WDCard`**（§2.10-#17；**唯一有权威签名块的一件**）
 ```swift
@@ -182,7 +182,7 @@ public struct WDCard<Content: View>: View {
 ```
 - 依据：**SPEC §2.11** 已给枚举声明、case、默认值 `.elevated` 与参数连接式 `WDCard(style: WDCardStyle = .elevated, …)`；§2.10-#17 槽位 `content`、容器 `contain`；快照渲染器表含 **`WDCard(.glass)`**（⇒ `glass` 必需）。
 - 待决：**无** —— 建议照原样冻结（本件不是提案，是誊录）。
-- 结论：☐
+- 结论：✅ **照原样冻结**（2026-11-10；依据 = §5.0 的 R1–R3 + 本件建议）
 
 **⑧ `WDIcon` + `WDIconSize`**（§2.10-#20）
 ```swift
@@ -193,14 +193,14 @@ public struct WDIcon: View {
 ```
 - 依据：§2.10-#20（槽位 `icon`；装饰：不进树）；设计仓 `08-icons.md` §2 的**四档**（16/20/24/28 + 线宽）⇒ 档位**来自设计、非发明**；`WDIconSize` 为 **public**（已定）。
 - 待决：默认档 —— **建议 `.md`**（设计文档：md=20 用于"表单前缀、列表、工具栏"，是主用档）。
-- 结论：☐
+- 结论：✅ **照原样冻结**（2026-11-10；依据 = §5.0 的 R1–R3 + 本件建议）
 
 ### 5.2 值类型成员（同属本次冻结范围）
 
 | 类型 | 提案 | 理由 | 结论 |
 | --- | --- | --- | --- |
-| `WDAvatarValue` | 见 §5.1-⑤（两个 `init`：`icon:` / `label:`） | 对应 §2.10-#12 的两个槽位 | ☐ |
-| `WDBadgeValue` | `public struct WDBadgeValue: Sendable, Equatable { public init(label: Text) }` | 它是 `WDListRowTrailing.badge(WDBadgeValue)` 的**值形态**，与 `WDBadge` 同源 | ☐ |
+| `WDAvatarValue` | 见 §5.1-⑤（两个 `init`：`icon:` / `label:`） | 对应 §2.10-#12 的两个槽位 | ✅ 通过（2026-11-10） |
+| `WDBadgeValue` | `public struct WDBadgeValue: Sendable, Equatable { public init(label: Text) }` | 它是 `WDListRowTrailing.badge(WDBadgeValue)` 的**值形态**，与 `WDBadge` 同源 | ✅ 通过（2026-11-10） |
 
 ### 5.3 阻塞处置（二选一）
 
@@ -209,6 +209,8 @@ public struct WDIcon: View {
 | (a) 等生成物 | 等 `contracts/icons.json` + 生成器产出 `WDIconName.swift` 落地后再开工全部 8 件受影响件 | M2 全线停在契约管道上 |
 | **(b) 建议** | **先开工不依赖图标的 6 件**：`WDSwitch` / `WDCheckbox` / `WDBadge` / `WDDivider` / `WDCard` + `WDTextField`（其 `Prefix.icon` 一个 case 延后）；把 `WDButton` / `WDListRow` / `WDAvatar` / `WDIconButton` / `WDIcon` 留到生成物到位 | 需要维护一份"延后清单"（已在本表列明） |
 
+**决议（2026-11-10）**：选 **(b)**。实际执行：`WDTextField` 先行落地（`9df6406`），图标管道随后解除（`9b899dc` + `7bb77d6`），`Prefix.icon` / `Accessory.clear` / `Accessory.reveal` 与 `WDIcon` 已回填；**剩余 9 件仍按 DEV-PLAN §2.3 的批次顺序推进**，不再受图标阻塞。
+
 ### 5.4 决议记录表（会上填写；会后回填 §1 并留档）
 
 | # | 决策项 | 结论 | 签字 | 日期 |
@@ -216,12 +218,12 @@ public struct WDIcon: View {
 | R1 | 单槽位用带标签 `init` | ✅ **通过**（带标签） | ios-lead | 2026-10-07 |
 | R2 | 槽位默认值 | ⚠️ **修改后通过**：**允许 `Text("")`**（由使用方决定）；可选槽仍用 `Text? = nil`；`accessibilityLabel` 按 SPEC:869 保持无默认值 | ios-lead | 2026-10-07 |
 | R3 | 未给档位不发明 | ✅ **通过**（按建议：只冻结 §2.10 给出的档位；延后的两笔代价见 §5.0-R3） | ios-lead | 2026-10-07 |
-| ①–⑧ | §5.1 逐件 | ☐ 全部照原样 ☐ 逐件修改（见各件） | | |
-| 5.2 | 两个值类型成员 | ☐ 通过 ☐ 修改 | | |
-| 5.3 | 阻塞处置 | ☐ (a) 等 ☐ (b) 先开工 6 件 | | |
-| 5.5 | `WDIconName` 形态（见下） | ☐ rawValue = 语义名 ☐ 其他 | | |
+| ①–⑧ | §5.1 逐件 | ✅ **全部照原样冻结**（8 件均按建议；3 个判断项见 §5.1 开头） | 项目负责人 | 2026-11-10 |
+| 5.2 | 两个值类型成员 | ✅ **通过**（`WDAvatarValue` 两 init；`WDBadgeValue.init(label:)`） | 项目负责人 | 2026-11-10 |
+| 5.3 | 阻塞处置 | ✅ **(b) 先开工 6 件**（`WDTextField` 已落地；图标管道解除后其余件不再受图标阻塞） | 项目负责人 | 2026-11-10 |
+| 5.5 | `WDIconName` 形态（见下） | ✅ **rawValue = 语义名**；映射放生成物 —— **已实施**（`WDIconName.swift`，44 条） | 项目负责人 | 2026-11-10 |
 
-**5.5 `WDIconName` 的形态**（解堵时要用，先记结论）：**建议 rawValue = 语义名**（契约键的代码镜像；Apple 改名/换符号时契约键稳定），语义名到 SF Symbols 的映射表**放生成物**（纯字符串表、无需 Swift 类型构造 ⇒ 与 `WDColorValues` 那种手写层不同；详见 `docs/ICON-PIPELINE.md` §4）。
+**5.5 `WDIconName` 的形态**（解堵时要用，先记结论）：**结论 = rawValue 用语义名**（契约键的代码镜像；Apple 改名/换符号时契约键稳定），语义名到 SF Symbols 的映射表**放生成物**（纯字符串表、无需 Swift 类型构造 ⇒ 与 `WDColorValues` 那种手写层不同；详见 `docs/ICON-PIPELINE.md` §4）。**已按此实施**（2026-10-07，`9b899dc`）。
 
 ## 6. 延后清单（因 `WDIconName` 未落地；对应 §5.3 选项 (b)）
 
@@ -235,3 +237,4 @@ public struct WDIcon: View {
 > **纪律**：延后项**不写进代码** —— 不硬编码 SF Symbol 名（F-07：图标名以契约为准）。落地时按 §1 的已冻结签名回填，并更新 `api/WisdomUI.api.json` 基线。
 > **实现现状（2026-10-07）**：`WDTextField` 已实现除上表三项之外的全部成员；其冒烟段已退役（`WDAPISurface.swift`）。
 > **2026-10-07 更新**：`WDIconName` 生成物**已落地**（设计仓生成器产出，44 条；冒烟占位已退役）⇒ **上表三项已全部回填**：`Prefix.icon` / `Accessory.clear` / `Accessory.reveal` 均已实现（附件按钮独立可达、独立标签、热区 = `WDSize.touchTargetMin`）。同批新增 **`WDIcon` + `WDIconSize`**（M2 ⑧）与手写映射 `WDIconMetrics`。
+> **2026-11-10 现状**：签名侧已全部冻结（§5.4）；**实现 2/11**。按 `docs/DEV-PLAN.md` §14.4 的六类断言，两件**均未完成**（缺组件测试、`+Previews.swift`、8 态快照）——这是 M2 出口必须补齐的欠账，不是签名问题。
