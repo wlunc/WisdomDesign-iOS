@@ -40,6 +40,10 @@
   iOS 26 `glassEffect`、17–25 纯色降级）、`WDIconButton`（plain 档；sm 32 / md 44 / lg 52 视觉、
   **热区恒 44**；无障碍标签必填）。冻结签名差异（Checkbox 半选/紧凑档、Card sunken/media/可点卡、
   IconButton 其余四变体）登记 `docs/DEV-PLAN.md` §2.3；组件测试 8 条 + 三件 8 态快照（24 张基线）。
+- **Foundation 覆盖率补齐**（2026-11-10）：新增 16 条单测覆盖颜色槽位（32 槽位/补丁构造/
+  light↔dark 差异）、令牌基础类型（`WDTextStyle` 四项派生、`WDShadowLayer`、`WGradientSpec`）
+  与环境写入口（`wdTheme`/`wdTheme(scheme:)`/`wdColors`/`wdEffectsBudget` 只降不升/`wdDensity`/
+  `wdAppearance` 派生）；`Foundation/**`（排除 generated）**67.3% → 97.69%**，M3 的 80% 门槛预达标。
 - **基础设施补齐**（2026-11-10；P2 的依赖项）：`WDLayoutDensity` + `wdDensity`（环境只读 +
   唯一写入口；默认 `comfortable`，行高下限 60/44，F44）；`Internal/WDHaptics.swift`
   （可注入 sink + `WDEffectsBudget` 的"一次操作最多一次"闸门；测试用捕获器断言次数，不真的震动）。

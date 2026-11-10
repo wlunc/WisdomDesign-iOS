@@ -188,7 +188,7 @@ PY
 > 其中 **3 件已冻结**（`WDButton`/`WDTextField`/`WDListRow`，誊录自 M0-11 冒烟段）、**8 件按建议冻结**（2026-11-10）；
 > **2 条阻塞**：① `WDIconName` 的 44 条语义名未产出（I-M0-h）—— **已解除**（2026-10-07：`9b899dc` 接入 44 条生成物，`7bb77d6` 回填 `WDIcon` 与三个延后成员）；② `WDCheckbox` 的**契约名**冻结依赖 Android 侧 14 行改名（SPEC R3-d）—— **仍待 Android，不阻 iOS 实现**（`isChecked` 形态已冻结）。
 >
-> **当前进度（2026-11-10 · M2 11/11 代码落地；批出口未判）**：**11 件全部实现**（`WDTextField`、`WDListRow`、`WDButton`、`WDIconButton`、`WDSwitch`、`WDCheckbox`、`WDBadge`、`WDAvatar`、`WDDivider`、`WDCard`、`WDIcon`），**每件的六类断言均已补齐**——组件测试 **41 条**、`+Previews.swift` ×11、8 态快照 ×11 = **88 张新基线**、`api` 零 diff。**基础件同步落地**：Foundation 无障碍层、布局密度（F44）、触觉网关（`Internal/WDHaptics`）。`Scripts/ci.sh pr` 复核**全绿**（`passed=90 failed=0`、符号 641、覆盖率 **55.56%**）。
+> **当前进度（2026-11-10 · M2 11/11 代码落地；批出口未判）**：**11 件全部实现**（`WDTextField`、`WDListRow`、`WDButton`、`WDIconButton`、`WDSwitch`、`WDCheckbox`、`WDBadge`、`WDAvatar`、`WDDivider`、`WDCard`、`WDIcon`），**每件的六类断言均已补齐**——组件测试 **41 条**、`+Previews.swift` ×11、8 态快照 ×11 = **88 张新基线**、`api` 零 diff。**基础件同步落地**：Foundation 无障碍层、布局密度（F44）、触觉网关（`Internal/WDHaptics`）。`Scripts/ci.sh pr` 复核**全绿**（`passed=106 failed=0`、符号 641、覆盖率 **61.06%**；**`Foundation/**` 97.69%**，M3 的 80% 门槛已预达标）。
 > **M2 批出口尚未判定**（落盘件 = `docs/M2-EXIT-REPORT.md`，2026-11-10）：
 > ① nightly **第 1/3 日绿**（2026-11-10 重跑：设备编译 + 16 tests 快照 + demo 审计 47.0s，**审计已覆盖 11 件**），还差 2 日；
 > ② 性能数字已进报告（11 件渲染耗时，只报不拦）；③ 无障碍审计已覆盖组件视口，**6 条窄例外**逐条点名

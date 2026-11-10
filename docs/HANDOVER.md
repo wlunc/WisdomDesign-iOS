@@ -2,7 +2,7 @@
 
 > **这份文件回答三件事**：仓库里的文档**在哪**、**怎么读**、**哪些还没验证**。
 > 它**不是**开发计划本身——计划在 [`DEV-PLAN.md`](DEV-PLAN.md)，规格在 [`SPEC.md`](SPEC.md)，结构在 [`ARCHITECTURE.md`](ARCHITECTURE.md)，操作手册在 [`../AGENTS.md`](../AGENTS.md)。
-> 状态快照（**2026-11-10**）：**M0、M1 已交付**（M1 出口报告 = `M1-EXIT-REPORT.md`，判定人签字仍待 ios-lead）；**M2 代码 11/11 已落地**；出口报告 = `M2-EXIT-REPORT.md`（**未判定通过**：nightly 第 1/3 日绿、无障碍语义断言与契约确认未闭合）；`Scripts/ci.sh pr` 复核**全绿**（90 tests / 符号 641 零 diff / 覆盖率 55.63%）；nightly 第 1/3 日绿（demo 审计已覆盖 11 件组件视口）。文档改动以 `git log` 为准。
+> 状态快照（**2026-11-10**）：**M0、M1 已交付**（M1 出口报告 = `M1-EXIT-REPORT.md`，判定人签字仍待 ios-lead）；**M2 代码 11/11 已落地**；出口报告 = `M2-EXIT-REPORT.md`（**未判定通过**：nightly 第 1/3 日绿、无障碍语义断言与契约确认未闭合）；`Scripts/ci.sh pr` 复核**全绿**（106 tests / 符号 641 零 diff / 覆盖率 61.06%；`Foundation/**` 97.69%）；nightly 第 1/3 日绿（demo 审计已覆盖 11 件组件视口）。文档改动以 `git log` 为准。
 
 ---
 
