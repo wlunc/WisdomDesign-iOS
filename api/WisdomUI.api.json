@@ -36,6 +36,12 @@
     },
     {
       "access" : "public",
+      "decl" : "var wdDensity: WDLayoutDensity { get set }",
+      "kind" : "swift.property",
+      "path" : "EnvironmentValues.wdDensity"
+    },
+    {
+      "access" : "public",
       "decl" : "var wdEffectsBudget: WDEffectsBudget { get set }",
       "kind" : "swift.property",
       "path" : "EnvironmentValues.wdEffectsBudget"
@@ -51,6 +57,12 @@
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "View.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "View.wdDensity(_:)"
     },
     {
       "access" : "public",
@@ -216,6 +228,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
       "kind" : "swift.method",
       "path" : "WDAvatar.wdEffectsBudget(_:)"
@@ -291,6 +309,12 @@
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDBadge.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdDensity(_:)"
     },
     {
       "access" : "public",
@@ -1434,6 +1458,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
       "kind" : "swift.method",
       "path" : "WDDivider.wdEffectsBudget(_:)"
@@ -1812,6 +1842,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
       "kind" : "swift.method",
       "path" : "WDIcon.wdEffectsBudget(_:)"
@@ -2163,6 +2199,30 @@
       "decl" : "case xl",
       "kind" : "swift.enum.case",
       "path" : "WDIconSize.xl"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDLayoutDensity",
+      "kind" : "swift.enum",
+      "path" : "WDLayoutDensity"
+    },
+    {
+      "access" : "public",
+      "decl" : "case comfortable",
+      "kind" : "swift.enum.case",
+      "path" : "WDLayoutDensity.comfortable"
+    },
+    {
+      "access" : "public",
+      "decl" : "case compact",
+      "kind" : "swift.enum.case",
+      "path" : "WDLayoutDensity.compact"
+    },
+    {
+      "access" : "public",
+      "decl" : "var rowMinHeight: CGFloat { get }",
+      "kind" : "swift.property",
+      "path" : "WDLayoutDensity.rowMinHeight"
     },
     {
       "access" : "public",
@@ -2652,6 +2712,72 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor struct WDSwitch",
+      "kind" : "swift.struct",
+      "path" : "WDSwitch"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDSwitch.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(isOn: Binding<Bool>, label: Text)",
+      "kind" : "swift.init",
+      "path" : "WDSwitch.init(isOn:label:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor struct WDSystemAnnouncer",
       "kind" : "swift.struct",
       "path" : "WDSystemAnnouncer"
@@ -2691,6 +2817,12 @@
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDTextField.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdDensity(_:)"
     },
     {
       "access" : "public",
