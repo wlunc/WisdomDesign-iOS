@@ -190,9 +190,10 @@ PY
 >
 > **当前进度（2026-11-10 · M2 11/11 代码落地；批出口未判）**：**11 件全部实现**（`WDTextField`、`WDListRow`、`WDButton`、`WDIconButton`、`WDSwitch`、`WDCheckbox`、`WDBadge`、`WDAvatar`、`WDDivider`、`WDCard`、`WDIcon`），**每件的六类断言均已补齐**——组件测试 **41 条**、`+Previews.swift` ×11、8 态快照 ×11 = **88 张新基线**、`api` 零 diff。**基础件同步落地**：Foundation 无障碍层、布局密度（F44）、触觉网关（`Internal/WDHaptics`）。`Scripts/ci.sh pr` 复核**全绿**（`passed=90 failed=0`、符号 641、覆盖率 **55.56%**）。
 > **M2 批出口尚未判定**（落盘件 = `docs/M2-EXIT-REPORT.md`，2026-11-10）：
-> ① nightly **第 1/3 日绿**（2026-11-10：设备编译 + 15 tests 快照 + demo 审计 50.8s），还差 2 日；
-> ② 性能数字已进报告（11 件渲染耗时，只报不拦）；③ 无障碍**语义树/播报**缺自动断言（demo 审计尚未挂 11 件）；
-> ④ 契约 `contracts/*.yaml` 未落库，按 I-2 以冻结表单代替（架构师确认仍待）。**判定人待签字。**
+> ① nightly **第 1/3 日绿**（2026-11-10 重跑：设备编译 + 16 tests 快照 + demo 审计 47.0s，**审计已覆盖 11 件**），还差 2 日；
+> ② 性能数字已进报告（11 件渲染耗时，只报不拦）；③ 无障碍审计已覆盖组件视口，**6 条窄例外**逐条点名
+> （固定字号头像/徽标、行的单行截断），音频播报仍不可机检；④ 契约 `contracts/*.yaml` 未落库，
+> 按 I-2 以冻结表单代替（架构师确认仍待）。**判定人待签字。**
 > **两条登记未闭合**（§13.1 两行因此仍为 🚧，不写 ✅）：
 > ① **错误态 assertive 播报**：§2.10-#03 要求"错误出现时播报（assertive，一次）"。`Text` 无法取串 ⇒ 组件按 F22 的另一条路径挂 `accessibilityHint`；**播报层已于 2026-11-10 落地**（`WDSystemAnnouncer` / `WDAnnouncementThrottle`，冒烟段已退役），但 `WDTextField` 的冻结签名**没有 announcer 注入点**。待裁决：**调用方播报**（demo/上层持 `WDSystemAnnouncer`，验收移到 demo 层）还是**组件注入**（改签名或加环境键 ⇒ 走 U 项/契约流程）。owner = ios-lead + 架构师，时点 = **M2 出口前**。
 > ② **显隐切换的 selection 位置**：iOS 17 无 `TextField(text:selection:)`（SPEC §2.3 裁决 2 的单实例方案不可用）⇒ 按该条**降级路径**实现"焦点回填"，光标位置由系统落在末尾；需设计/组长确认可接受。owner = ios-lead，时点 = **M2 出口前**。
@@ -207,6 +208,7 @@ PY
 > ⑪ **`WDIconButton` 的四个变体不可表达**：冻结签名只有 `.plain` ⇒ `filled`/`tonal`/`glass`/`outline` 不可表达；`lg` 档按按钮档补 52（设计只有 sm/md）。owner = ios-lead + 设计，时点 = **M2 出口前**。
 > ⑫ **`WDButton` 的字号/图标档按令牌近似**：设计给 13/15/16 与图标 14/16/20，令牌字阶为 13/15/17、图标四档 16/20/24/28 ⇒ `lg` 用 body 17、图标映射 16/16/20；**聚焦光环**与"按下亮度 96%"未实现（按下只做 0.97 缩放）。owner = ios-lead + 设计，时点 = **M2 出口前**。
 > ⑬ **`WDListRow` 的两处语义未闭合**：① 徽标（`WDBadge` 为 `accessibilityHidden`）的内容**未合并**进整行朗读；② `.selectionIndicator` 的语义（单选/多选）SPEC 未定义，按"圆点 + 品牌内点"实现；长按多选不在组件内（I38）。owner = ios-lead + 设计，时点 = **M2 出口前**。
+> ⑭ **`WDListRow` 选中底改用不透明 `surface.tint`**：设计 18 是"brand 8% 透明底"，但半透明背景会被系统无障碍审计按**未合成**的背景色计算对比度（实测判 `text.primary` 不达标）；改同族浅色实底后审计通过，视觉差异已进 8 态快照。owner = ios-lead + 设计，时点 = **M2 出口前**。
 
 **本端任务**：该批 11 件组件实现 + 六态快照 + 无障碍断言 + 该批性能数字（**只报不拦**）。
 **入口判据**：I-2（**批前签名冻结**：11 件的完整签名 + 契约条目入库）。

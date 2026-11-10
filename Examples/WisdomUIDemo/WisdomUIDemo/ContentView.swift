@@ -10,7 +10,15 @@ import WisdomUI
 /// **注意**：demo **不能** import `WisdomUIPreviews`（画廊在预览 target 里）——包只发布一个 product
 /// `WisdomUI`（F-10），外部 Xcode 工程看不到未进 `products` 的 target。所以 demo 自己搭展示内容。
 struct DemoRootView: View {
+  /// 页签（**不用 TabView**：iOS 26 的浮动玻璃 Tab 栏会压住滚动内容，
+  /// 让 `performAccessibilityAudit` 把"压在栏下的文字"判成对比度不达标）。
+  private enum Page: String, CaseIterable, Hashable {
+    case theme
+    case components
+  }
+
   @State private var scheme = WDColorValues.wdDefaultScheme
+  @State private var page = Page.theme
 
   private let launchCount = UserDefaults.standard.integer(forKey: "wd.demo.launchCount")
 
@@ -19,6 +27,27 @@ struct DemoRootView: View {
   }
 
   var body: some View {
+    VStack(spacing: WDSpacing.s3) {
+      Picker("Page", selection: $page) {
+        ForEach(Page.allCases, id: \.self) { page in
+          Text(verbatim: page == .theme ? "主题" : "组件").tag(page)
+        }
+      }
+      .pickerStyle(.segmented)
+      .accessibilityIdentifier("page-picker")
+
+      switch page {
+      case .theme: themeTab
+      case .components: DemoComponentsView(colors: theme.colors)
+      }
+    }
+    .wdTheme(theme)
+    .foregroundStyle(theme.colors.textPrimary)
+    .background(theme.colors.bgCanvas)
+  }
+
+  /// 主题页：运行时 scheme 切换 + 字阶/槽位画廊（M1 交付物）。
+  private var themeTab: some View {
     VStack(spacing: WDSpacing.s3) {
       Picker("Scheme", selection: $scheme) {
         ForEach(WDColorValues.wdSchemeNames, id: \.self) { name in
@@ -52,9 +81,78 @@ struct DemoRootView: View {
         .padding(WDSpacing.s4)
       }
     }
-    .foregroundStyle(theme.colors.textPrimary)
-    .wdTheme(theme)
-    .background(theme.colors.bgCanvas)
+  }
+}
+
+/// 组件页：**M2 无障碍审计视口**（nightly-2 的 4 类目审计走这里）。
+///
+/// 11 件各放一个代表性实例（全部带语义标签；装饰件按组件自身规则不进树）。
+/// 固定字号组件（`WDBadge` 11pt / `WDAvatar` 12pt 首字）属设计例外，审计口径见
+/// `docs/M2-EXIT-REPORT.md` §4-②。
+struct DemoComponentsView: View {
+  let colors: WDColorValues
+
+  @State private var text = "整理储物间"
+  @State private var switchOn = true
+  @State private var checked = true
+
+  var body: some View {
+    ScrollView {
+      VStack(alignment: .leading, spacing: WDSpacing.s4) {
+        WDCard(style: .elevated) {
+          VStack(alignment: .leading, spacing: WDSpacing.s4) {
+            WDTextField(
+              text: $text,
+              label: Text(verbatim: "任务名称"),
+              appearance: .init(helper: .error(Text(verbatim: "名称已被占用")))
+            )
+            WDListRow(
+              title: Text(verbatim: "整理储物间"),
+              subtitle: Text(verbatim: "今天 18:00 前"),
+              leading: .icon(.task),
+              trailing: .value(Text(verbatim: "3 件")),
+              action: {}
+            )
+            WDListRow(
+              title: Text(verbatim: "妈妈的待办"),
+              subtitle: Text(verbatim: "已完成 2 项"),
+              leading: .avatar(.init(label: Text(verbatim: "妈"))),
+              trailing: .badge(.init(label: Text(verbatim: "进行中")))
+            )
+            WDListRow(
+              title: Text(verbatim: "每天八杯水"),
+              leading: .checkbox,
+              isSelected: true,
+              action: {}
+            )
+          }
+        }
+
+        HStack(spacing: WDSpacing.s3) {
+          WDButton(verbatim: "提交") {}
+          WDButton(verbatim: "分享", variant: .tonal) {}
+          WDButton(verbatim: "删除", variant: .destructive) {}
+        }
+
+        HStack(spacing: WDSpacing.s3) {
+          WDIconButton(icon: .search, accessibilityLabel: Text(verbatim: "搜索")) {}
+          WDIconButton(icon: .add, accessibilityLabel: Text(verbatim: "新增"), size: .sm) {}
+        }
+
+        WDSwitch(isOn: $switchOn, label: Text(verbatim: "共享给家人"))
+        WDCheckbox(isChecked: $checked, label: Text(verbatim: "每日提醒"))
+
+        HStack(spacing: WDSpacing.s3) {
+          WDBadge(label: Text(verbatim: "已完成"))
+          WDAvatar(value: .init(label: Text(verbatim: "妈")))
+          WDIcon(icon: .home, size: .lg)
+        }
+
+        WDDivider()
+      }
+      .padding(WDSpacing.s4)
+    }
+    .background(colors.bgCanvas)
   }
 }
 

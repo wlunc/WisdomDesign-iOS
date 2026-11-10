@@ -37,23 +37,66 @@ final class WisdomUIDemoUITests: XCTestCase {
   ///
   /// 用 `issueHandler` 逐条**打印**违规明细（auditType + 描述 + 元素）后再让它失败：
   /// 默认实现只抛一句 "Dynamic Type font sizes are partially unsupported"，定位不到元素。
+  ///
+  /// 覆盖两个页签：① `主题`（M1 的字阶/槽位画廊）；② `组件`（M2 的 11 件审计视口）。
   func testAccessibilityAudit() throws {
     let app = XCUIApplication()
     app.launch()
     XCTAssertTrue(app.staticTexts["scheme-label"].waitForExistence(timeout: 20))
+    try audit(app, scope: "theme")
+
+    let componentsTab = app.segmentedControls["page-picker"].buttons["组件"]
+    XCTAssertTrue(componentsTab.waitForExistence(timeout: 20), "组件页签未出现")
+    componentsTab.tap()
+    XCTAssertTrue(app.buttons["提交"].waitForExistence(timeout: 20), "组件审计视口未出现")
+    try audit(app, scope: "components")
+  }
+
+  /// 单个页签的严格审计。**只放行两类别有理由的窄例外**（其余一律失败）：
+  ///   · 固定字号组件（头像首字 12pt / 徽标 11pt）的 dynamicType —— 设计例外，登记 M2 出口报告 §4；
+  ///   · 列表行标题/副标题的 textClipped —— 设计 18 §7 要求单行截断，审计按 `lineLimit(1)` 判"可能截断"。
+  /// 例外必须在这里**逐条点名 label**，不允许按类别整体吞掉。
+  private func audit(_ app: XCUIApplication, scope: String) throws {
     try app.performAccessibilityAudit(for: [.contrast, .hitRegion, .textClipped, .dynamicType]) {
       issue in
+      let label = issue.element?.label ?? "-"
+      let compact = issue.compactDescription
+
+      if let reason = AuditExceptions.known(scope: scope, label: label, compact: compact) {
+        print("AUDIT-KNOWN scope=\(scope) label=\(label) reason=\(reason)")
+        return true
+      }
+
       print(
         """
-        AUDIT-ISSUE type=\(issue.auditType) \
+        AUDIT-ISSUE scope=\(scope) type=\(issue.auditType) \
         element=\(issue.element?.identifier ?? "-")/\(issue.element.map { String(describing: $0.elementType) } ?? "-") \
+        label=\(label) value=\(issue.element?.value as? String ?? "-") \
         frame=\(issue.element?.frame.debugDescription ?? "-") \
-        compact=\(issue.compactDescription) \
+        compact=\(compact) \
         detail=\(issue.detailedDescription)
         """
       )
-      // **严格模式**：返回 false = 不吞任何 issue（打印只是为了失败时能定位到元素）。
+      // **严格模式**：返回 false = 不吞任何 issue。
       return false
     }
+  }
+
+}
+
+/// 已知的、带理由的窄例外（M2 出口报告 §4-② 有登记）。
+///
+/// 放在独立 `enum` 而不是测试类里：审计回调是 `@Sendable`，捕获测试类的 `Self` 会触发
+/// "sending non-Sendable metatype" 的 Swift 6 错误。
+private enum AuditExceptions {
+  static func known(scope: String, label: String, compact: String) -> String? {
+    guard scope == "components" else { return nil }
+    if compact.hasPrefix("Dynamic Type"), ["妈", "进行中"].contains(label) {
+      return "固定字号设计例外（头像首字 12pt / 徽标 11pt）"
+    }
+    if compact.hasPrefix("Text clipped"), ["整理储物间", "妈妈的待办", "今天 18:00 前"].contains(label) {
+      return "设计 18 §7 的单行截断（审计按 lineLimit(1) 判可能截断）"
+    }
+    return nil
   }
 }

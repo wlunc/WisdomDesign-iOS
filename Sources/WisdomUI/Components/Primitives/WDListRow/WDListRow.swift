@@ -214,7 +214,11 @@ public struct WDListRow: View {
   }
 
   private var rowBackground: Color {
-    isSelected ? colors.textBrand.opacity(Self.selectedTintAlpha) : Color.clear
+    // 设计 18 是"brand 8% 透明底"；这里改用**不透明的 `surface.tint`**：
+    // 半透明底会被系统无障碍审计按"未合成的背景色"算对比度（实测判 text.primary 不达标），
+    // 用同族的浅色实底既保持"选中 = 浅色底"的语义，又让对比度可被机器证明。差异登记在
+    // `docs/DEV-PLAN.md` §2.3-⑬。
+    isSelected ? colors.surfaceTint : Color.clear
   }
 
   @ViewBuilder private var selectionBar: some View {
@@ -252,8 +256,6 @@ public struct WDListRow: View {
   private static let indicatorInner: CGFloat = 10  // wd-structure-check:disable R7 — 设计值
   /// 选中态左侧品牌条宽（设计 18：3pt）。
   private static let selectionBarWidth: CGFloat = 3  // wd-structure-check:disable R7 — 设计值
-  /// 选中态品牌底透明度（设计 18：8%）。
-  private static let selectedTintAlpha: CGFloat = 0.08  // wd-structure-check:disable R7 — 设计值
 }
 
 /// 按下反馈：整行 `fill.pressed`（100ms）；用 `ButtonStyle` 拿 pressed。
