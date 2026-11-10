@@ -58,6 +58,9 @@
 - **API 基线随 M2 两件回填**：`api/WisdomUI.api.json` **+18 符号**（`WDIcon` 全家、`WDIconSize` 四档、
   `WDTextFieldPrefix.icon`、`WDTextFieldAccessory.clear/reveal`）。按 SPEC §1.5.3，基线变更单独提交
   （`chore(api): …`），**不得**与实现提交混在一次提交里。
+- **API 基线随无障碍层更新**：`api/WisdomUI.api.json` **+16 符号**（`WDSemantics`、`WDAnnouncementPriority`、
+  `WDAnnouncing`、`WDSystemAnnouncer`、`WDAnnouncementThrottle`、`WDA11yFocusID`）——这些声明原先只在
+  冒烟段（被规范化器排除），随实现落地首次进入公开面；无移除。
 
 ### Breaking
 

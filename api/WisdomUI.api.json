@@ -90,6 +90,66 @@
     },
     {
       "access" : "public",
+      "decl" : "struct WDA11yFocusID",
+      "kind" : "swift.struct",
+      "path" : "WDA11yFocusID"
+    },
+    {
+      "access" : "public",
+      "decl" : "let rawValue: String",
+      "kind" : "swift.property",
+      "path" : "WDA11yFocusID.rawValue"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDAnnouncementPriority",
+      "kind" : "swift.enum",
+      "path" : "WDAnnouncementPriority"
+    },
+    {
+      "access" : "public",
+      "decl" : "case assertive",
+      "kind" : "swift.enum.case",
+      "path" : "WDAnnouncementPriority.assertive"
+    },
+    {
+      "access" : "public",
+      "decl" : "case polite",
+      "kind" : "swift.enum.case",
+      "path" : "WDAnnouncementPriority.polite"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDAnnouncementThrottle",
+      "kind" : "swift.enum",
+      "path" : "WDAnnouncementThrottle"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func shouldAnnounce(previous: Double, current: Double, thresholds: [Double]) -> Bool",
+      "kind" : "swift.type.method",
+      "path" : "WDAnnouncementThrottle.shouldAnnounce(previous:current:thresholds:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func shouldAnnounceAfterRelease(now: ContinuousClock.Instant, last: ContinuousClock.Instant?) -> Bool",
+      "kind" : "swift.type.method",
+      "path" : "WDAnnouncementThrottle.shouldAnnounceAfterRelease(now:last:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor protocol WDAnnouncing",
+      "kind" : "swift.protocol",
+      "path" : "WDAnnouncing"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func post(_ text: String, priority: WDAnnouncementPriority)",
+      "kind" : "swift.method",
+      "path" : "WDAnnouncing.post(_:priority:)"
+    },
+    {
+      "access" : "public",
       "decl" : "struct WDAppearance",
       "kind" : "swift.struct",
       "path" : "WDAppearance"
@@ -2028,6 +2088,30 @@
     },
     {
       "access" : "public",
+      "decl" : "enum WDSemantics",
+      "kind" : "swift.enum",
+      "path" : "WDSemantics"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func join(_ parts: [String], separator: String) -> String",
+      "kind" : "swift.type.method",
+      "path" : "WDSemantics.join(_:separator:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func join(_ parts: [Text], separator: Text) -> Text",
+      "kind" : "swift.type.method",
+      "path" : "WDSemantics.join(_:separator:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "static func positional(label: Text, positionText: Text, separator: Text) -> Text",
+      "kind" : "swift.type.method",
+      "path" : "WDSemantics.positional(label:positionText:separator:)"
+    },
+    {
+      "access" : "public",
       "decl" : "struct WDShadowLayer",
       "kind" : "swift.struct",
       "path" : "WDShadowLayer"
@@ -2355,6 +2439,24 @@
       "decl" : "static let pressedBrightness: CGFloat",
       "kind" : "swift.type.property",
       "path" : "WDState.pressedBrightness"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor struct WDSystemAnnouncer",
+      "kind" : "swift.struct",
+      "path" : "WDSystemAnnouncer"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init()",
+      "kind" : "swift.init",
+      "path" : "WDSystemAnnouncer.init()"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func post(_ text: String, priority: WDAnnouncementPriority)",
+      "kind" : "swift.method",
+      "path" : "WDSystemAnnouncer.post(_:priority:)"
     },
     {
       "access" : "public",
