@@ -516,7 +516,7 @@ CI 侧导出 `WD_CONTRACTS_DIR=$GITHUB_WORKSPACE/wisdomdesign/contracts`；**解
 | 本地编译回路 | `xcodebuild build-for-testing -scheme "$WD_SCHEME" -destination "$WD_SIM_ID" -derivedDataPath .build/dd` | 固定 DerivedData（`.build/` 已在 `iOS/.gitignore:2`） |
 | 纯规则回路 | `Scripts/check-structure.sh`（秒级，不需要 Xcode） | R1–R21 + 自检样本 |
 | 预览 | `#Preview` 矩阵（`WD_PREVIEWS` 守卫）+ `Sources/WisdomUIPreviews/` 共享矩阵 | 三条限制写进 `iOS/README.md`：需要宿主 app target；release 不编译；材质/玻璃在预览里与真机不一致 |
-| **快照渲染器清单**（E6 补充，**写进 `Tests/WisdomUISnapshotTests/SnapshotSupport.swift` 的显式表**，不靠实现者临时判断） | `UIHostingController` + `drawHierarchy`：**玻璃类 6 个** `WDBottomSheet`/`WDActionSheet`/`WDTabBar`/`WDNavigationBar`/`WDToolbar`/`WDCard(.glass)`；其余用 `ImageRenderer` | `ImageRenderer` 不渲染 `Material`/`glassEffect` |
+| **快照渲染器清单**（E6 补充，**写进 `Tests/WisdomUISnapshotTests/SnapshotSupport.swift` 的显式表**，不靠实现者临时判断） | **`UIHostingController` + 层渲染（P17，2026-11-10 修订）**：① **玻璃类 6 个** `WDBottomSheet`/`WDActionSheet`/`WDTabBar`/`WDNavigationBar`/`WDToolbar`/`WDCard(.glass)`；② **UIKit 接管类**（含 `TextField` 或 `ProgressView` 的普通组件）：`WDTextField`/`WDButton`/`WDIconButton`（实测 `ImageRenderer` 对 `TextField` **输出全透明**）；其余用 `ImageRenderer` | `ImageRenderer` 不渲染 `Material`/`glassEffect`/UIKit 文本控件；UIKit 接管类与玻璃类走同一渲染器（窗口 + 图层合成） |
 | 真机调试 | `Examples/WisdomUIDemo`（Xcode 工程，`package(path: "../..")` 依赖本地包） | ① `pbxproj` 检入时 `DEVELOPMENT_TEAM` 用占位 + `xcconfig` 覆盖（**不检入 team/bundle id**）；② **M1 交付物补 demo 的 UITest target `WisdomUIDemoUITests`**（`performAccessibilityAudit` 只能跑在 XCUITest 里）；③ `Examples/README.md` 写明"demo 不参与 `dump-api`、不发布" |
 | 热重载 | **iOS 无热重载**（Xcode Previews ≠ Live Edit） | 属 DX 事实，写 README/CONTRIBUTING，**不进 contracts**（D-i3 移出） |
 | Mock 数据 | `Sources/WisdomUIPreviews/WDSampleData.swift`（零业务语义） | 库内不定义业务模型 |
@@ -658,6 +658,7 @@ VStack(alignment: .leading) {
 2. 显隐切换：**默认执行项 = `TextField(text:selection:)` 单实例 + 自绘密文替换**，附 1 条单测"切换前后 `selection` 与焦点不变"；若实测不可行，降级为"焦点回填原位置、光标置末尾"并在 acceptance 标注；
 3. `WDTextFieldAppearance` 的 `public var` 保留，但 README 明说"**外观对象是不可变语义，请在构造时给全**"（值类型 + 可变副本，实际安全）；
 4. 错误展示归调用方（N6）；错误态**读屏结果**按 F22（iOS 无 error trait，用 `accessibilityValue`/`hint` 组合，文案由调用方给）。
+5. **错误态 assertive 播报由调用方完成**（2026-11-10 裁决）：库提供 `WDSystemAnnouncer` / `WDAnnouncing` / `WDAnnouncementThrottle`；组件只保证读屏 hint 与字段结构，**不内置播报注入点**（`Text` 无法取串，避免为此扩冻结签名）。验收落在 demo 层（调用方播报 + 审计）。
 
 ### 2.4 `WDListRow`（Primitives，M2）
 
@@ -685,7 +686,9 @@ public struct WDListRow: View {
 1. **删 `tertiary`**：规格解剖表只有"标题 + 副标题"两槽（`specs/01-basic.md:1652-1653`），Android 侧也只有 `title/subtitle/trailingText` ⇒ 判定 **"三行 76" = 标题 + 副标题 + 尾部值文本**；`76` 的触发条件 = "**有副标题且有尾部文本/徽标**"。`Q-i1` 保留为设计确认项，但**默认按此实现**（不作 M2 阻塞）；
 2. **行高裁决规则**：`行高 = max(密度档最小行高, 槽位派生行高)`（密度只抬/压下限，不压缩内容）；契约写 `WDListRow.height = max(density.rowMinHeight, slots.rowHeight)`，4 格矩阵 {comfortable,compact} × {1 槽, 2 槽} 逐格固化为单测；两端注入形态（iOS `@Environment(\.wdDensity)` / Android `density: WDLayoutDensity? = null`）登记为 **F44**（IOS-05：从 F23 拆出；行高公式本身属 U 系列）；
 3. **`.swipeActions` 只在 `List`/`ForEach` 内生效** —— 必须写进组件文档（"在 `ScrollView`+`VStack` 里静默失效"），否则 M2 会收到"滑动没反应"的 bug；`allowsFullSwipe` 用系统默认 `true`（与规格"≥阈值直接删除"等价，`[SDK]` `SwiftUI:15527`）；
-4. `action == nil` 时**必须**同时：不加 `.isButton`、不设 `contentShape`、`focusable(false)`；`action == nil` + `isSelected` 的组合明确"选中态由父容器表达"（避免无热区的选中视觉）。
+4. `action == nil` 时**必须**同时：不加 `.isButton`、不设 `contentShape`、`focusable(false)`；`action == nil` + `isSelected` 的组合明确"选中态由父容器表达"（避免无热区的选中视觉）；
+5. **`.selectionIndicator` 语义 = 单选指示**（2026-11-10 裁决）：未选 = 空心圆，已选 = 品牌色内点；多选场景用 `.checkbox`，不引入第三套指示器；
+6. **选中底用不透明 `surface.tint`**（2026-11-10 裁决）：设计稿的"brand 8% 透明底"会让系统对比度审计按**未合成**的背景色计算（实测 `text.primary` 不达标）⇒ 改用同族浅色实底；左侧 3pt 品牌条不变。视觉差异以 8 态快照为准。
 
 ### 2.5 弹层：`.wdSheet(...)` / `.wdAlert(...)` 修饰符形态（F21/B3/I22 采纳）
 

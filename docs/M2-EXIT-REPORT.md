@@ -62,7 +62,11 @@
 | ⑥ | **U-10（caption2 审计）** | 系统审计把 11pt 文本判为 Dynamic Type unsupported；组件若在审计视口用 caption2 需窄例外或改档 | ios-lead + tech-lead / 挂 demo 审计前 |
 | ⑦ | **M1 出口报告签字** | `M1-EXIT-REPORT.md` 判定人仍"待签字" | ios-lead / 与 M2 出口一并 |
 
-## 5. 冻结签名的差异登记（`docs/DEV-PLAN.md` §2.3 ①–⑬）
+## 5. 冻结签名的差异登记（`docs/DEV-PLAN.md` §2.3 ①–⑬）—— **已裁决（2026-11-10）**
+
+> **裁决结果**：按建议全部执行 —— **A 接受 6 条 + 审计例外 3 类**（已回写 SPEC 的 P17–P20）、
+> **C 延后 8 条**（逐条写延后批次与触发条件）、**B 改签名 0 条**。明细见
+> [`docs/M2-DEVIATIONS.md`](M2-DEVIATIONS.md) §5。
 
 累计 **14 条**，全部是"冻结签名表达不了设计稿"的取舍（不是实现缺陷），逐条带 owner 与"**M2 出口前**"时点。
 **逐条裁决清单（含建议与代价）= [`docs/M2-DEVIATIONS.md`](M2-DEVIATIONS.md)**：
@@ -79,6 +83,5 @@
 - **不判定 M2 通过**。剩余动作（按顺序）：
   1. 2026-11-11 / 11-12 各跑一次 `Scripts/ci.sh nightly`，凑满连续 3 日绿（当前第 1/3 日，已含组件审计）；
   2. 与架构师对齐 `contracts/*.yaml`（或书面确认"冻结表单 = 本批契约"），补判据 ②；
-  3. 14 条差异逐条裁决（可批量：接受 / 改签名 / 延后到 M4–M6），并裁决 §4-② 的 6 条审计例外；
-  4. 全部绿后由 ios-lead 签字，再开 M3（`WDListSection` + API 封板 + `Foundation/**` ≥80% + 体积门槛）。
+  3. 全部绿后由 ios-lead 签字，再开 M3（`WDListSection` + API 封板 + `Foundation/**` ≥80% + 体积门槛）。
 - 本报告与 `M1-EXIT-REPORT.md` 一样：**每条结论都对应可重跑的命令或已入库产物**；未跑通的一律标【未验证】。
