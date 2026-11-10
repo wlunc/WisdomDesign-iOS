@@ -366,6 +366,186 @@
     },
     {
       "access" : "public",
+      "decl" : "enum WDButtonSize",
+      "kind" : "swift.enum",
+      "path" : "WDButtonSize"
+    },
+    {
+      "access" : "public",
+      "decl" : "case lg",
+      "kind" : "swift.enum.case",
+      "path" : "WDButtonSize.lg"
+    },
+    {
+      "access" : "public",
+      "decl" : "case md",
+      "kind" : "swift.enum.case",
+      "path" : "WDButtonSize.md"
+    },
+    {
+      "access" : "public",
+      "decl" : "case sm",
+      "kind" : "swift.enum.case",
+      "path" : "WDButtonSize.sm"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor struct WDCard<Content> where Content : View",
+      "kind" : "swift.struct",
+      "path" : "WDCard"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDCard.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(style: WDCardStyle = .elevated, @ViewBuilder content: () -> Content)",
+      "kind" : "swift.init",
+      "path" : "WDCard.init(style:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDCardStyle",
+      "kind" : "swift.enum",
+      "path" : "WDCardStyle"
+    },
+    {
+      "access" : "public",
+      "decl" : "case elevated",
+      "kind" : "swift.enum.case",
+      "path" : "WDCardStyle.elevated"
+    },
+    {
+      "access" : "public",
+      "decl" : "case glass",
+      "kind" : "swift.enum.case",
+      "path" : "WDCardStyle.glass"
+    },
+    {
+      "access" : "public",
+      "decl" : "case outlined",
+      "kind" : "swift.enum.case",
+      "path" : "WDCardStyle.outlined"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor struct WDCheckbox",
+      "kind" : "swift.struct",
+      "path" : "WDCheckbox"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDCheckbox.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(isChecked: Binding<Bool>, label: Text)",
+      "kind" : "swift.init",
+      "path" : "WDCheckbox.init(isChecked:label:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
       "decl" : "enum WDColor",
       "kind" : "swift.enum",
       "path" : "WDColor"
@@ -1881,6 +2061,84 @@
       "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
       "kind" : "swift.method",
       "path" : "WDIcon.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor struct WDIconButton",
+      "kind" : "swift.struct",
+      "path" : "WDIconButton"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDIconButton.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(icon: WDIconName, accessibilityLabel: Text, variant: WDIconButtonVariant = .plain, size: WDButtonSize = .md, isLoading: Bool = false, action: @escaping () -> Void)",
+      "kind" : "swift.init",
+      "path" : "WDIconButton.init(icon:accessibilityLabel:variant:size:isLoading:action:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDIconButtonVariant",
+      "kind" : "swift.enum",
+      "path" : "WDIconButtonVariant"
+    },
+    {
+      "access" : "public",
+      "decl" : "case plain",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconButtonVariant.plain"
     },
     {
       "access" : "public",
