@@ -29,10 +29,13 @@
   scheme，值变更触发重组、**不重启进程**）；三件套 `WDGlass` / `WDEffectsBudget` / `WDContrast` +
   **34 条参数化用例**（含两条"必须红"用例）；`WisdomUIPreviews` 画廊 + `WisdomUISnapshotTests`
   （8 态矩阵、**16 张基线**）；`Examples/WisdomUIDemo`（app + 无障碍审计 UITests）。
-- **M2 首批（进行中，2/11 代码落地）**：`WDTextField`（46pt 字段盒、label/prefix/accessory/helper
-  四槽位、附件按钮独立可达、密文/计数）；`WDIcon` + `WDIconMetrics`（四档 16/20/24/28，
-  **不随动态字体放大**、装饰件不进树）；`WDIconName` 生成物（44 条语义名 + SF Symbols 映射，
-  `contracts v1.0.0 · sha256:aab3bb93f508`）。
+- **M2 首批（2/11 组件完成六类断言；2 条登记未闭合）**：`WDTextField`（46pt 字段盒、三变体、
+  聚焦/错误/禁用/只读、label/prefix/accessory/helper 四槽位、附件按钮独立可达、密文/计数）与
+  `WDIcon` + `WDIconMetrics`（四档 16/20/24/28，**不随动态字体放大**、装饰件不进树）；
+  `WDIconName` 生成物（44 条语义名 + SF Symbols 映射，`contracts v1.0.0 · sha256:aab3bb93f508`）；
+  组件测试 **10 条**（字段盒 46±1、三态等高、辅助行、最小宽、AX3 生长、计数阈值、AX5 不缩放）、
+  `+Previews.swift` ×2、组件级 **8 态快照 ×2（16 张基线）**。未闭合：错误态 assertive 播报（依赖
+  `WDAnnouncing` 层）、显隐切换的 selection 位置（iOS 17 走降级路径；见 `docs/DEV-PLAN.md` §2.3）。
 
 ### Changed
 
@@ -42,6 +45,10 @@
 - `WDTextStyle` 改为 **4 存储字段**（新增 `letterSpacing`）、加 `Equatable`、
   构造器按 O-10 转 `internal`；新增派生 `lineHeightRatio`。
 - README 的"开发"段改为门禁口径（`Scripts/ci.sh`）+ 预览三限制；补齐 `Examples/` 说明。
+- **`WDTextField` 视觉与状态补齐**（2026-11-10）：三变体（`inset`/`outline`/`glass`，玻璃走
+  `WDGlass.resolve` 且 iOS 17–25 纯色降级）、聚焦描边+光环、错误描边、禁用 40%、只读下沉底、
+  点容器聚焦、错误态 `accessibilityHint`（F22）；组件级 8 态快照改用 `UIHostingController` 渲染器
+  （`ImageRenderer` 对 `TextField` 输出全透明，登记 **P17**）。
 - **API 基线随 M2 两件回填**：`api/WisdomUI.api.json` **+18 符号**（`WDIcon` 全家、`WDIconSize` 四档、
   `WDTextFieldPrefix.icon`、`WDTextFieldAccessory.clear/reveal`）。按 SPEC §1.5.3，基线变更单独提交
   （`chore(api): …`），**不得**与实现提交混在一次提交里。

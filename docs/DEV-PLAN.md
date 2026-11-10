@@ -188,7 +188,11 @@ PY
 > 其中 **3 件已冻结**（`WDButton`/`WDTextField`/`WDListRow`，誊录自 M0-11 冒烟段）、**8 件按建议冻结**（2026-11-10）；
 > **2 条阻塞**：① `WDIconName` 的 44 条语义名未产出（I-M0-h）—— **已解除**（2026-10-07：`9b899dc` 接入 44 条生成物，`7bb77d6` 回填 `WDIcon` 与三个延后成员）；② `WDCheckbox` 的**契约名**冻结依赖 Android 侧 14 行改名（SPEC R3-d）—— **仍待 Android，不阻 iOS 实现**（`isChecked` 形态已冻结）。
 >
-> **当前进度（2026-11-10 复核）**：**代码 2/11**（`WDTextField`、`WDIcon`）；按 §14.4 六类断言计 **0/11**（两件均缺组件测试、`+Previews.swift` 与 8 态快照）。`api/WisdomUI.api.json` 已随两件回填（+18 符号，`2c2fef1`）；`Scripts/ci.sh pr` 复核**全绿**（`passed=41 failed=0`、符号 471 零 diff、覆盖率 46.78%）。剩余 9 件未开工。
+> **当前进度（2026-11-10 · P1 收尾）**：**代码 2/11**（`WDTextField`、`WDIcon`）；**六类断言两件均已补齐**——组件测试 10 条（字段盒 46±1、三态等高、辅助行、最小宽、AX3 生长、计数阈值、AX5 不缩放）、`+Previews.swift` ×2、8 态快照 ×2 = **16 张新基线**、`api` 零 diff。`Scripts/ci.sh pr` 复核**全绿**（`passed=51 failed=0`、符号 471、覆盖率 **52.63%**；`WDTextField` 行覆盖 72.2%、`WDIcon` 100%）。
+> **两条登记未闭合**（§13.1 两行因此仍为 🚧，不写 ✅）：
+> ① **错误态 assertive 播报**：§2.10-#03 要求"错误出现时播报（assertive，一次）"，但 `Text` 无法取串，组件只能按 F22 的另一条路径挂 `accessibilityHint`；真正的播报依赖**尚未实现的 `WDAnnouncing` 层**（现在仍在 M0-11 冒烟段）+ 调用方注入。owner = ios-lead + 架构师，时点 = **M2 出口前**。
+> ② **显隐切换的 selection 位置**：iOS 17 无 `TextField(text:selection:)`（SPEC §2.3 裁决 2 的单实例方案不可用）⇒ 按该条**降级路径**实现"焦点回填"，光标位置由系统落在末尾；需设计/组长确认可接受。owner = ios-lead，时点 = **M2 出口前**。
+> ③ 快照渲染器表待回写 = **P17**（`WDTextField` 归 `UIHostingController` 渲染器：`ImageRenderer` 对它实测输出全透明），见 §6。
 
 **本端任务**：该批 11 件组件实现 + 六态快照 + 无障碍断言 + 该批性能数字（**只报不拦**）。
 **入口判据**：I-2（**批前签名冻结**：11 件的完整签名 + 契约条目入库）。
@@ -485,6 +489,7 @@ awk '/^\|/{if(!b){k++;n=0;f=NR} b=1;n++; if(n==2 && $0 !~ /^\|[-: |]*-[-: |]*\|[
 | **P15**（快照矩阵的计数词） | `docs/DEV-PLAN.md` §2.2 / §15.1-⑦ / §9（验收矩阵行）、`docs/ARCHITECTURE.md` 的验证矩阵行 | 写作「**六态**：浅/深 × 默认/AX3 × LTR/RTL」，但三个轴相乘 = **8 态**（「六态」是 U6 交互态的词，被借用到快照矩阵上） | 改成「**八态**（浅/深 × 默认/AX3 × LTR/RTL）」或直接去掉计数词，只留括号里的三轴 | ios-lead | M1 出口前 | **待回写**（本端实现已按括号里的三轴执行 8 态：`SnapshotSupport` 头注 + 矩阵计数断言 `matrix.count == 8`） |
 | **P14**（行盒放大概判据的 `⌈⌉`） | `docs/SPEC.md` §2.6.3 的 U5-c 行与「U5 定稿措辞」段 | 放大档判据由「`renderedLineBox ≥ ⌈natural × n⌉`」改为「`≥ natural × n − 0.5pt`」：**`⌈⌉` 对非整数自然高不可满足**（实测 caption2/AX3/n=2：自然高 35.83 ⇒ `⌈71.67⌉ = 72`，真实渲染恰为 71.67pt）。**本意（不裁切）不变**，只去掉向上取整引入的 0.33–1pt 假红 | ios-lead + 架构师 | M1 出口前 | **待回写**（本端实现已按新形式落地并登记于 `WDLineBoxTest.swift` 头注；SPEC 文本未改） |
 | **P16**（R10 的适用范围） | `docs/SPEC.md` §1.1.2 的 R10 行 | 写「`Components/**` 里的静态令牌入口（`WDColor.*`/`WDType.*`）」 | 收窄为只禁**可主题化**的静态入口（`WDColor.`；将来含 gradient/material）；**字阶 `WDType.*` 移出禁列** —— 理由：§3.1 明写字号/间距/尺寸/时长**不可主题化**，且组件取字体的唯一入口 `wdFont(_:)` 需要一个 `WDTextStyle`，禁掉 `WDType.` 会让**合法写法不存在**（R11 已单独拦 `.font(WDType.` 这种绕过 wdFont 的写法） | ios-lead + 架构师 | M2 批内 | **已实施（2026-10-07）**：检查器的 `staticTokenEntry` 收窄为 `WDColor.`；正例 fixture 补 `wdFont(WDType.body)` 一条（`test-checker` 22/22/22 绿）。**SPEC 文本未改**，待回写 |
+| **P17**（快照渲染器表） | `docs/SPEC.md` §1.6 的渲染器表 + `docs/DEV-PLAN.md` §13.1 的 `WDTextField` 行 | §13.1 把 `WDTextField` 记作"普通类 / `ImageRenderer`"，但 `TextField` 是 UIKit 接管视图：**`ImageRenderer` 实测输出全透明图**（2026-11-10）。应改归类为 `UIHostingController` + `layer.render` 渲染器（与玻璃类同族） | ios-lead | M2 出口前 | **待回写**（实现已按新渲染器落地：`SnapshotSupport.pngHierarchy`；`textfield-*` 8 态基线入库） |
 | **P10**（设计侧行高句） | `09-layout.md` :101 | "整行 = 48 布局盒（可见 44 + 上下各 2dp 内边距）；热区 = 该布局盒、不覆盖相邻行" | 设计 + 架构师 | M0-1 | **待回写（设计侧，不阻塞本端实现）** |
 | **P7 / P8**（Android 侧） | `12-android-spec.md` §2.3/§3.1.2/§3.3.1 与 :1880 | 行高/热区与 U12 = 32 槽位 | android-lead | M0-1 冻结前 | **非本端**（登记在此仅为闭环视图） |
 | **D-06**（历史项，已闭环） | `02-ios-spec.md` §6.1-7 / §9.2-I-M0-i / §9.3-6 / §5-I45 | 门禁 grep 的仓内正确 pathspec | ios-dev + ios-lead | M0-i（已完成） | **已回写**；注：曾有一次"绕过登记直接改"属**一次性授权、不构成先例** |
