@@ -192,6 +192,84 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor struct WDAvatar",
+      "kind" : "swift.struct",
+      "path" : "WDAvatar"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDAvatar.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(value: WDAvatarValue)",
+      "kind" : "swift.init",
+      "path" : "WDAvatar.init(value:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDAvatarValue",
+      "kind" : "swift.struct",
+      "path" : "WDAvatarValue"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(icon: WDIconName)",
+      "kind" : "swift.init",
+      "path" : "WDAvatarValue.init(icon:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(label: Text)",
+      "kind" : "swift.init",
+      "path" : "WDAvatarValue.init(label:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor struct WDBadge",
       "kind" : "swift.struct",
       "path" : "WDBadge"
