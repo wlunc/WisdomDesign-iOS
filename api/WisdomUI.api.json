@@ -24,6 +24,18 @@
   "symbols" : [
     {
       "access" : "public",
+      "decl" : "@MainActor static func wd(_ variant: WDButtonVariant, size: WDButtonSize = .md) -> WDButtonStyle",
+      "kind" : "swift.type.method",
+      "path" : "ButtonStyle.wd(_:size:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor static var wdFilled: WDButtonStyle { get }",
+      "kind" : "swift.type.property",
+      "path" : "ButtonStyle.wdFilled"
+    },
+    {
+      "access" : "public",
       "decl" : "var wdAppearance: WDAppearance { get }",
       "kind" : "swift.property",
       "path" : "EnvironmentValues.wdAppearance"
@@ -366,6 +378,84 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor struct WDButton<Label> where Label : View",
+      "kind" : "swift.struct",
+      "path" : "WDButton"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDButton.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(_ text: LocalizedStringKey, variant: WDButtonVariant = .filled, size: WDButtonSize = .md, isLoading: Bool = false, loadingAccessibilityText: Text? = nil, leadingIcon: WDIconName? = nil, trailingIcon: WDIconName? = nil, action: @escaping () -> Void)",
+      "kind" : "swift.init",
+      "path" : "WDButton.init(_:variant:size:isLoading:loadingAccessibilityText:leadingIcon:trailingIcon:action:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(variant: WDButtonVariant = .filled, size: WDButtonSize = .md, isLoading: Bool = false, loadingAccessibilityText: Text? = nil, leadingIcon: WDIconName? = nil, trailingIcon: WDIconName? = nil, action: @escaping () -> Void, @ViewBuilder label: () -> Label)",
+      "kind" : "swift.init",
+      "path" : "WDButton.init(variant:size:isLoading:loadingAccessibilityText:leadingIcon:trailingIcon:action:label:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(verbatim text: String, variant: WDButtonVariant = .filled, size: WDButtonSize = .md, isLoading: Bool = false, loadingAccessibilityText: Text? = nil, leadingIcon: WDIconName? = nil, trailingIcon: WDIconName? = nil, action: @escaping () -> Void)",
+      "kind" : "swift.init",
+      "path" : "WDButton.init(verbatim:variant:size:isLoading:loadingAccessibilityText:leadingIcon:trailingIcon:action:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
       "decl" : "enum WDButtonSize",
       "kind" : "swift.enum",
       "path" : "WDButtonSize"
@@ -387,6 +477,78 @@
       "decl" : "case sm",
       "kind" : "swift.enum.case",
       "path" : "WDButtonSize.sm"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor struct WDButtonStyle",
+      "kind" : "swift.struct",
+      "path" : "WDButtonStyle"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(variant: WDButtonVariant = .filled, size: WDButtonSize = .md, isLoading: Bool = false)",
+      "kind" : "swift.init",
+      "path" : "WDButtonStyle.init(variant:size:isLoading:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func makeBody(configuration: ButtonStyleConfiguration) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDButtonStyle.makeBody(configuration:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor static func wd(_ variant: WDButtonVariant, size: WDButtonSize = .md) -> WDButtonStyle",
+      "kind" : "swift.type.method",
+      "path" : "WDButtonStyle.wd(_:size:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor static var wdFilled: WDButtonStyle { get }",
+      "kind" : "swift.type.property",
+      "path" : "WDButtonStyle.wdFilled"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDButtonVariant",
+      "kind" : "swift.enum",
+      "path" : "WDButtonVariant"
+    },
+    {
+      "access" : "public",
+      "decl" : "case destructive",
+      "kind" : "swift.enum.case",
+      "path" : "WDButtonVariant.destructive"
+    },
+    {
+      "access" : "public",
+      "decl" : "case filled",
+      "kind" : "swift.enum.case",
+      "path" : "WDButtonVariant.filled"
+    },
+    {
+      "access" : "public",
+      "decl" : "case glass",
+      "kind" : "swift.enum.case",
+      "path" : "WDButtonVariant.glass"
+    },
+    {
+      "access" : "public",
+      "decl" : "case outline",
+      "kind" : "swift.enum.case",
+      "path" : "WDButtonVariant.outline"
+    },
+    {
+      "access" : "public",
+      "decl" : "case plain",
+      "kind" : "swift.enum.case",
+      "path" : "WDButtonVariant.plain"
+    },
+    {
+      "access" : "public",
+      "decl" : "case tonal",
+      "kind" : "swift.enum.case",
+      "path" : "WDButtonVariant.tonal"
     },
     {
       "access" : "public",
@@ -2481,6 +2643,162 @@
       "decl" : "var rowMinHeight: CGFloat { get }",
       "kind" : "swift.property",
       "path" : "WDLayoutDensity.rowMinHeight"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor struct WDListRow",
+      "kind" : "swift.struct",
+      "path" : "WDListRow"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDListRow.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(title: Text, subtitle: Text? = nil, leading: WDListRowLeading = .none, trailing: WDListRowTrailing = .none, isSelected: Bool = false, swipeAction: WDListRowSwipeAction = .none, showsSeparator: Bool = true, action: (() -> Void)? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDListRow.init(title:subtitle:leading:trailing:isSelected:swipeAction:showsSeparator:action:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDListRowLeading",
+      "kind" : "swift.enum",
+      "path" : "WDListRowLeading"
+    },
+    {
+      "access" : "public",
+      "decl" : "case avatar(WDAvatarValue)",
+      "kind" : "swift.enum.case",
+      "path" : "WDListRowLeading.avatar(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "case checkbox",
+      "kind" : "swift.enum.case",
+      "path" : "WDListRowLeading.checkbox"
+    },
+    {
+      "access" : "public",
+      "decl" : "case icon(WDIconName)",
+      "kind" : "swift.enum.case",
+      "path" : "WDListRowLeading.icon(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "case none",
+      "kind" : "swift.enum.case",
+      "path" : "WDListRowLeading.none"
+    },
+    {
+      "access" : "public",
+      "decl" : "case selectionIndicator",
+      "kind" : "swift.enum.case",
+      "path" : "WDListRowLeading.selectionIndicator"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor enum WDListRowSwipeAction",
+      "kind" : "swift.enum",
+      "path" : "WDListRowSwipeAction"
+    },
+    {
+      "access" : "public",
+      "decl" : "case delete(title: Text, onDelete: () -> Void)",
+      "kind" : "swift.enum.case",
+      "path" : "WDListRowSwipeAction.delete(title:onDelete:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "case none",
+      "kind" : "swift.enum.case",
+      "path" : "WDListRowSwipeAction.none"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDListRowTrailing",
+      "kind" : "swift.enum",
+      "path" : "WDListRowTrailing"
+    },
+    {
+      "access" : "public",
+      "decl" : "case avatar(WDAvatarValue)",
+      "kind" : "swift.enum.case",
+      "path" : "WDListRowTrailing.avatar(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "case badge(WDBadgeValue)",
+      "kind" : "swift.enum.case",
+      "path" : "WDListRowTrailing.badge(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "case disclosure",
+      "kind" : "swift.enum.case",
+      "path" : "WDListRowTrailing.disclosure"
+    },
+    {
+      "access" : "public",
+      "decl" : "case none",
+      "kind" : "swift.enum.case",
+      "path" : "WDListRowTrailing.none"
+    },
+    {
+      "access" : "public",
+      "decl" : "case value(Text)",
+      "kind" : "swift.enum.case",
+      "path" : "WDListRowTrailing.value(_:)"
     },
     {
       "access" : "public",
