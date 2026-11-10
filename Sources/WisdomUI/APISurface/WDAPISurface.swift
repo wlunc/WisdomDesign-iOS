@@ -235,67 +235,9 @@
 
   // MARK: - ③ 无障碍与语义公开面（SPEC §2.6.2 / §3.6）
 
-  /// 语义拼接原语：只做**结构**（零标点、零语序、零状态文案；B2/D5）。
-  public enum WDSemantics {
-    /// 按 `separator` 拼接文本块。
-    public static func join(_ parts: [Text], separator: Text) -> Text {
-      fatalError()
-    }
-
-    /// 位置措辞（措辞与分隔符均由调用方给）。
-    public static func positional(label: Text, positionText: Text, separator: Text) -> Text {
-      fatalError()
-    }
-
-    /// 纯逻辑重载（供两端 fixtures）。
-    public static func join(_ parts: [String], separator: String) -> String {
-      fatalError()
-    }
-  }
-
-  /// 播报优先级（SPEC §2.6.2）。
-  public enum WDAnnouncementPriority: Sendable, Equatable {
-    case polite
-    case assertive
-  }
-
-  /// 播报网关（★ 去 `Sendable`；口径 = §1.2.1 隔离注解表）。
-  @MainActor public protocol WDAnnouncing {
-    /// 同步播报（无 `Task`）。
-    func post(_ text: String, priority: WDAnnouncementPriority)
-  }
-
-  /// 系统播报实现（M1 落地：同步调 `AccessibilityNotification.Announcement(_:).post()`）。
-  @MainActor public struct WDSystemAnnouncer: WDAnnouncing {
-    /// 同步播报。
-    public func post(_ text: String, priority: WDAnnouncementPriority) {
-      fatalError()
-    }
-  }
-
-  /// 播报节流（纯逻辑，两端同源 fixtures `announcement-cases.json`）。
-  public enum WDAnnouncementThrottle {
-    /// 是否应播报（阈值集合由调用方给）。
-    public static func shouldAnnounce(previous: Double, current: Double, thresholds: [Double])
-      -> Bool
-    {
-      fatalError()
-    }
-
-    /// 释放后是否应播报。
-    public static func shouldAnnounceAfterRelease(
-      now: ContinuousClock.Instant,
-      last: ContinuousClock.Instant?
-    ) -> Bool {
-      fatalError()
-    }
-  }
-
-  /// 无障碍焦点身份（`@AccessibilityFocusState` 需要 `Hashable` ⇒ 不能用 `Text`；§2.6.2）。
-  public struct WDA11yFocusID: Hashable, Sendable {
-    /// 原始值。
-    public let rawValue: String
-  }
+  // `WDSemantics` / `WDAnnouncementPriority` / `WDAnnouncing` / `WDSystemAnnouncer` /
+  // `WDAnnouncementThrottle` / `WDA11yFocusID` **已由 2026-11-10 的 a11y 层实现**
+  //（`Sources/WisdomUI/Foundation/A11y/`），故此冒烟段按纪律删除（实现落地 = 同 PR 退役）。
 
   // MARK: - ④ 主题 / 材质 / 动效公开面（SPEC §3.2 / §3.5）
 

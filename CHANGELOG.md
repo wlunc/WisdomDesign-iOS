@@ -24,6 +24,12 @@
   规范化器丢弃 USR/绝对路径等易漂移字段）。
 - **归档体积基线** `Examples/BaselineShell/`（E3-iOS-a 的分母：同构、不引入本库）。
 - 协作文件：`CONTRIBUTING.md`、`.github/pull_request_template.md`、`.github/CODEOWNERS`。
+- **无障碍层落地**（2026-11-10）：`WDSemantics`（`join` / `positional`，零标点、零语序，
+  `[String]` 纯逻辑重载按 Android 同口径剔除空串）；`WDAnnouncementPriority` / `WDAnnouncing` /
+  `WDSystemAnnouncer`（同步、无 `Task`；`polite` → `PageScrolled`、`assertive` → `Announcement`）；
+  `WDAnnouncementThrottle`（进度只向上跨阈值；释放后 1s 节流，数值登记 D-8）；
+  `WDA11yFocusID`（`Hashable` 焦点身份）。M0-11 冒烟段的对应声明**同提交退役**；
+  测试 9 条（语义渲染等价 / 阈值与节流 / 焦点身份）。
 - **M1 基础设施**（2026-10-07 交付）：`wdFont(_:)` 单入口 + 行盒度量（12 档 × 12 字阶 × {en, zh} ×
   {字体级, 渲染级} = **288 条 fixture**）；`WDTheme` / `wdTheme` / `wdColors` 运行时换肤（换已生成的
   scheme，值变更触发重组、**不重启进程**）；三件套 `WDGlass` / `WDEffectsBudget` / `WDContrast` +
