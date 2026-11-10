@@ -36,10 +36,8 @@
     case filled, tonal, glass, outline, plain, destructive
   }
 
-  /// 按钮尺寸档位（SPEC §2.2）。
-  public enum WDButtonSize: String, CaseIterable, Sendable, Equatable {
-    case sm, md, lg
-  }
+  // `WDButtonSize` **已由 M2 落地**（Components/Primitives/WDButton/WDButtonSize.swift），
+  // 故从此冒烟段删除（`WDButton` 的签名继续引用真实类型）。
 
   /// 主按钮（SPEC §2.2；M2 首件）。
   public struct WDButton<Label: View>: View {

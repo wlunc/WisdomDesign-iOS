@@ -24,6 +24,11 @@
   规范化器丢弃 USR/绝对路径等易漂移字段）。
 - **归档体积基线** `Examples/BaselineShell/`（E3-iOS-a 的分母：同构、不引入本库）。
 - 协作文件：`CONTRIBUTING.md`、`.github/pull_request_template.md`、`.github/CODEOWNERS`。
+- **M2 组件（续四）**：`WDCheckbox`（方框 26 / 圆角 9 / 勾用描边路径；两态；切换轻触觉 ×1）、
+  `WDCard`（elevated / outlined / glass 三档；内距 16 固定、圆角 24；玻璃走 `WDGlass.resolve` +
+  iOS 26 `glassEffect`、17–25 纯色降级）、`WDIconButton`（plain 档；sm 32 / md 44 / lg 52 视觉、
+  **热区恒 44**；无障碍标签必填）。冻结签名差异（Checkbox 半选/紧凑档、Card sunken/media/可点卡、
+  IconButton 其余四变体）登记 `docs/DEV-PLAN.md` §2.3；组件测试 8 条 + 三件 8 态快照（24 张基线）。
 - **基础设施补齐**（2026-11-10；P2 的依赖项）：`WDLayoutDensity` + `wdDensity`（环境只读 +
   唯一写入口；默认 `comfortable`，行高下限 60/44，F44）；`Internal/WDHaptics.swift`
   （可注入 sink + `WDEffectsBudget` 的"一次操作最多一次"闸门；测试用捕获器断言次数，不真的震动）。
@@ -82,6 +87,9 @@
   及其 View 扩展入口）——从冒烟段落地后首次进入公开面；无移除。
 - **API 基线随布局密度/WDSwitch 更新**：`api/WisdomUI.api.json` **+22 符号**（`WDLayoutDensity`、
   `wdDensity` 读写入口、`WDSwitch` 及其 View 扩展入口）；无移除。
+- **API 基线随 WDCheckbox/WDCard/WDIconButton 更新**：`api/WisdomUI.api.json` **+43 符号**
+  （`WDCheckbox`、`WDCard`/`WDCardStyle`、`WDIconButton`/`WDIconButtonVariant`、`WDButtonSize`
+  及其 View 扩展入口）；无移除。
 
 ### Breaking
 
