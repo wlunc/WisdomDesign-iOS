@@ -80,6 +80,8 @@
 
 ## 6. 放行建议
 
+> 签字材料（出口判定表 + 可直接回复的签字文本 + M3 冻结会议程）= [`docs/M2-SIGNOFF-PACKAGE.md`](M2-SIGNOFF-PACKAGE.md)。
+
 - **不判定 M2 通过**。剩余动作（按顺序）：
   1. **2026-11-12 跑第 3 日** `Scripts/ci.sh nightly`（第 2/3 日已于 2026-11-11 绿，含组件审计与目录导航）；
   2. ~~与架构师对齐 `contracts/*.yaml`~~ ⇒ **已闭合（2026-11-10）**：架构师书面确认「冻结表单 = 本批契约」（`docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5）；`contracts/*.yaml` 回填 = M3 出口前；

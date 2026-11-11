@@ -210,6 +210,8 @@ PY
 > ⑬ **`WDListRow` 的两处语义未闭合**：① 徽标（`WDBadge` 为 `accessibilityHidden`）的内容**未合并**进整行朗读；② `.selectionIndicator` 的语义（单选/多选）SPEC 未定义，按"圆点 + 品牌内点"实现；长按多选不在组件内（I38）。owner = ios-lead + 设计，时点 = **M2 出口前**。
 > ⑭ **`WDListRow` 选中底改用不透明 `surface.tint`**：设计 18 是"brand 8% 透明底"，但半透明背景会被系统无障碍审计按**未合成**的背景色计算对比度（实测判 `text.primary` 不达标）；改同族浅色实底后审计通过，视觉差异已进 8 态快照。owner = ios-lead + 设计，时点 = **M2 出口前**。
 >
+> **签字包（2026-11-11）**：`docs/M2-SIGNOFF-PACKAGE.md` —— 出口判定 6/6 表、可直接回复的 M1/M2 签字文本、M3 冻结会（`WDListSection` 五问）议程与 M3 三件义务。
+>
 > **裁决记录（2026-11-10，项目负责人批量确认；逐条明细 = `docs/M2-DEVIATIONS.md`）**：
 > **A 接受**：① 调用方播报（P20 已回写）、② 降级路径（SPEC §2.3 裁决 2 已覆盖）、③ 渲染器表（P17 已回写）、
 > ⑫ 字号/图标按令牌近似（聚焦光环延后到 M5）、⑬ 的 `.selectionIndicator` 语义（P18 已回写）、
