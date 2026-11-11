@@ -2,7 +2,7 @@
 
 > **这份文件回答三件事**：仓库里的文档**在哪**、**怎么读**、**哪些还没验证**。
 > 它**不是**开发计划本身——计划在 [`DEV-PLAN.md`](DEV-PLAN.md)，规格在 [`SPEC.md`](SPEC.md)，结构在 [`ARCHITECTURE.md`](ARCHITECTURE.md)，操作手册在 [`../AGENTS.md`](../AGENTS.md)。
-> 状态快照（**2026-11-10**）：**M0、M1 已交付**（M1 出口报告 = `M1-EXIT-REPORT.md`，判定人签字仍待 ios-lead）；**M2 代码 11/11 已落地**；出口报告 = `M2-EXIT-REPORT.md`（**未判定通过**：nightly 第 1/3 日绿、无障碍语义断言待复核；**契约确认已于 2026-11-10 由架构师书面落盘** = [`CONTRACTS-CONFIRMATION-REQUEST.md`](CONTRACTS-CONFIRMATION-REQUEST.md) §5，yaml 回填 = M3 出口前）；`Scripts/ci.sh pr` 复核**全绿**（106 tests / 符号 641 零 diff / 覆盖率 61.06%；`Foundation/**` 97.69%）；nightly **3 日已齐**（2026-11-10/11/12；11-12 首跑因 `launch-count` 的 near-threshold 告警偶发红、同代码复跑 3/3 绿并加夹具窄例外），**待 ios-lead 签字**。文档改动以 `git log` 为准。
+> 状态快照（**2026-11-10**）：**M0、M1 已交付**（M1 出口报告 = `M1-EXIT-REPORT.md`，判定人签字仍待 ios-lead）；**M2 代码 11/11 已落地**；出口报告 = `M2-EXIT-REPORT.md`（**未判定通过**：nightly 第 1/3 日绿、无障碍语义断言待复核；**契约确认已于 2026-11-10 由架构师书面落盘** = [`CONTRACTS-CONFIRMATION-REQUEST.md`](CONTRACTS-CONFIRMATION-REQUEST.md) §5，yaml 回填 = M3 出口前）；`Scripts/ci.sh pr` 复核**全绿**（106 tests / 符号 641 零 diff / 覆盖率 61.06%；`Foundation/**` 97.69%）；nightly **3 日已齐**（2026-11-10/11/12；11-12 首跑因 `launch-count` 的 near-threshold 告警偶发红、同代码复跑 3/3 绿并加夹具窄例外；**07:49 最终复跑绿**），**待 ios-lead 签字**。文档改动以 `git log` 为准。
 
 ---
 

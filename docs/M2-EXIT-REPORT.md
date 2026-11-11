@@ -2,8 +2,9 @@
 
 > 里程碑：**M2**（口径来源 = `docs/DEV-PLAN.md` §2.3）｜报告日期：**2026-11-10**｜判定人：ios-lead（**待签字**）
 > 判定环境：Xcode 26.6（Build 17F113）／iOS 26.5 模拟器（iPhone Air，UDID 711BF16D-…）
+> 最终 nightly：**2026-11-12 07:49 绿**（HEAD `1bedada`：设备编译 1.3s + 16 tests 快照 + demo 审计 68.5s，3 条 UITest 全过，`AUDIT-ISSUE=0`）。
 > **结论：11 件代码与逐件六类断言已落地；出口判据 6 条均有结论**（② 以冻结表单 + 架构师书面确认替代闭合，
-> `contracts/*.yaml` 回填 = M3 出口前）；nightly 已凑满 **3 日**（2026-11-10/11/12，第 3 日含一次 flaky 复跑，见 §4-①）
+> `contracts/*.yaml` 回填 = M3 出口前）；nightly 已凑满 **3 日**（2026-11-10/11/12，第 3 日首跑红→当日**两次**复跑绿，见 §4-①）
 > ⇒ **技术判据已齐，待 ios-lead 签字**（若签字时要求把 11-12 首跑红视为断 streak，则出口顺延至 11-14）。
 
 ## 1. 出口判据逐条判定（DEV-PLAN §2.3 的 6 条）
@@ -55,7 +56,7 @@
 
 | # | 项 | 现状 | 依赖谁 / 何时 |
 | --- | --- | --- | --- |
-| ① | **nightly 连续 3 日绿** | 2026-11-10（2.8s + 16 tests + 审计 47.0s）；2026-11-11（2.1s + 16 tests + 审计 69.6s，含目录导航）；**2026-11-12 第 3 日：首跑红 → 复跑绿**——首跑在 demo 审计报 `launch-count` 的 "Contrast nearly passed"（frame 13×16、13pt；实测 text.primary on surface.card ≈16:1，**非 WCAG 失败**），同代码复跑 **3/3 绿**，审计夹具加一条点名窄例外后整条 nightly 绿（1.2s + 16 tests + 审计 69.1s，3 条 UITest 全过）；**库代码三天未变** | ✅（flaky 说明见左；是否将 11-12 计入 3 日窗口由 ios-lead 签字时确认） |
+| ① | **nightly 连续 3 日绿** | 2026-11-10（2.8s + 16 tests + 审计 47.0s）；2026-11-11（2.1s + 16 tests + 审计 69.6s，含目录导航）；**2026-11-12 第 3 日：首跑红 → 两次复跑绿**——首跑在 demo 审计报 `launch-count` 的 "Contrast nearly passed"（13pt；实测 ≈16:1，**非 WCAG 失败**），同代码复跑 **3/3 绿**，夹具加点名窄例外后整条绿（1.2s + 16 tests + 审计 69.1s）；**07:49 最终复跑绿**（1.3s + 16 tests + 审计 68.5s，`AUDIT-ISSUE=0`）；**库代码三天未变** | ✅（flaky 说明见左；是否将 11-12 计入 3 日窗口由 ios-lead 签字时确认） |
 | ② | **组件无障碍审计的窄例外** | 审计已覆盖 11 件（两页签）；放行 6 条并逐条点名：固定字号（头像首字 12pt ×2、徽标 11pt）与行的单行截断（×3）。**已接受（2026-11-10，见 `docs/M2-DEVIATIONS.md` §5）**；语音播报的音频效果仍不可机检（代码级实现 + 人工 review） | 已裁决接受 / 本次出口 |
 | ③ | **错误态 assertive 播报** | `WDTextField` 只挂 `accessibilityHint`；播报层（`WDSystemAnnouncer`）已落地。**已裁决：调用方播报**（SPEC 回写 P20，2026-11-10）；组件无注入点属有意设计。音频效果仍不可机检 | 已裁决 / 本次出口 |
 | ④ | **契约 `contracts/*.yaml`** | **已闭合（2026-11-10）**：I-2 以冻结表单代替，架构师书面确认（`docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5）；yaml 回填 = **M3 出口前**（`../wisdomdesign/contracts/`） | 架构师（已确认）/ M3 出口前回填 |
@@ -84,7 +85,7 @@
 > 签字材料（出口判定表 + 可直接回复的签字文本 + M3 冻结会议程）= [`docs/M2-SIGNOFF-PACKAGE.md`](M2-SIGNOFF-PACKAGE.md)。
 
 - **不判定 M2 通过**。剩余动作（按顺序）：
-  1. ~~2026-11-12 跑第 3 日~~ ⇒ **已跑**：首跑红（`launch-count` 的 near-threshold 告警，非产品缺陷）→ 同代码复跑 3/3 绿 + 夹具窄例外 → 整条 nightly 绿（见 §4-①）；
+  1. ~~2026-11-12 跑第 3 日~~ ⇒ **已跑并最终绿**：首跑红（`launch-count` 的 near-threshold 告警，非产品缺陷）→ 同代码复跑 3/3 绿 + 夹具窄例外 → 整条 nightly 绿；**07:49 最终复跑绿**（见 §4-①）；
   2. ~~与架构师对齐 `contracts/*.yaml`~~ ⇒ **已闭合（2026-11-10）**：架构师书面确认「冻结表单 = 本批契约」（`docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5）；`contracts/*.yaml` 回填 = M3 出口前；
   3. 全部绿后由 ios-lead 签字，再开 M3（`WDListSection` + API 封板 + `Foundation/**` ≥80% + 体积门槛）。
 - 本报告与 `M1-EXIT-REPORT.md` 一样：**每条结论都对应可重跑的命令或已入库产物**；未跑通的一律标【未验证】。
