@@ -90,7 +90,7 @@ Scripts/ci.sh measure   # 过程成本测量（分阶段计时；**未测不写�
 cold 的 PR-2 那 45 s 是 `swift Scripts/canonicalize-api.swift` 的**宿主模块缓存被清后重编译**（每轮都付），不是 API 逻辑慢。
 原始数据：`.build/perf/ci-measure-20261007.json`。**测法变了要重测**（改 `ci.sh` 的 PR 阶段、换 Xcode 大版本、换金标设备）。
 - **覆盖率**：最近一次门禁 `WisdomUI` **52.19%**（2026-11-10；11 件组件 67.3–100%（`WDButton` 67.3%、`WDListRow` 69.4%、`WDTextField` 72.2%，其余 81–100%）；**`Foundation/**` 97.69%**（M3 的 80% 门槛已预达标；仅 `WDAnnouncement` 58.3%）、`Foundation/**` 67.28%，其余组件未开工）；M3 起 `Foundation/**` ≥ 80% 才转门槛（排除 `generated/`、组件 `+Previews` 不参与该门槛）。
-- `Scripts/ci.sh nightly`：前置物已齐；**第 1/3 日绿**（2026-11-10：设备编译 + 快照套件 + demo 无障碍审计），还差 2 日才满足 M2 出口；详见 `docs/M2-EXIT-REPORT.md`。
+- `Scripts/ci.sh nightly`：前置物已齐；**第 2/3 日绿**（2026-11-10 / 11-11：设备编译 + 快照套件 + demo 无障碍审计），还差 1 日才满足 M2 出口；详见 `docs/M2-EXIT-REPORT.md`。
 - `.github/workflows/ci.yml`：**【未验证】** 本仓尚无一次 GitHub Actions 实跑（macOS 26 镜像标签与自带 Xcode 版本属外部事实）。
 
 贡献流程（提交纪律、评审归属、不能自行决定的事）见 [CONTRIBUTING.md](CONTRIBUTING.md)；PR 自检清单见 [.github/pull_request_template.md](.github/pull_request_template.md)。

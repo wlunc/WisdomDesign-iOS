@@ -190,7 +190,7 @@ PY
 >
 > **当前进度（2026-11-10 · M2 11/11 代码落地；批出口未判）**：**11 件全部实现**（`WDTextField`、`WDListRow`、`WDButton`、`WDIconButton`、`WDSwitch`、`WDCheckbox`、`WDBadge`、`WDAvatar`、`WDDivider`、`WDCard`、`WDIcon`），**每件的六类断言均已补齐**——组件测试 **41 条**、`+Previews.swift` ×11、8 态快照 ×11 = **88 张新基线**、`api` 零 diff。**基础件同步落地**：Foundation 无障碍层、布局密度（F44）、触觉网关（`Internal/WDHaptics`）。`Scripts/ci.sh pr` 复核**全绿**（`passed=106 failed=0`、符号 641、覆盖率 **61.06%**；**`Foundation/**` 97.69%**，M3 的 80% 门槛已预达标）。
 > **M2 批出口尚未判定**（落盘件 = `docs/M2-EXIT-REPORT.md`，2026-11-10）：
-> ① nightly **第 1/3 日绿**（2026-11-10 重跑：设备编译 + 16 tests 快照 + demo 审计 47.0s，**审计已覆盖 11 件**），还差 2 日；
+> ① nightly **第 2/3 日绿**（2026-11-10：16 tests + 审计 47.0s；2026-11-11：2.1s 设备编译 + 16 tests + 审计 69.6s，含 demo 目录导航断言），还差 1 日；
 > ② 性能数字已进报告（11 件渲染耗时，只报不拦）；③ 无障碍审计已覆盖组件视口，**6 条窄例外**逐条点名
 > （固定字号头像/徽标、行的单行截断），音频播报仍不可机检；④ 契约 `contracts/*.yaml` 未落库，
 > 按 I-2 以冻结表单代替；**架构师书面确认已于 2026-11-10 落盘**（签署记录 = `docs/CONTRACTS-CONFIRMATION-REQUEST.md` 的「5. 架构师确认记录」），回填时点 = M3 出口前。**判定人待签字。**
