@@ -103,7 +103,9 @@ final class WisdomUIDemoUITests: XCTestCase {
       let label = issue.element?.label ?? "-"
       let compact = issue.compactDescription
 
-      if let reason = AuditExceptions.known(scope: scope, label: label, compact: compact) {
+      if let reason = AuditExceptions.known(
+        scope: scope, identifier: issue.element?.identifier ?? "", label: label, compact: compact
+      ) {
         print("AUDIT-KNOWN scope=\(scope) label=\(label) reason=\(reason)")
         return true
       }
@@ -130,7 +132,18 @@ final class WisdomUIDemoUITests: XCTestCase {
 /// 放在独立 `enum` 而不是测试类里：审计回调是 `@Sendable`，捕获测试类的 `Self` 会触发
 /// "sending non-Sendable metatype" 的 Swift 6 错误。
 private enum AuditExceptions {
-  static func known(scope: String, label: String, compact: String) -> String? {
+  static func known(
+    scope: String, identifier: String, label: String, compact: String
+  ) -> String? {
+    // 2026-11-12：nightly 第 3 日首次红 —— iOS 26 审计对卡片圆角附近的 13pt 文本偶发报
+    // "Contrast nearly passed"（同一代码复跑 3/3 绿；元素 = theme 页的 launch-count，
+    // text.primary on surface.card 实测约 16:1，不是 WCAG 失败）。只放行这条**告警**；
+    // "Contrast failed" 仍严格失败，且不扩大到其他元素。
+    if scope == "theme", identifier == "launch-count",
+      compact.hasPrefix("Contrast nearly passed")
+    {
+      return "iOS 26 审计 near-threshold 告警（非 WCAG 失败；复跑 3/3 绿）"
+    }
     guard scope == "components" else { return nil }
     if compact.hasPrefix("Dynamic Type"), ["妈", "进行中"].contains(label) {
       return "固定字号设计例外（头像首字 12pt / 徽标 11pt）"

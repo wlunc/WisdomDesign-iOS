@@ -124,6 +124,10 @@
 
 ### Fixed
 
+- **demo 审计夹具**（2026-11-12）：为 theme 页 `launch-count` 的 iOS 26 "Contrast nearly passed"
+  告警加一条**点名窄例外**（13pt 文本；实测 text.primary on surface.card 约 16:1，**非 WCAG 失败**；
+  同代码复跑 3/3 绿）。`Contrast failed` 仍严格失败，且不扩大到其他元素。
+
 - **R15 对契约键名的假红**：原实现只要字面量含 L-B 标点就报错，而键名（如 `text.primary`）天然含
   `.` ⇒ 与 SPEC §3.7 的 I41"其余只允许标识符/键名"冲突。加键名形态白名单 + 正例样本
   （`R15_key_name_literal.swift`），反例（`、` 与词序模板）仍必须命中。
