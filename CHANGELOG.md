@@ -24,6 +24,9 @@
   规范化器丢弃 USR/绝对路径等易漂移字段）。
 - **归档体积基线** `Examples/BaselineShell/`（E3-iOS-a 的分母：同构、不引入本库）。
 - 协作文件：`CONTRIBUTING.md`、`.github/pull_request_template.md`、`.github/CODEOWNERS`。
+- **E3-iOS-a 同构消费方壳**（2026-11-11，分支 `feat/m3-wdlist-section`）：新增
+  `Examples/BaselineShellWithLibrary`（与 `BaselineShell` 同构、行改用 `WDListRow`）；
+  首次成对归档（未 Thinning，Release）：baseline 86,016 B / 本壳 561,152 B，增量 **475,136 B ≈ 464 KB**。
 - **demo 组件目录改版**（2026-11-10）：主入口从"所有组件堆在一个页签"改为按用途分组的组件目录
   （操作 / 输入与选择 / 内容展示 / 布局与结构，覆盖 11 件 primitives）；点击进入详情页，
   提供实时预览、档位/状态与实现细节；带枚举的 6 件组件在详情右上角提供"设置"切换，
