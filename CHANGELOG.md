@@ -24,6 +24,11 @@
   规范化器丢弃 USR/绝对路径等易漂移字段）。
 - **归档体积基线** `Examples/BaselineShell/`（E3-iOS-a 的分母：同构、不引入本库）。
 - 协作文件：`CONTRIBUTING.md`、`.github/pull_request_template.md`、`.github/CODEOWNERS`。
+- **demo 组件目录改版**（2026-11-10）：主入口从"所有组件堆在一个页签"改为按用途分组的组件目录
+  （操作 / 输入与选择 / 内容展示 / 布局与结构，覆盖 11 件 primitives）；点击进入详情页，
+  提供实时预览、档位/状态与实现细节；带枚举的 6 件组件在详情右上角提供"设置"切换，
+  关闭设置后预览显示新配置。主题与令牌、无障碍审计视口迁到目录右上角的调色板入口；
+  UITest 增加目录导航 + 枚举切换断言，审计例外补"已完成 2 项"（列表行单行截断，设计 18 §7）。
 - **demo 组件审计视口**（2026-11-10）：`Examples/WisdomUIDemo` 增加"组件"页签（11 件代表性实例）；
   页签用**分段控件**而非 `TabView`——iOS 26 的浮动玻璃 Tab 栏会压住滚动内容，令对比度审计误判。
   demo UITest 对两个页签分别跑 contrast / hitRegion / textClipped / dynamicType；6 条窄例外

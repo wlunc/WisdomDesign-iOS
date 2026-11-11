@@ -16,6 +16,10 @@ final class WisdomUIDemoUITests: XCTestCase {
     let app = XCUIApplication()
     app.launch()
 
+    let themeButton = app.buttons["theme-button"]
+    XCTAssertTrue(themeButton.waitForExistence(timeout: 20), "主题入口未出现")
+    themeButton.tap()
+
     let label = app.staticTexts["scheme-label"]
     XCTAssertTrue(label.waitForExistence(timeout: 20), "scheme-label 未出现")
     let schemeBefore = label.value as? String
@@ -42,14 +46,51 @@ final class WisdomUIDemoUITests: XCTestCase {
   func testAccessibilityAudit() throws {
     let app = XCUIApplication()
     app.launch()
+
+    let themeButton = app.buttons["theme-button"]
+    XCTAssertTrue(themeButton.waitForExistence(timeout: 20), "主题入口未出现")
+    themeButton.tap()
     XCTAssertTrue(app.staticTexts["scheme-label"].waitForExistence(timeout: 20))
     try audit(app, scope: "theme")
 
-    let componentsTab = app.segmentedControls["page-picker"].buttons["组件"]
-    XCTAssertTrue(componentsTab.waitForExistence(timeout: 20), "组件页签未出现")
-    componentsTab.tap()
+    let auditLink = app.buttons["audit-viewport-link"]
+    XCTAssertTrue(auditLink.waitForExistence(timeout: 20), "审计视口入口未出现")
+    auditLink.tap()
     XCTAssertTrue(app.buttons["提交"].waitForExistence(timeout: 20), "组件审计视口未出现")
     try audit(app, scope: "components")
+  }
+
+  /// 组件目录：分类存在、点击进入详情、右上角设置能切换枚举并影响预览。
+  func testComponentCatalogNavigationAndSettings() {
+    let app = XCUIApplication()
+    app.launch()
+
+    XCTAssertTrue(app.staticTexts["操作"].waitForExistence(timeout: 20), "分类「操作」未出现")
+    XCTAssertTrue(app.staticTexts["输入与选择"].exists, "分类「输入与选择」未出现")
+    XCTAssertTrue(app.staticTexts["内容展示"].exists, "分类「内容展示」未出现")
+    XCTAssertTrue(app.staticTexts["布局与结构"].exists, "分类「布局与结构」未出现")
+
+    let buttonRow = app.buttons["component-row-WDButton"]
+    XCTAssertTrue(buttonRow.waitForExistence(timeout: 20), "WDButton 行未出现")
+    buttonRow.tap()
+
+    XCTAssertTrue(app.navigationBars["WDButton"].waitForExistence(timeout: 20), "WDButton 详情未出现")
+
+    let settingsButton = app.buttons["component-settings-button"]
+    XCTAssertTrue(settingsButton.waitForExistence(timeout: 20), "枚举组件的设置按钮未出现")
+    settingsButton.tap()
+
+    let tonalOption = app.buttons["setting-button-variant-1"]
+    XCTAssertTrue(tonalOption.waitForExistence(timeout: 20), "变体选项未出现")
+    tonalOption.tap()
+
+    let doneButton = app.buttons["settings-done-button"]
+    XCTAssertTrue(doneButton.waitForExistence(timeout: 20), "设置完成按钮未出现")
+    doneButton.tap()
+
+    let configChip = app.staticTexts["config-chip-0"]
+    XCTAssertTrue(configChip.waitForExistence(timeout: 20), "配置摘要未出现")
+    XCTAssertEqual(configChip.label, "柔色", "切换变体后配置摘要必须更新")
   }
 
   /// 单个页签的严格审计。**只放行两类别有理由的窄例外**（其余一律失败）：
@@ -94,7 +135,9 @@ private enum AuditExceptions {
     if compact.hasPrefix("Dynamic Type"), ["妈", "进行中"].contains(label) {
       return "固定字号设计例外（头像首字 12pt / 徽标 11pt）"
     }
-    if compact.hasPrefix("Text clipped"), ["整理储物间", "妈妈的待办", "今天 18:00 前"].contains(label) {
+    if compact.hasPrefix("Text clipped"),
+      ["整理储物间", "妈妈的待办", "今天 18:00 前", "已完成 2 项"].contains(label)
+    {
       return "设计 18 §7 的单行截断（审计按 lineLimit(1) 判可能截断）"
     }
     return nil

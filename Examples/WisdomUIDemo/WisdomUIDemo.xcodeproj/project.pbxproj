@@ -10,6 +10,12 @@
 		2B00000000000000000000C1 /* WisdomUIDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000F3 /* WisdomUIDemoApp.swift */; };
 		2B00000000000000000000C2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000F4 /* ContentView.swift */; };
 		2B00000000000000000000C3 /* WisdomUIDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000F5 /* WisdomUIDemoUITests.swift */; };
+		2B00000000000000000000C4 /* DemoComponentCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000F7 /* DemoComponentCatalog.swift */; };
+		2B00000000000000000000C5 /* DemoComponentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000F8 /* DemoComponentListView.swift */; };
+		2B00000000000000000000C6 /* DemoComponentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000F9 /* DemoComponentDetailView.swift */; };
+		2B00000000000000000000C7 /* DemoComponentPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000FA /* DemoComponentPreview.swift */; };
+		2B00000000000000000000C8 /* DemoVariants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000FB /* DemoVariants.swift */; };
+		2B00000000000000000000C9 /* DemoThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000FC /* DemoThemeView.swift */; };
 		2B00000000000000000000B1 /* WisdomUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2B000000000000000000001E /* WisdomUI */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +36,12 @@
 		2B00000000000000000000F4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2B00000000000000000000F5 /* WisdomUIDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WisdomUIDemoUITests.swift; sourceTree = "<group>"; };
 		2B00000000000000000000F6 /* Demo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Demo.xcconfig; sourceTree = "<group>"; };
+		2B00000000000000000000F7 /* DemoComponentCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoComponentCatalog.swift; sourceTree = "<group>"; };
+		2B00000000000000000000F8 /* DemoComponentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoComponentListView.swift; sourceTree = "<group>"; };
+		2B00000000000000000000F9 /* DemoComponentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoComponentDetailView.swift; sourceTree = "<group>"; };
+		2B00000000000000000000FA /* DemoComponentPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoComponentPreview.swift; sourceTree = "<group>"; };
+		2B00000000000000000000FB /* DemoVariants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoVariants.swift; sourceTree = "<group>"; };
+		2B00000000000000000000FC /* DemoThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoThemeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +87,12 @@
 			children = (
 				2B00000000000000000000F3 /* WisdomUIDemoApp.swift */,
 				2B00000000000000000000F4 /* ContentView.swift */,
+				2B00000000000000000000F7 /* DemoComponentCatalog.swift */,
+				2B00000000000000000000F8 /* DemoComponentListView.swift */,
+				2B00000000000000000000F9 /* DemoComponentDetailView.swift */,
+				2B00000000000000000000FA /* DemoComponentPreview.swift */,
+				2B00000000000000000000FB /* DemoVariants.swift */,
+				2B00000000000000000000FC /* DemoThemeView.swift */,
 			);
 			path = WisdomUIDemo;
 			sourceTree = "<group>";
@@ -201,6 +219,12 @@
 			files = (
 				2B00000000000000000000C1 /* WisdomUIDemoApp.swift in Sources */,
 				2B00000000000000000000C2 /* ContentView.swift in Sources */,
+				2B00000000000000000000C4 /* DemoComponentCatalog.swift in Sources */,
+				2B00000000000000000000C5 /* DemoComponentListView.swift in Sources */,
+				2B00000000000000000000C6 /* DemoComponentDetailView.swift in Sources */,
+				2B00000000000000000000C7 /* DemoComponentPreview.swift in Sources */,
+				2B00000000000000000000C8 /* DemoVariants.swift in Sources */,
+				2B00000000000000000000C9 /* DemoThemeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

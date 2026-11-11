@@ -8,6 +8,10 @@
 | `BaselineShell/` | **归档体积基线**（E3-iOS-a 的分母：同构、**不引入 WisdomUI**） | I-M0-j（已交付，见其 README） |
 | `WisdomUIDemo/` | 演示 + 无障碍审计宿主（`performAccessibilityAudit` 四类目）+ 运行时换 scheme 的载体 | **M1 交付物**（已建；UITest 的首次实跑见 DEV-PLAN §2.2 的【未验证】标注） |
 
+**demo 浏览路径**：分类组件目录 → 组件详情（实时预览 / 档位 / 状态 / 实现细节）。
+带枚举的组件在详情右上角提供「设置」，关闭设置后预览会显示新配置；主题与令牌、无障碍审计视口
+收在目录右上角的调色板入口，不占用主列表。
+
 **共同纪律**：
 
 - **不检入 team / bundle id**：pbxproj 用占位值，本地用 xcconfig 或命令行覆盖（SPEC §1.6-①）。
