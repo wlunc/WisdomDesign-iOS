@@ -2802,6 +2802,126 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor struct WDListSection<Item, Row, Footer> where Item : Identifiable, Row : View, Footer : View",
+      "kind" : "swift.struct",
+      "path" : "WDListSection"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDListSection.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(items: [Item], selection: Set<Item.ID> = [], header: Text, headerAction: WDListSectionAction? = nil, @ViewBuilder row: @escaping (Item, WDListSectionRowContext) -> Row)",
+      "kind" : "swift.init",
+      "path" : "WDListSection.init(items:selection:header:headerAction:row:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(items: [Item], selection: Set<Item.ID> = [], header: Text, headerAction: WDListSectionAction? = nil, @ViewBuilder row: @escaping (Item, WDListSectionRowContext) -> Row, @ViewBuilder footer: () -> Footer)",
+      "kind" : "swift.init",
+      "path" : "WDListSection.init(items:selection:header:headerAction:row:footer:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDListSectionAction",
+      "kind" : "swift.struct",
+      "path" : "WDListSectionAction"
+    },
+    {
+      "access" : "public",
+      "decl" : "let action: () -> Void",
+      "kind" : "swift.property",
+      "path" : "WDListSectionAction.action"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(label: Text, action: @escaping () -> Void)",
+      "kind" : "swift.init",
+      "path" : "WDListSectionAction.init(label:action:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let label: Text",
+      "kind" : "swift.property",
+      "path" : "WDListSectionAction.label"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDListSectionRowContext",
+      "kind" : "swift.struct",
+      "path" : "WDListSectionRowContext"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(isSelected: Bool, isLast: Bool)",
+      "kind" : "swift.init",
+      "path" : "WDListSectionRowContext.init(isSelected:isLast:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let isLast: Bool",
+      "kind" : "swift.property",
+      "path" : "WDListSectionRowContext.isLast"
+    },
+    {
+      "access" : "public",
+      "decl" : "let isSelected: Bool",
+      "kind" : "swift.property",
+      "path" : "WDListSectionRowContext.isSelected"
+    },
+    {
+      "access" : "public",
       "decl" : "enum WDMotion",
       "kind" : "swift.enum",
       "path" : "WDMotion"
