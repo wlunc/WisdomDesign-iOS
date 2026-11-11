@@ -17,6 +17,8 @@ M3 出口判据⑤要求"体积门槛值定为 P50 + 10%（或绝对上限）并
 | **BaselineShell**（分母；不引入本库） | `.build/archive-baseline.xcarchive` | **86,016 B（84 KB）** | 76,848 B |
 | **WisdomUIDemo**（参考分子；含 demo UI + 本库） | `.build/archive-demo.xcarchive` | **598,016 B（584 KB）** | 586,200 B |
 | **参考差值**（demo − baseline） | — | **512,000 B（500 KB）** | 509,352 B（≈497 KB） |
+| **同构消费方**（`BaselineShellWithLibrary`，仅引入库 + `WDListRow`；**2026-11-11 新增**） | `.build/archive-baseline-lib.xcarchive` | **561,152 B（548 KB）** | 552,016 B |
+| **E3-iOS-a 增量**（同构消费方 − baseline，**未 Thinning**） | — | **475,136 B（≈464 KB）** | 475,168 B（≈464 KB） |
 
 > ⚠️ **这个差值不是 E3-iOS-a**：E3-iOS-a 要求分母与分子**同构**（只差"是否引入 `WisdomUI`"）。
 > 当前分子是 demo（主题页 + 组件页 + 审计视口），比空壳多出大量 UI 代码 ⇒ 500 KB 只能当**上界参考**，
@@ -47,7 +49,7 @@ du -sk .build/archive-demo.xcarchive/Products/Applications/*.app
 | # | 缺口 | 为什么现在是缺的 | 补测时点 |
 | --- | --- | --- | --- |
 | ① | **Thinning 增量** | 未签名归档不能导出 thinned IPA（`-exportArchive` 需要签名/`exportOptionsPlist`） | M3 出口前（用开发证书导出，或改用"未签名 archive + 设备切片估算"并注明口径） |
-| ② | **同构消费方（配对分子）** | 需要一个"与 BaselineShell 同构、但改用 `WDListRow`/`WDCard` 渲染"的 app；现在没有，且当前处于**代码冻结期**（nightly 连续 3 日不能改源） | M3 开工后（新建 `Examples/BaselineShellWithLibrary`；改它=改基线，需单独提交 + CHANGELOG） |
+| ② | **同构消费方（配对分子）** | ✅ **已建并测（2026-11-11，分支 `feat/m3-wdlist-section`）**：`Examples/BaselineShellWithLibrary`，与 BaselineShell 同构、行改用 `WDListRow`；**未 Thinning** 增量 = **475,136 B（≈464 KB）**。合并时点 = M2 出口签字后（分支合并前不进门禁） | 合并 + 三次归档取 P50（M3 出口） |
 | ③ | **E3-iOS-b（每组件边际增量）** | 需要"每件一个配对壳"或差量构建；成本高，规格标"只报不拦 → M4 起门槛" | M4 |
 | ④ | **门槛值** | 规格要求 P50 + 10%（M1–M3 三次报告）；现在只有 1 次预测量 | M3 出口（tech-lead + 架构师定，写 README/CHANGELOG） |
 
