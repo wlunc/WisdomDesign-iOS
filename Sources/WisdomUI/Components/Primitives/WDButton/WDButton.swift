@@ -107,7 +107,7 @@ extension WDButton where Label == Text {
       leadingIcon: leadingIcon,
       trailingIcon: trailingIcon,
       action: action,
-      label: { Text(text) }
+      label: { Text(text) }  // wd-structure-check:disable R21 — 仅转交 Text
     )
   }
 
@@ -130,7 +130,7 @@ extension WDButton where Label == Text {
       leadingIcon: leadingIcon,
       trailingIcon: trailingIcon,
       action: action,
-      label: { Text(verbatim: text) }
+      label: { Text(verbatim: text) }  // wd-structure-check:disable R21 — 仅转交 Text
     )
   }
 }

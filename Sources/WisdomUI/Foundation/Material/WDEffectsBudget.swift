@@ -44,7 +44,7 @@ public struct WDEffectsBudget: Sendable, Equatable {
     blurSurfaces: 1,
     washes: 1,
     sheens: 1,
-    skeletonShimmers: 6,
+    skeletonShimmers: 6,  // wd-structure-check:disable R7 — DF-03 效果配额第 4 条（同屏 ≤6）
     strongElevations: 1,
     animatedRings: 1,
     hapticsPerAction: 1

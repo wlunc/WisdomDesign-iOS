@@ -68,9 +68,9 @@ public struct WDIconButton: View {
   /// 档位 → 视觉尺寸（设计 02 §3；`lg` 在设计里没有图标按钮档，按按钮档补 52）。
   static func visualSize(for size: WDButtonSize) -> CGFloat {
     switch size {
-    case .sm: return 32
-    case .md: return 44
-    case .lg: return 52
+    case .sm: return WDSize.controlSm
+    case .md: return WDSize.controlMd
+    case .lg: return WDSize.controlLg
     }
   }
 

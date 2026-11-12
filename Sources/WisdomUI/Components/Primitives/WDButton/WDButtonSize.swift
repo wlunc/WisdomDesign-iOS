@@ -38,7 +38,8 @@ public enum WDButtonSize: String, CaseIterable, Sendable, Equatable {
 
   /// 按钮的垂直热区补量：视觉高度不足 44 的档位向外补到 44（设计 01：触控热区不小于 44）。
   var buttonHitInset: CGFloat {
-    max(0, (WDSize.touchTargetMin - controlHeight) / 2)
+    let half = (WDSize.touchTargetMin - controlHeight) / 2  // wd-structure-check:disable R7 — 上下各半
+    return max(0, half)
   }
 
   /// 按钮图标档（设计 01 §3：14 / 16 / 20；映射到令牌四档 16 / 16 / 20）。

@@ -218,12 +218,13 @@ cmd_pr() {
   printf 'scheme=%s\ndestination=%s\nxcode=%s\npin=%s\n' \
     "$SCHEME" "$DEST" "$(xcodebuild -version | head -1)" "${CFFIXED_USER_HOME:-<off>}"
 
-  phase_begin "PR-0 host 规则 + 格式 + 令牌溯源（秒级，不需要 Xcode）"
-  Scripts/check-structure.sh
+  phase_begin "PR-0 host 规则（--strict）+ 格式 + 令牌溯源（秒级，不需要 Xcode）"
+  # M3 起 R7/R15/R21 的 warning 一律转拦（SPEC §1.1.2 / §1.5.5）：--strict 下任何 warning = 失败。
+  Scripts/check-structure.sh --strict
   Scripts/check-format.sh
   # 跨仓同批自证（SPEC §1.5.4-3）：读设计仓的 dist/tokens.manifest.json 断言 sha12 == 生成物；
   # manifest 缺失 = fail（不 skip）。路径可用 WD_TOKENS_MANIFEST 覆盖。
-  Scripts/check-structure.sh --tokens-trace
+  Scripts/check-structure.sh --tokens-trace --strict
   phase_end
 
   phase_begin "PR-1a build-for-testing（含 WD_API_SMOKE 签名冒烟；只编模拟器一张图）"

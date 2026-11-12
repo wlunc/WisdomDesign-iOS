@@ -17,10 +17,17 @@ public enum WDContrast {
   public static func relativeLuminance(_ color: Color) -> Double {
     let components = rgba(color)
     func channel(_ value: Double) -> Double {
-      value <= 0.03928 ? value / 12.92 : pow((value + 0.055) / 1.055, 2.4)
+      let knee = 0.03928  // wd-structure-check:disable R7 — WCAG 规范常量
+      let scale = 12.92  // wd-structure-check:disable R7 — WCAG 规范常量
+      let offset = 0.055  // wd-structure-check:disable R7 — WCAG 规范常量
+      let gamma = 2.4  // wd-structure-check:disable R7 — WCAG 规范常量
+      return value <= knee ? value / scale : pow((value + offset) / (1 + offset), gamma)
     }
-    return 0.2126 * channel(components.r) + 0.7152 * channel(components.g) + 0.0722
-      * channel(components.b)
+    let redWeight = 0.2126  // wd-structure-check:disable R7 — WCAG 权重
+    let greenWeight = 0.7152  // wd-structure-check:disable R7 — WCAG 权重
+    let blueWeight = 0.0722  // wd-structure-check:disable R7 — WCAG 权重
+    return redWeight * channel(components.r) + greenWeight * channel(components.g)
+      + blueWeight * channel(components.b)
   }
 
   /// 对比度 = (L_亮 + 0.05) / (L_暗 + 0.05)。
