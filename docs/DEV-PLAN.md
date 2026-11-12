@@ -233,7 +233,9 @@ PY
 **入口判据**：I-2；另需 M2 出口全绿。
 **出口判据（6 条）**：① `api/WisdomUI.api.json` 入库且 `git diff --exit-code` 绿；② 命名与枚举规则内联表 §5.3 全部对齐；③ 快照与契约用例全绿；④ 覆盖率转门槛：`Foundation/**` ≥ **80%**（排除 `generated/`）；⑤ **体积门槛值**定为"P50 + 10%（或绝对上限）"并写进 `README.md`/`CHANGELOG.md`；⑥ 封板批 12 件 primitives（M2 的 11 + 本批 1）在出口报告中占位、无缺件 —— **其余 primitives 按其所在批的"批前签名冻结"执行**，20/20 primitives 完成于 M5 出口。
 >
-> **开工状态（2026-11-12）**：I-1 ✅（M2 已签字）；I-2 ✅（`docs/M3-SIGNATURE-FREEZE.md`，五问按建议确认）；`WDListSection` 已实现并合并（7 条单测 + 2 预览；PR 113 tests / 661 符号零 diff 绿）。**待补**：8 态快照（4 变体 × 8 态）、demo 审计挂载、契约 11 个 yaml 回填（不晚于 M3 出口）、体积门槛定值（U-09）、API 封板签字。
+> **收尾状态（2026-11-12）**：I-1 ✅（M2 已签字）；I-2 ✅（`docs/M3-SIGNATURE-FREEZE.md`，五问按建议确认）。`WDListSection` 六类断言收尾——清 `DRAFT`、**8 态快照 4 变体 × 8 = 32 张**、demo 审计视口扩到 **12 件**；**12 个契约 yaml** 已回填设计仓（11 件 + `WDListSection`）；**API 封板**（661 符号零 diff，`docs/M3-API-FREEZE.md`）；**覆盖率门槛**（`Foundation/**` 97.69% ≥ 80%，已转硬门槛）；**体积门槛**（P50 495,616 B × 1.10 = **545,178 B ≈ 532 KB**，已写 README/CHANGELOG）。
+> `ci.sh pr` 全绿（113 tests / 661 符号 / Foundation 97.69%）；**M3 第 1/3 日 nightly 绿**（2026-11-12：设备编译 2.33 s + 17 快照测试 / 136 基线 + demo 审计 64.6 s，3 UITest 全过、`AUDIT-ISSUE=0`）。
+> **待办**：nightly 第 2/3 日（11-13）与第 3/3 日（11-14）后判定出口。出口报告 = `docs/M3-EXIT-REPORT.md`（技术判据 6/6；门禁 1/3 日，**未签字**）。
 **门禁强度**：`PR+nightly₃+发布前`。
 
 ### 2.5 M4 — 反馈与弹层（9 件）
@@ -567,7 +569,7 @@ awk '/^\|/{if(!b){k++;n=0;f=NR} b=1;n++; if(n==2 && $0 !~ /^\|[-: |]*-[-: |]*\|[
 | U-07 | 三枚举与 `isChecked` 改名的 **CI 级编译验证** | ios-dev | M0/M2 交界 | M2 首批签名冻结 |
 | U-08 | SPM `Package.resolved` pin 后"移动 tag"的失败模式 | ios-lead | M6 发布前 | 发布纪律的自证 |
 | **U-10** | **系统无障碍审计把 11pt（`caption2`）文本判为 "Dynamic Type unsupported"** —— 2026-10-07 实测定位 | ios-lead + tech-lead | M2 批前（组件大量用 caption2 之前） | nightly-2 的 4 类目审计。**证据（同一视口内的字号阶梯对照）**：`.font(.caption2)`（纯 SwiftUI）／`wdFont(.caption2)`／`wdFont(.caption2)` 观测标签**全部被报**；`.font(.caption)`(12pt)／`.font(.footnote)`(13pt)／`wdFont(.footnote)`／`wdFont(.footnote)` **全部通过**；`ScrollView` 内的 caption2 未参与本轮检查。**结论**：与 `wdFont` 实现无关，是系统审计口径。**当前处置**：demo 的审计视口内不用 11pt（观测标签用 footnote），审计**保持严格**（不开例外）。**待裁决**：组件（`WDBadge`/`WDChip`/辅助文案）若必须在审计视口用 caption2 ⇒ 需要一条**带理由的窄例外**或与设计确认改档，不得全局关掉 `.dynamicType` 类别 |
-| U-09 | **归档体积增量与体积门槛值**（M3 出口"体积门槛值定"目前只是待定项） | ios-lead | **M3 出口** | 发布前层的体积断言。**预测量（2026-11-10）**：BaselineShell 归档 86,016 B / demo 598,016 B（参考差值 512,000 B，**非同构**）；Thinning 与同构消费方仍缺，见 `docs/U09-SIZE-BASELINE.md` |
+| U-09 | **归档体积增量与体积门槛值** | ios-lead | **M3 出口** | **已回填（2026-11-12）**：同构消费方 3 次归档（含 `WDListSection`）= 581,632 B − BaselineShell 86,016 B = **495,616 B**；门槛 = **P50 × 1.10 = 545,178 B（≈532 KB）**，按增量表达；见 `docs/U09-SIZE-BASELINE.md` §6。**Thinning 增量仍【未验证】**（未签名归档不能导出 thinned IPA），M6 发布前层补测 |
 
 ### 8.2 技术与协作风险（本端相关）
 
@@ -692,7 +694,7 @@ awk '/^\|/{if(!b){k++;n=0;f=NR} b=1;n++; if(n==2 && $0 !~ /^\|[-: |]*-[-: |]*\|[
 | `WDProgressRing` | ☐ | M4 | 否 | `Components/Primitives/WDProgressRing/`（`WDProgressRing.swift` + `WDProgressRing+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#16 | 受控值 `value`；槽位 同上；特例 环径锁死 | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：同上 | 同批（§3 批内顺序） |
 | `WDCard` | ✅ | M2 | 否 | `Components/Primitives/WDCard/`（`WDCard.swift` + `WDCard+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#17 | 受控值 —；槽位 `content`；特例 `.elevated` | 快照 = `UIHostingController`+`drawHierarchy`（玻璃类 6 个之一）；无障碍：容器 `contain` | 同批（§3 批内顺序） |
 | `WDListRow` | ✅ | M2 | **是** | `Components/Primitives/WDListRow/`（`WDListRow.swift` + `WDListRow+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#18（专节 §2.4） | 受控值 `selected` / `isSelected`；槽位 `title`,`subtitle`,`leading`,`trailing`；特例 44/60/76 | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行 ×2；无障碍：整行合并读；删除自定义操作 | `WDTextField`（§9 关键路径 `WDTextField → WDListRow`） |
-| `WDListSection` | ☐ | M3 | 否 | `Components/Primitives/WDListSection/`（`WDListSection.swift` + `WDListSection+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#19 | 受控值 `selection` ✓；槽位 `header`,`footer`,`items`；特例 末行无分隔 | 快照 = `ImageRenderer`（普通类）；无障碍：— | 同批（§3 批内顺序） |
+| `WDListSection` | ✅ | M3 | 否 | `Components/Primitives/WDListSection/`（`WDListSection.swift` + `WDListSection+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#19 | 受控值 `selection` ✓；槽位 `header`,`footer`,`items`；特例 末行无分隔 | 快照 = `ImageRenderer`（普通类；4 变体 × 8 态 = 32 张）；无障碍：标题 header trait、动作热区 44、demo 四类目审计 | 同批（§3 批内顺序） |
 | `WDIcon` | 🚧 | M2 | 否 | `Components/Primitives/WDIcon/`（`WDIcon.swift` + `WDIcon+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#20 | 受控值 —；槽位 `icon`；特例 装饰：不进树 | 快照 = `ImageRenderer`（普通类）；无障碍：不进树 | 同批（§3 批内顺序） |
 | `WDSegmentedControl` | ☐ | M5 | **是** | `Components/Composites/WDSegmentedControl/`（`WDSegmentedControl.swift` + `WDSegmentedControl+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#21 | 受控值 `selection` ✓；槽位 `items`；特例 容器 `contain` | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：切换一次 | 关键路径件（下游批前置） |
 | `WDPicker` | ☐ | M5 | 否 | `Components/Composites/WDPicker/`（`WDPicker.swift` + `WDPicker+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#22 | 受控值 `selection` ✓；槽位 `label`,`options`；特例 空数组断言 | 快照 = `ImageRenderer`（普通类）；行盒断言：1 行；无障碍：— | 同批（§3 批内顺序） |

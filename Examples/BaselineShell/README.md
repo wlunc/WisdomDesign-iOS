@@ -38,5 +38,7 @@ P50 + 10%（或绝对上限），由 tech-lead + 架构师在 M3 出口定 —�
 `.build/dd-baseline/Build/Products/Debug-iphoneos/BaselineShell.app`（可执行 72,688 B）。
 （Debug 产物里有 `__preview.dylib`，因为 `ENABLE_PREVIEWS = YES`；Release/归档不含。）
 
-**【未验证】**：① 归档与 Thinning 增量**尚未跑**；② E3-iOS-a 的"消费方 app − 本 shell"配对测量要等
-demo（M1）与 M3 的体积报告 —— 回填责任 = ios-lead，时点 = M3 出口（`docs/DEV-PLAN.md` §8.1 的 U-09）。
+**归档已跑（2026-11-12，3 次）**：Release 归档 `.app` = **86,016 B**、可执行文件 = **76,848 B**；
+与 `BaselineShellWithLibrary` 配对得到 E3-iOS-a 增量 P50 = **495,616 B**、门槛 = **545,178 B（≈532 KB）**
+（详见 `iOS/docs/U09-SIZE-BASELINE.md` §6）。**【未验证】**：Thinning 增量（需签名导出 thinned IPA；
+当前门槛是**未 Thinning** 口径，M6 发布前层补）。

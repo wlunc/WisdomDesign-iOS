@@ -8,6 +8,20 @@
 
 ### Added
 
+- **`WDListSection` 六类断言收尾（M3）**：清掉 `DRAFT` 注释；新增 `WDListSectionSnapshotTests`——
+  **4 变体（标准 / 标题动作 / 带页脚 / 空组）× 8 态 = 32 张基线**（空组应只有空白）；
+  demo 组件目录新增 `WDListSection` 条目与实时预览，审计视口扩到 **12 件**（M2 11 + M3 1）。
+- **M3 公开 API 封板**：`api/WisdomUI.api.json` 入库且 `dump-api` **零 diff（661 符号）**；
+  记录 = `docs/M3-API-FREEZE.md`（SHA-256、工具链、复跑命令与封板口径）。
+- **M3 契约回填（设计仓 `contracts/`，12 个 yaml）**：M2 的 11 件 + `WDListSection`；
+  `params`（受控值取 C-15 canonical）/ `slots`（21 名词表子集或「无」）/ `default` + 枚举全量 case。
+  回填 = 誊录，不改签名/默认值/槽位/枚举（设计仓提交 `feat(contracts): M2/M3 契约条目回填`）。
+- **M3 覆盖率门槛**：`Scripts/ci.sh pr` 的覆盖率阶段由「只打印」改为**硬门槛**——
+  `Foundation/**`（排除 `generated/`）**≥ 80%** 才绿；本次实测 **97.69%（593/607）**。
+- **M3 归档体积门槛（E3-iOS-a）**：同构消费方与分母各归档 3 次，3 次完全相同
+  （BaselineShell 86,016 B / 消费方 581,632 B）——增量 P50 = **495,616 B（≈484 KB）**，
+  门槛 = `P50 × 1.10` = **545,178 B（≈532 KB）**，
+  按增量表达；写入 `README.md` / `docs/U09-SIZE-BASELINE.md` §6。Thinning 增量仍【未验证】（M6 发布前层）。
 - **令牌流水线落地**：`Sources/WisdomUI/Foundation/generated/{WDTokens,WDTokensVersion,WDColorSlots}.swift`
   （设计仓 `tools/token-build/build.js` 生成；`tokens v1.0.0 · sha256:e552bb87e270`；
   **32 个语义色槽位**（含 `text.disabled`）；`schemes = [light, dark]`）。

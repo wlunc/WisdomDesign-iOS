@@ -33,7 +33,9 @@ xcodebuild archive -project Examples/BaselineShellWithLibrary/BaselineShellWithL
 
 - 口径 = `docs/SPEC.md` §1.2.3 / IOS-13：体积**只报不拦**，M4 起转门槛；门槛值 = M1–M3 三次报告的
   P50 + 10%（或绝对上限），由 tech-lead + 架构师在 M3 出口定 —— **未测之前不写门槛值**。
-## 已测（2026-11-11，首次成对归档）
+## 已测
+
+### 2026-11-11 首次成对归档（历史，`WDListSection` 合并前）
 
 | 目标 | `.app` | 可执行文件 |
 | --- | --- | --- |
@@ -41,8 +43,16 @@ xcodebuild archive -project Examples/BaselineShellWithLibrary/BaselineShellWithL
 | **本壳**（分子） | **561,152 B** | **552,016 B** |
 | **E3-iOS-a 增量（未 Thinning）** | **475,136 B ≈ 464 KB** | **475,168 B ≈ 464 KB** |
 
-环境：Xcode 26.6 / `generic/platform=iOS` / Release 归档 / `CODE_SIGNING_ALLOWED=NO`；
-两边用同一命令与同一 derivedData 根。
+### 2026-11-12 正式测量（3 次重复；M3 出口定值）
 
-**【未验证】**：① Thinning 增量（需签名导出 thinned IPA；当前是**未 Thinning** 的归档体积差）；
-② 三次报告取 P50（M3 出口定门槛值）。
+| 目标 | `.app` | 可执行文件 |
+| --- | --- | --- |
+| `BaselineShell`（分母） | 86,016 B | 76,848 B |
+| **本壳**（分子） | **581,632 B** | **572,424 B** |
+| **E3-iOS-a 增量（未 Thinning）** | **495,616 B ≈ 484 KB** | **495,576 B** |
+
+- 3 次归档**完全相同**；原始数据 = `iOS/.build/size/measurements.tsv`；
+- **门槛 = P50 × 1.10 = 545,178 B（≈532 KB）**，按**增量**表达；详见 `iOS/docs/U09-SIZE-BASELINE.md` §6；
+- 环境：Xcode 26.6 / `generic/platform=iOS` / Release 归档 / `CODE_SIGNING_ALLOWED=NO`；与分母同命令、同 derivedData 根。
+
+**【未验证】**：Thinning 增量（需签名导出 thinned IPA；当前门槛是**未 Thinning** 口径，M6 发布前层补）。

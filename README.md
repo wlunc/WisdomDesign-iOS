@@ -50,7 +50,7 @@ node tools/token-build/build.js
 门禁一律 `xcodebuild` + 模拟器；**host 侧的 SwiftPM 命令不作门禁**（本包只声明 iOS 平台，host 编译必然失败）。
 
 ```bash
-Scripts/ci.sh pr        # 每次提交必过：PR-0 host 规则/格式 → PR-1 模拟器编译 + 单测 → PR-2 API 冻结 → 覆盖率
+Scripts/ci.sh pr        # 每次提交必过：PR-0 host 规则/格式 → PR-1 模拟器编译 + 单测 → PR-2 API 冻结 → 覆盖率门槛（Foundation/** ≥ 80%）
 Scripts/ci.sh doctor    # 只做环境自检（工具链 / scheme / destination），不编译
 Scripts/ci.sh nightly   # 每批强制：设备编译 + 六态快照（六态套件是 M1 交付物，M1 前会以退出码 3 明确失败）
 Scripts/ci.sh measure   # 过程成本测量（分阶段计时；**未测不写预算**）
@@ -74,6 +74,7 @@ Scripts/ci.sh measure   # 过程成本测量（分阶段计时；**未测不写�
 
 - `Scripts/ci.sh pr`：**首次全绿**（2026-10-06；Xcode 26.6 + iOS 26.5 模拟器）。
 - `Scripts/ci.sh pr`：**2026-11-10 复核全绿**（M2 两件补齐六类断言后；`passed=106 failed=0`、符号 641 零 diff、`WisdomUI` 覆盖率 **61.06%**、warm 21.30 s——**n=1 复核值，不替换下表的三态预算**）。
+- `Scripts/ci.sh pr`：**2026-11-12 M3 复核全绿**（`passed=113 failed=0`、符号 **661** 零 diff、`Foundation/**` **97.69%（593/607）≥ 80% 硬门槛**、warm 23.47 s——n=1，含新增快照目标编译）。
 
 **门禁预算（实测，2026-10-07；`Scripts/ci.sh measure 3 --states=warm,clean,cold`，每态 n=3 取中位数；单位 = 秒）**：
 
@@ -89,9 +90,22 @@ Scripts/ci.sh measure   # 过程成本测量（分阶段计时；**未测不写�
 口径：**warm** = 复用现有缓存；**clean** = 每轮删 DerivedData；**cold** = 连 SwiftPM manifest 缓存与 module-cache 一起删。
 cold 的 PR-2 那 45 s 是 `swift Scripts/canonicalize-api.swift` 的**宿主模块缓存被清后重编译**（每轮都付），不是 API 逻辑慢。
 原始数据：`.build/perf/ci-measure-20261007.json`。**测法变了要重测**（改 `ci.sh` 的 PR 阶段、换 Xcode 大版本、换金标设备）。
-- **覆盖率**：最近一次门禁 `WisdomUI` **52.19%**（2026-11-10；11 件组件 67.3–100%（`WDButton` 67.3%、`WDListRow` 69.4%、`WDTextField` 72.2%，其余 81–100%）；**`Foundation/**` 97.69%**（M3 的 80% 门槛已预达标；仅 `WDAnnouncement` 58.3%）、`Foundation/**` 67.28%，其余组件未开工）；M3 起 `Foundation/**` ≥ 80% 才转门槛（排除 `generated/`、组件 `+Previews` 不参与该门槛）。
-- `Scripts/ci.sh nightly`：前置物已齐；**3 日已齐**（2026-11-10/11/12；11-12 首跑因 `launch-count` 的 near-threshold 告警偶发红，同代码复跑 3/3 绿 + 夹具窄例外；**07:49 最终复跑绿**）；**M2 已判定通过（ios-lead 签字 2026-11-12）**；详见 `docs/M2-EXIT-REPORT.md`。
+- **覆盖率门槛（M3 起生效）**：最近一次门禁（2026-11-12）`WisdomUI` **60.99%**、**`Foundation/**` 97.69%（593/607）** ⇒ **PR 的覆盖率阶段已由「只打印」转为硬门槛**（`Scripts/ci.sh pr`：`Foundation/**` ≥ 80%，排除 `generated/`；组件的 `+Previews` 不计入）。组件级数字**只报不拦**，不设门槛。
+- `Scripts/ci.sh nightly`：M2 的 **3 日已齐**（2026-11-10/11/12；11-12 首跑因 `launch-count` 的 near-threshold 告警偶发红，同代码复跑 3/3 绿 + 夹具窄例外），**M2 已判定通过（ios-lead 签字 2026-11-12）**，详见 `docs/M2-EXIT-REPORT.md`。
+- `Scripts/ci.sh nightly`（M3）：**第 1/3 日绿（2026-11-12）**——设备编译 2.33 s + **17 快照测试 / 136 基线** + demo 四类目审计 64.6 s（3 条 UITest 全过，`AUDIT-ISSUE=0`）；第 2/3 日（11-13）、第 3/3 日（11-14）跑完后才判定 M3 出口。
 - `.github/workflows/ci.yml`：**【未验证】** 本仓尚无一次 GitHub Actions 实跑（macOS 26 镜像标签与自带 Xcode 版本属外部事实）。
+
+### 归档体积门槛（E3-iOS-a，M3 起）
+
+| 项 | 值 |
+| --- | --- |
+| 指标 | 同构消费方 `BaselineShellWithLibrary` − `BaselineShell` 的 `.app` 归档增量（**未 Thinning**） |
+| P50（2026-11-12，3 次重复） | **495,616 B（≈484 KB）** |
+| **门槛** | **P50 × 1.10 = 545,178 B（≈532 KB）** |
+| 现状 | **只报不拦**；M4 起接入发布前层断言 |
+
+命令与原始数据见 [docs/U09-SIZE-BASELINE.md](docs/U09-SIZE-BASELINE.md) §6。
+Thinning 增量仍为【未验证】，M6 发布前层补测；口径变更须在 CHANGELOG 说明，不得静默替换。
 
 贡献流程（提交纪律、评审归属、不能自行决定的事）见 [CONTRIBUTING.md](CONTRIBUTING.md)；PR 自检清单见 [.github/pull_request_template.md](.github/pull_request_template.md)。
 
@@ -105,6 +119,6 @@ cold 的 PR-2 那 45 s 是 `swift Scripts/canonicalize-api.swift` 的**宿主模
 
 ### 快速查看组件（三条路，按上手速度）
 
-1. **demo app（推荐：可交互 + 可审计）**：`open Examples/WisdomUIDemo/WisdomUIDemo.xcodeproj`，选 `WisdomUIDemo` scheme 跑模拟器；顶部分段控件切「主题 / 组件」，「组件」页是 M2 11 件的审计视口（也是 nightly 无障碍审计的输入）。
-2. **快照画廊（不用 Xcode）**：`Scripts/preview-components.sh` —— 从 `Tests/WisdomUISnapshotTests/Baselines/` 生成 `.build/component-gallery.html` 并在浏览器打开（11 件 × 8 态）。
+1. **demo app（推荐：可交互 + 可审计）**：`open Examples/WisdomUIDemo/WisdomUIDemo.xcodeproj`，选 `WisdomUIDemo` scheme 跑模拟器；组件目录按用途分组，「组件」页是 M2/M3 **12 件**的审计视口（也是 nightly 无障碍审计的输入）。
+2. **快照画廊（不用 Xcode）**：`Scripts/preview-components.sh` —— 从 `Tests/WisdomUISnapshotTests/Baselines/` 生成 `.build/component-gallery.html` 并在浏览器打开（12 件 × 8 态；`WDListSection` 为 4 变体，共 136 张基线）。
 3. **Xcode SwiftUI 预览**：打开 `Package.swift` 后在组件文件的 `#Preview` 里看；**需要宿主 app**（本仓用 demo），且 release 不编译预览。

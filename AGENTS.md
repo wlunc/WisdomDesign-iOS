@@ -194,7 +194,7 @@ xcodebuild test-without-building -scheme "$WD_SCHEME" -destination "$WD_SIM_ID" 
 # ③ API 冻结（复用上面的 DerivedData，不额外编译）
 Scripts/dump-api.sh && git diff --exit-code -- api/WisdomUI.api.json
 
-# ④ 覆盖率报告（只打印不拦，M3 前）
+# ④ 覆盖率门槛（Foundation/** ≥ 80%，排除 generated/；M3 起转门槛）
 mkdir -p .build/perf && xcrun xccov view --report --json .build/dd/pr.xcresult > .build/perf/coverage.json
 ```
 
@@ -303,7 +303,7 @@ xcrun swift-format lint --strict --parallel $(git ls-files '*.swift' | grep -vE 
 | U-06 | 快照渲染器/金标设备矩阵、demo 无障碍审计（nightly 项） | 两端 + tech-lead | M1 前 | nightly 门禁可用性 |
 | U-07 | 三枚举（`WDCardStyle`/`WDToastVariant`/`WDBannerVariant`）与 `WDCheckbox.isChecked` 改名的 **CI 级编译验证** | ios-dev | M0/M2 交界 | M2 首批签名冻结 |
 | U-08 | SPM `Package.resolved` pin 后"移动 tag"的失败模式（政策无条件成立，失败模式待实测） | ios-lead | M6 发布前 | 发布纪律的自证 |
-| U-09 | **归档体积增量与体积门槛值**（`docs/SPEC.md` 的 E3-iOS-a/b；M3 出口"体积门槛值定"目前只是待定项） | ios-lead | **M3 出口** | 发布前层的体积断言（`xcodebuild archive` + Thinning 增量） |
+| U-09 | **归档体积增量与体积门槛值**（`docs/SPEC.md` 的 E3-iOS-a/b） | ios-lead | **M3 出口** | 已定值（2026-11-12）：同构消费方增量 P50 = **495,616 B**、门槛 = **545,178 B（≈532 KB）**（P50 × 1.10，按增量）；Thinning 增量仍【未验证】，M6 发布前层补 |
 
 **§7 的取值纪律（t60·F-01 ②）**：设计值未到位时，**按 §6.1 的默认执行项冻结，不得自定值**；表里没有的项 = 尚未给值，**不得**用"实现方便"的值顶上。
 
