@@ -1,7 +1,7 @@
 # M2 签字包 —— 出口判定 + M1/M2 签字请求 + M3 冻结会议程
 
 > 用途：把"签字前要看的证据、要回的话、M3 开工要拍板的事"一次备好。
-> 时点：**2026-11-11 晚**（nightly 第 2/3 日已绿）。**签字动作在 2026-11-12 第 3 日 nightly 绿之后执行**。
+> 时点：**2026-11-11 晚**（nightly 第 2/3 日已绿）。**已于 2026-11-12 签字：M2 判定通过、M1 补签通过**（记录见两份出口报告的判定记录节）。
 > 判定人：ios-lead（M2）+ ios-lead（M1 补签）｜参加 M3 冻结会：ios-lead（主持）、架构师、设计、tech-lead。
 > 关联：[`M2-EXIT-REPORT.md`](M2-EXIT-REPORT.md)、[`M1-EXIT-REPORT.md`](M1-EXIT-REPORT.md)、
 > [`CONTRACTS-CONFIRMATION-REQUEST.md`](CONTRACTS-CONFIRMATION-REQUEST.md) §5、[`M3-PREP-LISTSECTION.md`](M3-PREP-LISTSECTION.md)、

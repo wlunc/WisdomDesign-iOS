@@ -876,7 +876,7 @@ extension View {
 **兼容性规则（理由按 I24f 改写）**：
 1. **追加带默认值的公开 `init` 参数 = 源码兼容，但破坏符号快照连续性** ⇒ 需要一次**显式基线更新** + CHANGELOG 记录；**改变已有参数的类型/标签 = 源级 breaking**；
 2. 新增枚举 case = 源级 breaking（两端一致，API-4）：minor 发布 + CHANGELOG Breaking 段 + 迁移片段；改名/删除 = major；
-3. **默认值变化不改 ABI、不改符号快照** ⇒ 只能靠 `contracts/*.yaml` 断言发现（API-5）；
+3. **默认值变化不改 ABI**；**本仓会进符号快照**（canonicalizer 的 `decl` 含默认值，如 `size: WDButtonSize = .md`）⇒ 基线 diff 可检出；跨端语义仍以 `contracts/*.yaml` 断言为唯一真源（API-5）；
 4. 生成常量增删：新增 = minor；删除 = 源级 breaking；
 5. 每处语义变更在 `wisdomdesign/docs/versions.md` 记一行。
 
@@ -1189,7 +1189,7 @@ extension View {
 | **F29** | "关闭意图"回调可达性 | 只能交付"点了关闭按钮"（`onCloseButtonTap`）与"系统已完成关闭"（`onDismiss`） | `onDismissRequest` 可交付**意图** | "可见性唯一真源在调用方" + **"关闭后焦点归还触发元素"**（写法与验收见 §3.6 的 `.accessibilityFocused($focus, equals: triggerID)`） |
 | **F30** | 动效降级入口 | `accessibilityReduceMotion`（`wdAnimation` 内归一） | `MotionDurationScale` | 降级的**行为**四类一致（§3.5）；入口自由 |
 | **F31** | 时长/弹簧数值类型 | `Double`（秒） | `Int`（毫秒） | 令牌真源以毫秒计、两端换算；**禁止把换算系数写进组件** |
-| **F32** | 默认参数与 ABI 兼容判定 | 默认值**不进**符号快照 ⇒ 靠契约断言（API-5） | Kotlin `$default` 合成方法进 ABI（加参数也是 breaking） | 语义一致：默认值变化 = 语义变更 + CHANGELOG；判定工具自由 |
+| **F32** | 默认参数与 ABI 兼容判定 | 默认值**在本仓进**符号快照（canonicalizer 的 `decl` 含默认值）⇒ 基线可检出；契约断言仍是唯一真源（API-5） | Kotlin `$default` 合成方法进 ABI（加参数也是 breaking） | 语义一致：默认值变化 = 语义变更 + CHANGELOG；判定工具自由 |
 | **F33** | 类型构造能力与可见性 | 生成物构造器 `internal`（`WDTextStyle`） | 生成类 `internal constructor`；**`WDGradientSpec` 例外保留公开构造器**；手写类同 | 消费方不得构造令牌值 |
 | **F34** | 容器语义近似 | 无容器 trait ⇒ `children:.contain` + `.isSelected` 近似 | `Role` 无容器角色 ⇒ `isTraversalGroup` + `collectionInfo` | 只追求"读屏行为一致"，不与 ARIA 一一对应 |
 | **F35** | 软键盘避让责任 | 库不做；调用方 `.scrollDismissesKeyboard`；`WDBottomSheet` 例外 | `ime.union` 白名单 | **"库不做键盘避让"进 acceptance**；浮层例外两端各自登记 |
