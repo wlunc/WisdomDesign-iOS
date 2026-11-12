@@ -93,6 +93,30 @@ final class WisdomUIDemoUITests: XCTestCase {
     XCTAssertEqual(configChip.label, "柔色", "切换变体后配置摘要必须更新")
   }
 
+  /// ActionSheet：从目录进入详情、打开、点取消关闭；截图附在 result bundle 里供人工核对透明背景。
+  func testActionSheetPresentsAndDismisses() {
+    let app = XCUIApplication()
+    app.launch()
+
+    let row = app.buttons["component-row-WDActionSheet"]
+    XCTAssertTrue(row.waitForExistence(timeout: 20), "WDActionSheet 行未出现")
+    row.tap()
+
+    let trigger = app.buttons["打开操作表"]
+    XCTAssertTrue(trigger.waitForExistence(timeout: 20), "打开操作表按钮未出现")
+    trigger.tap()
+
+    let cancel = app.buttons["取消"]
+    XCTAssertTrue(cancel.waitForExistence(timeout: 20), "ActionSheet 未出现")
+    let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+    attachment.name = "actionsheet-presented"
+    attachment.lifetime = .keepAlways
+    add(attachment)
+
+    cancel.tap()
+    XCTAssertFalse(cancel.waitForExistence(timeout: 2), "点取消后 ActionSheet 应关闭")
+  }
+
   /// 单个页签的严格审计。**只放行两类别有理由的窄例外**（其余一律失败）：
   ///   · 固定字号组件（头像首字 12pt / 徽标 11pt）的 dynamicType —— 设计例外，登记 M2 出口报告 §4；
   ///   · 列表行标题/副标题的 textClipped —— 设计 18 §7 要求单行截断，审计按 `lineLimit(1)` 判"可能截断"。

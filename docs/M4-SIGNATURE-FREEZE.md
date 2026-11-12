@@ -236,3 +236,4 @@ public struct WDProgressRing: View {
 - **契约补充**：`../wisdomdesign/contracts/contrast.json`（light/dark 34 对 + 玻璃禁止对）。
 - **ActionSheet 设计对齐（2026-11-12）**：标题入列表卡片、行左对齐 + 可选 20pt 图标、取消为独立 18 圆角卡片；
   `WDActionSheetItem` 增加 `icon: WDIconName? = nil`（设计 27 §4 的「带图标」变体）。
+  呈现改为 `fullScreenCover` + 自绘遮罩（透明背景、无系统 sheet 边框、点遮罩 = 取消）。

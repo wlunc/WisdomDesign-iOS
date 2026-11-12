@@ -203,36 +203,6 @@ struct WDActionSheetPanel: View {
     items.first { $0.role == .cancel }
   }
 
-  /// sheet 高度估算：面板内距 + 列表卡片（标题/行/边框）+ 取消卡片。
-  static func estimatedHeight(
-    title: Text?,
-    message: Text?,
-    items: [WDActionSheetItem],
-    dynamicTypeSize: DynamicTypeSize
-  ) -> CGFloat {
-    var height = WDSpacing.s5 + WDSpacing.s3 + WDSpacing.s1
-    if title != nil || message != nil {
-      height += WDSpacing.s4 + WDSpacing.s3 + 1
-      if title != nil {
-        height += WDFontMetrics.lineBoxHeight(
-          for: WDType.caption1, dynamicTypeSize: dynamicTypeSize)
-      }
-      if title != nil && message != nil {
-        height += WDSpacing.s1
-      }
-      if message != nil {
-        height += WDFontMetrics.lineBoxHeight(
-          for: WDType.caption1, dynamicTypeSize: dynamicTypeSize)
-      }
-    }
-    let rows = regularItems(from: items).count
-    height += CGFloat(rows) * WDSize.controlMd
-    height += CGFloat(max(0, rows - 1))
-    if cancelItem(from: items) != nil {
-      height += WDSpacing.s3 + WDSpacing.s10
-    }
-    return height
-  }
 }
 
 private struct WDActionSheetModifier: ViewModifier {
@@ -243,38 +213,47 @@ private struct WDActionSheetModifier: ViewModifier {
   let onSelect: (WDActionSheetItem.ID) -> Void
   let onCancel: (() -> Void)?
 
-  @Environment(\.wdColors) private var colors
-  @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+  @Environment(\.wdAppearance) private var appearance
+
+  private static let scrimOpacityLight: CGFloat = 0.28  // wd-structure-check:disable R7 — 设计 27
+  private static let scrimOpacityDark: CGFloat = 0.50  // wd-structure-check:disable R7 — 设计 27
 
   func body(content anchor: Content) -> some View {
-    anchor.sheet(isPresented: $isPresented) {
-      WDActionSheetPanel(
-        title: title,
-        message: message,
-        items: items,
-        onSelect: { id in
-          isPresented = false
-          onSelect(id)
-        },
-        onCancel: {
-          isPresented = false
-          onCancel?()
-        }
-      )
-      .presentationDetents([.height(contentHeight)])
-      .presentationDragIndicator(.hidden)
-      .presentationCornerRadius(WDRadius.xxl)
+    anchor.fullScreenCover(isPresented: $isPresented) {
+      ZStack(alignment: .bottom) {
+        scrim
+        WDActionSheetPanel(
+          title: title,
+          message: message,
+          items: items,
+          onSelect: { id in
+            isPresented = false
+            onSelect(id)
+          },
+          onCancel: {
+            isPresented = false
+            onCancel?()
+          }
+        )
+        .frame(maxWidth: .infinity)
+        .accessibilityAddTraits(.isModal)
+        .onAppear { WDA11yFocus.screenChanged() }
+      }
       .presentationBackground(.clear)
     }
   }
 
-  private var contentHeight: CGFloat {
-    WDActionSheetPanel.estimatedHeight(
-      title: title,
-      message: message,
-      items: items,
-      dynamicTypeSize: dynamicTypeSize
+  /// 半透明遮罩；点击等价于取消（设计 27 §8）。
+  private var scrim: some View {
+    Color.black.opacity(
+      appearance.colorScheme == .dark ? Self.scrimOpacityDark : Self.scrimOpacityLight
     )
+    .ignoresSafeArea()
+    .contentShape(Rectangle())
+    .onTapGesture {
+      isPresented = false
+      onCancel?()
+    }
   }
 }
 
