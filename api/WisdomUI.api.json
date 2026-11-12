@@ -66,6 +66,24 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "View.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "View.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "View.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "View.wdColors(_:)"
@@ -102,6 +120,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "View.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
       "kind" : "swift.method",
       "path" : "View.wdTheme(_:)"
@@ -114,6 +138,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "View.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
+    },
+    {
+      "access" : "public",
       "decl" : "struct WDA11yFocusID",
       "kind" : "swift.struct",
       "path" : "WDA11yFocusID"
@@ -123,6 +153,114 @@
       "decl" : "let rawValue: String",
       "kind" : "swift.property",
       "path" : "WDA11yFocusID.rawValue"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDActionSheetItem",
+      "kind" : "swift.struct",
+      "path" : "WDActionSheetItem"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum Role",
+      "kind" : "swift.enum",
+      "path" : "WDActionSheetItem.Role"
+    },
+    {
+      "access" : "public",
+      "decl" : "case cancel",
+      "kind" : "swift.enum.case",
+      "path" : "WDActionSheetItem.Role.cancel"
+    },
+    {
+      "access" : "public",
+      "decl" : "case `default`",
+      "kind" : "swift.enum.case",
+      "path" : "WDActionSheetItem.Role.default"
+    },
+    {
+      "access" : "public",
+      "decl" : "case destructive",
+      "kind" : "swift.enum.case",
+      "path" : "WDActionSheetItem.Role.destructive"
+    },
+    {
+      "access" : "public",
+      "decl" : "let id: String",
+      "kind" : "swift.property",
+      "path" : "WDActionSheetItem.id"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(id: String, label: Text, role: WDActionSheetItem.Role = .default)",
+      "kind" : "swift.init",
+      "path" : "WDActionSheetItem.init(id:label:role:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let label: Text",
+      "kind" : "swift.property",
+      "path" : "WDActionSheetItem.label"
+    },
+    {
+      "access" : "public",
+      "decl" : "let role: WDActionSheetItem.Role",
+      "kind" : "swift.property",
+      "path" : "WDActionSheetItem.role"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDAlertAction",
+      "kind" : "swift.struct",
+      "path" : "WDAlertAction"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum Role",
+      "kind" : "swift.enum",
+      "path" : "WDAlertAction.Role"
+    },
+    {
+      "access" : "public",
+      "decl" : "case cancel",
+      "kind" : "swift.enum.case",
+      "path" : "WDAlertAction.Role.cancel"
+    },
+    {
+      "access" : "public",
+      "decl" : "case `default`",
+      "kind" : "swift.enum.case",
+      "path" : "WDAlertAction.Role.default"
+    },
+    {
+      "access" : "public",
+      "decl" : "case destructive",
+      "kind" : "swift.enum.case",
+      "path" : "WDAlertAction.Role.destructive"
+    },
+    {
+      "access" : "public",
+      "decl" : "let action: () -> Void",
+      "kind" : "swift.property",
+      "path" : "WDAlertAction.action"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(label: Text, role: WDAlertAction.Role = .default, action: @escaping () -> Void)",
+      "kind" : "swift.init",
+      "path" : "WDAlertAction.init(label:role:action:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let label: Text",
+      "kind" : "swift.property",
+      "path" : "WDAlertAction.label"
+    },
+    {
+      "access" : "public",
+      "decl" : "let role: WDAlertAction.Role",
+      "kind" : "swift.property",
+      "path" : "WDAlertAction.role"
     },
     {
       "access" : "public",
@@ -234,6 +372,24 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDAvatar.wdColors(_:)"
@@ -270,6 +426,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
       "kind" : "swift.method",
       "path" : "WDAvatar.wdTheme(_:)"
@@ -279,6 +441,12 @@
       "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
       "kind" : "swift.method",
       "path" : "WDAvatar.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
     },
     {
       "access" : "public",
@@ -318,6 +486,24 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDBadge.wdColors(_:)"
@@ -354,6 +540,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
       "kind" : "swift.method",
       "path" : "WDBadge.wdTheme(_:)"
@@ -366,6 +558,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
+    },
+    {
+      "access" : "public",
       "decl" : "struct WDBadgeValue",
       "kind" : "swift.struct",
       "path" : "WDBadgeValue"
@@ -375,6 +573,186 @@
       "decl" : "init(label: Text)",
       "kind" : "swift.init",
       "path" : "WDBadgeValue.init(label:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor struct WDBanner",
+      "kind" : "swift.struct",
+      "path" : "WDBanner"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDBanner.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(isVisible: Binding<Bool>, variant: WDBannerVariant = .info, message: Text, action: WDBannerAction? = nil, dismissAccessibilityLabel: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDBanner.init(isVisible:variant:message:action:dismissAccessibilityLabel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDBannerAction",
+      "kind" : "swift.struct",
+      "path" : "WDBannerAction"
+    },
+    {
+      "access" : "public",
+      "decl" : "let action: () -> Void",
+      "kind" : "swift.property",
+      "path" : "WDBannerAction.action"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(label: Text, action: @escaping () -> Void)",
+      "kind" : "swift.init",
+      "path" : "WDBannerAction.init(label:action:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let label: Text",
+      "kind" : "swift.property",
+      "path" : "WDBannerAction.label"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDBannerVariant",
+      "kind" : "swift.enum",
+      "path" : "WDBannerVariant"
+    },
+    {
+      "access" : "public",
+      "decl" : "case danger",
+      "kind" : "swift.enum.case",
+      "path" : "WDBannerVariant.danger"
+    },
+    {
+      "access" : "public",
+      "decl" : "case info",
+      "kind" : "swift.enum.case",
+      "path" : "WDBannerVariant.info"
+    },
+    {
+      "access" : "public",
+      "decl" : "case warning",
+      "kind" : "swift.enum.case",
+      "path" : "WDBannerVariant.warning"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDBottomSheetDetent",
+      "kind" : "swift.enum",
+      "path" : "WDBottomSheetDetent"
+    },
+    {
+      "access" : "public",
+      "decl" : "case half",
+      "kind" : "swift.enum.case",
+      "path" : "WDBottomSheetDetent.half"
+    },
+    {
+      "access" : "public",
+      "decl" : "case large",
+      "kind" : "swift.enum.case",
+      "path" : "WDBottomSheetDetent.large"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDBottomSheetDetents",
+      "kind" : "swift.enum",
+      "path" : "WDBottomSheetDetents"
+    },
+    {
+      "access" : "public",
+      "decl" : "case all",
+      "kind" : "swift.enum.case",
+      "path" : "WDBottomSheetDetents.all"
+    },
+    {
+      "access" : "public",
+      "decl" : "case fixed(WDBottomSheetDetent)",
+      "kind" : "swift.enum.case",
+      "path" : "WDBottomSheetDetents.fixed(_:)"
     },
     {
       "access" : "public",
@@ -405,6 +783,24 @@
       "decl" : "@MainActor init(verbatim text: String, variant: WDButtonVariant = .filled, size: WDButtonSize = .md, isLoading: Bool = false, loadingAccessibilityText: Text? = nil, leadingIcon: WDIconName? = nil, trailingIcon: WDIconName? = nil, action: @escaping () -> Void)",
       "kind" : "swift.init",
       "path" : "WDButton.init(verbatim:variant:size:isLoading:loadingAccessibilityText:leadingIcon:trailingIcon:action:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
     },
     {
       "access" : "public",
@@ -444,6 +840,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
       "kind" : "swift.method",
       "path" : "WDButton.wdTheme(_:)"
@@ -453,6 +855,12 @@
       "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
       "kind" : "swift.method",
       "path" : "WDButton.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
     },
     {
       "access" : "public",
@@ -570,6 +978,24 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDCard.wdColors(_:)"
@@ -606,6 +1032,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
       "kind" : "swift.method",
       "path" : "WDCard.wdTheme(_:)"
@@ -615,6 +1047,12 @@
       "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
       "kind" : "swift.method",
       "path" : "WDCard.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
     },
     {
       "access" : "public",
@@ -660,6 +1098,24 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDCheckbox.wdColors(_:)"
@@ -696,6 +1152,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
       "kind" : "swift.method",
       "path" : "WDCheckbox.wdTheme(_:)"
@@ -705,6 +1167,12 @@
       "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
       "kind" : "swift.method",
       "path" : "WDCheckbox.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
     },
     {
       "access" : "public",
@@ -1794,6 +2262,24 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDDivider.wdColors(_:)"
@@ -1830,6 +2316,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
       "kind" : "swift.method",
       "path" : "WDDivider.wdTheme(_:)"
@@ -1839,6 +2331,12 @@
       "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
       "kind" : "swift.method",
       "path" : "WDDivider.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
     },
     {
       "access" : "public",
@@ -1953,6 +2451,132 @@
       "decl" : "static let e3: [WDShadowLayer]",
       "kind" : "swift.type.property",
       "path" : "WDElevation.e3"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor struct WDEmptyState",
+      "kind" : "swift.struct",
+      "path" : "WDEmptyState"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDEmptyState.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(icon: WDIconName? = nil, title: Text, message: Text? = nil, action: WDEmptyStateAction? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDEmptyState.init(icon:title:message:action:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDEmptyStateAction",
+      "kind" : "swift.struct",
+      "path" : "WDEmptyStateAction"
+    },
+    {
+      "access" : "public",
+      "decl" : "let action: () -> Void",
+      "kind" : "swift.property",
+      "path" : "WDEmptyStateAction.action"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(label: Text, isLoading: Bool = false, action: @escaping () -> Void)",
+      "kind" : "swift.init",
+      "path" : "WDEmptyStateAction.init(label:isLoading:action:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let isLoading: Bool",
+      "kind" : "swift.property",
+      "path" : "WDEmptyStateAction.isLoading"
+    },
+    {
+      "access" : "public",
+      "decl" : "let label: Text",
+      "kind" : "swift.property",
+      "path" : "WDEmptyStateAction.label"
     },
     {
       "access" : "public",
@@ -2178,6 +2802,24 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDIcon.wdColors(_:)"
@@ -2214,6 +2856,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
       "kind" : "swift.method",
       "path" : "WDIcon.wdTheme(_:)"
@@ -2223,6 +2871,12 @@
       "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
       "kind" : "swift.method",
       "path" : "WDIcon.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
     },
     {
       "access" : "public",
@@ -2241,6 +2895,24 @@
       "decl" : "@MainActor init(icon: WDIconName, accessibilityLabel: Text, variant: WDIconButtonVariant = .plain, size: WDButtonSize = .md, isLoading: Bool = false, action: @escaping () -> Void)",
       "kind" : "swift.init",
       "path" : "WDIconButton.init(icon:accessibilityLabel:variant:size:isLoading:action:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
     },
     {
       "access" : "public",
@@ -2280,6 +2952,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
       "kind" : "swift.method",
       "path" : "WDIconButton.wdTheme(_:)"
@@ -2289,6 +2967,12 @@
       "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
       "kind" : "swift.method",
       "path" : "WDIconButton.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
     },
     {
       "access" : "public",
@@ -2664,6 +3348,24 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDListRow.wdColors(_:)"
@@ -2700,6 +3402,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
       "kind" : "swift.method",
       "path" : "WDListRow.wdTheme(_:)"
@@ -2709,6 +3417,12 @@
       "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
       "kind" : "swift.method",
       "path" : "WDListRow.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
     },
     {
       "access" : "public",
@@ -2826,6 +3540,24 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDListSection.wdColors(_:)"
@@ -2862,6 +3594,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
       "kind" : "swift.method",
       "path" : "WDListSection.wdTheme(_:)"
@@ -2871,6 +3609,12 @@
       "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
       "kind" : "swift.method",
       "path" : "WDListSection.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
     },
     {
       "access" : "public",
@@ -2991,6 +3735,222 @@
       "decl" : "static let snappy: Animation",
       "kind" : "swift.type.property",
       "path" : "WDMotion.Spring.snappy"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor struct WDProgressBar",
+      "kind" : "swift.struct",
+      "path" : "WDProgressBar"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDProgressBar.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(label: Text? = nil, valueText: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDProgressBar.init(label:valueText:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(value: Double, label: Text? = nil, valueText: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDProgressBar.init(value:label:valueText:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor struct WDProgressRing",
+      "kind" : "swift.struct",
+      "path" : "WDProgressRing"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDProgressRing.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(value: Double, size: WDProgressRingSize = .standard, label: Text? = nil, valueText: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDProgressRing.init(value:size:label:valueText:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDProgressRingSize",
+      "kind" : "swift.enum",
+      "path" : "WDProgressRingSize"
+    },
+    {
+      "access" : "public",
+      "decl" : "case compact",
+      "kind" : "swift.enum.case",
+      "path" : "WDProgressRingSize.compact"
+    },
+    {
+      "access" : "public",
+      "decl" : "case standard",
+      "kind" : "swift.enum.case",
+      "path" : "WDProgressRingSize.standard"
     },
     {
       "access" : "public",
@@ -3306,6 +4266,126 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor struct WDSkeleton",
+      "kind" : "swift.struct",
+      "path" : "WDSkeleton"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDSkeleton.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(variant: WDSkeletonVariant = .text, lineCount: Int = 3, accessibilityLabel: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDSkeleton.init(variant:lineCount:accessibilityLabel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDSkeletonVariant",
+      "kind" : "swift.enum",
+      "path" : "WDSkeletonVariant"
+    },
+    {
+      "access" : "public",
+      "decl" : "case card",
+      "kind" : "swift.enum.case",
+      "path" : "WDSkeletonVariant.card"
+    },
+    {
+      "access" : "public",
+      "decl" : "case list",
+      "kind" : "swift.enum.case",
+      "path" : "WDSkeletonVariant.list"
+    },
+    {
+      "access" : "public",
+      "decl" : "case text",
+      "kind" : "swift.enum.case",
+      "path" : "WDSkeletonVariant.text"
+    },
+    {
+      "access" : "public",
       "decl" : "enum WDSpacing",
       "kind" : "swift.enum",
       "path" : "WDSpacing"
@@ -3426,6 +4506,24 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDSwitch.wdColors(_:)"
@@ -3462,6 +4560,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
       "kind" : "swift.method",
       "path" : "WDSwitch.wdTheme(_:)"
@@ -3471,6 +4575,12 @@
       "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
       "kind" : "swift.method",
       "path" : "WDSwitch.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
     },
     {
       "access" : "public",
@@ -3510,6 +4620,24 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDTextField.wdColors(_:)"
@@ -3546,6 +4674,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
       "kind" : "swift.method",
       "path" : "WDTextField.wdTheme(_:)"
@@ -3555,6 +4689,12 @@
       "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
       "kind" : "swift.method",
       "path" : "WDTextField.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
     },
     {
       "access" : "public",
@@ -3855,6 +4995,60 @@
       "decl" : "let scheme: String",
       "kind" : "swift.property",
       "path" : "WDTheme.scheme"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDToastAction",
+      "kind" : "swift.struct",
+      "path" : "WDToastAction"
+    },
+    {
+      "access" : "public",
+      "decl" : "let action: () -> Void",
+      "kind" : "swift.property",
+      "path" : "WDToastAction.action"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(label: Text, action: @escaping () -> Void)",
+      "kind" : "swift.init",
+      "path" : "WDToastAction.init(label:action:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let label: Text",
+      "kind" : "swift.property",
+      "path" : "WDToastAction.label"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDToastVariant",
+      "kind" : "swift.enum",
+      "path" : "WDToastVariant"
+    },
+    {
+      "access" : "public",
+      "decl" : "case danger",
+      "kind" : "swift.enum.case",
+      "path" : "WDToastVariant.danger"
+    },
+    {
+      "access" : "public",
+      "decl" : "case neutral",
+      "kind" : "swift.enum.case",
+      "path" : "WDToastVariant.neutral"
+    },
+    {
+      "access" : "public",
+      "decl" : "case success",
+      "kind" : "swift.enum.case",
+      "path" : "WDToastVariant.success"
+    },
+    {
+      "access" : "public",
+      "decl" : "case warning",
+      "kind" : "swift.enum.case",
+      "path" : "WDToastVariant.warning"
     },
     {
       "access" : "public",
