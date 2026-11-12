@@ -2,7 +2,7 @@
 
 > **这份文件回答三件事**：仓库里的文档**在哪**、**怎么读**、**哪些还没验证**。
 > 它**不是**开发计划本身——计划在 [`DEV-PLAN.md`](DEV-PLAN.md)，规格在 [`SPEC.md`](SPEC.md)，结构在 [`ARCHITECTURE.md`](ARCHITECTURE.md)，操作手册在 [`../AGENTS.md`](../AGENTS.md)。
-> 状态快照（**2026-11-10**）：**M0、M1 已交付并签字**（2026-11-12）；**M2 已判定通过**（2026-11-12，`M2-EXIT-REPORT.md` §7）；**M3 开工中**（`WDListSection` 草案在分支，签名 2026-11-12 确认）；契约确认已由架构师落盘 = [`CONTRACTS-CONFIRMATION-REQUEST.md`](CONTRACTS-CONFIRMATION-REQUEST.md) §5，yaml 回填 = M3 出口前；`Scripts/ci.sh pr` 复核**全绿**（106 tests / 符号 641 零 diff / 覆盖率 61.06%；`Foundation/**` 97.69%）；nightly **3 日已齐**（2026-11-10/11/12；11-12 首跑因 `launch-count` 的 near-threshold 告警偶发红、同代码复跑 3/3 绿并加夹具窄例外；**07:49 最终复跑绿**），**待 ios-lead 签字**。文档改动以 `git log` 为准。
+> 状态快照（**2026-11-10**）：**M0、M1 已交付并签字**（2026-11-12）；**M2 已判定通过**（2026-11-12，`M2-EXIT-REPORT.md` §7）；**M3 开工中**（`WDListSection` 已实现并合并，签名 2026-11-12 确认；待补 8 态快照/审计挂载/契约回填/体积门槛）；契约确认已由架构师落盘 = [`CONTRACTS-CONFIRMATION-REQUEST.md`](CONTRACTS-CONFIRMATION-REQUEST.md) §5，yaml 回填 = M3 出口前；`Scripts/ci.sh pr` 复核**全绿**（106 tests / 符号 641 零 diff / 覆盖率 61.06%；`Foundation/**` 97.69%）；nightly **3 日已齐**（2026-11-10/11/12；11-12 首跑因 `launch-count` 的 near-threshold 告警偶发红、同代码复跑 3/3 绿并加夹具窄例外；**07:49 最终复跑绿**），**待 ios-lead 签字**。文档改动以 `git log` 为准。
 
 ---
 

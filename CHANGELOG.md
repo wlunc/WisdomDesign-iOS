@@ -24,11 +24,11 @@
   规范化器丢弃 USR/绝对路径等易漂移字段）。
 - **归档体积基线** `Examples/BaselineShell/`（E3-iOS-a 的分母：同构、不引入本库）。
 - 协作文件：`CONTRIBUTING.md`、`.github/pull_request_template.md`、`.github/CODEOWNERS`。
-- **`WDListSection`（M3 草案，分支）**：数据驱动的列表分组（`items`/`selection`/`header`/
+- **`WDListSection`（M3）**：数据驱动的列表分组（`items`/`selection`/`header`/
   `headerAction`/`footer`）；空集合自动隐藏整组、末行通过 `WDListSectionRowContext.isLast`
   交给行自己关分隔线；7 条单测（空组/末行/选中/密度/页脚/动作热区）+ 2 个预览。
-  签名冻结草案 = `docs/M3-SIGNATURE-FREEZE.md`（**待 ios-lead 确认**，确认前不合并）。
-- **E3-iOS-a 同构消费方壳**（2026-11-11，分支 `feat/m3-wdlist-section`）：新增
+  签名冻结 = `docs/M3-SIGNATURE-FREEZE.md`（2026-11-12 按建议确认；7 条单测 + 2 预览）。
+- **E3-iOS-a 同构消费方壳**（2026-11-11）：新增
   `Examples/BaselineShellWithLibrary`（与 `BaselineShell` 同构、行改用 `WDListRow`）；
   首次成对归档（未 Thinning，Release）：baseline 86,016 B / 本壳 561,152 B，增量 **475,136 B ≈ 464 KB**。
 - **demo 组件目录改版**（2026-11-10）：主入口从"所有组件堆在一个页签"改为按用途分组的组件目录

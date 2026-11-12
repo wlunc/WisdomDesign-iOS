@@ -232,6 +232,8 @@ PY
 > （items 形态/selection 类型/headerAction/卡片容器/空组隐藏）、六类断言计划与风险。**签名未冻结前不得开写。**
 **入口判据**：I-2；另需 M2 出口全绿。
 **出口判据（6 条）**：① `api/WisdomUI.api.json` 入库且 `git diff --exit-code` 绿；② 命名与枚举规则内联表 §5.3 全部对齐；③ 快照与契约用例全绿；④ 覆盖率转门槛：`Foundation/**` ≥ **80%**（排除 `generated/`）；⑤ **体积门槛值**定为"P50 + 10%（或绝对上限）"并写进 `README.md`/`CHANGELOG.md`；⑥ 封板批 12 件 primitives（M2 的 11 + 本批 1）在出口报告中占位、无缺件 —— **其余 primitives 按其所在批的"批前签名冻结"执行**，20/20 primitives 完成于 M5 出口。
+>
+> **开工状态（2026-11-12）**：I-1 ✅（M2 已签字）；I-2 ✅（`docs/M3-SIGNATURE-FREEZE.md`，五问按建议确认）；`WDListSection` 已实现并合并（7 条单测 + 2 预览；PR 113 tests / 661 符号零 diff 绿）。**待补**：8 态快照（4 变体 × 8 态）、demo 审计挂载、契约 11 个 yaml 回填（不晚于 M3 出口）、体积门槛定值（U-09）、API 封板签字。
 **门禁强度**：`PR+nightly₃+发布前`。
 
 ### 2.5 M4 — 反馈与弹层（9 件）
