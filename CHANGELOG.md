@@ -17,7 +17,11 @@
   `params`（受控值取 C-15 canonical）/ `slots`（21 名词表子集或「无」）/ `default` + 枚举全量 case。
   回填 = 誊录，不改签名/默认值/槽位/枚举（设计仓提交 `feat(contracts): M2/M3 契约条目回填`）。
 - **M3 覆盖率门槛**：`Scripts/ci.sh pr` 的覆盖率阶段由「只打印」改为**硬门槛**——
-  `Foundation/**`（排除 `generated/`）**≥ 80%** 才绿；本次实测 **97.69%（593/607）**。
+  `Foundation/**`（排除 `generated/`）**≥ 80%** 才绿；本次实测 **97.73%（603/617）**。
+- **M3 结构门禁转严格（`--strict`）**：按 SPEC §1.1.2/§1.5.5，M3 起 R7/R15/R21 的 warning 转拦；
+  PR-0 改为 `check-structure.sh --strict`。清理：`WDIconButton` 三档视觉尺寸改用
+  `WDSize.controlSm/Md/Lg` 令牌；其余 10 处数值字面量（WCAG 公式、十六进制解码、DF-03 配额、
+  热区补量）与 2 处文本容器按规则**同行带理由豁免**；结果 **0 warning / 51 suppressed**。
 - **M3 归档体积门槛（E3-iOS-a）**：同构消费方与分母各归档 3 次，3 次完全相同
   （BaselineShell 86,016 B / 消费方 581,632 B）——增量 P50 = **495,616 B（≈484 KB）**，
   门槛 = `P50 × 1.10` = **545,178 B（≈532 KB）**，

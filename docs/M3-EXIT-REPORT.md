@@ -12,14 +12,17 @@
 | ① | `api/WisdomUI.api.json` 入库且 `git diff --exit-code` 绿 | PR-2：`dump-api: 与基线零 diff（symbols=661）`；SHA-256 `a3392784…`；记录 = `docs/M3-API-FREEZE.md` | ✅ |
 | ② | 命名与枚举规则内联表 §5.3 全部对齐 | 12 个契约 yaml（11 件 + `WDListSection`）回填设计仓；校验：受控值 canonical（`loading`/`text`/`on`/`checked`/`selected`/`selection`）全部命中、`slots` 全部 ⊆ 21 名词表（`WDDivider` 写「无」）、枚举 case 与 API 基线归一化集合全部相等 | ✅ |
 | ③ | 快照与契约用例全绿 | `WDListSectionSnapshotTests`：**4 变体 × 8 态 = 32 张**；全仓基线 **136 张**；nightly-1b：**17 个快照测试 / 14 suites 全绿**；组件单测 **7 条**（空组/末行/选中/密度/页脚/动作热区）；demo 目录与预览已挂载 | ✅ |
-| ④ | 覆盖率转门槛：`Foundation/**` ≥ 80%（排除 `generated/`） | `ci.sh pr` 第 4 阶段已由「只打印」改为**硬门槛**；实测 **97.69%（593/607）≥ 80%**（`WisdomUI` 总覆盖率 60.99%，只报不拦） | ✅ |
+| ④ | 覆盖率转门槛：`Foundation/**` ≥ 80%（排除 `generated/`） | `ci.sh pr` 第 4 阶段已由「只打印」改为**硬门槛**；实测 **97.73%（603/617）≥ 80%**（`WisdomUI` 总覆盖率 61.14%，只报不拦） | ✅ |
 | ⑤ | 体积门槛值定为「P50 + 10%」并写进 README/CHANGELOG | 同构消费方 3 次归档：581,632 B − 86,016 B = **495,616 B**（3 次完全相同）⇒ 门槛 = **545,178 B（≈532 KB）**，按增量表达；已写 `README.md`、`CHANGELOG.md`、`docs/U09-SIZE-BASELINE.md` §6 | ✅ |
 | ⑥ | 封板批 12 件 primitives 在报告中占位、无缺件 | 见 §5：M2 的 11 件 + `WDListSection` = **12/12 ✅**；其余 8 件 primitives 按 M4/M5 各自批前冻结 | ✅ |
 
+**封板附带（SPEC §1.1.2/§1.5.5）**：M3 起 R7/R15/R21 的 warning 转拦——PR-0 已改
+`Scripts/check-structure.sh --strict`；本次清理后 **0 warning / 51 处带理由豁免**（R7 中 3 处改用令牌）。
+
 **门禁强度**：`PR + nightly₃ + 发布前`。
 
-- **PR：✅ 全绿（2026-11-12）**——`passed=113 failed=0`、符号 661 零 diff、`Foundation/**` 97.69% 过门槛、warm **23.47 s**（n=1，最终 HEAD 复跑）。
-- **nightly：1/3 日**——**2026-11-12 绿**：设备编译 2.33 s + 17 快照测试（136 基线）23.70 s + demo 四类目审计 64.59 s；3 条 UITest 全过，`AUDIT-ISSUE=0`。
+- **PR：✅ 全绿（2026-11-12）**——`passed=113 failed=0`、符号 661 零 diff、`Foundation/**` 97.73% 过门槛、`--strict` 结构门禁 0 warning、warm **20.84 s**（n=1，最终 HEAD 复跑）。
+- **nightly：1/3 日**——**2026-11-12 绿**：设备编译 2.13 s + 17 快照测试（136 基线）27.52 s + demo 四类目审计 67.65 s；3 条 UITest 全过，`AUDIT-ISSUE=0`；整条 97.29 s。
 - **待补**：nightly 第 2/3 日（2026-11-13）、第 3/3 日（2026-11-14）。**连续 3 日未满 ⇒ 本报告不签字**。
 - **发布前层**：归档体积已测（未 Thinning）；Thinning 增量仍【未验证】（M6 发布前层），见 §4。
 
@@ -35,6 +38,7 @@
 | 契约 | 设计仓 `../wisdomdesign/contracts/`：11 件 + `WDListSection` = **12 个 yaml**（提交 `89779f7`）；params/slots/default + 枚举全量 case |
 | API 封板 | `docs/M3-API-FREEZE.md`（661 符号 / SHA-256 / 复跑命令 / 封板口径） |
 | 门槛 | 覆盖率硬门槛（`ci.sh` 第 4 阶段）；归档体积门槛（README / U09 §6） |
+| 结构门禁 | `ci.sh` PR-0 转 `check-structure.sh --strict`（SPEC §1.1.2/§1.5.5 的 M3 升级）；R7 清理：3 处改令牌、10 处带理由豁免；R21 2 处带理由豁免；结果 **0 warning / 51 suppressed** |
 
 ## 3. 门禁原始数据
 
@@ -42,23 +46,23 @@
 
 | 阶段 | 耗时 |
 | --- | --- |
-| PR-0 host 规则 + 格式 + 令牌溯源 | 1.62 s |
-| PR-1a build-for-testing（含 `WD_API_SMOKE`） | 5.05 s |
-| PR-1b test-without-building（`WisdomUITests`）+ 覆盖率采集 | 13.70 s |
-| PR-2 API 冻结 | 2.46 s |
-| 覆盖率门槛（Foundation ≥ 80%） | 0.64 s |
-| **合计** | **23.47 s**（warm，n=1） |
+| PR-0 host 规则（`--strict`）+ 格式 + 令牌溯源 | 1.63 s |
+| PR-1a build-for-testing（含 `WD_API_SMOKE`） | 2.52 s |
+| PR-1b test-without-building（`WisdomUITests`）+ 覆盖率采集 | 13.85 s |
+| PR-2 API 冻结 | 2.27 s |
+| 覆盖率门槛（Foundation ≥ 80%） | 0.56 s |
+| **合计** | **20.84 s**（warm，n=1） |
 
-测试结论：`result=Passed passed=113 failed=0 skipped=0`；覆盖率：`WisdomUI 60.99%`、`Foundation/** 97.69%（593/607）`。
+测试结论：`result=Passed passed=113 failed=0 skipped=0`；覆盖率：`WisdomUI 61.14%`、`Foundation/** 97.73%（603/617）`。结构门禁：`--strict`，0 warning / 51 处带理由豁免。
 
 ### 3.2 nightly 第 1/3 日（2026-11-12）
 
 | 阶段 | 结果 |
 | --- | --- |
-| nightly-1a 设备编译（generic/platform=iOS） | 2.33 s，绿 |
-| nightly-1b 快照（`WisdomUISnapshotTests`） | 23.70 s；**17 tests / 14 suites 全绿**（136 基线） |
-| nightly-2 demo 无障碍审计（4 类目） | 64.59 s；**3 条 UITest 全过**、`AUDIT-ISSUE=0`；已知窄例外按 M2 出口报告 §4-② 逐条点名（固定字号头像/徽标、行的单行截断） |
-| **合计** | **90.61 s** |
+| nightly-1a 设备编译（generic/platform=iOS） | 2.13 s，绿 |
+| nightly-1b 快照（`WisdomUISnapshotTests`） | 27.52 s；**17 tests / 14 suites 全绿**（136 基线） |
+| nightly-2 demo 无障碍审计（4 类目） | 67.65 s；**3 条 UITest 全过**、`AUDIT-ISSUE=0`；已知窄例外按 M2 出口报告 §4-② 逐条点名（固定字号头像/徽标、行的单行截断） |
+| **合计** | **97.29 s** |
 
 ## 4. 未验证 / 未闭合台账（**不得写成已通过**）
 

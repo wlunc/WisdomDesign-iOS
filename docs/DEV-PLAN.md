@@ -233,8 +233,8 @@ PY
 **入口判据**：I-2；另需 M2 出口全绿。
 **出口判据（6 条）**：① `api/WisdomUI.api.json` 入库且 `git diff --exit-code` 绿；② 命名与枚举规则内联表 §5.3 全部对齐；③ 快照与契约用例全绿；④ 覆盖率转门槛：`Foundation/**` ≥ **80%**（排除 `generated/`）；⑤ **体积门槛值**定为"P50 + 10%（或绝对上限）"并写进 `README.md`/`CHANGELOG.md`；⑥ 封板批 12 件 primitives（M2 的 11 + 本批 1）在出口报告中占位、无缺件 —— **其余 primitives 按其所在批的"批前签名冻结"执行**，20/20 primitives 完成于 M5 出口。
 >
-> **收尾状态（2026-11-12）**：I-1 ✅（M2 已签字）；I-2 ✅（`docs/M3-SIGNATURE-FREEZE.md`，五问按建议确认）。`WDListSection` 六类断言收尾——清 `DRAFT`、**8 态快照 4 变体 × 8 = 32 张**、demo 审计视口扩到 **12 件**；**12 个契约 yaml** 已回填设计仓（11 件 + `WDListSection`）；**API 封板**（661 符号零 diff，`docs/M3-API-FREEZE.md`）；**覆盖率门槛**（`Foundation/**` 97.69% ≥ 80%，已转硬门槛）；**体积门槛**（P50 495,616 B × 1.10 = **545,178 B ≈ 532 KB**，已写 README/CHANGELOG）。
-> `ci.sh pr` 全绿（113 tests / 661 符号 / Foundation 97.69%）；**M3 第 1/3 日 nightly 绿**（2026-11-12：设备编译 2.33 s + 17 快照测试 / 136 基线 + demo 审计 64.6 s，3 UITest 全过、`AUDIT-ISSUE=0`）。
+> **收尾状态（2026-11-12）**：I-1 ✅（M2 已签字）；I-2 ✅（`docs/M3-SIGNATURE-FREEZE.md`，五问按建议确认）。`WDListSection` 六类断言收尾——清 `DRAFT`、**8 态快照 4 变体 × 8 = 32 张**、demo 审计视口扩到 **12 件**；**12 个契约 yaml** 已回填设计仓（11 件 + `WDListSection`）；**API 封板**（661 符号零 diff，`docs/M3-API-FREEZE.md`）；**覆盖率门槛**（`Foundation/**` 97.73% ≥ 80%，已转硬门槛）；**结构门禁 `--strict`**（R7/R20/R21 的 warning 一律拦，0 warning / 51 处带理由豁免）；**体积门槛**（P50 495,616 B × 1.10 = **545,178 B ≈ 532 KB**，已写 README/CHANGELOG）。
+> `ci.sh pr` 全绿（113 tests / 661 符号 / Foundation 97.73%）；**M3 第 1/3 日 nightly 绿**（2026-11-12：设备编译 2.13 s + 17 快照测试 / 136 基线（27.52 s）+ demo 审计 67.65 s，3 UITest 全过、`AUDIT-ISSUE=0`；整条 97.29 s）。
 > **待办**：nightly 第 2/3 日（11-13）与第 3/3 日（11-14）后判定出口。出口报告 = `docs/M3-EXIT-REPORT.md`（技术判据 6/6；门禁 1/3 日，**未签字**）。
 **门禁强度**：`PR+nightly₃+发布前`。
 
@@ -305,7 +305,7 @@ print(c[-1][1]["udid"])')"            # 取最新可用运行时的 UDID；禁�
 
 ```bash
 # ① host 侧，秒级（不需要 Xcode）
-Scripts/check-structure.sh                  # R1–R21 + 令牌溯源 + 契约清单
+Scripts/check-structure.sh --strict         # R1–R21（M3 起 warning 也拦；R7/R20/R21）+ 令牌溯源 + 契约清单
 Scripts/check-format.sh                     # swift-format（显式文件清单，排除 generated/）
 
 # ② 编译 + 单测 + 签名冒烟（一次模拟器会话；PR 只编模拟器一张编译图）
@@ -320,7 +320,7 @@ xcodebuild test-without-building -scheme "$WD_SCHEME" -destination "$WD_SIM_ID" 
 # ③ API 冻结（复用上面的 DerivedData，不额外编译）
 Scripts/dump-api.sh && git diff --exit-code -- api/WisdomUI.api.json
 
-# ④ 覆盖率报告（只打印不拦，M3 前）
+# ④ 覆盖率门槛（Foundation/** ≥ 80%，排除 generated/；M3 起）
 mkdir -p .build/perf && xcrun xccov view --report --json .build/dd/pr.xcresult > .build/perf/coverage.json
 ```
 
@@ -846,7 +846,7 @@ xcodebuild test-without-building -scheme "$WD_SCHEME" -destination "$WD_SIM_ID" 
 Scripts/ci.sh pr
 
 # 分步版（想定位失败点时用）
-Scripts/check-structure.sh && Scripts/check-format.sh
+Scripts/check-structure.sh --strict && Scripts/check-format.sh
 xcodebuild build-for-testing -scheme "$WD_SCHEME" -destination "$WD_SIM_ID" -derivedDataPath .build/dd -quiet \
   -enableCodeCoverage YES -resultBundlePath .build/dd/pr.xcresult \
   SWIFT_ACTIVE_COMPILATION_CONDITIONS='$(inherited) WD_API_SMOKE'
@@ -992,7 +992,7 @@ echo "$WD_SCHEME / $WD_SIM_ID"
 | # | 症状 | 最可能的原因 | 处置 |
 | --- | --- | --- | --- |
 | ① | 改了 `Foundation/generated/**` 后 `check-structure.sh` 报 R12 | 手改了生成物（banner 校验会拦） | **撤销手改**；改令牌 → 走设计仓变更集 → 跑 `node ../wisdomdesign/tools/token-build/build.js` 重新生成 |
-| ② | PR 门禁红，但不知道是哪一类 | 三种类型混在一起：结构（R1–R21）/ 格式（swift-format）/ 编译测试 | 先跑**最便宜**的两条 `Scripts/check-structure.sh`、`Scripts/check-format.sh`，都绿再跑 `build-for-testing`；仍然红看 `xcodebuild` 的**第一条** error（后面的多是连带错） |
+| ② | PR 门禁红，但不知道是哪一类 | 三种类型混在一起：结构（R1–R21）/ 格式（swift-format）/ 编译测试 | 先跑**最便宜**的两条 `Scripts/check-structure.sh --strict`、`Scripts/check-format.sh`，都绿再跑 `build-for-testing`；仍然红看 `xcodebuild` 的**第一条** error（后面的多是连带错） |
 | ③ | 六态快照红 | 两类：**基线漂移**（环境/字体/渲染器变了）vs **实现变化**（真的改了像素） | 先看 diff 区域：只变字形抗锯齿 ⇒ 基线漂移（复核金标设备矩阵 U-06）；变成结构性变化 ⇒ 是实现变化，**更新基线必须与成因同 PR** |
 | ④ | 行盒/字体断言红（中文特别容易） | 中文自然行高 1.400em > 设计值 ⇒ "默认档 = 设计值"不成立 | 用**带容差的 max 形式**断言（`max(设计盒高×缩放, natural)`）并给中英 fixture；**不要**改用 `Mode.Fixed`/`lineHeightMultiple`（R 系列禁则） |
 | ⑤ | 改了 `Package.swift` 后行为诡异（旧脚本还在跑 / 新 target 不生效） | `.build` 缓存陈旧 | 删缓存后重跑：`rm -rf .build/dd`，必要时 `xcodebuild clean -scheme "$WD_SCHEME"`；**不要**用 `swift build` 绕过 |

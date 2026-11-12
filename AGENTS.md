@@ -22,7 +22,7 @@
 
 ```bash
 # 秒级自检（host，不需要 Xcode）（脚本已由 I-M0-b/c 落地；仅在脚本缺失的历史状态下才需要 §5.0 的三条命令）
-cd iOS && Scripts/check-structure.sh      # R1–R21 结构/依赖/字面量/令牌溯源
+cd iOS && Scripts/check-structure.sh --strict   # R1–R21 结构/依赖/字面量/令牌溯源（M3 起 warning 也拦）
 cd iOS && Scripts/check-format.sh         # swift-format（显式清单，排除 generated/）
 ```
 
@@ -179,7 +179,7 @@ print(c[-1][1]["udid"])')"            # 取最新可用运行时的 UDID；禁�
 
 ```bash
 # ① host 侧，秒级（不需要 Xcode）
-Scripts/check-structure.sh                  # R1–R21 + 令牌溯源 + 契约清单
+Scripts/check-structure.sh --strict         # R1–R21（M3 起 warning 也拦）+ 令牌溯源 + 契约清单
 Scripts/check-format.sh                     # swift-format（显式文件清单，排除 generated/）
 
 # ② 编译 + 单测 + 签名冒烟（一次模拟器会话；PR 只编模拟器一张编译图）
@@ -224,7 +224,7 @@ git describe --tags --exact-match            # 必须 == WDTokensVersion.version
 ### 5.4 本地开发回路（秒级，优先用）—— **现状：M0 后可用**
 
 ```bash
-Scripts/check-structure.sh                  # 规则自检
+Scripts/check-structure.sh --strict         # 规则自检（M3 起 warning 也拦）
 Scripts/test-checker.sh                     # 检查器自身正反样本（R1–R21）
 xcrun swift-format lint --strict --parallel $(git ls-files '*.swift' | grep -vE '/Foundation/[Gg]enerated/')
 ```
