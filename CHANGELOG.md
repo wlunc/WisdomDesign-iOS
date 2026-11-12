@@ -8,6 +8,15 @@
 
 ### Added
 
+- **M4 九件落地（反馈与弹层）**：`WDBottomSheet`（系统 sheet + half/large 档位）、`WDActionSheet`、
+  `WDAlert`（270 卡片 + 带输入重载 + screenChanged 焦点移入）、`WDToast`（组件内 .task 计时）、
+  `WDBanner`（3 变体 + 软底渐变）、`WDEmptyState`、`WDSkeleton`（text/list/card + 2200ms 微光）、
+  `WDProgressBar`、`WDProgressRing`。冒烟段的 sheet/actionSheet 声明同 PR 退役；
+  `WDHaptics` 增加 success 种类（进度 100%）。
+- **M4 快照与 demo**：9 件 × 8 态 = **72 张新基线**（总 **208**）；demo 组件目录扩到 **21 件**，
+  弹层从详情页触发，审计视口加入进度条/环、Banner、EmptyState、Skeleton；3 条 UITest 全过。
+- **M4 对比度账目**：设计仓 `contracts/contrast.json`（light/dark 34 对 + 玻璃禁止对）；
+  ProgressBar 填充因 `gradient.mid` 浅端仅 2.02:1 改为品牌色渐变（3.91:1 / 6.71:1）。
 - **`WDListSection` 六类断言收尾（M3）**：清掉 `DRAFT` 注释；新增 `WDListSectionSnapshotTests`——
   **4 变体（标准 / 标题动作 / 带页脚 / 空组）× 8 态 = 32 张基线**（空组应只有空白）；
   demo 组件目录新增 `WDListSection` 条目与实时预览，审计视口扩到 **12 件**（M2 11 + M3 1）。
@@ -18,6 +27,7 @@
   回填 = 誊录，不改签名/默认值/槽位/枚举（设计仓提交 `feat(contracts): M2/M3 契约条目回填`）。
 - **M3 覆盖率门槛**：`Scripts/ci.sh pr` 的覆盖率阶段由「只打印」改为**硬门槛**——
   `Foundation/**`（排除 `generated/`）**≥ 80%** 才绿；本次实测 **97.73%（603/617）**。
+- **API 基线随 M4 九件更新**：`api/WisdomUI.api.json` **661 → 860 符号（+199）**；无移除。
 - **M3 结构门禁转严格（`--strict`）**：按 SPEC §1.1.2/§1.5.5，M3 起 R7/R15/R21 的 warning 转拦；
   PR-0 改为 `check-structure.sh --strict`。清理：`WDIconButton` 三档视觉尺寸改用
   `WDSize.controlSm/Md/Lg` 令牌；其余 10 处数值字面量（WCAG 公式、十六进制解码、DF-03 配额、

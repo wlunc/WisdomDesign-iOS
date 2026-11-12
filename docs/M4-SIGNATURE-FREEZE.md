@@ -1,9 +1,10 @@
 # M4 批前签名冻结（9 件）—— 草案，待确认
 
 > 用途：满足 I-2（批前签名冻结）。M4 = 反馈与弹层 9 件（`docs/DEV-PLAN.md` §2.5）。
-> 日期：**2026-11-12**｜状态：**草案（待项目负责人确认）**｜依据：`docs/SPEC.md` §2.5/§2.10、设计仓
+> 日期：**2026-11-12**｜状态：**已冻结 + 已实现（项目负责人「都按建议」确认）**｜依据：`docs/SPEC.md` §2.5/§2.10、设计仓
 > `specs/01-basic.md` #15/#16、`specs/02-advanced.md` #25–#31、`docs/DEV-PLAN.md` §21.6 的 M4 十问。
-> **未确认前不得开写**；确认后本文件转为 `已冻结`，并回填 9 个 `../wisdomdesign/contracts/*.yaml`。
+> **确认结果（2026-11-12）**：Q1 = 3 个 Banner 变体；Q2 = 组件内 `.task` 计时；Q3 = 做 Alert 带输入重载；
+> Q4 = 暂不做 ProgressBar 分段。本文件转为**已冻结**；9 个 `../wisdomdesign/contracts/*.yaml` 同批回填。
 
 ## 1. 入口判据（I-1…I-5）
 
@@ -148,7 +149,11 @@ public struct WDEmptyState: View {
 public enum WDSkeletonVariant: String, CaseIterable, Sendable, Equatable { case text, list, card }
 
 public struct WDSkeleton: View {
-  public init(variant: WDSkeletonVariant = .text, lineCount: Int = 3)
+  public init(
+    variant: WDSkeletonVariant = .text,
+    lineCount: Int = 3,
+    accessibilityLabel: Text? = nil   // L-B：加载中文案由调用方给；nil = 装饰
+  )
 }
 ```
 
@@ -204,10 +209,10 @@ public struct WDProgressRing: View {
 
 | # | 问题 | 推荐 | 备选/代价 |
 | --- | --- | --- | --- |
-| **Q1** | `WDBannerVariant` 是 3 个还是 4 个？ | **3 个**（info/warning/danger，与 C-15/U2 的 Android 集合一致） | 加 `success`（设计 §4 有）⇒ 跨端 U 项不一致，且新增 case 属源级 breaking；需先改 C-15/Android 契约 |
-| **Q2** | Toast 自动消失的计时归谁？ | **组件内 `.task` 结构化计时**（`durationMilliseconds`，随视图消失取消；把"组件自建计时器"的禁令限定为 `Timer`/`DispatchQueue` 泄漏） | 调用方计时 ⇒ 组件只做展示，但 3s/5s 语义要调用方重复实现，且"悬停暂停"难保证 |
-| **Q3** | Alert 的"带输入"变体现在做吗？ | **做**：第二个 `content` 重载（设计 §4 的第 4 变体） | 延后 ⇒ 需登记差异，M4 只做 3 变体 |
-| **Q4** | ProgressBar 的"分段"变体现在做吗？ | **暂不做**（§21.6 的十问只要求确定/不确定；分段用 `valueText` 调 `WDProgressBar` 之外组合） | 做 ⇒ 需要 `segments/completed` 参数，API 面变大；设计 §4 有该变体 |
+| **Q1** | `WDBannerVariant` 是 3 个还是 4 个？ | **采用 3 个**（info/warning/danger，与 C-15/U2 的 Android 集合一致） | 加 `success`（设计 §4 有）⇒ 跨端 U 项不一致，且新增 case 属源级 breaking；需先改 C-15/Android 契约 |
+| **Q2** | Toast 自动消失的计时归谁？ | **采用组件内 `.task` 结构化计时**（`durationMilliseconds`，随视图消失取消；把"组件自建计时器"的禁令限定为 `Timer`/`DispatchQueue` 泄漏） | 调用方计时 ⇒ 组件只做展示，但 3s/5s 语义要调用方重复实现，且"悬停暂停"难保证 |
+| **Q3** | Alert 的"带输入"变体现在做吗？ | **采用做**：第二个 `content` 重载（设计 §4 的第 4 变体） | 延后 ⇒ 需登记差异，M4 只做 3 变体 |
+| **Q4** | ProgressBar 的"分段"变体现在做吗？ | **采用暂不做**（§21.6 的十问只要求确定/不确定；分段用 `valueText` 调 `WDProgressBar` 之外组合） | 做 ⇒ 需要 `segments/completed` 参数，API 面变大；设计 §4 有该变体 |
 
 > 其余实现细节（Alert 自绘 270 卡片 vs 系统 `.alert`、Toast 挂 window vs 锚点 overlay、Skeleton `lineCount` 命名）
 > 按"设计保真优先 + 系统能力可用"处理，不单列拍板项；落地时在 PR 描述登记。
@@ -216,7 +221,15 @@ public struct WDProgressRing: View {
 
 | 项 | 值 |
 | --- | --- |
-| 确认人 | 待项目负责人 |
-| 日期 | 待定 |
-| 结论 | 待定（Q1–Q4） |
-| 后续 | 确认后：回填 9 个 yaml → 实现 → PR/nightly → M4 出口报告 |
+| 确认人 | 项目负责人 |
+| 日期 | 2026-11-12 |
+| 结论 | **都按建议**：Q1 = 3 变体；Q2 = 组件内 `.task`；Q3 = 做带输入；Q4 = 暂缓分段 |
+| 后续 | 9 个 yaml 已回填（设计仓 `e1a1d19`）；9 件已实现；PR 123 tests / 860 符号；M4 出口报告 = `docs/M4-EXIT-REPORT.md`（7/7，nightly 不阻塞） |
+
+## 7. 实现完成与差异（2026-11-12）
+
+- 9 件全部落地（`Components/{Primitives,Composites}/`）；结构断言 9 条、性能采样 1 条、快照 72 张。
+- **已接受的差异**（逐条见 `docs/M4-EXIT-REPORT.md` §4）：Alert 焦点归还未实现（`screenChanged` 移入，归还需 U 项/签名扩展）；
+  Toast 悬停暂停/上滑关闭未实现；Banner `success` 按 Q1 不纳入；ProgressBar 分段按 Q4 暂缓；
+  ProgressBar 填充改品牌色渐变（设计 `gradient.mid` 浅端 2.02:1 < 3:1）；sheet 快照为面板内容。
+- **契约补充**：`../wisdomdesign/contracts/contrast.json`（light/dark 34 对 + 玻璃禁止对）。

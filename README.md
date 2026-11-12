@@ -75,6 +75,7 @@ Scripts/ci.sh measure   # 过程成本测量（分阶段计时；**未测不写�
 - `Scripts/ci.sh pr`：**首次全绿**（2026-10-06；Xcode 26.6 + iOS 26.5 模拟器）。
 - `Scripts/ci.sh pr`：**2026-11-10 复核全绿**（M2 两件补齐六类断言后；`passed=106 failed=0`、符号 641 零 diff、`WisdomUI` 覆盖率 **61.06%**、warm 21.30 s——**n=1 复核值，不替换下表的三态预算**）。
 - `Scripts/ci.sh pr`：**2026-11-12 M3 复核全绿**（`passed=113 failed=0`、符号 **661** 零 diff、`Foundation/**` **97.73%（603/617）≥ 80% 硬门槛**、`--strict` 结构门禁 0 warning、warm 20.84 s——n=1，含新增快照目标编译）。
+- `Scripts/ci.sh pr`：**2026-11-12 M4 复核全绿**（`passed=123 failed=0`、符号 **860** 零 diff、`Foundation/**` **97.26%（603/620）**、`--strict` 0 warning、warm 27.57 s——n=1）。
 
 **门禁预算（实测，2026-10-07；`Scripts/ci.sh measure 3 --states=warm,clean,cold`，每态 n=3 取中位数；单位 = 秒）**：
 
@@ -90,7 +91,7 @@ Scripts/ci.sh measure   # 过程成本测量（分阶段计时；**未测不写�
 口径：**warm** = 复用现有缓存；**clean** = 每轮删 DerivedData；**cold** = 连 SwiftPM manifest 缓存与 module-cache 一起删。
 cold 的 PR-2 那 45 s 是 `swift Scripts/canonicalize-api.swift` 的**宿主模块缓存被清后重编译**（每轮都付），不是 API 逻辑慢。
 原始数据：`.build/perf/ci-measure-20261007.json`。**测法变了要重测**（改 `ci.sh` 的 PR 阶段、换 Xcode 大版本、换金标设备）。
-- **覆盖率门槛（M3 起生效）**：最近一次门禁（2026-11-12）`WisdomUI` **61.14%**、**`Foundation/**` 97.73%（603/617）** ⇒ **PR 的覆盖率阶段已由「只打印」转为硬门槛**（`Scripts/ci.sh pr`：`Foundation/**` ≥ 80%，排除 `generated/`；组件的 `+Previews` 不计入）。组件级数字**只报不拦**，不设门槛。
+- **覆盖率门槛（M3 起生效）**：最近一次门禁（2026-11-12，M4）`WisdomUI` **66.09%**、**`Foundation/**` 97.26%（603/620）** ⇒ **PR 的覆盖率阶段已由「只打印」转为硬门槛**（`Scripts/ci.sh pr`：`Foundation/**` ≥ 80%，排除 `generated/`；组件的 `+Previews` 不计入）。组件级数字**只报不拦**，不设门槛。
 - `Scripts/ci.sh nightly`：M2 的 **3 日已齐**（2026-11-10/11/12；11-12 首跑因 `launch-count` 的 near-threshold 告警偶发红，同代码复跑 3/3 绿 + 夹具窄例外），**M2 已判定通过（ios-lead 签字 2026-11-12）**，详见 `docs/M2-EXIT-REPORT.md`。
 - `Scripts/ci.sh nightly`（M3）：**第 1/3 日绿（2026-11-12）**——设备编译 2.13 s + **17 快照测试 / 136 基线**（27.52 s）+ demo 四类目审计 67.65 s（3 条 UITest 全过，`AUDIT-ISSUE=0`；整条 97.29 s）；项目负责人 2026-11-12 决定忽略 nightly₃；M3 按技术判据 6/6 判定通过（nightly 仅第 1 日实测，不补跑）。
 - `.github/workflows/ci.yml`：**【未验证】** 本仓尚无一次 GitHub Actions 实跑（macOS 26 镜像标签与自带 Xcode 版本属外部事实）。
@@ -119,6 +120,6 @@ Thinning 增量仍为【未验证】，M6 发布前层补测；口径变更须�
 
 ### 快速查看组件（三条路，按上手速度）
 
-1. **demo app（推荐：可交互 + 可审计）**：`open Examples/WisdomUIDemo/WisdomUIDemo.xcodeproj`，选 `WisdomUIDemo` scheme 跑模拟器；组件目录按用途分组，「组件」页是 M2/M3 **12 件**的审计视口（也是 nightly 无障碍审计的输入）。
-2. **快照画廊（不用 Xcode）**：`Scripts/preview-components.sh` —— 从 `Tests/WisdomUISnapshotTests/Baselines/` 生成 `.build/component-gallery.html` 并在浏览器打开（12 件 × 8 态；`WDListSection` 为 4 变体，共 136 张基线）。
+1. **demo app（推荐：可交互 + 可审计）**：`open Examples/WisdomUIDemo/WisdomUIDemo.xcodeproj`，选 `WisdomUIDemo` scheme 跑模拟器；组件目录按用途分组，审计视口覆盖 M2/M3/M4 的 **21 件**（4 件弹层从详情页打开）。
+2. **快照画廊（不用 Xcode）**：`Scripts/preview-components.sh` —— 从 `Tests/WisdomUISnapshotTests/Baselines/` 生成 `.build/component-gallery.html` 并在浏览器打开（**208 张基线**；M4 九件各 8 态，`WDListSection` 为 4 变体）。
 3. **Xcode SwiftUI 预览**：打开 `Package.swift` 后在组件文件的 `#Preview` 里看；**需要宿主 app**（本仓用 demo），且 release 不编译预览。
