@@ -104,7 +104,7 @@ public struct WDProgressBar: View {
           if clamped >= 1 {
             Capsule().fill(colors.statusSuccess)
           } else {
-            Capsule().fill(WDGradient.mid.linearGradient)
+            Capsule().fill(progressFill)
           }
         }
         .frame(height: Self.barHeight)
@@ -119,7 +119,7 @@ public struct WDProgressBar: View {
     HStack(spacing: 0) {
       if indeterminatePhase { Spacer(minLength: 0) }
       Capsule()
-        .fill(WDGradient.mid.linearGradient)
+        .fill(progressFill)
         .frame(height: Self.barHeight)
         .containerRelativeFrame(.horizontal) { length, _ in length * Self.indeterminateWidthRatio }
       if !indeterminatePhase { Spacer(minLength: 0) }
@@ -132,6 +132,16 @@ public struct WDProgressBar: View {
       value: indeterminatePhase
     )
     .onAppear { indeterminatePhase = true }
+  }
+
+  /// 进行中的填充：textBrand → statusInfo。设计的 gradient.mid 浅端在 surface.tint 上只有 2.02:1（< 3:1），
+  /// 为满足图形对比度改用品牌色实底渐变（浅色 3.91:1 / 深色 6.71:1）；差异进 M4 出口报告。
+  private var progressFill: LinearGradient {
+    LinearGradient(
+      colors: [colors.textBrand, colors.statusInfo],
+      startPoint: .leading,
+      endPoint: .trailing
+    )
   }
 
   private var determinateValue: Double? {
