@@ -25,7 +25,7 @@ public struct WDActionSheetItem: Identifiable, Sendable, Equatable {
 }
 
 extension View {
-  /// 操作表（底部滑入；取消键与操作列表视觉分离；空 items 在 debug 下断言）。
+  /// 操作表（底部浮层；取消为独立胶囊；空 items 在 debug 下断言）。
   public func wdActionSheet(
     isPresented: Binding<Bool>,
     title: Text? = nil,
@@ -59,62 +59,79 @@ struct WDActionSheetPanel: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      header
-      VStack(spacing: 0) {
-        ForEach(regularItems) { item in
-          row(item)
-          if item.id != regularItems.last?.id {
-            Divider().overlay(colors.borderHairline)
-          }
-        }
+      if title != nil || message != nil {
+        header
       }
+      listCard
       if let cancelItem {
-        Divider().overlay(colors.borderHairline).padding(.top, WDSpacing.s3)
-        row(cancelItem)
+        Button {
+          onCancel?()
+        } label: {
+          cancelItem.label
+            .wdFont(WDType.body)
+            .foregroundStyle(colors.textBrand)
+            .frame(maxWidth: .infinity, minHeight: WDSpacing.s10)
+            .wdLineBox(WDType.body)
+            .contentShape(Capsule())
+        }
+        .buttonStyle(WDActionSheetRowStyle(pressedFill: colors.fillPressed))
+        .background(Capsule().fill(colors.surfaceCardSolid))
+        .clipShape(Capsule())
+        .padding(.top, WDSpacing.s3)
       }
     }
-    .frame(maxWidth: .infinity, alignment: .top)
+    .padding(.horizontal, WDSpacing.s5)
+    .padding(.top, WDSpacing.s5)
+    .padding(.bottom, WDSpacing.s3)
     .onAppear {
       assert(!items.isEmpty, "WDActionSheet items 不能为空（设计 27 §4）")
     }
   }
 
-  @ViewBuilder private var header: some View {
-    if title != nil || message != nil {
-      VStack(spacing: WDSpacing.s2) {
-        if let title {
-          title
-            .wdFont(WDType.headline)
-            .foregroundStyle(colors.textPrimary)
-            .multilineTextAlignment(.center)
-            .wdLineBox(WDType.headline)
-        }
-        if let message {
-          message
-            .wdFont(WDType.footnote)
-            .foregroundStyle(colors.textSecondary)
-            .multilineTextAlignment(.center)
-            .wdLineBox(WDType.footnote)
+  private var header: some View {
+    VStack(spacing: WDSpacing.s2) {
+      if let title {
+        title
+          .wdFont(WDType.footnote)
+          .foregroundStyle(colors.textSecondary)
+          .multilineTextAlignment(.center)
+          .wdLineBox(WDType.footnote)
+      }
+      if let message {
+        message
+          .wdFont(WDType.caption1)
+          .foregroundStyle(colors.textSecondary)
+          .multilineTextAlignment(.center)
+          .wdLineBox(WDType.caption1)
+      }
+    }
+    .padding(.bottom, WDSpacing.s4)
+  }
+
+  private var listCard: some View {
+    VStack(spacing: 0) {
+      ForEach(regularItems) { item in
+        row(item)
+        if item.id != regularItems.last?.id {
+          Divider()
+            .overlay(colors.borderHairline)
+            .padding(.leading, WDSpacing.s5)
         }
       }
-      .padding(.horizontal, WDSpacing.s5)
-      .padding(.top, WDSpacing.s5)
-      .padding(.bottom, WDSpacing.s4)
     }
+    .background(colors.surfaceCardSolid)
+    .clipShape(RoundedRectangle(cornerRadius: WDRadius.lg, style: .continuous))
   }
 
   private func row(_ item: WDActionSheetItem) -> some View {
     Button {
-      if item.role == .cancel {
-        onCancel?()
-      } else {
-        onSelect(item.id)
-      }
+      onSelect(item.id)
     } label: {
       item.label
         .wdFont(WDType.body)
         .foregroundStyle(color(for: item.role))
         .frame(maxWidth: .infinity, minHeight: WDSize.controlMd)
+        .padding(.horizontal, WDSpacing.s5)
         .wdLineBox(WDType.body)
         .contentShape(Rectangle())
     }
@@ -130,11 +147,56 @@ struct WDActionSheetPanel: View {
   }
 
   private var regularItems: [WDActionSheetItem] {
-    items.filter { $0.role != .cancel }
+    Self.regularItems(from: items)
   }
 
   private var cancelItem: WDActionSheetItem? {
+    Self.cancelItem(from: items)
+  }
+
+  static func regularItems(from items: [WDActionSheetItem]) -> [WDActionSheetItem] {
+    items.enumerated()
+      .filter { $0.element.role != .cancel }
+      .sorted { lhs, rhs in
+        let left = lhs.element.role == .destructive ? 1 : 0
+        let right = rhs.element.role == .destructive ? 1 : 0
+        if left != right { return left < right }
+        return lhs.offset < rhs.offset
+      }
+      .map(\.element)
+  }
+
+  static func cancelItem(from items: [WDActionSheetItem]) -> WDActionSheetItem? {
     items.first { $0.role == .cancel }
+  }
+
+  /// sheet 高度估算：面板内距 + 标题/说明 + 操作列表 + 取消胶囊。
+  static func estimatedHeight(
+    title: Text?,
+    message: Text?,
+    items: [WDActionSheetItem],
+    dynamicTypeSize: DynamicTypeSize
+  ) -> CGFloat {
+    var height = WDSpacing.s5 + WDSpacing.s3
+    if title != nil || message != nil {
+      if title != nil {
+        height += WDFontMetrics.lineBoxHeight(
+          for: WDType.footnote, dynamicTypeSize: dynamicTypeSize)
+      }
+      if message != nil {
+        height +=
+          WDSpacing.s2
+          + WDFontMetrics.lineBoxHeight(for: WDType.caption1, dynamicTypeSize: dynamicTypeSize)
+      }
+      height += WDSpacing.s4
+    }
+    let rows = regularItems(from: items).count
+    height += CGFloat(rows) * WDSize.controlMd
+    height += CGFloat(max(0, rows - 1)) * 1
+    if cancelItem(from: items) != nil {
+      height += WDSpacing.s3 + WDSpacing.s10
+    }
+    return height
   }
 }
 
@@ -147,6 +209,7 @@ private struct WDActionSheetModifier: ViewModifier {
   let onCancel: (() -> Void)?
 
   @Environment(\.wdColors) private var colors
+  @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
   func body(content anchor: Content) -> some View {
     anchor.sheet(isPresented: $isPresented) {
@@ -163,11 +226,20 @@ private struct WDActionSheetModifier: ViewModifier {
           onCancel?()
         }
       )
-      .presentationDetents([.medium, .large])
+      .presentationDetents([.height(contentHeight)])
       .presentationDragIndicator(.hidden)
       .presentationCornerRadius(WDRadius.xxl)
-      .presentationBackground(colors.surfaceCardSolid)
+      .presentationBackground(colors.bgGrouped)
     }
+  }
+
+  private var contentHeight: CGFloat {
+    WDActionSheetPanel.estimatedHeight(
+      title: title,
+      message: message,
+      items: items,
+      dynamicTypeSize: dynamicTypeSize
+    )
   }
 }
 
