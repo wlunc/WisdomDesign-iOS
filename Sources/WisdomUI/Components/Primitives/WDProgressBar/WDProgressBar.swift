@@ -108,9 +108,7 @@ public struct WDProgressBar: View {
           }
         }
         .frame(height: Self.barHeight)
-        .containerRelativeFrame(.horizontal) { length, _ in
-          max(0, length * CGFloat(clamped))
-        }
+        .scaleEffect(x: CGFloat(clamped), anchor: .leading)
         .animation(.linear(duration: WDMotion.Duration.base), value: clamped)
       }
       .clipShape(Capsule())

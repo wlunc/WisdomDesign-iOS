@@ -47,8 +47,8 @@ extension View {
   }
 }
 
-private struct WDActionSheetModifier: ViewModifier {
-  @Binding var isPresented: Bool
+/// 操作表内容（与系统 sheet 解耦，便于快照与组合；内部类型）。
+struct WDActionSheetPanel: View {
   let title: Text?
   let message: Text?
   let items: [WDActionSheetItem]
@@ -57,17 +57,7 @@ private struct WDActionSheetModifier: ViewModifier {
 
   @Environment(\.wdColors) private var colors
 
-  func body(content anchor: Content) -> some View {
-    anchor.sheet(isPresented: $isPresented) {
-      actionSheet
-        .presentationDetents([.medium, .large])
-        .presentationDragIndicator(.hidden)
-        .presentationCornerRadius(WDRadius.xxl)
-        .presentationBackground(colors.surfaceCardSolid)
-    }
-  }
-
-  private var actionSheet: some View {
+  var body: some View {
     VStack(spacing: 0) {
       header
       VStack(spacing: 0) {
@@ -116,10 +106,8 @@ private struct WDActionSheetModifier: ViewModifier {
   private func row(_ item: WDActionSheetItem) -> some View {
     Button {
       if item.role == .cancel {
-        isPresented = false
         onCancel?()
       } else {
-        isPresented = false
         onSelect(item.id)
       }
     } label: {
@@ -147,6 +135,39 @@ private struct WDActionSheetModifier: ViewModifier {
 
   private var cancelItem: WDActionSheetItem? {
     items.first { $0.role == .cancel }
+  }
+}
+
+private struct WDActionSheetModifier: ViewModifier {
+  @Binding var isPresented: Bool
+  let title: Text?
+  let message: Text?
+  let items: [WDActionSheetItem]
+  let onSelect: (WDActionSheetItem.ID) -> Void
+  let onCancel: (() -> Void)?
+
+  @Environment(\.wdColors) private var colors
+
+  func body(content anchor: Content) -> some View {
+    anchor.sheet(isPresented: $isPresented) {
+      WDActionSheetPanel(
+        title: title,
+        message: message,
+        items: items,
+        onSelect: { id in
+          isPresented = false
+          onSelect(id)
+        },
+        onCancel: {
+          isPresented = false
+          onCancel?()
+        }
+      )
+      .presentationDetents([.medium, .large])
+      .presentationDragIndicator(.hidden)
+      .presentationCornerRadius(WDRadius.xxl)
+      .presentationBackground(colors.surfaceCardSolid)
+    }
   }
 }
 

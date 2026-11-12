@@ -43,6 +43,52 @@ extension View {
   }
 }
 
+/// 面板内容（与系统 sheet 解耦，便于快照与组合；内部类型）。
+struct WDBottomSheetPanel<Content: View, Footer: View>: View {
+  let title: Text?
+  let closeButtonAccessibilityLabel: Text
+  let onClose: () -> Void
+  let content: Content
+  let footer: Footer
+
+  @Environment(\.wdColors) private var colors
+
+  var body: some View {
+    VStack(spacing: 0) {
+      header
+      content
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, WDSpacing.s5)
+      if Footer.self != EmptyView.self {
+        footer
+          .padding(.horizontal, WDSpacing.s5)
+          .padding(.top, WDSpacing.s4)
+          .padding(.bottom, WDSpacing.s5)
+      }
+    }
+    .frame(maxWidth: .infinity, alignment: .top)
+  }
+
+  private var header: some View {
+    HStack(spacing: WDSpacing.s3) {
+      if let title {
+        title
+          .wdFont(WDType.headline)
+          .foregroundStyle(colors.textPrimary)
+          .wdLineBox(WDType.headline)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .accessibilityAddTraits(.isHeader)
+      } else {
+        Spacer(minLength: 0)
+      }
+      WDIconButton(icon: .close, accessibilityLabel: closeButtonAccessibilityLabel, action: onClose)
+    }
+    .padding(.horizontal, WDSpacing.s5)
+    .padding(.top, WDSpacing.s4)
+    .padding(.bottom, WDSpacing.s3)
+  }
+}
+
 private struct WDSheetModifier<SheetContent: View, SheetFooter: View>: ViewModifier {
   @Binding var isPresented: Bool
   let detents: WDBottomSheetDetents
@@ -85,47 +131,22 @@ private struct WDSheetModifier<SheetContent: View, SheetFooter: View>: ViewModif
 
   func body(content anchor: Content) -> some View {
     anchor.sheet(isPresented: $isPresented, onDismiss: onDismiss) {
-      VStack(spacing: 0) {
-        header
-        content()
-          .frame(maxWidth: .infinity, alignment: .leading)
-          .padding(.horizontal, WDSpacing.s5)
-        if SheetFooter.self != EmptyView.self {
-          footer()
-            .padding(.horizontal, WDSpacing.s5)
-            .padding(.top, WDSpacing.s4)
-            .padding(.bottom, WDSpacing.s5)
-        }
-      }
-      .frame(maxWidth: .infinity, alignment: .top)
+      WDBottomSheetPanel(
+        title: title,
+        closeButtonAccessibilityLabel: closeButtonAccessibilityLabel,
+        onClose: {
+          isPresented = false
+          onCloseButtonTap?()
+        },
+        content: content(),
+        footer: footer()
+      )
       .presentationDetents(detentSet, selection: $selectedDetent)
       .presentationDragIndicator(.visible)
       .interactiveDismissDisabled(interactiveDismissDisabled)
       .presentationCornerRadius(WDRadius.xxl)
       .presentationBackground(colors.surfaceCardSolid)
     }
-  }
-
-  private var header: some View {
-    HStack(spacing: WDSpacing.s3) {
-      if let title {
-        title
-          .wdFont(WDType.headline)
-          .foregroundStyle(colors.textPrimary)
-          .wdLineBox(WDType.headline)
-          .frame(maxWidth: .infinity, alignment: .leading)
-          .accessibilityAddTraits(.isHeader)
-      } else {
-        Spacer(minLength: 0)
-      }
-      WDIconButton(icon: .close, accessibilityLabel: closeButtonAccessibilityLabel) {
-        isPresented = false
-        onCloseButtonTap?()
-      }
-    }
-    .padding(.horizontal, WDSpacing.s5)
-    .padding(.top, WDSpacing.s4)
-    .padding(.bottom, WDSpacing.s3)
   }
 
   private var detentSet: Set<PresentationDetent> {

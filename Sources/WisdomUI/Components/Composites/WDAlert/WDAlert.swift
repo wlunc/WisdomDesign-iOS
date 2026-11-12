@@ -77,10 +77,7 @@ private struct WDAlertModifier<AlertContent: View>: ViewModifier {
   let content: () -> AlertContent
 
   @Environment(\.wdColors) private var colors
-  @AccessibilityFocusState private var focusedTitle: WDA11yFocusID?
   @State private var isSubmitting = false
-
-  private var titleFocusID: WDA11yFocusID { WDAlertFocus.title }
 
   func body(content anchor: Content) -> some View {
     anchor
@@ -95,7 +92,7 @@ private struct WDAlertModifier<AlertContent: View>: ViewModifier {
       .onChange(of: isPresented) { _, presented in
         if presented {
           isSubmitting = false
-          focusedTitle = titleFocusID
+          WDA11yFocus.screenChanged()
         }
       }
   }
@@ -121,7 +118,6 @@ private struct WDAlertModifier<AlertContent: View>: ViewModifier {
         .padding(.bottom, WDSpacing.s1)
         .padding(.horizontal, WDSpacing.s5)
         .accessibilityAddTraits(.isHeader)
-        .accessibilityFocused($focusedTitle, equals: WDAlertFocus.title)
       if let message {
         message
           .wdFont(WDType.footnote)
@@ -203,11 +199,6 @@ private struct WDAlertModifier<AlertContent: View>: ViewModifier {
     case .destructive: return colors.statusDanger
     }
   }
-}
-
-/// 弹窗焦点身份（不再放进泛型类型：Swift 不允许泛型类型里的 static stored property）。
-private enum WDAlertFocus {
-  static let title = WDA11yFocusID(rawValue: "wd-alert-title")
 }
 
 /// 弹窗按钮的按下底色。
