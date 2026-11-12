@@ -119,6 +119,9 @@
 
 ### Changed
 
+- **`WDBanner` 对齐修复**：HStack 由 top 改 center（图标/文案/操作/关闭键同一垂直中心）；
+  文案行盒改 1 行下限（多行自然长高，不再为单行预留两行）；关闭键改 `sm`（视觉 16）。
+  8 态 banner 基线重录。
 - 生成物目录 `Foundation/Generated/` → `Foundation/generated/`（**纯移动，零内容变化**；
   M0-2 生成器的目标态）。格式清单的排除模式随之写成 `/Foundation/[Gg]enerated/`。
 - `Foundation/WDTokenTypes.swift` → `Foundation/Tokens/WDTokenTypes.swift`（纯移动）。

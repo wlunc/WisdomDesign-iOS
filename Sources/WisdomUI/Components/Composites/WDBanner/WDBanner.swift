@@ -57,23 +57,22 @@ public struct WDBanner: View {
   }
 
   private var banner: some View {
-    HStack(alignment: .top, spacing: WDSpacing.s3) {
+    HStack(alignment: .center, spacing: WDSpacing.s3) {
       WDIcon(icon: icon, size: .md)
         .foregroundStyle(accent)
         .accessibilityHidden(true)
-        .frame(minHeight: WDType.footnote.lineHeight)
       message
         .wdFont(WDType.footnote)
         .foregroundStyle(colors.textPrimary)
         .fontWeight(variant == .danger ? .semibold : .regular)
         .lineLimit(2)
-        .wdLineBox(WDType.footnote, lines: 2)  // wd-structure-check:disable R7 — 设计 29 §3 的最多 2 行
+        .wdLineBox(WDType.footnote)
         .frame(maxWidth: .infinity, alignment: .leading)
       if let action {
         WDButton(variant: .plain, size: .sm, action: action.action, label: { action.label })
       }
       if let dismissAccessibilityLabel {
-        WDIconButton(icon: .close, accessibilityLabel: dismissAccessibilityLabel) {
+        WDIconButton(icon: .close, accessibilityLabel: dismissAccessibilityLabel, size: .sm) {
           isVisible = false
         }
       }
