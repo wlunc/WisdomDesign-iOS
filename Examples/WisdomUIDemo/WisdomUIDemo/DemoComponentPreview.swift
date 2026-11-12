@@ -581,6 +581,7 @@ private struct DemoActionSheetPreview: View {
 
 private struct DemoBottomSheetPreview: View {
   @State private var shown = false
+  @State private var draft = "整理储物间"
 
   var body: some View {
     DemoPreviewCanvas {
@@ -594,8 +595,7 @@ private struct DemoBottomSheetPreview: View {
       closeButtonAccessibilityLabel: Text(verbatim: "关闭成员选择")
     ) {
       VStack(alignment: .leading, spacing: WDSpacing.s4) {
-        Text(verbatim: "面板内容")
-          .wdFont(WDType.body)
+        WDTextField(text: $draft, label: Text(verbatim: "任务名称"))
         Text(verbatim: "把手可拖拽/点击切换档位；下滑关闭；点遮罩也可关闭。")
           .wdFont(WDType.footnote)
           .foregroundStyle(.secondary)

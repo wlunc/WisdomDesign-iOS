@@ -29,7 +29,7 @@
 | API 基线 | **860 符号**（M3 的 661 + **199**）；冒烟段的 sheet/actionSheet 声明同 PR 退役 |
 | 测试 | 结构断言 **9 条** + 性能采样 **1 条** + 快照 **9 个测试 / 72 张基线**；PR **123 tests** |
 | demo | 组件目录 **21 件**（M2 11 + M3 1 + M4 9）；弹层从详情页触发；审计视口加入 5 件可视图 |
-| 无障碍 | Alert/ActionSheet/BottomSheet 出现时 `screenChanged` 把焦点移入；ActionSheet/BottomSheet 自绘层用 `.isModal` + 隐藏锚点；**焦点归还仍未验证**；Banner/Toast/Skeleton 的播报标签由调用方注入（L-B） |
+| 无障碍 | Alert/ActionSheet/BottomSheet 出现时 `screenChanged` 把焦点移入；ActionSheet/BottomSheet 自绘层用 `.isModal` + 隐藏锚点；**BottomSheet 焦点归还已实现**（presenter 记录 `UIAccessibility.focusedElement`，dismiss 后 `.layoutChanged` 归还），ActionSheet 仍未；Banner/Toast/Skeleton 的播报标签由调用方注入（L-B） |
 
 ## 3. 性能数字（ImageRenderer；只报不拦）
 
@@ -63,7 +63,7 @@
 | ⑧ | Thinning 增量 | 仍【未验证】（未签名归档不能导出 thinned IPA） | M6 发布前层 |
 | ⑨ | nightly 连续 3 日 | 按项目负责人 2026-11-12 决定**不阻塞**；本轮未补跑 | 项目负责人决定 |
 | ⑩ | Skeleton 微光形态 | 由设计稿的"斜向微光扫过"改为**水平 sourceAtop 扫光**（只落在灰块上，避免斜方块观感）；行宽改 `maxWidth` + 固定短行留白，修复 demo 横向溢出 | 已修复（2026-11-12） |
-| ⑪ | BottomSheet 与设计 26 的布局差异 | 标题 `title3`、头部 56；内容 12 顶距 + `ScrollView`；底部操作区固定 + 1pt 分割线 + 高 72 + 右对齐；宽屏面板上限 480。**改为窗口级自绘贴边面板**：左右/底部贴屏幕、顶部 32 圆角、把手 36×5、half/large 档位、把手拖拽/点击切换、下滑关闭、点遮罩关闭、键盘上移。**系统 `.sheet` 不再使用**（iOS 26 对 partial detent 浮动约 16pt，无法去边） | 已改自绘（2026-11-12）；系统行为差异：内容滚到顶再拖面板、焦点归还、VoiceOver 自定义“下滑关闭”未实现 |
+| ⑪ | BottomSheet 与设计 26 的布局差异 | 标题 `title3`、头部 56；内容 12 顶距 + `ScrollView`；底部操作区固定 + 1pt 分割线 + 高 72 + 右对齐；宽屏面板上限 480。**改为窗口级自绘贴边面板**：左右/底部贴屏幕、顶部 32 圆角、把手 36×5、half/large、把手拖拽/点击切换、下滑关闭、点遮罩关闭、键盘上移；**焦点归还已实现**；VoiceOver 用 `.escape`（系统 Dismiss）。**系统 `.sheet` 不再使用**（iOS 26 对 partial detent 浮动约 16pt） | 已改自绘（2026-11-12）；键盘避让 UI 测试通过；**内容滚到顶再拖面板仍未实现**（只有把手/顶部 24pt 可拖） |
 | ⑫ | ActionSheet 间距与取消形态 | 按设计 27 参考重排：左右 16 内距；标题/说明移入列表卡片顶部（caption1/secondary + 底部分隔线）；行左对齐 + 可选 20pt 前置图标；取消为独立 48pt **圆角卡片**（18 圆角/semibold/e2）；破坏性置底。**改用窗口级 presenter + 自绘遮罩**：透明背景、无系统 sheet 边框；遮罩从第一帧静态出现，**只有面板从底部滑入/滑出**；点遮罩 = 取消（设计 27 §8） | 已重排（2026-11-12）；遮罩点击/动画已对齐 |
 
 ## 5. 判定记录

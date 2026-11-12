@@ -249,6 +249,7 @@ private struct BottomSheetSample: View {
       closeButtonAccessibilityLabel: Text(verbatim: "关闭成员选择"),
       onClose: {},
       content: VStack(alignment: .leading, spacing: WDSpacing.s4) {
+        WDTextField(text: .constant("整理储物间"), label: Text(verbatim: "任务名称"))
         Text(verbatim: "面板内容")
           .wdFont(WDType.body)
         Text(verbatim: "第二行说明")

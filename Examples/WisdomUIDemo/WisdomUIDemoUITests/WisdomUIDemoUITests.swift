@@ -142,6 +142,36 @@ final class WisdomUIDemoUITests: XCTestCase {
     XCTAssertFalse(close.waitForExistence(timeout: 2), "点关闭后 BottomSheet 应关闭")
   }
 
+  /// BottomSheet：点输入框弹出键盘，验证面板上移、字段不被遮挡。
+  func testBottomSheetKeyboardAvoidsField() throws {
+    let app = XCUIApplication()
+    app.launch()
+
+    let row = app.buttons["component-row-WDBottomSheet"]
+    XCTAssertTrue(row.waitForExistence(timeout: 20), "WDBottomSheet 行未出现")
+    row.tap()
+
+    let trigger = app.buttons["打开底部面板"]
+    XCTAssertTrue(trigger.waitForExistence(timeout: 20), "打开底部面板按钮未出现")
+    trigger.tap()
+
+    let field = app.textFields["任务名称"]
+    XCTAssertTrue(field.waitForExistence(timeout: 20), "任务名称输入框未出现")
+    field.tap()
+
+    let keyboard = app.keyboards.firstMatch
+    guard keyboard.waitForExistence(timeout: 5) else {
+      throw XCTSkip("模拟器未显示软件键盘，无法验证键盘避让")
+    }
+    Thread.sleep(forTimeInterval: 0.5)
+    XCTAssertLessThan(field.frame.maxY, keyboard.frame.minY, "面板未上移，字段被键盘遮挡")
+
+    let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+    attachment.name = "bottomsheet-keyboard"
+    attachment.lifetime = .keepAlways
+    add(attachment)
+  }
+
   /// 单个页签的严格审计。**只放行两类别有理由的窄例外**（其余一律失败）：
   ///   · 固定字号组件（头像首字 12pt / 徽标 11pt）的 dynamicType —— 设计例外，登记 M2 出口报告 §4；
   ///   · 列表行标题/副标题的 textClipped —— 设计 18 §7 要求单行截断，审计按 `lineLimit(1)` 判"可能截断"。

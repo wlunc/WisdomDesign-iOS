@@ -8,6 +8,7 @@ final class WDBottomSheetPresenter {
   static let shared = WDBottomSheetPresenter()
 
   private var host: UIViewController?
+  private var previousFocus: Any?
 
   /// 立即呈现；content 拿到窗口尺寸与底部安全区。
   func present<V: View>(@ViewBuilder content: (CGSize, CGFloat) -> V) {
@@ -25,6 +26,7 @@ final class WDBottomSheetPresenter {
     while let presented = top.presentedViewController {
       top = presented
     }
+    previousFocus = UIAccessibility.focusedElement(using: nil)
     let controller = UIHostingController(
       rootView: content(window.bounds.size, window.safeAreaInsets.bottom))
     controller.view.backgroundColor = .clear
@@ -33,10 +35,18 @@ final class WDBottomSheetPresenter {
     host = controller
   }
 
-  /// 立即移除宿主（layer 的滑出动画已结束）。
+  /// 立即移除宿主（layer 的滑出动画已结束），并把焦点还给触发元素。
   func dismiss() {
+    let hadHost = host != nil
     host?.dismiss(animated: false)
     host = nil
+    guard hadHost, let previousFocus else {
+      return
+    }
+    self.previousFocus = nil
+    DispatchQueue.main.async {
+      UIAccessibility.post(notification: .layoutChanged, argument: previousFocus)
+    }
   }
 }
 
@@ -100,6 +110,9 @@ struct WDBottomSheetLayer<Content: View, Footer: View>: View {
         .animation(WDMotion.Spring.snappy, value: detent)
         .animation(.easeOut(duration: WDMotion.Duration.base), value: keyboardInset)
         .accessibilityAddTraits(.isModal)
+        .accessibilityAction(.escape) {
+          dismiss(isCloseButton: false)
+        }
         .overlay(alignment: .top) {
           dragArea
         }
@@ -177,25 +190,28 @@ struct WDBottomSheetLayer<Content: View, Footer: View>: View {
         }
       }
       .onEnded { value in
-        let translation = value.translation.height
-        if !interactiveDismissDisabled,
-          translation > panelHeight * dismissRatio
-            || value.predictedEndTranslation.height > dismissVelocity
-        {
-          dismiss(isCloseButton: false)
-          return
-        }
-        withAnimation(WDMotion.Spring.snappy) {
-          if detents == .all {
-            if translation < -detentSwitchThreshold {
-              detent = .large
-            } else if translation > detentSwitchThreshold, detent == .large {
-              detent = .half
-            }
-          }
-          dragOffset = 0
+        endDrag(
+          translation: value.translation.height, velocity: value.predictedEndTranslation.height)
+      }
+  }
+
+  private func endDrag(translation: CGFloat, velocity: CGFloat) {
+    if !interactiveDismissDisabled,
+      translation > panelHeight * dismissRatio || velocity > dismissVelocity
+    {
+      dismiss(isCloseButton: false)
+      return
+    }
+    withAnimation(WDMotion.Spring.snappy) {
+      if detents == .all {
+        if translation < -detentSwitchThreshold {
+          detent = .large
+        } else if translation > detentSwitchThreshold, detent == .large {
+          detent = .half
         }
       }
+      dragOffset = 0
+    }
   }
 
   private var panelHeight: CGFloat {
