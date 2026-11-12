@@ -186,15 +186,21 @@
     },
     {
       "access" : "public",
+      "decl" : "let icon: WDIconName?",
+      "kind" : "swift.property",
+      "path" : "WDActionSheetItem.icon"
+    },
+    {
+      "access" : "public",
       "decl" : "let id: String",
       "kind" : "swift.property",
       "path" : "WDActionSheetItem.id"
     },
     {
       "access" : "public",
-      "decl" : "init(id: String, label: Text, role: WDActionSheetItem.Role = .default)",
+      "decl" : "init(id: String, label: Text, role: WDActionSheetItem.Role = .default, icon: WDIconName? = nil)",
       "kind" : "swift.init",
-      "path" : "WDActionSheetItem.init(id:label:role:)"
+      "path" : "WDActionSheetItem.init(id:label:role:icon:)"
     },
     {
       "access" : "public",
