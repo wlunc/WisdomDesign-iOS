@@ -36,65 +36,8 @@
 
   // MARK: - ② 弹层公开面（SPEC §2.5）
 
-  /// 面板档位（0.5 / 0.92；SPEC §2.5）。
-  public enum WDBottomSheetDetent: String, CaseIterable, Sendable, Equatable {
-    case half, large
-  }
-
-  /// 档位联合（iOS 独有 ⇒ 登记 F38；默认 `.all` 与 Android 默认档一致）。
-  public enum WDBottomSheetDetents: Sendable, Equatable {
-    case all
-    case fixed(WDBottomSheetDetent)
-  }
-
-  extension View {
-    /// 底部面板修饰符（锚点视图形态 ⇒ F21；`closeButtonAccessibilityLabel` 必填）。
-    public func wdSheet<Content: View, Footer: View>(
-      isPresented: Binding<Bool>,
-      detents: WDBottomSheetDetents = .all,
-      initialDetent: WDBottomSheetDetent = .half,
-      interactiveDismissDisabled: Bool = false,
-      title: Text? = nil,
-      closeButtonAccessibilityLabel: Text,
-      onCloseButtonTap: (() -> Void)? = nil,
-      onDismiss: (() -> Void)? = nil,
-      @ViewBuilder content: () -> Content,
-      @ViewBuilder footer: () -> Footer
-    ) -> some View {
-      fatalError()
-    }
-  }
-
-  /// 操作表选项（★ 不是 `Hashable`：含 `Text`；SPEC §2.5）。
-  public struct WDActionSheetItem: Identifiable, Sendable, Equatable {
-    /// 选项角色。
-    public enum Role: Sendable, Equatable {
-      case `default`
-      case destructive
-      case cancel
-    }
-
-    /// 稳定身份。
-    public let id: String
-    /// 标签文案（调用方给）。
-    public let label: Text
-    /// 角色。
-    public let role: Role
-  }
-
-  extension View {
-    /// 操作表修饰符（可见性唯一真源在调用方；无 `onDismissAttempt`）。
-    public func wdActionSheet(
-      isPresented: Binding<Bool>,
-      title: Text? = nil,
-      message: Text? = nil,
-      items: [WDActionSheetItem],
-      onSelect: @escaping (WDActionSheetItem.ID) -> Void,
-      onCancel: (() -> Void)? = nil
-    ) -> some View {
-      fatalError()
-    }
-  }
+  // WDBottomSheetDetent / WDBottomSheetDetents / wdSheet / WDActionSheetItem / wdActionSheet
+  // 已由 M4 落地（Components/Composites/{WDBottomSheet,WDActionSheet}/），故按纪律从冒烟段删除。
 
   // MARK: - ③ 无障碍与语义公开面（SPEC §2.6.2 / §3.6）
 

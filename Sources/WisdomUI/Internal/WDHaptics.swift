@@ -7,6 +7,8 @@ enum WDHapticKind: Sendable, Equatable {
   case press
   /// 切换（开关/勾选）。
   case toggle
+  /// 完成（进度到 100% 等，设计 15 §5）。
+  case success
 }
 
 /// 可注入的触觉 sink（测试用捕获器；组件一律经 `WDHaptics` 调用，不直接碰 UIKit）。
@@ -18,10 +20,16 @@ enum WDHapticKind: Sendable, Equatable {
 /// 系统实现（`UIImpactFeedbackGenerator(.light)`；设计：轻触觉）。
 @MainActor final class WDSystemHapticSink: WDHapticSink {
   private let generator = UIImpactFeedbackGenerator(style: .light)
+  private let notification = UINotificationFeedbackGenerator()
 
   func play(_ kind: WDHapticKind) {
-    // 两种语义在 iOS 上都用 light impact（设计只要求"轻"；差异归 F39）。
-    generator.impactOccurred()
+    switch kind {
+    case .press, .toggle:
+      // 两种语义在 iOS 上都用 light impact（设计只要求"轻"；差异归 F39）。
+      generator.impactOccurred()
+    case .success:
+      notification.notificationOccurred(.success)
+    }
   }
 }
 
