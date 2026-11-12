@@ -189,7 +189,9 @@ private struct DemoComponentSettingsView: View {
       return [.large]
     case .button, .card:
       return [.medium, .large]
-    case .switchControl, .checkbox, .badge, .avatar, .divider, .listSection:
+    case .switchControl, .checkbox, .badge, .avatar, .divider, .listSection,
+      .progressBar, .progressRing, .banner, .emptyState, .skeleton,
+      .alert, .actionSheet, .bottomSheet, .toast:
       return [.medium]
     }
   }
@@ -398,7 +400,9 @@ private struct DemoComponentSettingsView: View {
         DemoSettingHeader(title: "图标（44 个语义名）")
       }
 
-    case .switchControl, .checkbox, .badge, .avatar, .divider, .listSection:
+    case .switchControl, .checkbox, .badge, .avatar, .divider, .listSection,
+      .progressBar, .progressRing, .banner, .emptyState, .skeleton,
+      .alert, .actionSheet, .bottomSheet, .toast:
       Section {
         Text(verbatim: "该组件没有可切换的枚举。")
           .wdFont(WDType.body)

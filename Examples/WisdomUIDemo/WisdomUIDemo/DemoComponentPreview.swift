@@ -172,6 +172,24 @@ struct DemoComponentPreview: View {
       DemoDividerPreview()
     case .listSection:
       DemoListSectionPreview()
+    case .progressBar:
+      DemoProgressBarPreview()
+    case .progressRing:
+      DemoProgressRingPreview()
+    case .banner:
+      DemoBannerPreview()
+    case .emptyState:
+      DemoEmptyStatePreview()
+    case .skeleton:
+      DemoSkeletonPreview()
+    case .alert:
+      DemoAlertPreview()
+    case .actionSheet:
+      DemoActionSheetPreview()
+    case .bottomSheet:
+      DemoBottomSheetPreview()
+    case .toast:
+      DemoToastPreview()
     }
   }
 }
@@ -440,5 +458,167 @@ private struct DemoDividerPreview: View {
         .foregroundStyle(colors.textSecondary)
     }
     .frame(maxWidth: .infinity, alignment: .leading)
+  }
+}
+
+// MARK: - M4 反馈与弹层
+
+private struct DemoProgressBarPreview: View {
+  var body: some View {
+    VStack(alignment: .leading, spacing: WDSpacing.s6) {
+      WDProgressBar(value: 0.45, label: Text(verbatim: "上传进度"), valueText: Text(verbatim: "45%"))
+      WDProgressBar(label: Text(verbatim: "加载中"))
+      WDProgressBar(value: 1, label: Text(verbatim: "整理储物间"), valueText: Text(verbatim: "100%"))
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+  }
+}
+
+private struct DemoProgressRingPreview: View {
+  var body: some View {
+    HStack(alignment: .top, spacing: WDSpacing.s7) {
+      WDProgressRing(value: 0.6, label: Text(verbatim: "本周家务"), valueText: Text(verbatim: "3/5"))
+      WDProgressRing(
+        value: 0.45, size: .compact, label: Text(verbatim: "紧凑"), valueText: Text(verbatim: "45%"))
+      WDProgressRing(value: 1, label: Text(verbatim: "完成"))
+    }
+  }
+}
+
+private struct DemoBannerPreview: View {
+  @State private var visible = true
+
+  var body: some View {
+    VStack(spacing: WDSpacing.s4) {
+      if visible {
+        WDBanner(
+          isVisible: $visible,
+          variant: .info,
+          message: Text(verbatim: "已同步到家庭空间"),
+          action: .init(label: Text(verbatim: "查看"), action: {})
+        )
+        WDBanner(
+          isVisible: .constant(true), variant: .warning, message: Text(verbatim: "试用期还剩 3 天"))
+        WDBanner(
+          isVisible: .constant(true),
+          variant: .danger,
+          message: Text(verbatim: "网络不可用，改动已暂存本地"),
+          dismissAccessibilityLabel: Text(verbatim: "关闭网络提示")
+        )
+      } else {
+        WDButton(verbatim: "重新显示") { visible = true }
+      }
+    }
+  }
+}
+
+private struct DemoEmptyStatePreview: View {
+  var body: some View {
+    WDEmptyState(
+      icon: .task,
+      title: Text(verbatim: "还没有任务"),
+      message: Text(verbatim: "新建第一个任务，把要做的事记下来。"),
+      action: .init(label: Text(verbatim: "新建第一个任务"), action: {})
+    )
+  }
+}
+
+private struct DemoSkeletonPreview: View {
+  var body: some View {
+    VStack(alignment: .leading, spacing: WDSpacing.s6) {
+      WDSkeleton(variant: .text, lineCount: 3, accessibilityLabel: Text(verbatim: "加载中"))
+      WDSkeleton(variant: .list, accessibilityLabel: Text(verbatim: "加载中"))
+      WDSkeleton(variant: .card, accessibilityLabel: Text(verbatim: "加载中"))
+    }
+  }
+}
+
+private struct DemoAlertPreview: View {
+  @State private var shown = false
+
+  var body: some View {
+    DemoPreviewCanvas {
+      VStack(spacing: WDSpacing.s4) {
+        Text(verbatim: "阻断式弹窗：遮罩点击不关闭，必须做出选择。")
+          .wdFont(WDType.body)
+          .multilineTextAlignment(.center)
+        WDButton(verbatim: "删除任务", variant: .destructive) { shown = true }
+      }
+    }
+    .wdAlert(
+      isPresented: $shown,
+      title: Text(verbatim: "删除这条任务？"),
+      message: Text(verbatim: "删除后无法恢复，其他成员也看不到了。"),
+      actions: [
+        .init(label: Text(verbatim: "取消"), role: .cancel, action: {}),
+        .init(label: Text(verbatim: "删除"), role: .destructive, action: {}),
+      ]
+    )
+  }
+}
+
+private struct DemoActionSheetPreview: View {
+  @State private var shown = false
+
+  var body: some View {
+    DemoPreviewCanvas {
+      WDButton(verbatim: "打开操作表") { shown = true }
+    }
+    .wdActionSheet(
+      isPresented: $shown,
+      title: Text(verbatim: "任务操作"),
+      message: Text(verbatim: "选择要执行的操作。"),
+      items: [
+        .init(id: "share", label: Text(verbatim: "分享")),
+        .init(id: "delete", label: Text(verbatim: "删除"), role: .destructive),
+        .init(id: "cancel", label: Text(verbatim: "取消"), role: .cancel),
+      ],
+      onSelect: { _ in },
+      onCancel: {}
+    )
+  }
+}
+
+private struct DemoBottomSheetPreview: View {
+  @State private var shown = false
+
+  var body: some View {
+    DemoPreviewCanvas {
+      WDButton(verbatim: "打开底部面板") { shown = true }
+    }
+    .wdSheet(
+      isPresented: $shown,
+      detents: .all,
+      initialDetent: .half,
+      title: Text(verbatim: "选择成员"),
+      closeButtonAccessibilityLabel: Text(verbatim: "关闭成员选择")
+    ) {
+      VStack(alignment: .leading, spacing: WDSpacing.s4) {
+        Text(verbatim: "面板内容")
+          .wdFont(WDType.body)
+        Text(verbatim: "下滑关闭由系统接管；关闭键与焦点陷阱由系统保证。")
+          .wdFont(WDType.footnote)
+          .foregroundStyle(.secondary)
+      }
+      .padding(.vertical, WDSpacing.s5)
+    } footer: {
+      WDButton(verbatim: "完成") { shown = false }
+    }
+  }
+}
+
+private struct DemoToastPreview: View {
+  @State private var shown = false
+
+  var body: some View {
+    DemoPreviewCanvas {
+      WDButton(verbatim: "显示 Toast") { shown = true }
+    }
+    .wdToast(
+      isPresented: $shown,
+      variant: .success,
+      message: Text(verbatim: "任务已保存"),
+      action: .init(label: Text(verbatim: "撤销"), action: {})
+    )
   }
 }

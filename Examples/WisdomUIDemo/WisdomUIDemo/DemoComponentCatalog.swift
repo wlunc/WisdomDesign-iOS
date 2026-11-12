@@ -55,6 +55,15 @@ enum DemoComponentID: String, CaseIterable, Identifiable, Hashable, Sendable {
   case icon = "WDIcon"
   case divider = "WDDivider"
   case listSection = "WDListSection"
+  case progressBar = "WDProgressBar"
+  case progressRing = "WDProgressRing"
+  case banner = "WDBanner"
+  case emptyState = "WDEmptyState"
+  case skeleton = "WDSkeleton"
+  case alert = "WDAlert"
+  case actionSheet = "WDActionSheet"
+  case bottomSheet = "WDBottomSheet"
+  case toast = "WDToast"
 
   var id: String { rawValue }
 }
@@ -104,6 +113,62 @@ enum DemoComponentCatalog {
         "当前冻结的变体只有 plain",
       ],
       hasEnumSettings: true
+    ),
+    DemoComponentEntry(
+      id: .alert,
+      category: .actions,
+      icon: .overdue,
+      summary: "阻断式弹窗。固定 270 卡片、遮罩点击不关闭、支持带输入变体。",
+      layer: "Composites",
+      batch: "M4",
+      highlights: [
+        "固定宽 270、圆角 24、elevation.3",
+        "取消在左、确认/危险在右；点击后禁用防重复",
+        "出现时焦点移入弹层（screenChanged）",
+      ],
+      hasEnumSettings: false
+    ),
+    DemoComponentEntry(
+      id: .actionSheet,
+      category: .actions,
+      icon: .more,
+      summary: "底部操作表。行高 44，取消键与操作列表视觉分离，空 items 在 debug 下断言。",
+      layer: "Composites",
+      batch: "M4",
+      highlights: [
+        "行高 44；破坏性项用 status.danger",
+        "取消键独立成组",
+        "系统 sheet 负责焦点陷阱与键盘避让",
+      ],
+      hasEnumSettings: false
+    ),
+    DemoComponentEntry(
+      id: .bottomSheet,
+      category: .actions,
+      icon: .expand,
+      summary: "底部面板。half / large 两档，标题、内容、页脚三段，关闭键标签必填。",
+      layer: "Composites",
+      batch: "M4",
+      highlights: [
+        "档位 0.5 / 0.92，默认 .all",
+        "关闭键无障碍标签必填",
+        "下滑关闭由系统接管；interactiveDismissDisabled 可关",
+      ],
+      hasEnumSettings: false
+    ),
+    DemoComponentEntry(
+      id: .toast,
+      category: .actions,
+      icon: .done,
+      summary: "非阻塞轻提示。玻璃胶囊、3 秒/带操作 5 秒自动消失，不抢焦点。",
+      layer: "Composites",
+      batch: "M4",
+      highlights: [
+        "单行高 46、圆角 full",
+        "组件内 .task 计时，随视图消失取消",
+        "四个变体：neutral / success / warning / danger",
+      ],
+      hasEnumSettings: false
     ),
     DemoComponentEntry(
       id: .textField,
@@ -216,6 +281,76 @@ enum DemoComponentCatalog {
         "装饰件：不进无障碍树，颜色由容器给",
       ],
       hasEnumSettings: true
+    ),
+    DemoComponentEntry(
+      id: .progressBar,
+      category: .display,
+      icon: .inProgress,
+      summary: "线性进度。确定态按百分比填充，不确定态来回移动，完成态换成功色。",
+      layer: "Primitives",
+      batch: "M4",
+      highlights: [
+        "轨道高 6、圆角 full、最小宽 100",
+        "数值钳制到 0...1；完成时成功触觉一次",
+        "只跨 25/50/75/100 播报（由调用方给标签）",
+      ],
+      hasEnumSettings: false
+    ),
+    DemoComponentEntry(
+      id: .progressRing,
+      category: .display,
+      icon: .inProgress,
+      summary: "环形进度。标准 60 / 紧凑 44，线帽圆头，完成时环色转成功色。",
+      layer: "Primitives",
+      batch: "M4",
+      highlights: [
+        "标准 60 / 紧凑 44；线宽 6 / 5",
+        "12 点方向顺时针，线帽圆头",
+        "环本身装饰，信息由 label / valueText 承担",
+      ],
+      hasEnumSettings: false
+    ),
+    DemoComponentEntry(
+      id: .banner,
+      category: .display,
+      icon: .offline,
+      summary: "常驻页面提示。软底渐变、最多 2 行，支持一个操作与可选关闭键。",
+      layer: "Composites",
+      batch: "M4",
+      highlights: [
+        "三变体：info / warning / danger（success 不在冻结面内）",
+        "错误态文字加粗、图标与文字同时变化",
+        "可见性由调用方的 isVisible 持有",
+      ],
+      hasEnumSettings: false
+    ),
+    DemoComponentEntry(
+      id: .emptyState,
+      category: .display,
+      icon: .task,
+      summary: "空状态。图标底座 56 + 标题 + 说明 + 最多一个主操作。",
+      layer: "Composites",
+      batch: "M4",
+      highlights: [
+        "图标底座 56×56，装饰件",
+        "说明最多 2 行，文本最大宽 240",
+        "无操作时整块不可交互",
+      ],
+      hasEnumSettings: false
+    ),
+    DemoComponentEntry(
+      id: .skeleton,
+      category: .display,
+      icon: .duplicate,
+      summary: "骨架占位。文本 / 列表 / 卡片三形态，微光 2200ms，减弱动效或预算不足时静态。",
+      layer: "Composites",
+      batch: "M4",
+      highlights: [
+        "文本行高 11、圆角 6、宽度 70% / 45%",
+        "列表行与 WDListRow 等高",
+        "整区只朗读一次（标签由调用方给）",
+      ],
+      hasEnumSettings: false
     ),
     DemoComponentEntry(
       id: .divider,
@@ -554,7 +689,9 @@ struct DemoComponentSettings {
       return items
     case .icon:
       return [iconName.rawValue, iconSize.demoTitle]
-    case .switchControl, .checkbox, .badge, .avatar, .divider, .listSection:
+    case .switchControl, .checkbox, .badge, .avatar, .divider, .listSection,
+      .progressBar, .progressRing, .banner, .emptyState, .skeleton,
+      .alert, .actionSheet, .bottomSheet, .toast:
       return []
     }
   }

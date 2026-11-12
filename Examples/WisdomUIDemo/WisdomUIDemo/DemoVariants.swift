@@ -32,7 +32,8 @@ struct DemoVariantsSection: View {
       DemoDividerVariants()
     case .listSection:
       DemoListSectionVariants()
-    case .switchControl, .checkbox:
+    case .progressBar, .progressRing, .banner, .emptyState, .skeleton,
+      .alert, .actionSheet, .bottomSheet, .toast, .switchControl, .checkbox:
       EmptyView()
     }
   }
@@ -123,7 +124,9 @@ struct DemoStatesSection: View {
           }
         }
       }
-    case .card, .badge, .avatar, .icon, .divider, .listSection:
+    case .card, .badge, .avatar, .icon, .divider, .listSection,
+      .progressBar, .progressRing, .banner, .emptyState, .skeleton,
+      .alert, .actionSheet, .bottomSheet, .toast:
       EmptyView()
     }
   }

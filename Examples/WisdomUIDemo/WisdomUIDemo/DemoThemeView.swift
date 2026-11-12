@@ -105,7 +105,7 @@ struct DemoThemeView: View {
           Text(verbatim: "无障碍审计视口")
             .wdFont(WDType.headline)
             .foregroundStyle(colors.textPrimary)
-          Text(verbatim: "M2/M3 的 12 件代表性实例；nightly 的四类目审计从这里进入。")
+          Text(verbatim: "M2/M3/M4 的 21 件组件；4 件弹层从组件详情页打开，其余实例在这里审计。")
             .wdFont(WDType.caption1)
             .foregroundStyle(colors.textSecondary)
             .multilineTextAlignment(.leading)
@@ -133,7 +133,7 @@ struct DemoThemeView: View {
 
 // MARK: - 无障碍审计视口（M2 交付物，nightly 依赖）
 
-/// 组件无障碍审计视口：12 件各放一个代表性实例（全部带语义标签；装饰件按组件自身规则不进树）。
+/// 组件无障碍审计视口：M2/M3/M4 的组件各放一个代表性实例（弹层从详情页打开）。
 ///
 /// 这个页面刻意保持“全部实例在一屏”的旧形态：nightly 的 4 类目审计需要一个稳定、
 /// 可复现的覆盖范围。它从主题页进入，不再占用主列表。
@@ -221,6 +221,27 @@ struct DemoAuditViewport: View {
         }
 
         WDDivider()
+
+        WDProgressBar(value: 0.45, label: Text(verbatim: "上传进度"), valueText: Text(verbatim: "45%"))
+
+        HStack(alignment: .top, spacing: WDSpacing.s5) {
+          WDProgressRing(value: 0.6, label: Text(verbatim: "本周"), valueText: Text(verbatim: "3/5"))
+          WDProgressRing(value: 0.45, size: .compact, label: Text(verbatim: "紧凑"))
+        }
+
+        WDBanner(
+          isVisible: .constant(true),
+          variant: .info,
+          message: Text(verbatim: "已同步到家庭空间")
+        )
+
+        WDEmptyState(
+          icon: .task,
+          title: Text(verbatim: "还没有任务"),
+          message: Text(verbatim: "新建后在这里显示。")
+        )
+
+        WDSkeleton(variant: .text, lineCount: 3, accessibilityLabel: Text(verbatim: "加载中"))
       }
       .padding(WDSpacing.s4)
       .frame(maxWidth: 720)
