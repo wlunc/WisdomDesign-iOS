@@ -245,6 +245,8 @@ PY
 **出口判据（7 条）**：① 批前冻结完成（9 件契约入库）；② 玻璃档位单测（档位 × `appearance` × `textLevel` → `opaque|glass|glassStrong`，含两条"必须红"用例）绿；③ **效果配额 7 条**各自的计数/降级断言绿，且"同屏模糊面数量**可数**"；④ 对比度门槛按**最不利取色**验证（`contrast` 审计 + 每套 scheme 的对比度账目进契约）；⑤ 该批性能数字进报告；⑥ 六态快照入库（玻璃类 6 件用 `UIHostingController` + `drawHierarchy`）；⑦ 发布物冒烟（demo 构建 + 归档可产出）。
 **门禁强度**：`PR+nightly₃+发布前`。
 
+> **开工状态（2026-11-12）**：M3 已判定通过；M4 的批前签名冻结草案已落盘 = `docs/M4-SIGNATURE-FREEZE.md`（9 件推荐签名 + 契约条目 + **Q1–Q4 待项目负责人拍板**）。**未确认前未开写**。
+
 ### 2.6 M5 — 导航与表单（15 件）
 
 **本端任务**：`WDSegmentedControl`、`WDDatePicker`、`WDPullToRefresh`、`WDNavigationBar`、`WDTabBar`、`WDSearchField`、`WDRadio`、`WDSlider`、`WDStepper`、`WDChip`、`WDAvatarStack`、`WDPicker`、`WDFormRow`、`WDToolbar`、`WDFAB`（含 6 件 primitives：`WDSearchField`/`WDRadio`/`WDSlider`/`WDStepper`/`WDChip`/`WDAvatarStack`）。
