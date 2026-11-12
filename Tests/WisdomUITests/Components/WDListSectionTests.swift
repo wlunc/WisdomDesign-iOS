@@ -4,7 +4,7 @@ import UIKit
 
 @testable import WisdomUI
 
-/// `WDListSection`（M3 草案）的结构断言：空组隐藏、末行/选中传递、密度与间距。
+/// `WDListSection`（M3）的结构断言：空组隐藏、末行/选中传递、密度与间距。
 @MainActor
 @Suite("列表分组（WDListSection）")
 struct WDListSectionTests {

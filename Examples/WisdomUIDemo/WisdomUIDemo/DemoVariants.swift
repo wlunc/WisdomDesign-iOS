@@ -30,6 +30,8 @@ struct DemoVariantsSection: View {
       DemoIconVariants(settings: $settings)
     case .divider:
       DemoDividerVariants()
+    case .listSection:
+      DemoListSectionVariants()
     case .switchControl, .checkbox:
       EmptyView()
     }
@@ -121,7 +123,7 @@ struct DemoStatesSection: View {
           }
         }
       }
-    case .card, .badge, .avatar, .icon, .divider:
+    case .card, .badge, .avatar, .icon, .divider, .listSection:
       EmptyView()
     }
   }
@@ -392,6 +394,75 @@ private struct DemoListRowVariants: View {
           isSelected: settings.rowSelected,
           showsSeparator: settings.rowShowsSeparator
         )
+      }
+    }
+  }
+}
+
+// MARK: - ListSection
+
+private struct DemoListSectionItem: Identifiable {
+  let id: Int
+  let title: String
+  let subtitle: String
+}
+
+private struct DemoListSectionVariants: View {
+  @Environment(\.wdColors) private var colors
+
+  private let items = [
+    DemoListSectionItem(id: 1, title: "整理储物间", subtitle: "今天 18:00 前"),
+    DemoListSectionItem(id: 2, title: "擦窗", subtitle: "已完成"),
+    DemoListSectionItem(id: 3, title: "更换床单", subtitle: "明天"),
+  ]
+
+  var body: some View {
+    VStack(spacing: WDSpacing.s6) {
+      DemoSection("标准分组", subtitle: "标题 + 一个内容卡片；选中集合由 WDListSection 转成行上下文。") {
+        WDListSection(items: items, selection: [2], header: Text(verbatim: "今天")) {
+          item, context in
+          WDListRow(
+            title: Text(verbatim: item.title),
+            subtitle: Text(verbatim: item.subtitle),
+            leading: .icon(.task),
+            isSelected: context.isSelected,
+            showsSeparator: !context.isLast,
+            action: {}
+          )
+        }
+      }
+
+      DemoSection(
+        "标题动作与页脚",
+        subtitle: "标题右侧最多一个动作；页脚 footnote 由组件施加，样式不必调用方重复。"
+      ) {
+        WDListSection(
+          items: items,
+          header: Text(verbatim: "本周"),
+          headerAction: .init(label: Text(verbatim: "编辑"), action: {})
+        ) { item, context in
+          WDListRow(
+            title: Text(verbatim: item.title),
+            subtitle: Text(verbatim: item.subtitle),
+            leading: .icon(.task),
+            isSelected: context.isSelected,
+            showsSeparator: !context.isLast,
+            action: {}
+          )
+        } footer: {
+          Text(verbatim: "共 3 项，已完成 1 项")
+        }
+      }
+
+      DemoSection("空分组", subtitle: "空 items 是唯一判据：整组隐藏，不出现空标题或空页脚。") {
+        VStack(alignment: .leading, spacing: WDSpacing.s3) {
+          WDListSection(items: [DemoListSectionItem](), header: Text(verbatim: "空组")) { _, _ in
+            EmptyView()
+          }
+          Text(verbatim: "上面这个分组什么都不渲染（连标题也不出现）。")
+            .wdFont(WDType.caption1)
+            .foregroundStyle(colors.textTertiary)
+        }
       }
     }
   }

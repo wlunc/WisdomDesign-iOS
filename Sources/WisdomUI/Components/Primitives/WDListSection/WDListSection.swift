@@ -2,8 +2,7 @@ import SwiftUI
 
 /// 分组标题右侧的**分组级动作**（设计 19 §2：最多一个，`text.brand`）。
 ///
-/// **DRAFT**：`WDListSection` 的签名仍待 ios-lead 确认（`docs/M3-SIGNATURE-FREEZE.md`），
-/// 确认前不得合并到 `main`。
+/// 签名冻结 = `docs/M3-SIGNATURE-FREEZE.md`（2026-11-12）。
 public struct WDListSectionAction {
   /// 动作文案（由调用方给，库内零文案）。
   public let label: Text
@@ -45,7 +44,8 @@ public struct WDListSectionRowContext: Sendable, Equatable {
 /// - **空分组整组隐藏**（连标题/动作/页脚）；
 /// - 组内行由调用方提供；末行由 `WDListSectionRowContext.isLast` 告知，行自己关分隔线。
 ///
-/// **DRAFT**：签名待 ios-lead 确认（`docs/M3-SIGNATURE-FREEZE.md`），确认前不得合并到 `main`。
+/// 签名冻结 = `docs/M3-SIGNATURE-FREEZE.md`（2026-11-12）；六类断言见
+/// `docs/M3-PREP-LISTSECTION.md` §5。
 public struct WDListSection<Item: Identifiable, Row: View, Footer: View>: View {
   private let items: [Item]
   private let selection: Set<Item.ID>
@@ -103,9 +103,11 @@ public struct WDListSection<Item: Identifiable, Row: View, Footer: View>: View {
           headerAction.label
             .wdFont(WDType.footnote)
             .foregroundStyle(colors.textBrand)
+            // 热区必须落在**无障碍节点自身**（只包外层 frame 时审计读到的是文字 26×15.67）。
+            .frame(minWidth: WDSize.touchTargetMin, minHeight: WDSize.touchTargetMin)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .frame(minHeight: WDSize.touchTargetMin)
       }
     }
     .padding(.leading, WDSpacing.s5 + WDSpacing.s1)

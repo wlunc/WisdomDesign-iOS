@@ -170,6 +170,8 @@ struct DemoComponentPreview: View {
       DemoIconPreview(settings: $settings)
     case .divider:
       DemoDividerPreview()
+    case .listSection:
+      DemoListSectionPreview()
     }
   }
 }
@@ -314,6 +316,36 @@ private struct DemoListRowPreview: View {
     settings.rowTapCount += 1
     if settings.rowLeading == .checkbox || settings.rowLeading == .selection {
       settings.rowSelected.toggle()
+    }
+  }
+}
+
+private struct DemoListSectionPreview: View {
+  private struct Item: Identifiable {
+    let id: Int
+    let title: String
+    let subtitle: String
+  }
+
+  private let items = [
+    Item(id: 1, title: "整理储物间", subtitle: "今天 18:00 前"),
+    Item(id: 2, title: "擦窗", subtitle: "已完成"),
+    Item(id: 3, title: "更换床单", subtitle: "明天"),
+  ]
+
+  var body: some View {
+    DemoPreviewCanvas {
+      WDListSection(items: items, selection: [2], header: Text(verbatim: "今天")) {
+        item, context in
+        WDListRow(
+          title: Text(verbatim: item.title),
+          subtitle: Text(verbatim: item.subtitle),
+          leading: .icon(.task),
+          isSelected: context.isSelected,
+          showsSeparator: !context.isLast,
+          action: {}
+        )
+      }
     }
   }
 }

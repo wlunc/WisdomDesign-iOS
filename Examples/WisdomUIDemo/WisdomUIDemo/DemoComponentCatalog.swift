@@ -54,6 +54,7 @@ enum DemoComponentID: String, CaseIterable, Identifiable, Hashable, Sendable {
   case avatar = "WDAvatar"
   case icon = "WDIcon"
   case divider = "WDDivider"
+  case listSection = "WDListSection"
 
   var id: String { rawValue }
 }
@@ -227,6 +228,20 @@ enum DemoComponentCatalog {
         "1pt 高、全宽、border.hairline 色",
         "无圆角、无状态",
         "装饰件：不进无障碍树",
+      ],
+      hasEnumSettings: false
+    ),
+    DemoComponentEntry(
+      id: .listSection,
+      category: .structure,
+      icon: .task,
+      summary: "数据驱动的列表分组：标题、标题动作、一个内容卡片与可选页脚；空集合整组隐藏。",
+      layer: "Primitives",
+      batch: "M3",
+      highlights: [
+        "空 items 整组隐藏（连标题/动作/页脚）",
+        "末行通过 WDListSectionRowContext.isLast 交给行关分隔线",
+        "标题 overline + 内容卡片 + 可选页脚 footnote",
       ],
       hasEnumSettings: false
     ),
@@ -539,7 +554,7 @@ struct DemoComponentSettings {
       return items
     case .icon:
       return [iconName.rawValue, iconSize.demoTitle]
-    case .switchControl, .checkbox, .badge, .avatar, .divider:
+    case .switchControl, .checkbox, .badge, .avatar, .divider, .listSection:
       return []
     }
   }

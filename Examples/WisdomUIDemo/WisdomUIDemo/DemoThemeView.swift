@@ -105,7 +105,7 @@ struct DemoThemeView: View {
           Text(verbatim: "无障碍审计视口")
             .wdFont(WDType.headline)
             .foregroundStyle(colors.textPrimary)
-          Text(verbatim: "M2 的 11 件代表性实例；nightly 的四类目审计从这里进入。")
+          Text(verbatim: "M2/M3 的 12 件代表性实例；nightly 的四类目审计从这里进入。")
             .wdFont(WDType.caption1)
             .foregroundStyle(colors.textSecondary)
             .multilineTextAlignment(.leading)
@@ -133,7 +133,7 @@ struct DemoThemeView: View {
 
 // MARK: - 无障碍审计视口（M2 交付物，nightly 依赖）
 
-/// 组件无障碍审计视口：11 件各放一个代表性实例（全部带语义标签；装饰件按组件自身规则不进树）。
+/// 组件无障碍审计视口：12 件各放一个代表性实例（全部带语义标签；装饰件按组件自身规则不进树）。
 ///
 /// 这个页面刻意保持“全部实例在一屏”的旧形态：nightly 的 4 类目审计需要一个稳定、
 /// 可复现的覆盖范围。它从主题页进入，不再占用主列表。
@@ -143,6 +143,16 @@ struct DemoAuditViewport: View {
   @State private var text = "整理储物间"
   @State private var switchOn = true
   @State private var checked = true
+
+  private struct AuditSectionItem: Identifiable {
+    let id: Int
+    let title: String
+  }
+
+  private let auditSectionItems = [
+    AuditSectionItem(id: 1, title: "整理储物间"),
+    AuditSectionItem(id: 2, title: "洗车"),
+  ]
 
   var body: some View {
     ScrollView {
@@ -174,6 +184,20 @@ struct DemoAuditViewport: View {
               action: {}
             )
           }
+        }
+
+        WDListSection(
+          items: auditSectionItems,
+          header: Text(verbatim: "本周"),
+          headerAction: .init(label: Text(verbatim: "编辑"), action: {})
+        ) { item, context in
+          WDListRow(
+            title: Text(verbatim: item.title),
+            showsSeparator: !context.isLast,
+            action: {}
+          )
+        } footer: {
+          Text(verbatim: "共 2 项")
         }
 
         HStack(spacing: WDSpacing.s3) {
