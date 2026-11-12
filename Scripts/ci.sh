@@ -254,21 +254,52 @@ cmd_pr() {
   fi
   phase_end
 
-  phase_begin "覆盖率报告（xccov；只打印不拦，M3 起转门槛）"
+  phase_begin "覆盖率门槛（Foundation/** ≥ 80%，排除 generated/）"
   xcrun xccov view --report --json "$DD/pr.xcresult" >"$PERF_DIR/coverage.json"
   python3 - "$PERF_DIR/coverage.json" <<'PY'
 import json, sys
+
 doc = json.load(open(sys.argv[1], encoding="utf-8"))
 targets = doc.get("targets", [])
 if not targets:
     print("覆盖率报告为空（xccov 没有可用输入）", file=sys.stderr)
     sys.exit(1)
+
 print("覆盖率目标数：%d" % len(targets))
-for t in targets:
-    cov = t.get("lineCoverage")
-    if cov is None:
+for target in targets:
+    cov = target.get("lineCoverage")
+    if cov is not None:
+        print("  %-24s %6.2f%%" % (target.get("name", "?"), cov * 100))
+
+foundation = []
+for target in targets:
+    if target.get("name") != "WisdomUI":
         continue
-    print("  %-24s %6.2f%%" % (t.get("name", "?"), cov * 100))
+    for file in target.get("files", []):
+        path = file.get("path", "")
+        if "/Foundation/" in path and "/generated/" not in path:
+            foundation.append(file)
+
+if not foundation:
+    print("覆盖率门槛：找不到 Foundation/** 的源文件（xccov 输出结构变了？）", file=sys.stderr)
+    sys.exit(1)
+
+covered = sum(file.get("coveredLines", 0) for file in foundation)
+executable = sum(file.get("executableLines", 0) for file in foundation)
+if executable == 0:
+    print("覆盖率门槛：Foundation/** 的可执行行数为 0", file=sys.stderr)
+    sys.exit(1)
+ratio = covered / executable * 100
+print("Foundation/**（排除 generated/）：%.2f%%（%d/%d），门槛 80%%" % (ratio, covered, executable))
+if ratio < 80.0:
+    print("覆盖率门槛未过：Foundation/** 需要 ≥ 80%（DEV-PLAN §2.4-④）。", file=sys.stderr)
+    for file in sorted(foundation, key=lambda f: f.get("lineCoverage", 0)):
+        print(
+            "  %6.2f%% %s" % (file.get("lineCoverage", 0) * 100, file.get("name", "?")),
+            file=sys.stderr,
+        )
+    print("处置：补 Foundation/** 单测，不要降低门槛。", file=sys.stderr)
+    sys.exit(1)
 PY
   phase_end
 
