@@ -596,7 +596,7 @@ private struct DemoBottomSheetPreview: View {
       VStack(alignment: .leading, spacing: WDSpacing.s4) {
         Text(verbatim: "面板内容")
           .wdFont(WDType.body)
-        Text(verbatim: "下滑关闭由系统接管；关闭键与焦点陷阱由系统保证。")
+        Text(verbatim: "把手可拖拽/点击切换档位；下滑关闭；点遮罩也可关闭。")
           .wdFont(WDType.footnote)
           .foregroundStyle(.secondary)
       }

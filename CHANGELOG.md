@@ -8,7 +8,7 @@
 
 ### Added
 
-- **M4 九件落地（反馈与弹层）**：`WDBottomSheet`（系统 sheet + half/large 档位）、`WDActionSheet`、
+- **M4 九件落地（反馈与弹层）**：`WDBottomSheet`（窗口级自绘贴边面板 + half/large 档位）、`WDActionSheet`、
   `WDAlert`（270 卡片 + 带输入重载 + screenChanged 焦点移入）、`WDToast`（组件内 .task 计时）、
   `WDBanner`（3 变体 + 软底渐变）、`WDEmptyState`、`WDSkeleton`（text/list/card + 2200ms 微光）、
   `WDProgressBar`、`WDProgressRing`。冒烟段的 sheet/actionSheet 声明同 PR 退役；
@@ -119,9 +119,9 @@
 
 ### Changed
 
-- **`WDBottomSheet` 按设计 26 补齐**：标题改 `title3`、头部固定 56；内容包 `ScrollView` 并加 12
-  顶距（可滚动，不把面板撑成全屏）；底部操作区固定、上方 1pt 分割线、高 72、按钮右对齐；
-  面板宽在宽屏上限 480。8 态基线重录。
+- **`WDBottomSheet` 按设计 26 补齐并改自绘贴边**：标题 `title3`、头部 56；内容 `ScrollView` + 12
+  顶距；底部操作区固定、1pt 分割线、高 72、右对齐；面板左右/底部贴屏幕、顶部 32 圆角、把手 36×5；
+  half/large 档位、把手拖拽/点击切换、下滑关闭、点遮罩关闭、键盘上移。8 态基线重录。
 - **`WDActionSheet` 按设计 27 参考重排**：左右 16 内距；标题/说明移入列表卡片顶部（caption1 /
   text.secondary + 底部分隔线）；行左对齐、可选 20pt 前置图标；取消为独立 48pt **圆角卡片**
   （18 圆角、semibold、e2 阴影）；破坏性项置底。呈现改为 **窗口级 presenter + 自绘遮罩**：

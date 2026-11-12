@@ -13,7 +13,7 @@ public enum WDBottomSheetDetents: Sendable, Equatable {
 }
 
 extension View {
-  /// 底部面板（锚点视图 + 系统 sheet；焦点陷阱/键盘避让由系统接管）。
+  /// 底部面板（窗口级自绘；贴屏幕左右/底部，顶部 32 圆角；把手/标题/滚动内容/固定页脚）。
   public func wdSheet<Content: View, Footer: View>(
     isPresented: Binding<Bool>,
     detents: WDBottomSheetDetents = .all,
@@ -43,20 +43,38 @@ extension View {
   }
 }
 
-/// 面板内容（与系统 sheet 解耦，便于快照与组合；内部类型）。
+/// 面板内容（与窗口 presenter 解耦，便于快照与组合；内部类型）。
 struct WDBottomSheetPanel<Content: View, Footer: View>: View {
   let title: Text?
   let closeButtonAccessibilityLabel: Text
   let onClose: () -> Void
   let content: Content
   let footer: Footer
+  let bottomInset: CGFloat
 
   @Environment(\.wdColors) private var colors
 
   private var headerMinHeight: CGFloat { WDSpacing.s10 + WDSpacing.s3 }
 
+  init(
+    title: Text?,
+    closeButtonAccessibilityLabel: Text,
+    onClose: @escaping () -> Void,
+    content: Content,
+    footer: Footer,
+    bottomInset: CGFloat = 0
+  ) {
+    self.title = title
+    self.closeButtonAccessibilityLabel = closeButtonAccessibilityLabel
+    self.onClose = onClose
+    self.content = content
+    self.footer = footer
+    self.bottomInset = bottomInset
+  }
+
   var body: some View {
     VStack(spacing: 0) {
+      handle
       header
       ScrollView {
         content
@@ -76,8 +94,29 @@ struct WDBottomSheetPanel<Content: View, Footer: View>: View {
           .padding(.bottom, WDSpacing.s4)
       }
     }
+    .padding(.bottom, bottomInset)
+    .background(colors.surfaceCardSolid)
+    .clipShape(
+      UnevenRoundedRectangle(
+        topLeadingRadius: WDRadius.xxl,
+        bottomLeadingRadius: 0,
+        bottomTrailingRadius: 0,
+        topTrailingRadius: WDRadius.xxl,
+        style: .continuous
+      )
+    )
+    .wdShadow(WDElevation.e3)
     .frame(maxWidth: WDSize.sheetMaxWidth)
     .frame(maxWidth: .infinity, alignment: .top)
+  }
+
+  private var handle: some View {
+    Capsule()
+      .fill(colors.borderHairlineStrong)
+      .frame(width: 36, height: 5)  // wd-structure-check:disable R7 — 设计 26 §3 把手
+      .padding(.top, WDSpacing.s3)
+      .padding(.bottom, WDSpacing.s3)
+      .accessibilityHidden(true)
   }
 
   private var header: some View {
@@ -111,67 +150,53 @@ private struct WDSheetModifier<SheetContent: View, SheetFooter: View>: ViewModif
   let content: () -> SheetContent
   let footer: () -> SheetFooter
 
-  @State private var selectedDetent: PresentationDetent
-  @Environment(\.wdColors) private var colors
-
-  init(
-    isPresented: Binding<Bool>,
-    detents: WDBottomSheetDetents,
-    initialDetent: WDBottomSheetDetent,
-    interactiveDismissDisabled: Bool,
-    title: Text?,
-    closeButtonAccessibilityLabel: Text,
-    onCloseButtonTap: (() -> Void)?,
-    onDismiss: (() -> Void)?,
-    content: @escaping () -> SheetContent,
-    footer: @escaping () -> SheetFooter
-  ) {
-    self._isPresented = isPresented
-    self.detents = detents
-    self.initialDetent = initialDetent
-    self.interactiveDismissDisabled = interactiveDismissDisabled
-    self.title = title
-    self.closeButtonAccessibilityLabel = closeButtonAccessibilityLabel
-    self.onCloseButtonTap = onCloseButtonTap
-    self.onDismiss = onDismiss
-    self.content = content
-    self.footer = footer
-    self._selectedDetent = State(initialValue: Self.presentationDetent(for: initialDetent))
+  func body(content anchor: Content) -> some View {
+    anchor
+      .accessibilityHidden(isPresented)
+      .onAppear {
+        if isPresented {
+          present()
+        }
+      }
+      .onChange(of: isPresented) { _, presented in
+        if presented {
+          present()
+        } else {
+          WDBottomSheetPresenter.shared.dismiss()
+          onDismiss?()
+        }
+      }
+      .onDisappear {
+        WDBottomSheetPresenter.shared.dismiss()
+      }
   }
 
-  func body(content anchor: Content) -> some View {
-    anchor.sheet(isPresented: $isPresented, onDismiss: onDismiss) {
-      WDBottomSheetPanel(
+  private func present() {
+    let effectiveInitial: WDBottomSheetDetent
+    switch detents {
+    case .fixed(let detent):
+      effectiveInitial = detent
+    case .all:
+      effectiveInitial = initialDetent
+    }
+    WDBottomSheetPresenter.shared.present { size, bottomInset in
+      WDBottomSheetLayer(
         title: title,
         closeButtonAccessibilityLabel: closeButtonAccessibilityLabel,
-        onClose: {
+        detents: detents,
+        initialDetent: effectiveInitial,
+        interactiveDismissDisabled: interactiveDismissDisabled,
+        containerSize: size,
+        bottomInset: bottomInset,
+        onRequestDismiss: { isCloseButton in
           isPresented = false
-          onCloseButtonTap?()
+          if isCloseButton {
+            onCloseButtonTap?()
+          }
         },
         content: content(),
         footer: footer()
       )
-      .presentationDetents(detentSet, selection: $selectedDetent)
-      .presentationDragIndicator(.visible)
-      .interactiveDismissDisabled(interactiveDismissDisabled)
-      .presentationCornerRadius(WDRadius.xxl)
-      .presentationBackground(colors.surfaceCardSolid)
-    }
-  }
-
-  private var detentSet: Set<PresentationDetent> {
-    switch detents {
-    case .all:
-      return [Self.presentationDetent(for: .half), Self.presentationDetent(for: .large)]
-    case .fixed(let detent):
-      return [Self.presentationDetent(for: detent)]
-    }
-  }
-
-  private static func presentationDetent(for detent: WDBottomSheetDetent) -> PresentationDetent {
-    switch detent {
-    case .half: return .fraction(WDSize.sheetDetentHalf)
-    case .large: return .fraction(WDSize.sheetDetentLarge)
     }
   }
 }
