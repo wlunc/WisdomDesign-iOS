@@ -2,7 +2,7 @@
 
 > **这份文件回答三件事**：仓库里的文档**在哪**、**怎么读**、**哪些还没验证**。
 > 它**不是**开发计划本身——计划在 [`DEV-PLAN.md`](DEV-PLAN.md)，规格在 [`SPEC.md`](SPEC.md)，结构在 [`ARCHITECTURE.md`](ARCHITECTURE.md)，操作手册在 [`../AGENTS.md`](../AGENTS.md)。
-> 状态快照（**2026-11-12 晚间**）：**M0、M1、M2 已交付并签字**；**M3 技术判据 6/6 完成**（`WDListSection` + 32 张 8 态基线 + demo 审计挂载；12 个契约 yaml 已回填设计仓 `89779f7`；API 封板 661 符号；`Foundation/**` 覆盖率硬门槛 97.73%、结构门禁 `--strict` 0 warning；体积门槛 545,178 B）。`Scripts/ci.sh pr` **全绿**（113 tests / 符号 661 零 diff / warm 20.84 s）；**M3 nightly 第 1/3 日绿**（2026-11-12：设备编译 2.13 s + 17 快照测试 / 136 基线（27.52 s）+ demo 审计 67.65 s，`AUDIT-ISSUE=0`；整条 97.29 s）。**出口未签字**：待 2026-11-13、11-14 两日 nightly；记录 = [`M3-EXIT-REPORT.md`](M3-EXIT-REPORT.md)。文档改动以 `git log` 为准。
+> 状态快照（**2026-11-12 晚间**）：**M0、M1、M2 已交付并签字**；**M3 已判定通过（技术判据 6/6）**（`WDListSection` + 32 张 8 态基线 + demo 审计挂载；12 个契约 yaml 已回填设计仓 `89779f7`；API 封板 661 符号；`Foundation/**` 覆盖率硬门槛 97.73%、结构门禁 `--strict` 0 warning；体积门槛 545,178 B）。`Scripts/ci.sh pr` **全绿**（113 tests / 符号 661 零 diff / warm 20.84 s）；**M3 nightly 第 1/3 日绿**（2026-11-12：设备编译 2.13 s + 17 快照测试 / 136 基线（27.52 s）+ demo 审计 67.65 s，`AUDIT-ISSUE=0`；整条 97.29 s）。**M3 出口已判定通过（2026-11-12）**：项目负责人决定忽略 nightly₃（实测仅第 1 日，不补跑）；记录 = [`M3-EXIT-REPORT.md`](M3-EXIT-REPORT.md) §6。文档改动以 `git log` 为准。
 
 ---
 

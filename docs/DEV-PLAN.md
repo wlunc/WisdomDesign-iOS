@@ -235,7 +235,7 @@ PY
 >
 > **收尾状态（2026-11-12）**：I-1 ✅（M2 已签字）；I-2 ✅（`docs/M3-SIGNATURE-FREEZE.md`，五问按建议确认）。`WDListSection` 六类断言收尾——清 `DRAFT`、**8 态快照 4 变体 × 8 = 32 张**、demo 审计视口扩到 **12 件**；**12 个契约 yaml** 已回填设计仓（11 件 + `WDListSection`）；**API 封板**（661 符号零 diff，`docs/M3-API-FREEZE.md`）；**覆盖率门槛**（`Foundation/**` 97.73% ≥ 80%，已转硬门槛）；**结构门禁 `--strict`**（R7/R20/R21 的 warning 一律拦，0 warning / 51 处带理由豁免）；**体积门槛**（P50 495,616 B × 1.10 = **545,178 B ≈ 532 KB**，已写 README/CHANGELOG）。
 > `ci.sh pr` 全绿（113 tests / 661 符号 / Foundation 97.73%）；**M3 第 1/3 日 nightly 绿**（2026-11-12：设备编译 2.13 s + 17 快照测试 / 136 基线（27.52 s）+ demo 审计 67.65 s，3 UITest 全过、`AUDIT-ISSUE=0`；整条 97.29 s）。
-> **待办**：nightly 第 2/3 日（11-13）与第 3/3 日（11-14）后判定出口。出口报告 = `docs/M3-EXIT-REPORT.md`（技术判据 6/6；门禁 1/3 日，**未签字**）。
+> **出口判定（2026-11-12）**：**通过** —— 技术判据 6/6；项目负责人明确决定忽略 nightly₃（实测仅第 1 日；11-13/11-14 不补跑）。出口报告 = `docs/M3-EXIT-REPORT.md` §6。
 **门禁强度**：`PR+nightly₃+发布前`。
 
 ### 2.5 M4 — 反馈与弹层（9 件）

@@ -92,7 +92,7 @@ cold 的 PR-2 那 45 s 是 `swift Scripts/canonicalize-api.swift` 的**宿主模
 原始数据：`.build/perf/ci-measure-20261007.json`。**测法变了要重测**（改 `ci.sh` 的 PR 阶段、换 Xcode 大版本、换金标设备）。
 - **覆盖率门槛（M3 起生效）**：最近一次门禁（2026-11-12）`WisdomUI` **61.14%**、**`Foundation/**` 97.73%（603/617）** ⇒ **PR 的覆盖率阶段已由「只打印」转为硬门槛**（`Scripts/ci.sh pr`：`Foundation/**` ≥ 80%，排除 `generated/`；组件的 `+Previews` 不计入）。组件级数字**只报不拦**，不设门槛。
 - `Scripts/ci.sh nightly`：M2 的 **3 日已齐**（2026-11-10/11/12；11-12 首跑因 `launch-count` 的 near-threshold 告警偶发红，同代码复跑 3/3 绿 + 夹具窄例外），**M2 已判定通过（ios-lead 签字 2026-11-12）**，详见 `docs/M2-EXIT-REPORT.md`。
-- `Scripts/ci.sh nightly`（M3）：**第 1/3 日绿（2026-11-12）**——设备编译 2.13 s + **17 快照测试 / 136 基线**（27.52 s）+ demo 四类目审计 67.65 s（3 条 UITest 全过，`AUDIT-ISSUE=0`；整条 97.29 s）；第 2/3 日（11-13）、第 3/3 日（11-14）跑完后才判定 M3 出口。
+- `Scripts/ci.sh nightly`（M3）：**第 1/3 日绿（2026-11-12）**——设备编译 2.13 s + **17 快照测试 / 136 基线**（27.52 s）+ demo 四类目审计 67.65 s（3 条 UITest 全过，`AUDIT-ISSUE=0`；整条 97.29 s）；项目负责人 2026-11-12 决定忽略 nightly₃；M3 按技术判据 6/6 判定通过（nightly 仅第 1 日实测，不补跑）。
 - `.github/workflows/ci.yml`：**【未验证】** 本仓尚无一次 GitHub Actions 实跑（macOS 26 镜像标签与自带 Xcode 版本属外部事实）。
 
 ### 归档体积门槛（E3-iOS-a，M3 起）
