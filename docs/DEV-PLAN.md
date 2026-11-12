@@ -184,7 +184,7 @@ PY
 
 ### 2.3 M2 — 首批 11 件（**关键路径 2 件串行在前**）
 
-> **批前签名冻结（I-2）**：表单 = `docs/M2-SIGNATURE-FREEZE.md`（2026-10-07 填报；**2026-11-10 补签**：§5.4 的 ①–⑧ / 两个值类型 / §5.3 选 (b) / §5.5 rawValue = 语义名全部 ✅；**架构师契约副本确认已于 2026-11-10 落盘**（签署记录 = `docs/CONTRACTS-CONFIRMATION-REQUEST.md` 的「5. 架构师确认记录」），按 I-2 原文以本表单代替 `contracts/*.yaml`，回填时点 = M3 出口前）。
+> **批前签名冻结（I-2）**：表单 = `docs/M2-SIGNATURE-FREEZE.md`（2026-10-07 填报；**2026-11-10 补签**：§5.4 的 ①–⑧ / 两个值类型 / §5.3 选 (b) / §5.5 rawValue = 语义名全部 ✅；**架构师契约副本确认已于 2026-11-10 落盘**（签署记录 = `docs/CONTRACTS-CONFIRMATION-REQUEST.md` 的「5. 架构师确认记录」），按 I-2 原文以本表单代替 `contracts/*.yaml`；**已于 2026-11-12 回填**（12 个 yaml，设计仓 `89779f7`））。
 > 其中 **3 件已冻结**（`WDButton`/`WDTextField`/`WDListRow`，誊录自 M0-11 冒烟段）、**8 件按建议冻结**（2026-11-10）；
 > **2 条阻塞**：① `WDIconName` 的 44 条语义名未产出（I-M0-h）—— **已解除**（2026-10-07：`9b899dc` 接入 44 条生成物，`7bb77d6` 回填 `WDIcon` 与三个延后成员）；② `WDCheckbox` 的**契约名**冻结依赖 Android 侧 14 行改名（SPEC R3-d）—— **仍待 Android 书面复核，不阻 iOS 实现**（`isChecked` 形态已冻结；注：`android/docs/SPEC.md` §2.10 已记载 14 行改名结果，回填前由 android-lead 确认一次，见 `docs/CONTRACTS-CONFIRMATION-REQUEST.md` 的 5.5）。
 >
@@ -193,7 +193,7 @@ PY
 > ① nightly **3 日已齐**（2026-11-10：16 tests + 审计 47.0s；11-11：2.1s + 16 tests + 审计 69.6s；11-12：**首跑红→两次复跑绿** —— 首跑报 `launch-count` 的 "Contrast nearly passed" 非 WCAG 失败，复跑 3/3 绿 + 夹具点名窄例外，整条 69.1s 绿；**07:49 最终复跑绿**（1.3s + 16 tests + 审计 68.5s，AUDIT-ISSUE=0））；库代码三天未变，是否将首跑红视为断 streak 由 ios-lead 签字确认；
 > ② 性能数字已进报告（11 件渲染耗时，只报不拦）；③ 无障碍审计已覆盖组件视口，**6 条窄例外**逐条点名
 > （固定字号头像/徽标、行的单行截断），音频播报仍不可机检；④ 契约 `contracts/*.yaml` 未落库，
-> 按 I-2 以冻结表单代替；**架构师书面确认已于 2026-11-10 落盘**（签署记录 = `docs/CONTRACTS-CONFIRMATION-REQUEST.md` 的「5. 架构师确认记录」），回填时点 = M3 出口前。**判定记录见该报告 §7。**
+> 按 I-2 以冻结表单代替；**架构师书面确认已于 2026-11-10 落盘**（签署记录 = `docs/CONTRACTS-CONFIRMATION-REQUEST.md` 的「5. 架构师确认记录」），**已于 2026-11-12 回填**（12 个 yaml，设计仓 `89779f7`）。**判定记录见该报告 §7。**
 > **两条登记未闭合**（§13.1 两行因此仍为 🚧，不写 ✅）：
 > ① **错误态 assertive 播报**：§2.10-#03 要求"错误出现时播报（assertive，一次）"。`Text` 无法取串 ⇒ 组件按 F22 的另一条路径挂 `accessibilityHint`；**播报层已于 2026-11-10 落地**（`WDSystemAnnouncer` / `WDAnnouncementThrottle`，冒烟段已退役），但 `WDTextField` 的冻结签名**没有 announcer 注入点**。待裁决：**调用方播报**（demo/上层持 `WDSystemAnnouncer`，验收移到 demo 层）还是**组件注入**（改签名或加环境键 ⇒ 走 U 项/契约流程）。owner = ios-lead + 架构师，时点 = **M2 出口前**。
 > ② **显隐切换的 selection 位置**：iOS 17 无 `TextField(text:selection:)`（SPEC §2.3 裁决 2 的单实例方案不可用）⇒ 按该条**降级路径**实现"焦点回填"，光标位置由系统落在末尾；需设计/组长确认可接受。owner = ios-lead，时点 = **M2 出口前**。

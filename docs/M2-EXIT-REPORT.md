@@ -4,7 +4,7 @@
 > 判定环境：Xcode 26.6（Build 17F113）／iOS 26.5 模拟器（iPhone Air，UDID 711BF16D-…）
 > 最终 nightly：**2026-11-12 07:49 绿**（HEAD `1bedada`：设备编译 1.3s + 16 tests 快照 + demo 审计 68.5s，3 条 UITest 全过，`AUDIT-ISSUE=0`）。
 > **结论：11 件代码与逐件六类断言已落地；出口判据 6 条均有结论**（② 以冻结表单 + 架构师书面确认替代闭合，
-> `contracts/*.yaml` 回填 = M3 出口前）；nightly 已凑满 **3 日**（2026-11-10/11/12，第 3 日首跑红→当日**两次**复跑绿，见 §4-①）
+> `contracts/*.yaml` 已于 **2026-11-12 回填**（12 个 yaml，设计仓 `89779f7`））；nightly 已凑满 **3 日**（2026-11-10/11/12，第 3 日首跑红→当日**两次**复跑绿，见 §4-①）
 > ⇒ **判定：通过（ios-lead 签字 2026-11-12）**。11-12 首跑红按 flaky（复跑绿 + 库代码三天未变）**计入 3 日窗口**。
 
 ## 1. 出口判据逐条判定（DEV-PLAN §2.3 的 6 条）
@@ -12,7 +12,7 @@
 | # | 判据 | 证据 | 结论 |
 | --- | --- | --- | --- |
 | ① | 迁移后 `api/WisdomUI.api.json` 无未解释差异 | 符号 453 → **641**，逐批随成因提交并写 CHANGELOG（+18 / +16 / +22 / +13 / +43 / +53）；末次 `dump-api` **零 diff** | ✅ |
-| ② | 11 件的契约用例名与实现一致（`params`/`slots`/`default` 与 §5.3） | 11 件签名与 `docs/M2-SIGNATURE-FREEZE.md` §1.1+§5.1+§5.2 逐字一致（编译产物级自证：641 符号零 diff）；`contracts/*.yaml` **仍未落库**，按 I-2 原文以冻结表单代替；**架构师书面确认 2026-11-10**（`docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5） | ✅（替代闭合） |
+| ② | 11 件的契约用例名与实现一致（`params`/`slots`/`default` 与 §5.3） | 11 件签名与 `docs/M2-SIGNATURE-FREEZE.md` §1.1+§5.1+§5.2 逐字一致（编译产物级自证：641 符号零 diff）；`contracts/*.yaml` **已落库（2026-11-12）**：11 件 + `WDListSection` = 12 个 yaml（设计仓 `89779f7`）；此前按 I-2 原文以冻结表单代替，**架构师书面确认 2026-11-10**（`docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5） | ✅ |
 | ③ | 六态截图入库且 `--tokens-trace` 绿 | **104 张基线**（M1 的 16 + M2 的 88 = 11 件 × 8 态）；PR-0 的 tokens trace 绿 | ✅ |
 | ④ | 无障碍断言（语义树/热区/对比度最不利取色）通过 | demo 增加**组件审计视口**（11 件代表性实例，两个页签分别跑 4 类目）；审计绿，**6 条带理由的窄例外**逐条点名（固定字号头像/徽标 ×3、单行截断 ×3）；装饰件不进树、必填标签、触觉网关有单测 | ✅（含 2 类登记例外，见 §4-②） |
 | ⑤ | 该批性能数字进报告（不拦） | §3 的 11 件渲染耗时（只报不拦） | ✅ |
@@ -59,7 +59,7 @@
 | ① | **nightly 连续 3 日绿** | 2026-11-10（2.8s + 16 tests + 审计 47.0s）；2026-11-11（2.1s + 16 tests + 审计 69.6s，含目录导航）；**2026-11-12 第 3 日：首跑红 → 两次复跑绿**——首跑在 demo 审计报 `launch-count` 的 "Contrast nearly passed"（13pt；实测 ≈16:1，**非 WCAG 失败**），同代码复跑 **3/3 绿**，夹具加点名窄例外后整条绿（1.2s + 16 tests + 审计 69.1s）；**07:49 最终复跑绿**（1.3s + 16 tests + 审计 68.5s，`AUDIT-ISSUE=0`）；**库代码三天未变** | ✅（flaky 说明见左；是否将 11-12 计入 3 日窗口由 ios-lead 签字时确认） |
 | ② | **组件无障碍审计的窄例外** | 审计已覆盖 11 件（两页签）；放行 6 条并逐条点名：固定字号（头像首字 12pt ×2、徽标 11pt）与行的单行截断（×3）。**已接受（2026-11-10，见 `docs/M2-DEVIATIONS.md` §5）**；语音播报的音频效果仍不可机检（代码级实现 + 人工 review） | 已裁决接受 / 本次出口 |
 | ③ | **错误态 assertive 播报** | `WDTextField` 只挂 `accessibilityHint`；播报层（`WDSystemAnnouncer`）已落地。**已裁决：调用方播报**（SPEC 回写 P20，2026-11-10）；组件无注入点属有意设计。音频效果仍不可机检 | 已裁决 / 本次出口 |
-| ④ | **契约 `contracts/*.yaml`** | **已闭合（2026-11-10）**：I-2 以冻结表单代替，架构师书面确认（`docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5）；yaml 回填 = **M3 出口前**（`../wisdomdesign/contracts/`） | 架构师（已确认）/ M3 出口前回填 |
+| ④ | **契约 `contracts/*.yaml`** | **已落库（2026-11-12）**：11 件 + `WDListSection` = 12 个 yaml 已回填 `../wisdomdesign/contracts/`（设计仓提交 `89779f7`）；M2 判据②的「回填」条件闭合。`WDCheckbox` 的 Android 书面复核仍待 android-lead（契约名 `checked` 已按 android SPEC §2.10 落库） | 架构师（已确认）/ **已回填** |
 | ⑤ | **真机采样（U-05）** | 设备无线连接，XCUITest runner 无法 bootstrap；`⌘R` 不受影响。观感结论必须人给（USB 直连后重跑） | 用户 + ios-dev / M1 遗留，M2 出口随批复核 |
 | ⑥ | **U-10（caption2 审计）** | 系统审计把 11pt 文本判为 Dynamic Type unsupported；组件若在审计视口用 caption2 需窄例外或改档 | ios-lead + tech-lead / 挂 demo 审计前 |
 | ⑦ | **M1 出口报告签字** | `M1-EXIT-REPORT.md` 判定人仍"待签字" | ios-lead / 与 M2 出口一并 |
@@ -86,8 +86,8 @@
 
 - **判定 M2 通过（2026-11-12，ios-lead 签字）**。判据 6/6；剩余动作转 M3：
   1. ~~2026-11-12 跑第 3 日~~ ⇒ **已跑并最终绿**：首跑红（`launch-count` 的 near-threshold 告警，非产品缺陷）→ 同代码复跑 3/3 绿 + 夹具窄例外 → 整条 nightly 绿；**07:49 最终复跑绿**（见 §4-①）；
-  2. ~~与架构师对齐 `contracts/*.yaml`~~ ⇒ **已闭合（2026-11-10）**：架构师书面确认「冻结表单 = 本批契约」（`docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5）；`contracts/*.yaml` 回填 = M3 出口前；
-  3. **M3 已开工**（`WDListSection` 签名确认 + API 封板 + `Foundation/**` ≥80% + 体积门槛）。
+  2. ~~与架构师对齐 `contracts/*.yaml`~~ ⇒ **已闭合（2026-11-10）**：架构师书面确认「冻结表单 = 本批契约」（`docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5）；`contracts/*.yaml` 已于 2026-11-12 回填（12 个 yaml，设计仓 `89779f7`）；
+  3. **M3 技术判据 6/6 完成、nightly 1/3**（2026-11-12；待 11-13、11-14 两日绿后签字，见 `M3-EXIT-REPORT.md`）。
 - 本报告与 `M1-EXIT-REPORT.md` 一样：**每条结论都对应可重跑的命令或已入库产物**；未跑通的一律标【未验证】。
 
 ## 7. 判定记录

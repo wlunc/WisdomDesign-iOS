@@ -6,7 +6,7 @@
 > 日期：2026-11-10｜请求方：iOS 侧（项目负责人已同意走"先确认、后回填"）｜确认人：**架构师**
 > 关联：`docs/M2-SIGNATURE-FREEZE.md`、`docs/M2-EXIT-REPORT.md` §1-②、`../AGENTS.md` §3.1 的 I-2 与 `docs/DEV-PLAN.md` §3（批前冻结）。
 >
-> **状态：✅ 已确认（选项 B）—— 2026-11-10 架构师书面签署；`contracts/*.yaml` 回填时点 = M3 出口前。**
+> **状态：✅ 已确认（选项 B）—— 2026-11-10 架构师书面签署；`contracts/*.yaml` 已于 2026-11-12 回填（11 件 + `WDListSection` = 12 个 yaml，设计仓提交 `89779f7`）。**
 > 签署记录、核对证据与回填口径见 §5（与 §3 冲突时以 §5 为准）。
 
 ## 1. 现状（可核对的证据）
@@ -139,7 +139,8 @@
 - `docs/M2-SIGNATURE-FREEZE.md`：§1.2/§1.3 加「已被 §5.1/§5.2 取代」标注；末行「实现 2/11」更正为 **11/11**。
 - `docs/M2-EXIT-REPORT.md` §1-② / §4-④ / §6-2、`docs/DEV-PLAN.md` §2.3、`docs/HANDOVER.md`、
   `docs/M3-PREP-LISTSECTION.md`、`docs/M2-DEVIATIONS.md` §4：把「确认仍待」类表述改为
-  「2026-11-10 已由架构师书面确认（回填 = M3 出口前）」。
+  「2026-11-10 已由架构师书面确认（回填已于 2026-11-12 完成，12 个 yaml）」。
+- **回填完成（2026-11-12）**：11 件 + `WDListSection` = 12 个 yaml 已落 `../wisdomdesign/contracts/`（设计仓提交 `89779f7`）；判定口径按 §5.3 复跑通过。
 - **仍待他人复核（不属本确认）**：① 本请求 §1 的「Android 侧 `params[].name` 仍待其改名」与
   `android/docs/SPEC.md` §2.10 的改名结果记载不一致 ⇒ 回填前由 android-lead 确认一次；
   ② `android/docs/DEV-PLAN.md` §7-V18 仍写 `contracts/icons.json` 未落库（实际已落：

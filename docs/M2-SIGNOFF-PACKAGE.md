@@ -12,7 +12,7 @@
 | # | 判据 | 证据（可复跑） | 结论 |
 | --- | --- | --- | --- |
 | ① | API 无未解释差异 | `Scripts/dump-api.sh` → 641 符号零 diff；逐批 +18/+16/+22/+13/+43/+53 均有成因提交与 CHANGELOG | ✅ |
-| ② | 契约用例名与实现一致 | 冻结表单 §1.1+§5.1+§5.2；架构师 **2026-11-10 书面确认（选项 B）**；11 个 `contracts/*.yaml` 回填 = **M3 出口前**（逾期 → 本判据回到未闭合） | ✅（替代闭合） |
+| ② | 契约用例名与实现一致 | 冻结表单 §1.1+§5.1+§5.2；架构师 **2026-11-10 书面确认（选项 B）**；**11 个 `contracts/*.yaml` 已于 2026-11-12 回填**（+ `WDListSection` = 12 个；设计仓 `89779f7`） | ✅ |
 | ③ | 8 态截图入库 + tokens trace | **104 张基线**（M1 16 + M2 88）；`ci.sh pr` 的 PR-0 tokens trace 绿 | ✅ |
 | ④ | 无障碍断言 | demo 目录 + 审计视口覆盖 11 件；两页签 × 4 类目审计绿；**6 条 `AUDIT-KNOWN`**（nightly 两日均实测 6 条：固定字号头像/徽标、单行截断；个别运行会多 1 条可见元素的同类例外，已在点名清单内）；音频播报不可机检 | ✅（含登记例外） |
 | ⑤ | 性能数字进报告 | `M2-EXIT-REPORT.md` §3：11 件渲染耗时（只报不拦） | ✅ |
@@ -81,7 +81,7 @@
 
 | 义务 | 内容 | 负责人 | 时点 |
 | --- | --- | --- | --- |
-| **契约回填** | `../wisdomdesign/contracts/<Component>.yaml` **11 个**；回填=誊录（不得改签名/默认值/槽位/枚举）；判定口径 = `CONTRACTS-CONFIRMATION-REQUEST.md` §5.3 | ios-lead + 架构师 | **不晚于 M3 出口** |
+| **契约回填** | `../wisdomdesign/contracts/<Component>.yaml` **11 个**；回填=誊录（不得改签名/默认值/槽位/枚举）；判定口径 = `CONTRACTS-CONFIRMATION-REQUEST.md` §5.3 | ios-lead + 架构师 | **已回填（2026-11-12；含 `WDListSection` 共 12 个）** |
 | **体积门槛** | 新建同构消费方壳 → 两端各归档 3 次 → P50 + 10%（或绝对上限）写 README/CHANGELOG；预测量见 `U09-SIZE-BASELINE.md` | ios-lead + tech-lead | M3 出口 |
 | **API 封板** | `api/WisdomUI.api.json` 已零 diff；补"基线入库 + 签字 + CHANGELOG"即封板 | ios-lead | M3 出口 |
 
@@ -96,7 +96,7 @@
 | 三绿后 | 回 §2 的两段签字文本 | ios-lead |
 | 同日或 11-13 | 冻结会（§4.1 五问）→ 冻结表落盘 | ios-lead 主持 |
 | 冻结表落盘后 | 开写 `WDListSection`（六类断言）→ `ci.sh pr` → 8 态基线 → nightly 第 1 日 | 我 |
-| M3 出口前 | 契约 11 yaml 回填 + 体积门槛定值 + API 封板签字 + P21 回写 | 对应 owner |
+| M3 出口前 | ~~契约 11 yaml 回填~~（2026-11-12 已完成，12 个）+ 体积门槛定值 + API 封板签字 + P21 回写 | 对应 owner |
 
 ## 6. 附件（都在 `iOS/docs/`）
 

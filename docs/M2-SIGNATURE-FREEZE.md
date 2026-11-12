@@ -2,7 +2,7 @@
 
 > 用途：满足 `../AGENTS.md` §3.1 的入口判据 **I-2**（批前签名冻结）。
 > **时点说明（照抄 I-2 原文）**：`contracts/*.yaml` 库为 **M0-5 才落库**；在此之前该判据以**本表单**代替。
-> 填报日期：2026-10-07｜填报人：ios-agent｜**确认：2026-11-10 项目负责人按 §5 的建议逐条冻结（"收尾 P0"指示；§5.4 留档）；架构师的契约副本确认同日落盘**（契约副本 = **§1.1 + §5.1 + §5.2**；签署记录见 `docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5；按 I-2 原文以本表单代替 `contracts/*.yaml`，回填时点 = M3 出口前）
+> 填报日期：2026-10-07｜填报人：ios-agent｜**确认：2026-11-10 项目负责人按 §5 的建议逐条冻结（"收尾 P0"指示；§5.4 留档）；架构师的契约副本确认同日落盘**（契约副本 = **§1.1 + §5.1 + §5.2**；签署记录见 `docs/CONTRACTS-CONFIRMATION-REQUEST.md` §5；按 I-2 原文以本表单代替 `contracts/*.yaml`；**已于 2026-11-12 回填**（12 个 yaml，设计仓 `89779f7`））
 > 批次：**M2 = 11 件**（`WDTextField`(C)、`WDListRow`(C)、`WDButton`、`WDIconButton`、`WDSwitch`、`WDCheckbox`、`WDBadge`、`WDAvatar`、`WDDivider`、`WDCard`、`WDIcon`）
 
 ## 0. 状态图例与依据
