@@ -44,7 +44,8 @@ public struct WDActionSheetItem: Identifiable, Sendable, Equatable {
   public let id: String
   public let label: Text
   public let role: Role
-  public init(id: String, label: Text, role: Role = .default)
+  public let icon: WDIconName?          // 设计 27 §4 的「带图标」变体；20pt
+  public init(id: String, label: Text, role: Role = .default, icon: WDIconName? = nil)
 }
 
 extension View {
@@ -233,3 +234,5 @@ public struct WDProgressRing: View {
   Toast 悬停暂停/上滑关闭未实现；Banner `success` 按 Q1 不纳入；ProgressBar 分段按 Q4 暂缓；
   ProgressBar 填充改品牌色渐变（设计 `gradient.mid` 浅端 2.02:1 < 3:1）；sheet 快照为面板内容。
 - **契约补充**：`../wisdomdesign/contracts/contrast.json`（light/dark 34 对 + 玻璃禁止对）。
+- **ActionSheet 设计对齐（2026-11-12）**：标题入列表卡片、行左对齐 + 可选 20pt 图标、取消为独立 18 圆角卡片；
+  `WDActionSheetItem` 增加 `icon: WDIconName? = nil`（设计 27 §4 的「带图标」变体）。

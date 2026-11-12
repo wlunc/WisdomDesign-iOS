@@ -119,9 +119,10 @@
 
 ### Changed
 
-- **`WDActionSheet` 按设计 27 重排**：左右 16 内距、操作列表圆角 18、取消独立 48pt 胶囊、
-  列表与取消间距 8、标题/说明弱化为 footnote/caption1 + text.secondary、破坏性项强制置底；
-  sheet 高度按内容估算（`.height`），不再用半屏 `medium` 留出大片空白。8 态基线重录。
+- **`WDActionSheet` 按设计 27 参考重排**：左右 16 内距；标题/说明移入列表卡片顶部（caption1 /
+  text.secondary + 底部分隔线）；行左对齐、可选 20pt 前置图标；取消为独立 48pt **圆角卡片**
+  （18 圆角、semibold、e2 阴影）；破坏性项置底；sheet 高度按内容估算（`.height`）、透明背景，
+  不再用半屏 `medium` 留出大片空白。8 态基线重录。
 - **`WDSkeleton` 微光与宽度修复**：微光由旋转色带改为水平 `sourceAtop` 扫光（只落在灰块上，不再出现斜方块）；
   行宽改 `maxWidth` + 固定短行留白，避免 `containerRelativeFrame` 在嵌套 HStack 里把 demo 撑出屏幕；8 态基线重录。
 - **`WDBanner` 对齐修复**：HStack 由 top 改 center（图标/文案/操作/关闭键同一垂直中心）；

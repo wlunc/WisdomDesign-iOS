@@ -15,17 +15,20 @@ public struct WDActionSheetItem: Identifiable, Sendable, Equatable {
   public let label: Text
   /// 角色。
   public let role: Role
+  /// 可选前置图标（设计 27 §4 的「带图标」变体，20pt）。
+  public let icon: WDIconName?
 
   /// 构造。
-  public init(id: String, label: Text, role: Role = .default) {
+  public init(id: String, label: Text, role: Role = .default, icon: WDIconName? = nil) {
     self.id = id
     self.label = label
     self.role = role
+    self.icon = icon
   }
 }
 
 extension View {
-  /// 操作表（底部浮层；取消为独立胶囊；空 items 在 debug 下断言）。
+  /// 操作表（底部浮层；取消为独立圆角卡片；空 items 在 debug 下断言）。
   public func wdActionSheet(
     isPresented: Binding<Bool>,
     title: Text? = nil,
@@ -59,24 +62,30 @@ struct WDActionSheetPanel: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      if title != nil || message != nil {
-        header
-      }
       listCard
       if let cancelItem {
         Button {
           onCancel?()
         } label: {
           cancelItem.label
-            .wdFont(WDType.body)
-            .foregroundStyle(colors.textBrand)
+            .wdFont(WDType.callout)
+            .fontWeight(.semibold)
+            .foregroundStyle(colors.textPrimary)
             .frame(maxWidth: .infinity, minHeight: WDSpacing.s10)
-            .wdLineBox(WDType.body)
-            .contentShape(Capsule())
+            .wdLineBox(WDType.callout)
+            .contentShape(RoundedRectangle(cornerRadius: WDRadius.lg, style: .continuous))
         }
         .buttonStyle(WDActionSheetRowStyle(pressedFill: colors.fillPressed))
-        .background(Capsule().fill(colors.surfaceCardSolid))
-        .clipShape(Capsule())
+        .background(
+          RoundedRectangle(cornerRadius: WDRadius.lg, style: .continuous)
+            .fill(colors.surfaceCardSolid)
+        )
+        .overlay(
+          RoundedRectangle(cornerRadius: WDRadius.lg, style: .continuous)
+            .stroke(colors.borderHairline, lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: WDRadius.lg, style: .continuous))
+        .wdShadow(WDElevation.e2)
         .padding(.top, WDSpacing.s3)
       }
     }
@@ -88,52 +97,72 @@ struct WDActionSheetPanel: View {
     }
   }
 
-  private var header: some View {
-    VStack(spacing: WDSpacing.s2) {
-      if let title {
-        title
-          .wdFont(WDType.footnote)
-          .foregroundStyle(colors.textSecondary)
-          .multilineTextAlignment(.center)
-          .wdLineBox(WDType.footnote)
-      }
-      if let message {
-        message
-          .wdFont(WDType.caption1)
-          .foregroundStyle(colors.textSecondary)
-          .multilineTextAlignment(.center)
-          .wdLineBox(WDType.caption1)
-      }
-    }
-    .padding(.bottom, WDSpacing.s4)
-  }
-
   private var listCard: some View {
     VStack(spacing: 0) {
+      if title != nil || message != nil {
+        header
+      }
       ForEach(regularItems) { item in
         row(item)
         if item.id != regularItems.last?.id {
-          Divider()
-            .overlay(colors.borderHairline)
-            .padding(.leading, WDSpacing.s5)
+          Divider().overlay(colors.borderHairline)
         }
       }
     }
     .background(colors.surfaceCardSolid)
     .clipShape(RoundedRectangle(cornerRadius: WDRadius.lg, style: .continuous))
+    .overlay(
+      RoundedRectangle(cornerRadius: WDRadius.lg, style: .continuous)
+        .stroke(colors.borderHairline, lineWidth: 1)
+    )
+    .wdShadow(WDElevation.e3)
+  }
+
+  private var header: some View {
+    VStack(alignment: .leading, spacing: WDSpacing.s1) {
+      if let title {
+        title
+          .wdFont(WDType.caption1)
+          .foregroundStyle(colors.textSecondary)
+          .wdLineBox(WDType.caption1)
+      }
+      if let message {
+        message
+          .wdFont(WDType.caption1)
+          .foregroundStyle(colors.textSecondary)
+          .wdLineBox(WDType.caption1)
+      }
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .padding(.horizontal, WDSpacing.s5)
+    .padding(.top, WDSpacing.s4)
+    .padding(.bottom, WDSpacing.s3)
+    .overlay(alignment: .bottom) {
+      Rectangle()
+        .fill(colors.borderHairline)
+        .frame(height: 1)
+    }
   }
 
   private func row(_ item: WDActionSheetItem) -> some View {
     Button {
       onSelect(item.id)
     } label: {
-      item.label
-        .wdFont(WDType.body)
-        .foregroundStyle(color(for: item.role))
-        .frame(maxWidth: .infinity, minHeight: WDSize.controlMd)
-        .padding(.horizontal, WDSpacing.s5)
-        .wdLineBox(WDType.body)
-        .contentShape(Rectangle())
+      HStack(spacing: WDSpacing.s3 + WDSpacing.s1) {
+        if let icon = item.icon {
+          WDIcon(icon: icon, size: .md)
+            .foregroundStyle(iconColor(for: item.role))
+            .accessibilityHidden(true)
+        }
+        item.label
+          .wdFont(WDType.callout)
+          .foregroundStyle(color(for: item.role))
+          .wdLineBox(WDType.callout)
+        Spacer(minLength: 0)
+      }
+      .padding(.horizontal, WDSpacing.s5)
+      .frame(maxWidth: .infinity, minHeight: WDSize.controlMd)
+      .contentShape(Rectangle())
     }
     .buttonStyle(WDActionSheetRowStyle(pressedFill: colors.fillPressed))
   }
@@ -142,8 +171,12 @@ struct WDActionSheetPanel: View {
     switch role {
     case .`default`: return colors.textPrimary
     case .destructive: return colors.statusDanger
-    case .cancel: return colors.textBrand
+    case .cancel: return colors.textPrimary
     }
+  }
+
+  private func iconColor(for role: WDActionSheetItem.Role) -> Color {
+    role == .destructive ? colors.statusDanger : colors.textTertiary
   }
 
   private var regularItems: [WDActionSheetItem] {
@@ -170,29 +203,31 @@ struct WDActionSheetPanel: View {
     items.first { $0.role == .cancel }
   }
 
-  /// sheet 高度估算：面板内距 + 标题/说明 + 操作列表 + 取消胶囊。
+  /// sheet 高度估算：面板内距 + 列表卡片（标题/行/边框）+ 取消卡片。
   static func estimatedHeight(
     title: Text?,
     message: Text?,
     items: [WDActionSheetItem],
     dynamicTypeSize: DynamicTypeSize
   ) -> CGFloat {
-    var height = WDSpacing.s5 + WDSpacing.s3
+    var height = WDSpacing.s5 + WDSpacing.s3 + WDSpacing.s1
     if title != nil || message != nil {
+      height += WDSpacing.s4 + WDSpacing.s3 + 1
       if title != nil {
         height += WDFontMetrics.lineBoxHeight(
-          for: WDType.footnote, dynamicTypeSize: dynamicTypeSize)
+          for: WDType.caption1, dynamicTypeSize: dynamicTypeSize)
+      }
+      if title != nil && message != nil {
+        height += WDSpacing.s1
       }
       if message != nil {
-        height +=
-          WDSpacing.s2
-          + WDFontMetrics.lineBoxHeight(for: WDType.caption1, dynamicTypeSize: dynamicTypeSize)
+        height += WDFontMetrics.lineBoxHeight(
+          for: WDType.caption1, dynamicTypeSize: dynamicTypeSize)
       }
-      height += WDSpacing.s4
     }
     let rows = regularItems(from: items).count
     height += CGFloat(rows) * WDSize.controlMd
-    height += CGFloat(max(0, rows - 1)) * 1
+    height += CGFloat(max(0, rows - 1))
     if cancelItem(from: items) != nil {
       height += WDSpacing.s3 + WDSpacing.s10
     }
@@ -229,7 +264,7 @@ private struct WDActionSheetModifier: ViewModifier {
       .presentationDetents([.height(contentHeight)])
       .presentationDragIndicator(.hidden)
       .presentationCornerRadius(WDRadius.xxl)
-      .presentationBackground(colors.bgGrouped)
+      .presentationBackground(.clear)
     }
   }
 

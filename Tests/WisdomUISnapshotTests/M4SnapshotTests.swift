@@ -266,8 +266,8 @@ private struct ActionSheetSample: View {
       title: Text(verbatim: "任务操作"),
       message: Text(verbatim: "选择要执行的操作。"),
       items: [
-        .init(id: "share", label: Text(verbatim: "分享")),
-        .init(id: "delete", label: Text(verbatim: "删除"), role: .destructive),
+        .init(id: "share", label: Text(verbatim: "分享"), icon: .share),
+        .init(id: "delete", label: Text(verbatim: "删除"), role: .destructive, icon: .delete),
         .init(id: "cancel", label: Text(verbatim: "取消"), role: .cancel),
       ],
       onSelect: { _ in },
