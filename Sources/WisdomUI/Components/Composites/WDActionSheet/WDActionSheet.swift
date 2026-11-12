@@ -213,47 +213,41 @@ private struct WDActionSheetModifier: ViewModifier {
   let onSelect: (WDActionSheetItem.ID) -> Void
   let onCancel: (() -> Void)?
 
-  @Environment(\.wdAppearance) private var appearance
-
-  private static let scrimOpacityLight: CGFloat = 0.28  // wd-structure-check:disable R7 — 设计 27
-  private static let scrimOpacityDark: CGFloat = 0.50  // wd-structure-check:disable R7 — 设计 27
-
   func body(content anchor: Content) -> some View {
-    anchor.fullScreenCover(isPresented: $isPresented) {
-      ZStack(alignment: .bottom) {
-        scrim
-        WDActionSheetPanel(
-          title: title,
-          message: message,
-          items: items,
-          onSelect: { id in
-            isPresented = false
-            onSelect(id)
-          },
-          onCancel: {
-            isPresented = false
-            onCancel?()
-          }
-        )
-        .frame(maxWidth: .infinity)
-        .accessibilityAddTraits(.isModal)
-        .onAppear { WDA11yFocus.screenChanged() }
+    anchor
+      .onAppear {
+        if isPresented {
+          present()
+        }
       }
-      .presentationBackground(.clear)
-    }
+      .onChange(of: isPresented) { _, presented in
+        if presented {
+          present()
+        } else {
+          WDActionSheetPresenter.shared.dismiss()
+        }
+      }
+      .onDisappear {
+        WDActionSheetPresenter.shared.dismiss()
+      }
   }
 
-  /// 半透明遮罩；点击等价于取消（设计 27 §8）。
-  private var scrim: some View {
-    Color.black.opacity(
-      appearance.colorScheme == .dark ? Self.scrimOpacityDark : Self.scrimOpacityLight
+  private func present() {
+    WDActionSheetPresenter.shared.present(
+      WDActionSheetLayer(
+        title: title,
+        message: message,
+        items: items,
+        onSelect: { id in
+          isPresented = false
+          onSelect(id)
+        },
+        onCancel: {
+          isPresented = false
+          onCancel?()
+        }
+      )
     )
-    .ignoresSafeArea()
-    .contentShape(Rectangle())
-    .onTapGesture {
-      isPresented = false
-      onCancel?()
-    }
   }
 }
 

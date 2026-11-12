@@ -121,8 +121,8 @@
 
 - **`WDActionSheet` 按设计 27 参考重排**：左右 16 内距；标题/说明移入列表卡片顶部（caption1 /
   text.secondary + 底部分隔线）；行左对齐、可选 20pt 前置图标；取消为独立 48pt **圆角卡片**
-  （18 圆角、semibold、e2 阴影）；破坏性项置底。呈现改为 **`fullScreenCover` + 自绘遮罩**：
-  透明背景、无系统 sheet 半透明边框、点遮罩 = 取消。8 态基线重录。
+  （18 圆角、semibold、e2 阴影）；破坏性项置底。呈现改为 **窗口级 presenter + 自绘遮罩**：
+  透明背景、无系统 sheet 半透明边框；**遮罩静态出现，面板单独滑入/滑出**；点遮罩 = 取消。8 态基线重录。
 - **`WDSkeleton` 微光与宽度修复**：微光由旋转色带改为水平 `sourceAtop` 扫光（只落在灰块上，不再出现斜方块）；
   行宽改 `maxWidth` + 固定短行留白，避免 `containerRelativeFrame` 在嵌套 HStack 里把 demo 撑出屏幕；8 态基线重录。
 - **`WDBanner` 对齐修复**：HStack 由 top 改 center（图标/文案/操作/关闭键同一垂直中心）；
