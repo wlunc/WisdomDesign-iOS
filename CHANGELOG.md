@@ -119,6 +119,8 @@
 
 ### Changed
 
+- **`WDSkeleton` 微光与宽度修复**：微光由旋转色带改为水平 `sourceAtop` 扫光（只落在灰块上，不再出现斜方块）；
+  行宽改 `maxWidth` + 固定短行留白，避免 `containerRelativeFrame` 在嵌套 HStack 里把 demo 撑出屏幕；8 态基线重录。
 - **`WDBanner` 对齐修复**：HStack 由 top 改 center（图标/文案/操作/关闭键同一垂直中心）；
   文案行盒改 1 行下限（多行自然长高，不再为单行预留两行）；关闭键改 `sm`（视觉 16）。
   8 态 banner 基线重录。

@@ -21,13 +21,13 @@ public struct WDSkeleton: View {
   @Environment(\.wdEffectsBudget) private var budget
   @Environment(\.wdDensity) private var density
 
-  /// 文本行宽度比例（设计 31 §3：70% / 45%）。
-  private static let wideLine: CGFloat = 0.70  // wd-structure-check:disable R7 — 设计 31 §3
-  private static let narrowLine: CGFloat = 0.45  // wd-structure-check:disable R7 — 设计 31 §3
   private static let textLineMax = 4  // wd-structure-check:disable R7 — 设计 31 §4 的文本行上限
   private static let listRowCount = 5  // wd-structure-check:disable R7 — 设计 31 §4 的列表行数
   private static let cardButtonWidth: CGFloat = 96  // wd-structure-check:disable R7 — 设计
   private static let shimmerDuration: TimeInterval = 2.2  // wd-structure-check:disable R7 — 设计
+  /// 短行右侧留白（设计 31 §3 的 45% 比例在常见 320 宽下的近似值；避免 containerRelativeFrame 的宽度泄漏）。
+  private static let shortLineInset: CGFloat = 144  // wd-structure-check:disable R7 — 设计
+  private static let shimmerTravel: CGFloat = 360  // wd-structure-check:disable R7 — 设计
 
   @State private var shimmer = false
 
@@ -45,6 +45,7 @@ public struct WDSkeleton: View {
   /// 渲染。
   public var body: some View {
     content
+      .compositingGroup()
       .overlay { shimmerOverlay }
       .clipShape(RoundedRectangle(cornerRadius: WDRadius.md, style: .continuous))
       .accessibilityElement(children: .ignore)
@@ -73,7 +74,7 @@ public struct WDSkeleton: View {
     VStack(alignment: .leading, spacing: WDSpacing.s3) {
       ForEach(0..<max(1, min(lineCount, Self.textLineMax)), id: \.self) { index in
         let even = index.isMultiple(of: 2)  // wd-structure-check:disable R7 — 设计
-        skeletonLine(width: even ? Self.wideLine : Self.narrowLine)
+        skeletonLine(isShort: !even)
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
@@ -87,11 +88,12 @@ public struct WDSkeleton: View {
         HStack(spacing: WDSpacing.s4) {
           Circle()
             .fill(colors.surfaceTint)
-            .frame(minWidth: WDSize.avatarMd, minHeight: WDSize.avatarMd)
+            .frame(maxWidth: WDSize.avatarMd, maxHeight: WDSize.avatarMd)
           VStack(alignment: .leading, spacing: WDSpacing.s2) {
-            skeletonLine(width: Self.wideLine)
-            skeletonLine(width: Self.narrowLine)
+            skeletonLine(isShort: false)
+            skeletonLine(isShort: true)
           }
+          .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.horizontal, WDSpacing.s5)
         .frame(
@@ -114,8 +116,8 @@ public struct WDSkeleton: View {
   private var cardBlock: some View {
     WDCard(style: .elevated) {
       VStack(alignment: .leading, spacing: WDSpacing.s4) {
-        skeletonLine(width: Self.narrowLine)
-        skeletonLine(width: Self.wideLine)
+        skeletonLine(isShort: true)
+        skeletonLine(isShort: false)
         RoundedRectangle(cornerRadius: WDRadius.full, style: .continuous)
           .fill(colors.surfaceTint)
           .frame(width: Self.cardButtonWidth, height: WDSize.controlSm)
@@ -126,22 +128,23 @@ public struct WDSkeleton: View {
 
   // MARK: - 灰块
 
-  private func skeletonLine(width: CGFloat) -> some View {
+  private func skeletonLine(isShort: Bool) -> some View {
     RoundedRectangle(cornerRadius: 6, style: .continuous)  // wd-structure-check:disable R7 — 设计
       .fill(colors.surfaceTint)
+      .frame(maxWidth: .infinity)
       .frame(height: 11)  // wd-structure-check:disable R7 — 设计 31 §3 的文本行高
-      .containerRelativeFrame(.horizontal) { length, _ in length * width }
+      .padding(.trailing, isShort ? Self.shortLineInset : 0)
   }
 
   @ViewBuilder private var shimmerOverlay: some View {
     if shouldShimmer {
       LinearGradient(
         colors: [.clear, colors.surfaceCard.opacity(0.55), .clear],
-        startPoint: .topLeading,
-        endPoint: .bottomTrailing
+        startPoint: .leading,
+        endPoint: .trailing
       )
-      .rotationEffect(.degrees(18))  // wd-structure-check:disable R7 — 设计 31 §9 的微光角度
-      .offset(x: shimmer ? 280 : -280)  // wd-structure-check:disable R7 — 设计 31 §9 的微光扫过行程
+      .offset(x: shimmer ? Self.shimmerTravel : -Self.shimmerTravel)
+      .blendMode(.sourceAtop)
       .animation(
         .linear(duration: Self.shimmerDuration).repeatForever(autoreverses: false),
         value: shimmer

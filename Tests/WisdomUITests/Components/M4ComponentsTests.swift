@@ -81,6 +81,19 @@ struct M4ComponentsTests {
         == height(WDSkeleton(variant: .text, lineCount: 10)))
   }
 
+  @Test("WDSkeleton：320 宽容器不横向溢出（列表/卡片内部行宽用容器宽度）")
+  func skeletonFitsWidth() {
+    for variant in WDSkeletonVariant.allCases {
+      let controller = UIHostingController(
+        rootView: WDSkeleton(variant: variant, accessibilityLabel: Text(verbatim: "加载中"))
+      )
+      let size = controller.sizeThatFits(
+        in: CGSize(width: 320, height: CGFloat.greatestFiniteMagnitude)
+      )
+      #expect(size.width <= 320.5, "skeleton width overflow")
+    }
+  }
+
   // MARK: - 提示
 
   @Test("WDBanner：可见时有高度且 ≥ 44；不可见时 0")
