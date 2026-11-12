@@ -53,19 +53,30 @@ struct WDBottomSheetPanel<Content: View, Footer: View>: View {
 
   @Environment(\.wdColors) private var colors
 
+  private var headerMinHeight: CGFloat { WDSpacing.s10 + WDSpacing.s3 }
+
   var body: some View {
     VStack(spacing: 0) {
       header
-      content
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, WDSpacing.s5)
-      if Footer.self != EmptyView.self {
-        footer
+      ScrollView {
+        content
+          .frame(maxWidth: .infinity, alignment: .leading)
           .padding(.horizontal, WDSpacing.s5)
           .padding(.top, WDSpacing.s4)
-          .padding(.bottom, WDSpacing.s5)
+      }
+      .scrollIndicators(.hidden)
+      if Footer.self != EmptyView.self {
+        Rectangle()
+          .fill(colors.borderHairline)
+          .frame(height: 1)
+        footer
+          .frame(maxWidth: .infinity, alignment: .trailing)
+          .padding(.horizontal, WDSpacing.s5)
+          .padding(.top, WDSpacing.s5)
+          .padding(.bottom, WDSpacing.s4)
       }
     }
+    .frame(maxWidth: WDSize.sheetMaxWidth)
     .frame(maxWidth: .infinity, alignment: .top)
   }
 
@@ -73,9 +84,9 @@ struct WDBottomSheetPanel<Content: View, Footer: View>: View {
     HStack(spacing: WDSpacing.s3) {
       if let title {
         title
-          .wdFont(WDType.headline)
+          .wdFont(WDType.title3)
           .foregroundStyle(colors.textPrimary)
-          .wdLineBox(WDType.headline)
+          .wdLineBox(WDType.title3)
           .frame(maxWidth: .infinity, alignment: .leading)
           .accessibilityAddTraits(.isHeader)
       } else {
@@ -84,8 +95,7 @@ struct WDBottomSheetPanel<Content: View, Footer: View>: View {
       WDIconButton(icon: .close, accessibilityLabel: closeButtonAccessibilityLabel, action: onClose)
     }
     .padding(.horizontal, WDSpacing.s5)
-    .padding(.top, WDSpacing.s4)
-    .padding(.bottom, WDSpacing.s3)
+    .frame(minHeight: headerMinHeight)
   }
 }
 

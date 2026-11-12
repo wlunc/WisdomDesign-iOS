@@ -117,6 +117,31 @@ final class WisdomUIDemoUITests: XCTestCase {
     XCTAssertFalse(cancel.waitForExistence(timeout: 2), "点取消后 ActionSheet 应关闭")
   }
 
+  /// BottomSheet：系统 sheet 打开后截图（核对把手/标题/内容/底部操作区），再点关闭。
+  func testBottomSheetPresentsAndDismisses() {
+    let app = XCUIApplication()
+    app.launch()
+
+    let row = app.buttons["component-row-WDBottomSheet"]
+    XCTAssertTrue(row.waitForExistence(timeout: 20), "WDBottomSheet 行未出现")
+    row.tap()
+
+    let trigger = app.buttons["打开底部面板"]
+    XCTAssertTrue(trigger.waitForExistence(timeout: 20), "打开底部面板按钮未出现")
+    trigger.tap()
+
+    let close = app.buttons["关闭成员选择"]
+    XCTAssertTrue(close.waitForExistence(timeout: 20), "BottomSheet 未出现")
+    Thread.sleep(forTimeInterval: 0.6)  // 等系统 sheet 落位，截图才是半屏 detent
+    let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+    attachment.name = "bottomsheet-presented"
+    attachment.lifetime = .keepAlways
+    add(attachment)
+
+    close.tap()
+    XCTAssertFalse(close.waitForExistence(timeout: 2), "点关闭后 BottomSheet 应关闭")
+  }
+
   /// 单个页签的严格审计。**只放行两类别有理由的窄例外**（其余一律失败）：
   ///   · 固定字号组件（头像首字 12pt / 徽标 11pt）的 dynamicType —— 设计例外，登记 M2 出口报告 §4；
   ///   · 列表行标题/副标题的 textClipped —— 设计 18 §7 要求单行截断，审计按 `lineLimit(1)` 判"可能截断"。
