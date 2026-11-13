@@ -128,7 +128,7 @@ struct DemoM5VariantsSection: View {
           }
         }
       }
-    case .pullToRefresh:
+    case .pullRefresh:
       DemoSection("系统刷新载体", subtitle: "在列表上下拉即可触发；进行中不会重复触发。") {
         Text(verbatim: "在「实时预览」里下拉列表试试。")
           .wdFont(WDType.subheadline)
@@ -240,7 +240,7 @@ struct DemoM5StatesSection: View {
     switch component.id {
     case .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
       .segmentedControl, .picker, .datePicker, .formRow,
-      .pullToRefresh, .navigationBar, .tabBar, .toolbar, .fab:
+      .pullRefresh, .navigationBar, .tabBar, .toolbar, .fab:
       DemoSection("禁用 / 选中", subtitle: "禁用态统一 40% 不透明度；选中态不只靠颜色。") {
         VStack(alignment: .leading, spacing: WDSpacing.s5) {
           disabledSample
@@ -295,7 +295,7 @@ struct DemoM5StatesSection: View {
         Text(verbatim: "明天").wdFont(WDType.subheadline)
       }
       .disabled(true)
-    case .pullToRefresh:
+    case .pullRefresh:
       Text(verbatim: "刷新由系统载体负责，无独立禁用态。")
         .wdFont(WDType.subheadline)
         .foregroundStyle(colors.textSecondary)

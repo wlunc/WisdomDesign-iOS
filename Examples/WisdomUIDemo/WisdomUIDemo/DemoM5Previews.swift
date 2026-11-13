@@ -21,7 +21,7 @@ struct DemoM5Preview: View {
     case .picker: DemoPickerLivePreview(settings: settings)
     case .datePicker: DemoDatePickerLivePreview(settings: settings)
     case .formRow: DemoFormRowLivePreview(settings: settings)
-    case .pullToRefresh: DemoPullToRefreshLivePreview()
+    case .pullRefresh: DemoPullRefreshLivePreview()
     case .navigationBar: DemoNavigationBarLivePreview(settings: settings)
     case .tabBar: DemoTabBarLivePreview(settings: settings)
     case .toolbar: DemoToolbarLivePreview(settings: settings)
@@ -201,27 +201,113 @@ private struct DemoFormRowLivePreview: View {
   }
 }
 
-private struct DemoPullToRefreshLivePreview: View {
+private struct DemoPullRefreshLivePreview: View {
   @State private var isRefreshing = false
+  @State private var refreshCount = 0
+  @State private var rows = Array(1...12)
+  @State private var showsFullScreen = false
 
   var body: some View {
-    ScrollView {
-      LazyVStack(spacing: 0) {
-        ForEach(1...5, id: \.self) { row in
+    VStack(spacing: WDSpacing.s2) {
+      // 固定高度 + 内容超出视口：外层详情页本身是 ScrollView，内层必须有独立高度与可滚动
+      // 内容，下拉手势才会落到这个 ScrollView 上（否则会被外层滚动手势吞掉）。
+      ScrollView {
+        LazyVStack(spacing: 0) {
+          ForEach(rows, id: \.self) { row in
+            Text(verbatim: "第 \(row) 条动态")
+              .wdFont(WDType.body)
+              .wdLineBox(WDType.body)
+              .frame(maxWidth: .infinity, alignment: .leading)
+              .padding(WDSpacing.s4)
+          }
+        }
+      }
+      .frame(height: 260)
+      .scrollIndicators(.hidden)
+      .background(WDColor.bgCanvas)
+      .accessibilityIdentifier("pull-refresh-scroll")
+      .wdPullRefresh(
+        isRefreshing: $isRefreshing,
+        label: Text(verbatim: "刷新")
+      ) {
+        try? await Task.sleep(for: .milliseconds(600))
+        rows = Array(1...12).shuffled()
+        refreshCount += 1
+      }
+
+      Text(verbatim: isRefreshing ? "刷新中" : "下拉可刷新")
+        .wdFont(WDType.caption1)
+        .wdLineBox(WDType.caption1)
+        .foregroundStyle(.secondary)
+        .accessibilityIdentifier("pull-refresh-status")
+
+      Text(verbatim: "刷新 \(refreshCount) 次")
+        .wdFont(WDType.caption1)
+        .wdLineBox(WDType.caption1)
+        .foregroundStyle(.secondary)
+        .accessibilityIdentifier("pull-refresh-count")
+
+      Button {
+        showsFullScreen = true
+      } label: {
+        Text(verbatim: "打开全屏下拉演示")
+          .wdFont(WDType.footnote)
+          .foregroundStyle(.tint)
+      }
+      .buttonStyle(.plain)
+      .accessibilityIdentifier("pull-refresh-fullscreen")
+    }
+    .fullScreenCover(isPresented: $showsFullScreen) {
+      DemoPullRefreshFullScreen()
+    }
+  }
+}
+
+/// 全屏下拉刷新演示：没有外层 ScrollView，手势不会被嵌套滚动吞掉。
+private struct DemoPullRefreshFullScreen: View {
+  @Environment(\.dismiss) private var dismiss
+
+  @State private var isRefreshing = false
+  @State private var refreshCount = 0
+  @State private var rows = Array(1...30)
+
+  var body: some View {
+    NavigationStack {
+      List {
+        ForEach(rows, id: \.self) { row in
           Text(verbatim: "第 \(row) 条动态")
             .wdFont(WDType.body)
             .wdLineBox(WDType.body)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(WDSpacing.s4)
         }
       }
-    }
-    .frame(minHeight: 220)
-    .wdPullToRefresh(
-      isRefreshing: $isRefreshing,
-      label: Text(verbatim: "刷新")
-    ) {
-      try? await Task.sleep(for: .milliseconds(300))
+      .listStyle(.plain)
+      .accessibilityIdentifier("pull-refresh-fullscreen-scroll")
+      .wdPullRefresh(
+        isRefreshing: $isRefreshing,
+        label: Text(verbatim: "刷新")
+      ) {
+        try? await Task.sleep(for: .milliseconds(600))
+        rows = Array(1...30).shuffled()
+        refreshCount += 1
+      }
+      .overlay(alignment: .top) {
+        Text(verbatim: "刷新 \(refreshCount) 次")
+          .wdFont(WDType.caption1)
+          .foregroundStyle(.secondary)
+          .padding(.top, WDSpacing.s2)
+          .accessibilityIdentifier("pull-refresh-fullscreen-count")
+      }
+      .navigationTitle(Text(verbatim: "WDPullRefresh"))
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .topBarTrailing) {
+          Button {
+            dismiss()
+          } label: {
+            Text(verbatim: "关闭")
+          }
+        }
+      }
     }
   }
 }
