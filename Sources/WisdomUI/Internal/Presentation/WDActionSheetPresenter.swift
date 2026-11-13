@@ -9,15 +9,17 @@ final class WDActionSheetPresenter {
   private var host: UIViewController?
   private var previousFocus: Any?
 
-  /// 立即呈现（无系统 modal 过渡；面板自己动画）。
-  func present<V: View>(_ content: V) {
+  /// 立即呈现（无系统 modal 过渡；面板自己动画；沿用调用方主题/明暗）。
+  func present<V: View>(theme: WDTheme, colorScheme: ColorScheme, _ content: V) {
     dismiss()
     guard let presenter = topViewController() else {
       return
     }
     previousFocus = UIAccessibility.focusedElement(using: nil)
-    let controller = UIHostingController(rootView: content)
+    let root = content.environment(\.wdTheme, theme)
+    let controller = UIHostingController(rootView: root)
     controller.view.backgroundColor = .clear
+    controller.overrideUserInterfaceStyle = colorScheme == .dark ? .dark : .light
     controller.modalPresentationStyle = .overFullScreen
     presenter.present(controller, animated: false)
     host = controller

@@ -93,6 +93,45 @@ final class WisdomUIDemoUITests: XCTestCase {
     XCTAssertEqual(configChip.label, "柔色", "切换变体后配置摘要必须更新")
   }
 
+  /// 切到 dark scheme 后，ActionSheet/BottomSheet 必须跟随主题；截图供人工核对。
+  func testSheetsFollowDarkScheme() {
+    let app = XCUIApplication()
+    app.launch()
+
+    app.buttons["theme-button"].tap()
+    let picker = app.segmentedControls["scheme-picker"]
+    XCTAssertTrue(picker.waitForExistence(timeout: 20), "scheme-picker 未出现")
+    picker.buttons.element(boundBy: 1).tap()
+    app.navigationBars.buttons.element(boundBy: 0).tap()
+
+    let actionRow = app.buttons["component-row-WDActionSheet"]
+    XCTAssertTrue(actionRow.waitForExistence(timeout: 20))
+    if !actionRow.isHittable { app.swipeUp() }
+    actionRow.tap()
+    app.buttons["打开操作表"].tap()
+    let cancel = app.buttons["取消"]
+    XCTAssertTrue(cancel.waitForExistence(timeout: 20), "ActionSheet 未出现")
+    let actionShot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+    actionShot.name = "actionsheet-dark"
+    actionShot.lifetime = .keepAlways
+    add(actionShot)
+    cancel.tap()
+    app.navigationBars.buttons.element(boundBy: 0).tap()
+
+    let sheetRow = app.buttons["component-row-WDBottomSheet"]
+    XCTAssertTrue(sheetRow.waitForExistence(timeout: 20))
+    if !sheetRow.isHittable { app.swipeUp() }
+    sheetRow.tap()
+    app.buttons["打开底部面板"].tap()
+    let close = app.buttons["关闭成员选择"]
+    XCTAssertTrue(close.waitForExistence(timeout: 20), "BottomSheet 未出现")
+    let sheetShot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+    sheetShot.name = "bottomsheet-dark"
+    sheetShot.lifetime = .keepAlways
+    add(sheetShot)
+    close.tap()
+  }
+
   /// 组合场景：卡片容器页、底部面板容器页，各截一张图。
   func testCompositionScenariosOpen() {
     let app = XCUIApplication()

@@ -213,6 +213,9 @@ private struct WDActionSheetModifier: ViewModifier {
   let onSelect: (WDActionSheetItem.ID) -> Void
   let onCancel: (() -> Void)?
 
+  @Environment(\.wdTheme) private var theme
+  @Environment(\.colorScheme) private var colorScheme
+
   func body(content anchor: Content) -> some View {
     anchor
       .onAppear {
@@ -234,6 +237,8 @@ private struct WDActionSheetModifier: ViewModifier {
 
   private func present() {
     WDActionSheetPresenter.shared.present(
+      theme: theme,
+      colorScheme: colorScheme,
       WDActionSheetLayer(
         title: title,
         message: message,

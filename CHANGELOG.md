@@ -119,6 +119,9 @@
 
 ### Changed
 
+- **ActionSheet / BottomSheet 跟随宿主题**：窗口级 presenter 继承调用方的 `wdTheme` 与 `colorScheme`
+  （hosting controller 注入主题 + `overrideUserInterfaceStyle`）；dark scheme 下遮罩、列表卡、取消卡、
+  面板、文字都切到深色。新增 dark scheme UI 测试。
 - **demo 组合场景**：新增「组合场景」入口——卡片容器（`WDCard` + Avatar/Badge/Progress/Switch/ListSection/Button）
   与底部面板容器（`WDBottomSheet` + TextField/Card/Switch/Checkbox/Progress/固定页脚）；
   目录页展示 21 件组件 + 2 个场景，新增组合场景 UI 测试与截图。

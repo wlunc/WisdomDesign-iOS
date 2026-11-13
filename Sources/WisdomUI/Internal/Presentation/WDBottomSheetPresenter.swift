@@ -10,8 +10,12 @@ final class WDBottomSheetPresenter {
   private var host: UIViewController?
   private var previousFocus: Any?
 
-  /// 立即呈现；content 拿到窗口尺寸与底部安全区。
-  func present<V: View>(@ViewBuilder content: (CGSize, CGFloat) -> V) {
+  /// 立即呈现；content 拿到窗口尺寸与底部安全区；沿用调用方主题/明暗。
+  func present<V: View>(
+    theme: WDTheme,
+    colorScheme: ColorScheme,
+    @ViewBuilder content: (CGSize, CGFloat) -> V
+  ) {
     dismiss()
     guard
       let scene = UIApplication.shared.connectedScenes
@@ -27,9 +31,11 @@ final class WDBottomSheetPresenter {
       top = presented
     }
     previousFocus = UIAccessibility.focusedElement(using: nil)
-    let controller = UIHostingController(
-      rootView: content(window.bounds.size, window.safeAreaInsets.bottom))
+    let themedRoot = content(window.bounds.size, window.safeAreaInsets.bottom)
+      .environment(\.wdTheme, theme)
+    let controller = UIHostingController(rootView: themedRoot)
     controller.view.backgroundColor = .clear
+    controller.overrideUserInterfaceStyle = colorScheme == .dark ? .dark : .light
     controller.modalPresentationStyle = .overFullScreen
     top.present(controller, animated: false)
     host = controller

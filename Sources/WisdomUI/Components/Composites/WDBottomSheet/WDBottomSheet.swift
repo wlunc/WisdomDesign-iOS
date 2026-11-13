@@ -163,6 +163,9 @@ private struct WDSheetModifier<SheetContent: View, SheetFooter: View>: ViewModif
   let content: () -> SheetContent
   let footer: () -> SheetFooter
 
+  @Environment(\.wdTheme) private var theme
+  @Environment(\.colorScheme) private var colorScheme
+
   func body(content anchor: Content) -> some View {
     anchor
       .accessibilityHidden(isPresented)
@@ -192,7 +195,8 @@ private struct WDSheetModifier<SheetContent: View, SheetFooter: View>: ViewModif
     case .all:
       effectiveInitial = initialDetent
     }
-    WDBottomSheetPresenter.shared.present { size, bottomInset in
+    WDBottomSheetPresenter.shared.present(theme: theme, colorScheme: colorScheme) {
+      size, bottomInset in
       WDBottomSheetLayer(
         title: title,
         closeButtonAccessibilityLabel: closeButtonAccessibilityLabel,
