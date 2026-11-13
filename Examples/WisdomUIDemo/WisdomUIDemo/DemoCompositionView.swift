@@ -251,6 +251,21 @@ struct DemoBottomSheetCompositionView: View {
           label: Text(verbatim: "本周完成度"),
           valueText: Text(verbatim: "3/5")
         )
+
+        WDListSection(
+          items: DemoCompositionTask.subtasks,
+          selection: [],
+          header: Text(verbatim: "子任务")
+        ) { item, context in
+          WDListRow(
+            title: Text(verbatim: item.title),
+            subtitle: Text(verbatim: item.subtitle),
+            leading: .icon(item.icon),
+            isSelected: context.isSelected,
+            showsSeparator: !context.isLast,
+            action: {}
+          )
+        }
       }
     } footer: {
       HStack(spacing: WDSpacing.s3) {
@@ -339,6 +354,15 @@ private struct DemoCompositionTask: Identifiable, Hashable {
     .init(id: 1, title: "整理储物间", subtitle: "今天 18:00 前", icon: .task),
     .init(id: 2, title: "擦窗", subtitle: "已完成", icon: .chore),
     .init(id: 3, title: "更换床单", subtitle: "明天", icon: .chore),
+  ]
+
+  static let subtasks: [DemoCompositionTask] = [
+    .init(id: 11, title: "擦拭台面", subtitle: "厨房", icon: .chore),
+    .init(id: 12, title: "清理冰箱", subtitle: "厨房", icon: .chore),
+    .init(id: 13, title: "倒垃圾", subtitle: "今天", icon: .chore),
+    .init(id: 14, title: "洗窗帘", subtitle: "周末", icon: .chore),
+    .init(id: 15, title: "整理鞋柜", subtitle: "玄关", icon: .chore),
+    .init(id: 16, title: "给植物浇水", subtitle: "阳台", icon: .plant),
   ]
 
   static let cardNotes: [String] = [

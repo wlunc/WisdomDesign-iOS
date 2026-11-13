@@ -1,8 +1,9 @@
 import SwiftUI
 import UIKit
 
-/// 在 SwiftUI ScrollView 的底层 UIScrollView 上挂一个并行 pan：
-/// 内容已在顶部且向下拖时，把位移交给 BottomSheet 面板；否则不干预滚动。
+/// 观察 SwiftUI ScrollView 底层 UIScrollView 的 pan：
+/// 内容可滚动时只观察原有 pan（不新增手势，避免抢占内部滚动）；
+/// 内容不可滚动时补一个并行 pan，让短内容也能从内容区下拉关闭面板。
 struct WDBottomSheetScrollProbe: UIViewRepresentable {
   let onPull: (CGFloat) -> Void
   let onEnd: (CGFloat, CGFloat) -> Void
@@ -24,7 +25,7 @@ struct WDBottomSheetScrollProbe: UIViewRepresentable {
   }
 }
 
-/// 零尺寸探针视图；在进入窗口后找到父级 UIScrollView 并安装手势。
+/// 零尺寸探针；可滚动时观察，不可滚动时才安装手势。
 @MainActor
 final class WDBottomSheetScrollProbeView: UIView, UIGestureRecognizerDelegate {
   var onPull: ((CGFloat) -> Void)?
@@ -32,6 +33,7 @@ final class WDBottomSheetScrollProbeView: UIView, UIGestureRecognizerDelegate {
 
   private weak var scrollView: UIScrollView?
   private var pan: UIPanGestureRecognizer?
+  private var observing = false
 
   override func didMoveToWindow() {
     super.didMoveToWindow()
@@ -47,23 +49,55 @@ final class WDBottomSheetScrollProbeView: UIView, UIGestureRecognizerDelegate {
   }
 
   private func installIfNeeded() {
-    guard pan == nil, let scrollView = enclosingScrollView() else {
+    guard let scrollView = enclosingScrollView() else {
+      return
+    }
+    if self.scrollView !== scrollView {
+      uninstall()
+      self.scrollView = scrollView
+    }
+    scrollView.bounces = false
+    let scrollable = scrollView.contentSize.height > scrollView.bounds.height + 1
+    if scrollable {
+      removeSeparatePan()
+      if !observing {
+        scrollView.panGestureRecognizer.addTarget(self, action: #selector(handlePan(_:)))
+        observing = true
+      }
+    } else {
+      if observing {
+        scrollView.panGestureRecognizer.removeTarget(self, action: #selector(handlePan(_:)))
+        observing = false
+      }
+      installSeparatePanIfNeeded(on: scrollView)
+    }
+  }
+
+  private func installSeparatePanIfNeeded(on scrollView: UIScrollView) {
+    guard pan == nil else {
       return
     }
     let recognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
     recognizer.delegate = self
     recognizer.cancelsTouchesInView = false
     scrollView.addGestureRecognizer(recognizer)
-    scrollView.bounces = false
-    self.scrollView = scrollView
-    self.pan = recognizer
+    pan = recognizer
+  }
+
+  private func removeSeparatePan() {
+    guard let pan, let scrollView else {
+      return
+    }
+    scrollView.removeGestureRecognizer(pan)
+    self.pan = nil
   }
 
   func uninstall() {
-    if let pan, let scrollView {
-      scrollView.removeGestureRecognizer(pan)
+    if observing, let scrollView {
+      scrollView.panGestureRecognizer.removeTarget(self, action: #selector(handlePan(_:)))
     }
-    pan = nil
+    removeSeparatePan()
+    observing = false
     scrollView = nil
   }
 

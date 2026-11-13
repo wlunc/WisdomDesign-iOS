@@ -119,6 +119,9 @@
 
 ### Changed
 
+- **BottomSheet 长内容滚动冲突**：内容可滚动时只观察 `UIScrollView` 既有 pan，不再叠加第二套手势；
+  不可滚动时才补并行 pan，保证短内容也能从内容区下拉关闭。新增长内容 UI 测试
+  （内部滚动到列表末项、关闭键位置不变）。
 - **ActionSheet / BottomSheet 跟随宿主题**：窗口级 presenter 继承调用方的 `wdTheme` 与 `colorScheme`
   （hosting controller 注入主题 + `overrideUserInterfaceStyle`）；dark scheme 下遮罩、列表卡、取消卡、
   面板、文字都切到深色。新增 dark scheme UI 测试。

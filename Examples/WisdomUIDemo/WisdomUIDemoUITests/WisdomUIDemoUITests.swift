@@ -132,6 +132,39 @@ final class WisdomUIDemoUITests: XCTestCase {
     close.tap()
   }
 
+  /// BottomSheet 长内容：内部滚动不得拖动面板（关闭键位置不变）。
+  func testBottomSheetLongContentScrollDoesNotMovePanel() {
+    let app = XCUIApplication()
+    app.launch()
+
+    let sheetRow = app.buttons["scenario-row-bottomSheet"]
+    XCTAssertTrue(sheetRow.waitForExistence(timeout: 20), "底部面板容器场景未出现")
+    if !sheetRow.isHittable { app.swipeUp() }
+    sheetRow.tap()
+
+    let open = app.buttons["打开组合面板"]
+    XCTAssertTrue(open.waitForExistence(timeout: 20), "打开组合面板按钮未出现")
+    open.tap()
+
+    let close = app.buttons["关闭新建任务"]
+    XCTAssertTrue(close.waitForExistence(timeout: 20), "组合面板未出现")
+    let before = close.frame
+
+    let anchor = app.staticTexts["今天 18:00 前"]
+    XCTAssertTrue(anchor.waitForExistence(timeout: 20), "面板内容未出现")
+    let start = anchor.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+    let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
+    start.press(forDuration: 0.05, thenDragTo: end, withVelocity: .fast, thenHoldForDuration: 0)
+    start.press(forDuration: 0.05, thenDragTo: end, withVelocity: .fast, thenHoldForDuration: 0)
+    XCTAssertTrue(close.exists, "内部滚动不应关闭面板")
+    XCTAssertEqual(close.frame.minY, before.minY, accuracy: 1, "内部滚动不应移动面板")
+
+    let middleRow = app.staticTexts["倒垃圾"]
+    XCTAssertTrue(middleRow.waitForExistence(timeout: 5), "长列表中段未出现")
+    XCTAssertTrue(middleRow.isHittable, "内部滚动应能滚动列表")
+    close.tap()
+  }
+
   /// 组合场景：卡片容器页、底部面板容器页，各截一张图。
   func testCompositionScenariosOpen() {
     let app = XCUIApplication()
