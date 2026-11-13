@@ -181,7 +181,7 @@ public struct WDListRow: View {
         .monospacedDigit()
         .lineLimit(1)
     case .badge(let value):
-      WDBadge(label: value.label)
+      WDBadge(value: value)
     case .avatar(let value):
       WDAvatar(value: value)
     case .disclosure:

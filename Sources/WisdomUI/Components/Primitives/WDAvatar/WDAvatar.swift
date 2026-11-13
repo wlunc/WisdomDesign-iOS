@@ -31,12 +31,20 @@ public struct WDAvatarValue: Sendable, Equatable {
 /// 都**不可表达**，差异登记在 `docs/DEV-PLAN.md` §2.3。首字号按设计固定（不随动态字体放大）。
 public struct WDAvatar: View {
   private let value: WDAvatarValue
+  private let diameter: CGFloat
 
   @Environment(\.wdColors) private var colors
 
-  /// 构造。
+  /// 构造（公开：md 32 档，直径锁死）。
   public init(value: WDAvatarValue) {
     self.value = value
+    diameter = Self.mdDiameter
+  }
+
+  /// 内部构造：供 `WDAvatarStack` 的 sm 28 档复用同一套渲染。
+  init(value: WDAvatarValue, diameter: CGFloat) {
+    self.value = value
+    self.diameter = diameter
   }
 
   /// 圆形底 + 首字/图标。
@@ -45,7 +53,7 @@ public struct WDAvatar: View {
       Circle().fill(colors.surfaceTint)
       content
     }
-    .frame(width: Self.diameter, height: Self.diameter)
+    .frame(width: diameter, height: diameter)
     .clipShape(Circle())
     .modifier(WDAvatarAccessibility(value: value))
   }
@@ -53,7 +61,7 @@ public struct WDAvatar: View {
   @ViewBuilder private var content: some View {
     if let label = value.label {
       label
-        .font(.system(size: Self.initialsSize))  // wd-structure-check:disable R7 R11 — 设计 12 的首字号固定
+        .font(initialsFont)
         .foregroundStyle(colors.textOnSoft)
         .lineLimit(1)
     } else if let icon = value.icon {
@@ -63,9 +71,18 @@ public struct WDAvatar: View {
   }
 
   /// md 直径（设计 12：`size.avatar.md` = 32；R9 禁 `frame` 绑令牌，故在此落值）。
-  private static let diameter: CGFloat = 32  // wd-structure-check:disable R7 — 设计 md 直径
-  /// md 首字号（设计 12：12pt；令牌无此值）。
-  private static let initialsSize: CGFloat = 12  // wd-structure-check:disable R7 — 设计首字号
+  private static let mdDiameter: CGFloat = 32  // wd-structure-check:disable R7 — 设计 md 直径
+  /// 首字号 = 直径 × 0.375（md 32 → 12，sm 28 → 10.5；设计只给 md 12）。
+  private var initialsSize: CGFloat {
+    diameter * Self.initialsRatio
+  }
+
+  /// 首字字体（设计 12 锁定字号，不随动态字体放大）。
+  private var initialsFont: Font {
+    .system(size: initialsSize)  // wd-structure-check:disable R11 — 设计字号
+  }
+  /// 首字号与直径的比例（md 32 → 12）。
+  private static let initialsRatio: CGFloat = 0.375  // wd-structure-check:disable R7 — 设计比例
 }
 
 /// 无障碍：文字形态读调用方给的文本；图标形态是占位（装饰，不进树）。
