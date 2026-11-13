@@ -395,6 +395,216 @@ enum DemoComponentCatalog {
       ],
       hasEnumSettings: false
     ),
+    DemoComponentEntry(
+      id: .searchField,
+      category: .input,
+      icon: .search,
+      summary: "搜索框。46 高与 WDTextField 同高，前导搜索图标固定，有值时出现清除键，可选聚焦展开取消。",
+      layer: "Primitives",
+      batch: "M5",
+      highlights: [
+        "高度 46、圆角 full，与 WDTextField 同高",
+        "清除键 / 取消键标签必填（L-B）",
+        "结果数播报与 300ms 防抖由调用方负责",
+      ],
+      hasEnumSettings: true
+    ),
+    DemoComponentEntry(
+      id: .radio,
+      category: .input,
+      icon: .done,
+      summary: "单选组。外圆 26 / 内点 12，组内互斥且点击已选项不重复回调。",
+      layer: "Primitives",
+      batch: "M5",
+      highlights: [
+        "标准档 26 / 12；紧凑档本轮不可表达",
+        "组标签由 label 提供，选项支持带描述",
+        "点击已选项不触发变更",
+      ],
+      hasEnumSettings: false
+    ),
+    DemoComponentEntry(
+      id: .slider,
+      category: .input,
+      icon: .inProgress,
+      summary: "滑杆。系统 Slider 载体（手势/读屏合规），支持范围、步长与松手回调。",
+      layer: "Primitives",
+      batch: "M5",
+      highlights: [
+        "轨道 6 / 手柄 26 的自绘视觉差异已登记",
+        "step 有值时系统吸附离散档",
+        "松手只触发一次轻触觉 + onEditingChanged(false)",
+      ],
+      hasEnumSettings: true
+    ),
+    DemoComponentEntry(
+      id: .stepper,
+      category: .input,
+      icon: .todo,
+      summary: "步进器。标准 36 / 紧凑 30，到边界禁用对应键，长按连续步进先慢后快。",
+      layer: "Primitives",
+      batch: "M5",
+      highlights: [
+        "整体是一个可调整控件（不是两个按钮）",
+        "按下一次触觉；连发不重复震动",
+        "长按连续步进，先慢后快",
+      ],
+      hasEnumSettings: true
+    ),
+    DemoComponentEntry(
+      id: .chip,
+      category: .display,
+      icon: .filter,
+      summary: "芯片。展示 / 可选 / 可删除三种语义用三个 init 分离，删除键独立可达。",
+      layer: "Primitives",
+      batch: "M5",
+      highlights: [
+        "标准 32 / 紧凑 28；圆角 full",
+        "已选 = surface.tint + 品牌 42% 描边 + 加粗",
+        "删除键热区 ≥44，不触发整行",
+      ],
+      hasEnumSettings: true
+    ),
+    DemoComponentEntry(
+      id: .avatarStack,
+      category: .display,
+      icon: .members,
+      summary: "头像堆叠。最多 4 个 + 溢出计数，重叠 30%，整叠只朗读一次。",
+      layer: "Primitives",
+      batch: "M5",
+      highlights: [
+        "sm 28 / md 32；重叠 = 直径 30%",
+        "max 4 + 「+n」；右压左",
+        "必填 accessibilityLabel（调用方拼完整句）",
+      ],
+      hasEnumSettings: true
+    ),
+    DemoComponentEntry(
+      id: .segmentedControl,
+      category: .input,
+      icon: .sort,
+      summary: "分段控件。容器 38、段最小 56，指示块弹簧滑动，玻璃/实底两档。",
+      layer: "Composites",
+      batch: "M5",
+      highlights: [
+        "容器 38、段最小 56、2–5 段等分",
+        "指示块 280ms 弹簧滑动",
+        "点击已选项不重复回调",
+      ],
+      hasEnumSettings: true
+    ),
+    DemoComponentEntry(
+      id: .picker,
+      category: .input,
+      icon: .disclose,
+      summary: "选择器。菜单 = 系统 Menu，滚轮 = 底部系统 Picker(.wheel)；未选显示占位。",
+      layer: "Composites",
+      batch: "M5",
+      highlights: [
+        "触发入口 44；未选 text.tertiary",
+        "支持分组标题与当前项标记",
+        "内联变体本轮不做（已登记）",
+      ],
+      hasEnumSettings: true
+    ),
+    DemoComponentEntry(
+      id: .datePicker,
+      category: .input,
+      icon: .calendar,
+      summary: "日期选择。.date 用自建月历（44 单元），.time 用系统滚轮，支持快捷 Chip 与 min/max。",
+      layer: "Composites",
+      batch: "M5",
+      highlights: [
+        "触发入口 44；日期格式走系统本地化",
+        "今天圆点 / 选中实心 / 越界禁用",
+        "快捷 Chip 仅 .date 模式渲染",
+      ],
+      hasEnumSettings: true
+    ),
+    DemoComponentEntry(
+      id: .formRow,
+      category: .structure,
+      icon: .edit,
+      summary: "表单行。标签 + 控件 + 说明/错误，行最小 44，AX 字号下横排自动变竖排。",
+      layer: "Composites",
+      batch: "M5",
+      highlights: [
+        "标签列宽 96；错误文字替换说明",
+        "错误文案挂到控件的 accessibilityHint",
+        "必填标记由调用方 requiredLabel 提供",
+      ],
+      hasEnumSettings: true
+    ),
+    DemoComponentEntry(
+      id: .pullToRefresh,
+      category: .actions,
+      icon: .redo,
+      summary: "下拉刷新。系统 .refreshable 载体（O-7），isRefreshing 反映状态并提供读屏刷新操作。",
+      layer: "Composites",
+      batch: "M5",
+      highlights: [
+        "系统视觉；阈值/自绘环差异已登记",
+        "进行中不重复触发",
+        "label 提供时挂「刷新」无障碍操作",
+      ],
+      hasEnumSettings: false
+    ),
+    DemoComponentEntry(
+      id: .navigationBar,
+      category: .actions,
+      icon: .back,
+      summary: "导航栏。内联 44 / 标准 56 / 大标题 96，透明与玻璃两档，返回与右侧动作。",
+      layer: "Composites",
+      batch: "M5",
+      highlights: [
+        "玻璃走 WDGlass.resolve 并计入效果配额",
+        "返回按钮标签由调用方给来源页名",
+        "滚动联动本轮不做（已登记）",
+      ],
+      hasEnumSettings: true
+    ),
+    DemoComponentEntry(
+      id: .tabBar,
+      category: .actions,
+      icon: .home,
+      summary: "标签栏。悬浮玻璃胶囊，2–5 项等分，角标复用 WDBadge 计数/圆点形态。",
+      layer: "Composites",
+      batch: "M5",
+      highlights: [
+        "高度用令牌 56（设计 58 差 2pt 已登记）",
+        "浅色 glass-strong；深色不透明（O-13）",
+        "选中 = 品牌色 + 加粗 + 4pt 圆点",
+      ],
+      hasEnumSettings: true
+    ),
+    DemoComponentEntry(
+      id: .toolbar,
+      category: .actions,
+      icon: .more,
+      summary: "工具栏。容器 48，按钮视觉 36 / 热区 44，最多 7 项，超出收进更多。",
+      layer: "Composites",
+      batch: "M5",
+      highlights: [
+        "选中 = 品牌渐变底 + 白图标",
+        "超过 7 项收进「更多」菜单",
+        "按钮禁用不隐藏整条工具栏",
+      ],
+      hasEnumSettings: true
+    ),
+    DemoComponentEntry(
+      id: .fab,
+      category: .actions,
+      icon: .add,
+      summary: "悬浮主操作。56/64/40 三档、圆角方/圆两形态，可展开 2–4 个子操作。",
+      layer: "Composites",
+      batch: "M5",
+      highlights: [
+        "渐变 + brand 阴影；按下 0.95",
+        "小号 40 热区补到 44",
+        "滚动缩小 / 遮罩收起本轮未做（已登记）",
+      ],
+      hasEnumSettings: true
+    ),
   ]
 
   /// 某个分组下的条目（保持目录里的书写顺序）。
@@ -673,6 +883,24 @@ struct DemoComponentSettings {
   var switchOn = true
   var checkboxChecked = true
 
+  // M5（导航与表单）的设置项。
+  var searchFieldShowsCancel = true
+  var sliderUsesStep = false
+  var stepperSize: WDStepperSize = .standard
+  var chipSize: WDChipSize = .standard
+  var avatarStackSize: WDAvatarStackSize = .md
+  var segmentStyle: WDSegmentedControlStyle = .solid
+  var pickerStyle: WDPickerStyle = .menu
+  var datePickerMode: WDDatePickerMode = .date
+  var formRowLayout: WDFormRowLayout = .horizontal
+  var navigationBarMode: WDNavigationBarMode = .standard
+  var navigationBarStyle: WDNavigationBarStyle = .transparent
+  var tabBarShowsBadge = true
+  var toolbarShowsOverflow = false
+  var fabSize: WDFABSize = .standard
+  var fabShape: WDFABShape = .roundedSquare
+  var fabExpandable = true
+
   /// 当前配置摘要（显示在实时预览上方的小胶囊里）。
   func summary(for id: DemoComponentID) -> [String] {
     switch id {
@@ -704,12 +932,37 @@ struct DemoComponentSettings {
       return items
     case .icon:
       return [iconName.rawValue, iconSize.demoTitle]
+    case .radio, .pullToRefresh:
+      return []
+    case .searchField:
+      return [searchFieldShowsCancel ? "带取消" : "标准"]
+    case .slider:
+      return [sliderUsesStep ? "带刻度" : "单值"]
+    case .stepper:
+      return [stepperSize.rawValue]
+    case .chip:
+      return [chipSize.rawValue]
+    case .avatarStack:
+      return [avatarStackSize.rawValue]
+    case .segmentedControl:
+      return [segmentStyle.rawValue]
+    case .picker:
+      return [pickerStyle.rawValue]
+    case .datePicker:
+      return [datePickerMode.rawValue]
+    case .formRow:
+      return [formRowLayout.rawValue]
+    case .navigationBar:
+      return [navigationBarMode.rawValue, navigationBarStyle.rawValue]
+    case .tabBar:
+      return [tabBarShowsBadge ? "带角标" : "无角标"]
+    case .toolbar:
+      return [toolbarShowsOverflow ? "9 项（更多）" : "4 项"]
+    case .fab:
+      return [fabSize.rawValue, fabShape.rawValue, fabExpandable ? "可展开" : "主操作"]
     case .switchControl, .checkbox, .badge, .avatar, .divider, .listSection,
       .progressBar, .progressRing, .banner, .emptyState, .skeleton,
-      .alert, .actionSheet, .bottomSheet, .toast,
-      .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
-      .segmentedControl, .picker, .datePicker, .formRow,
-      .pullToRefresh, .navigationBar, .tabBar, .toolbar, .fab:
+      .alert, .actionSheet, .bottomSheet, .toast:
       return []
     }
   }

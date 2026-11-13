@@ -403,12 +403,217 @@ private struct DemoComponentSettingsView: View {
         DemoSettingHeader(title: "图标（44 个语义名）")
       }
 
+    case .searchField:
+      Section {
+        DemoToggleRow(
+          title: "带取消按钮",
+          isOn: $settings.searchFieldShowsCancel,
+          identifier: "setting-searchfield-cancel"
+        )
+      } header: {
+        DemoSettingHeader(title: "形态")
+      }
+
+    case .slider:
+      Section {
+        DemoToggleRow(
+          title: "带刻度（step = 1）",
+          isOn: $settings.sliderUsesStep,
+          identifier: "setting-slider-step"
+        )
+      } header: {
+        DemoSettingHeader(title: "形态")
+      }
+
+    case .stepper:
+      Section {
+        DemoChoiceRow(
+          title: "尺寸",
+          selection: $settings.stepperSize,
+          options: WDStepperSize.allCases,
+          identifier: "setting-stepper-size"
+        ) { value in
+          value == .standard ? "标准" : "紧凑"
+        }
+      } header: {
+        DemoSettingHeader(title: "外观")
+      }
+
+    case .chip:
+      Section {
+        DemoChoiceRow(
+          title: "尺寸",
+          selection: $settings.chipSize,
+          options: WDChipSize.allCases,
+          identifier: "setting-chip-size"
+        ) { value in
+          value == .standard ? "标准" : "紧凑"
+        }
+      } header: {
+        DemoSettingHeader(title: "外观")
+      }
+
+    case .avatarStack:
+      Section {
+        DemoChoiceRow(
+          title: "尺寸",
+          selection: $settings.avatarStackSize,
+          options: WDAvatarStackSize.allCases,
+          identifier: "setting-avatarstack-size"
+        ) { value in
+          value == .sm ? "sm 28" : "md 32"
+        }
+      } header: {
+        DemoSettingHeader(title: "外观")
+      }
+
+    case .segmentedControl:
+      Section {
+        DemoChoiceRow(
+          title: "外观",
+          selection: $settings.segmentStyle,
+          options: WDSegmentedControlStyle.allCases,
+          identifier: "setting-segment-style"
+        ) { value in
+          value == .glass ? "玻璃" : "实底"
+        }
+      } header: {
+        DemoSettingHeader(title: "外观")
+      }
+
+    case .picker:
+      Section {
+        DemoChoiceRow(
+          title: "形态",
+          selection: $settings.pickerStyle,
+          options: WDPickerStyle.allCases,
+          identifier: "setting-picker-style"
+        ) { value in
+          value == .menu ? "菜单" : "滚轮"
+        }
+      } header: {
+        DemoSettingHeader(title: "外观")
+      }
+
+    case .datePicker:
+      Section {
+        DemoChoiceRow(
+          title: "模式",
+          selection: $settings.datePickerMode,
+          options: WDDatePickerMode.allCases,
+          identifier: "setting-datepicker-mode"
+        ) { value in
+          switch value {
+          case .date: return "日期"
+          case .time: return "时间"
+          case .dateAndTime: return "日期 + 时间"
+          }
+        }
+      } header: {
+        DemoSettingHeader(title: "模式")
+      }
+
+    case .formRow:
+      Section {
+        DemoChoiceRow(
+          title: "排布",
+          selection: $settings.formRowLayout,
+          options: WDFormRowLayout.allCases,
+          identifier: "setting-formrow-layout"
+        ) { value in
+          value == .horizontal ? "左右" : "上下"
+        }
+      } header: {
+        DemoSettingHeader(title: "排布")
+      }
+
+    case .navigationBar:
+      Section {
+        DemoChoiceRow(
+          title: "模式",
+          selection: $settings.navigationBarMode,
+          options: WDNavigationBarMode.allCases,
+          identifier: "setting-navbar-mode"
+        ) { value in
+          switch value {
+          case .inline: return "内联 44"
+          case .standard: return "标准 56"
+          case .largeTitle: return "大标题 96"
+          }
+        }
+        DemoChoiceRow(
+          title: "底色",
+          selection: $settings.navigationBarStyle,
+          options: WDNavigationBarStyle.allCases,
+          identifier: "setting-navbar-style"
+        ) { value in
+          value == .glass ? "玻璃" : "透明"
+        }
+      } header: {
+        DemoSettingHeader(title: "外观")
+      }
+
+    case .tabBar:
+      Section {
+        DemoToggleRow(
+          title: "带角标",
+          isOn: $settings.tabBarShowsBadge,
+          identifier: "setting-tabbar-badge"
+        )
+      } header: {
+        DemoSettingHeader(title: "内容")
+      }
+
+    case .toolbar:
+      Section {
+        DemoToggleRow(
+          title: "超过 7 项（收进更多）",
+          isOn: $settings.toolbarShowsOverflow,
+          identifier: "setting-toolbar-overflow"
+        )
+      } header: {
+        DemoSettingHeader(title: "内容")
+      }
+
+    case .fab:
+      Section {
+        DemoChoiceRow(
+          title: "尺寸",
+          selection: $settings.fabSize,
+          options: WDFABSize.allCases,
+          identifier: "setting-fab-size"
+        ) { value in
+          switch value {
+          case .small: return "小 40"
+          case .standard: return "标准 56"
+          case .large: return "大 64"
+          }
+        }
+        DemoChoiceRow(
+          title: "形状",
+          selection: $settings.fabShape,
+          options: WDFABShape.allCases,
+          identifier: "setting-fab-shape"
+        ) { value in
+          value == .circle ? "圆形" : "圆角方"
+        }
+      } header: {
+        DemoSettingHeader(title: "外观")
+      }
+
+      Section {
+        DemoToggleRow(
+          title: "可展开",
+          isOn: $settings.fabExpandable,
+          identifier: "setting-fab-expandable"
+        )
+      } header: {
+        DemoSettingHeader(title: "形态")
+      }
+
     case .switchControl, .checkbox, .badge, .avatar, .divider, .listSection,
       .progressBar, .progressRing, .banner, .emptyState, .skeleton,
-      .alert, .actionSheet, .bottomSheet, .toast,
-      .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
-      .segmentedControl, .picker, .datePicker, .formRow,
-      .pullToRefresh, .navigationBar, .tabBar, .toolbar, .fab:
+      .alert, .actionSheet, .bottomSheet, .toast, .radio, .pullToRefresh:
       Section {
         Text(verbatim: "该组件没有可切换的枚举。")
           .wdFont(WDType.body)

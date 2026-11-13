@@ -32,11 +32,12 @@ struct DemoVariantsSection: View {
       DemoDividerVariants()
     case .listSection:
       DemoListSectionVariants()
-    case .progressBar, .progressRing, .banner, .emptyState, .skeleton,
-      .alert, .actionSheet, .bottomSheet, .toast, .switchControl, .checkbox,
-      .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
+    case .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
       .segmentedControl, .picker, .datePicker, .formRow,
       .pullToRefresh, .navigationBar, .tabBar, .toolbar, .fab:
+      DemoM5VariantsSection(component: component, settings: $settings)
+    case .progressBar, .progressRing, .banner, .emptyState, .skeleton,
+      .alert, .actionSheet, .bottomSheet, .toast, .switchControl, .checkbox:
       EmptyView()
     }
   }
@@ -127,12 +128,13 @@ struct DemoStatesSection: View {
           }
         }
       }
-    case .card, .badge, .avatar, .icon, .divider, .listSection,
-      .progressBar, .progressRing, .banner, .emptyState, .skeleton,
-      .alert, .actionSheet, .bottomSheet, .toast,
-      .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
+    case .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
       .segmentedControl, .picker, .datePicker, .formRow,
       .pullToRefresh, .navigationBar, .tabBar, .toolbar, .fab:
+      DemoM5StatesSection(component: component, settings: $settings)
+    case .card, .badge, .avatar, .icon, .divider, .listSection,
+      .progressBar, .progressRing, .banner, .emptyState, .skeleton,
+      .alert, .actionSheet, .bottomSheet, .toast:
       EmptyView()
     }
   }

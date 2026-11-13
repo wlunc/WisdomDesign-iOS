@@ -16,7 +16,7 @@
   `WDToolbar`（>7 项收进更多）、`WDFAB`（可展开）。同一批把 `WDBadge` 扩了 `count`/`dot` 两种值形态
   （只增不改，闭合 M2 延后项⑤）。
 - **M5 快照与 demo**：15 件 × 8 态 + Badge 计数/圆点 = **128 张新基线**（总 **336**）；
-  demo 组件目录扩到 **36 件**，审计视口加入 M5 代表实例。
+  demo 组件目录扩到 **36 件**（M5 详情页含档位/状态/设置，13 件可切枚举），审计视口加入 M5 代表实例。
 - **M5 契约回填（设计仓 `contracts/`，15 个 yaml）**：params / slots / default + 枚举全量 case；
   `WDBadge.yaml` 增量记录 count/dot 值形态。
 - **M4 九件落地（反馈与弹层）**：`WDBottomSheet`（窗口级自绘贴边面板 + half/large 档位）、`WDActionSheet`、

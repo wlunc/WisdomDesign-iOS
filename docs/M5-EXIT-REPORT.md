@@ -31,7 +31,7 @@ nightly 本轮实跑（2026-11-13）：设备编译 **7.72 s** + 快照 **53.26 
 | 契约 | 15 个新 yaml + `WDBadge.yaml` 增量（共 **36** 个 yaml）；params / slots / default / enums |
 | API 基线 | **1211 符号**（M4 的 861 + **350**）；`dump-api` 零 diff |
 | 测试 | 结构断言 **24 条**（M5Components 24 + 性能 1）；快照 **16 个测试 / 128 张基线**；PR **146 tests** |
-| demo | 组件目录 **36 件**（M5 +15）；审计视口加入 M5 代表实例；demo 构建通过；`WisdomUIDemoUITests` **11 tests / 0 failures**（含四类目审计） |
+| demo | 组件目录 **36 件**（M5 +15）；M5 详情页含**档位 / 状态 / 设置**（13 件可切枚举）与可交互实时预览；审计视口加入 M5 代表实例；demo 构建通过；`WisdomUIDemoUITests` **11 tests / 0 failures**（含四类目审计） |
 
 ## 3. 性能数字（ImageRenderer；只报不拦）
 
