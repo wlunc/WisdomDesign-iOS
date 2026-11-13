@@ -182,7 +182,8 @@ private struct WDSegmentedControlLayout: Layout {
   func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
     let minimum = minSegmentWidth * CGFloat(count)
     let width = max(proposal.width ?? minimum, minimum)
-    return CGSize(width: width, height: proposal.height ?? contentHeight)
+    // 高度恒为内容高 32：忽略父级提出的高度（否则放进 VStack/详情页会被拉成整屏高）。
+    return CGSize(width: width, height: contentHeight)
   }
 
   func placeSubviews(
