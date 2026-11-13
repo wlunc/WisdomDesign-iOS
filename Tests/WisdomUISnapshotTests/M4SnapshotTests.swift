@@ -237,7 +237,8 @@ private struct ToastSample: View {
         isPresented: .constant(true),
         variant: .success,
         message: Text(verbatim: "任务已保存"),
-        action: .init(label: Text(verbatim: "撤销"), action: {})
+        action: .init(label: Text(verbatim: "撤销"), action: {}),
+        durationMilliseconds: 60_000
       )
   }
 }

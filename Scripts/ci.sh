@@ -327,8 +327,11 @@ cmd_nightly() {
 
   phase_begin "nightly-1b 六态快照（WisdomUISnapshotTests）"
   rm -rf "$DD/nightly.xcresult"
+  # 快照必须串行：M4 Toast 等窗口级 presenter 与 M5 的 UIHostingController 快照并发时会互相
+  # 顶掉窗口（实测 Toast 8 态像素差 8–14%）；加 -parallel-testing-enabled NO 后整条绿。
   run_logged nightly-snapshots xcodebuild test \
     -scheme "$SCHEME" -destination "$DEST" -derivedDataPath "$DD" \
+    -parallel-testing-enabled NO \
     -only-testing:WisdomUISnapshotTests -resultBundlePath "$DD/nightly.xcresult"
   assert_tests_passed "$DD/nightly.xcresult"
   phase_end
