@@ -12,6 +12,8 @@ struct DemoComponentListView: View {
       VStack(alignment: .leading, spacing: WDSpacing.s6) {
         DemoCatalogHero()
 
+        DemoCompositionSection()
+
         ForEach(DemoComponentCategory.allCases) { category in
           let entries = DemoComponentCatalog.entries(in: category)
           if !entries.isEmpty {
@@ -29,7 +31,7 @@ struct DemoComponentListView: View {
     }
     .scrollIndicators(.hidden)
     .background(colors.bgCanvas.ignoresSafeArea())
-    .navigationTitle(Text(verbatim: "组件"))
+    .navigationTitle(Text(verbatim: "组件与场景"))
     .navigationBarTitleDisplayMode(.large)
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
@@ -66,7 +68,7 @@ private struct DemoCatalogHero: View {
           Text(verbatim: "组件目录")
             .wdFont(WDType.title1)
             .foregroundStyle(colors.textOnSoft)
-          Text(verbatim: "按类别浏览，点进任意组件查看实时预览、档位与状态细节。")
+          Text(verbatim: "按类别浏览组件，或从「组合场景」查看容器与组件的联合使用。")
             .wdFont(WDType.subheadline)
             .foregroundStyle(colors.textOnSoft)
             .fixedSize(horizontal: false, vertical: true)
@@ -78,7 +80,7 @@ private struct DemoCatalogHero: View {
       HStack(spacing: WDSpacing.s2) {
         DemoMetric(value: "\(DemoComponentCatalog.totalCount)", label: "已实现")
         DemoMetric(value: "\(categoryCount)", label: "类别")
-        DemoMetric(value: "M2", label: "批次")
+        DemoMetric(value: "\(DemoScenarioCatalog.entries.count)", label: "组合场景")
       }
     }
     .padding(WDSpacing.s5)
@@ -131,6 +133,121 @@ private struct DemoMetric: View {
       RoundedRectangle(cornerRadius: WDRadius.sm, style: .continuous)
         .fill(colors.surfaceCardSolid.opacity(0.72))
     )
+  }
+}
+
+// MARK: - 组合场景
+
+private struct DemoCompositionSection: View {
+  @Environment(\.wdColors) private var colors
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: WDSpacing.s3) {
+      HStack(spacing: WDSpacing.s3) {
+        ZStack {
+          RoundedRectangle(cornerRadius: WDRadius.sm, style: .continuous)
+            .fill(colors.surfaceTint)
+            .frame(width: 32, height: 32)
+          WDIcon(icon: .sort, size: .sm)
+            .foregroundStyle(colors.textOnSoft)
+        }
+
+        VStack(alignment: .leading, spacing: 0) {
+          Text(verbatim: "组合场景")
+            .wdFont(WDType.title3)
+            .foregroundStyle(colors.textPrimary)
+          Text(verbatim: "容器与组件的联合使用")
+            .wdFont(WDType.caption1)
+            .foregroundStyle(colors.textSecondary)
+        }
+
+        Spacer(minLength: 0)
+
+        Text(verbatim: "\(DemoScenarioCatalog.entries.count) 个")
+          .wdFont(WDType.caption1)
+          .foregroundStyle(colors.textSecondary)
+          .padding(.horizontal, WDSpacing.s3)
+          .padding(.vertical, WDSpacing.s1)
+          .background(Capsule().fill(colors.surfaceCardSolid))
+      }
+
+      VStack(spacing: WDSpacing.s2) {
+        ForEach(DemoScenarioCatalog.entries) { scenario in
+          NavigationLink {
+            destination(for: scenario)
+          } label: {
+            DemoScenarioRow(scenario: scenario)
+          }
+          .buttonStyle(.plain)
+          .accessibilityIdentifier("scenario-row-\(scenario.id)")
+        }
+      }
+    }
+  }
+
+  @ViewBuilder private func destination(for scenario: DemoScenario) -> some View {
+    switch scenario.id {
+    case "card":
+      DemoCardCompositionView()
+    case "bottomSheet":
+      DemoBottomSheetCompositionView()
+    default:
+      EmptyView()
+    }
+  }
+}
+
+private struct DemoScenarioRow: View {
+  let scenario: DemoScenario
+
+  @Environment(\.wdColors) private var colors
+
+  var body: some View {
+    HStack(spacing: WDSpacing.s4) {
+      ZStack {
+        RoundedRectangle(cornerRadius: WDRadius.sm, style: .continuous)
+          .fill(colors.surfaceTint)
+          .frame(width: 42, height: 42)
+        WDIcon(icon: scenario.icon, size: .md)
+          .foregroundStyle(colors.textOnSoft)
+      }
+
+      VStack(alignment: .leading, spacing: WDSpacing.s1) {
+        HStack(spacing: WDSpacing.s2) {
+          Text(verbatim: scenario.title)
+            .wdFont(WDType.headline)
+            .foregroundStyle(colors.textPrimary)
+          Text(verbatim: "场景")
+            .wdFont(WDType.caption1)
+            .foregroundStyle(colors.textBrand)
+            .padding(.horizontal, WDSpacing.s2)
+            .padding(.vertical, 1)
+            .background(Capsule().fill(colors.surfaceTint))
+        }
+
+        Text(verbatim: scenario.subtitle)
+          .wdFont(WDType.caption1)
+          .foregroundStyle(colors.textSecondary)
+          .lineLimit(2)
+          .multilineTextAlignment(.leading)
+          .fixedSize(horizontal: false, vertical: true)
+      }
+
+      Spacer(minLength: 0)
+
+      WDIcon(icon: .disclose, size: .sm)
+        .foregroundStyle(colors.textTertiary)
+    }
+    .padding(WDSpacing.s4)
+    .background(
+      RoundedRectangle(cornerRadius: WDRadius.lg, style: .continuous)
+        .fill(colors.surfaceCard)
+    )
+    .overlay(
+      RoundedRectangle(cornerRadius: WDRadius.lg, style: .continuous)
+        .stroke(colors.borderHairline, lineWidth: 1)
+    )
+    .contentShape(RoundedRectangle(cornerRadius: WDRadius.lg, style: .continuous))
   }
 }
 
@@ -253,7 +370,7 @@ private struct DemoCatalogFooter: View {
         .foregroundStyle(colors.textPrimary)
       Text(
         verbatim:
-          "当前覆盖 M2 已实现的 11 件 primitives。M3–M6 的组件会随批次继续加入；"
+          "当前覆盖 M2–M4 的 21 件组件与 2 个组合场景。M5–M6 会继续加入；"
           + "主题与令牌、无障碍审计视口在右上角的调色板入口里。"
       )
       .wdFont(WDType.caption1)

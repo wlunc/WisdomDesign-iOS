@@ -28,7 +28,7 @@
 | 契约 | 9 个 yaml（params / slots / default + 枚举全量 case）；`contrast.json` 对比度账目 |
 | API 基线 | **861 符号**（M3 的 661 + **200**：M4 199 + `WDActionSheetItem.icon` 1）；冒烟段的 sheet/actionSheet 声明同 PR 退役 |
 | 测试 | 结构断言 **9 条** + 性能采样 **1 条** + 快照 **9 个测试 / 72 张基线**；PR **124 tests**；demo **7 条 UITest** |
-| demo | 组件目录 **21 件**（M2 11 + M3 1 + M4 9）；弹层从详情页触发；审计视口加入 5 件可视图 |
+| demo | 组件目录 **21 件**（M2 11 + M3 1 + M4 9）+ **2 个组合场景**（卡片容器/底部面板容器）；弹层从详情页触发；审计视口加入 5 件可视图 |
 | 无障碍 | Alert/ActionSheet/BottomSheet 出现时 `screenChanged` 把焦点移入；ActionSheet/BottomSheet 自绘层用 `.isModal` + 隐藏锚点；**两个自绘 sheet 都已实现焦点归还**（记录 `UIAccessibility.focusedElement`，dismiss 后 `.layoutChanged` 归还）；BottomSheet 另有 `.escape` 关闭动作；Banner/Toast/Skeleton 的播报标签由调用方注入（L-B） |
 
 ## 3. 性能数字（ImageRenderer；只报不拦）

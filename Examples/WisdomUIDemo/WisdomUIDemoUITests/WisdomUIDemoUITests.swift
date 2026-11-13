@@ -93,6 +93,41 @@ final class WisdomUIDemoUITests: XCTestCase {
     XCTAssertEqual(configChip.label, "柔色", "切换变体后配置摘要必须更新")
   }
 
+  /// 组合场景：卡片容器页、底部面板容器页，各截一张图。
+  func testCompositionScenariosOpen() {
+    let app = XCUIApplication()
+    app.launch()
+
+    let cardRow = app.buttons["scenario-row-card"]
+    XCTAssertTrue(cardRow.waitForExistence(timeout: 20), "卡片容器场景未出现")
+    cardRow.tap()
+    XCTAssertTrue(app.navigationBars["卡片容器"].waitForExistence(timeout: 20), "卡片容器页未出现")
+    let cardShot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+    cardShot.name = "composition-card"
+    cardShot.lifetime = .keepAlways
+    add(cardShot)
+
+    app.navigationBars.buttons.element(boundBy: 0).tap()
+    let sheetRow = app.buttons["scenario-row-bottomSheet"]
+    XCTAssertTrue(sheetRow.waitForExistence(timeout: 20), "底部面板容器场景未出现")
+    sheetRow.tap()
+    XCTAssertTrue(app.navigationBars["底部面板容器"].waitForExistence(timeout: 20), "底部面板容器页未出现")
+
+    let open = app.buttons["打开组合面板"]
+    XCTAssertTrue(open.waitForExistence(timeout: 20), "打开组合面板按钮未出现")
+    open.tap()
+    let close = app.buttons["关闭新建任务"]
+    XCTAssertTrue(close.waitForExistence(timeout: 20), "组合面板未出现")
+    Thread.sleep(forTimeInterval: 0.5)
+    let sheetShot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+    sheetShot.name = "composition-sheet"
+    sheetShot.lifetime = .keepAlways
+    add(sheetShot)
+
+    close.tap()
+    XCTAssertFalse(close.waitForExistence(timeout: 2), "关闭后组合面板应消失")
+  }
+
   /// ActionSheet：从目录进入详情、打开、点取消关闭；截图附在 result bundle 里供人工核对透明背景。
   func testActionSheetPresentsAndDismisses() {
     let app = XCUIApplication()

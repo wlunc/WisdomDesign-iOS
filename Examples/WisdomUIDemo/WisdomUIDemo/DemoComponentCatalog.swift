@@ -696,3 +696,28 @@ struct DemoComponentSettings {
     }
   }
 }
+
+/// 组合场景：不是新的组件类型，而是「容器 + 已有组件」的演示入口。
+struct DemoScenario: Identifiable, Hashable, Sendable {
+  let id: String
+  let title: String
+  let subtitle: String
+  let icon: WDIconName
+}
+
+enum DemoScenarioCatalog {
+  static let entries: [DemoScenario] = [
+    DemoScenario(
+      id: "card",
+      title: "卡片容器",
+      subtitle: "WDCard 里组合头像、徽章、进度、开关、列表与按钮",
+      icon: .sort
+    ),
+    DemoScenario(
+      id: "bottomSheet",
+      title: "底部面板容器",
+      subtitle: "WDBottomSheet 里组合输入框、卡片、开关、进度与固定页脚",
+      icon: .expand
+    ),
+  ]
+}

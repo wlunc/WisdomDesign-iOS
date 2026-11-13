@@ -119,6 +119,9 @@
 
 ### Changed
 
+- **demo 组合场景**：新增「组合场景」入口——卡片容器（`WDCard` + Avatar/Badge/Progress/Switch/ListSection/Button）
+  与底部面板容器（`WDBottomSheet` + TextField/Card/Switch/Checkbox/Progress/固定页脚）；
+  目录页展示 21 件组件 + 2 个场景，新增组合场景 UI 测试与截图。
 - **`WDBottomSheet` 按设计 26 补齐并改自绘贴边**：标题 `title3`、头部 56；内容 `ScrollView` + 12
   顶距；底部操作区固定、1pt 分割线、高 72、右对齐；面板左右/底部贴屏幕、顶部 32 圆角、把手 36×5；
   half/large 档位、把手拖拽/点击切换、下滑关闭、点遮罩关闭、键盘上移；焦点归还（layoutChanged）

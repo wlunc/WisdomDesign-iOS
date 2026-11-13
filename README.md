@@ -120,6 +120,6 @@ Thinning 增量仍为【未验证】，M6 发布前层补测；口径变更须�
 
 ### 快速查看组件（三条路，按上手速度）
 
-1. **demo app（推荐：可交互 + 可审计）**：`open Examples/WisdomUIDemo/WisdomUIDemo.xcodeproj`，选 `WisdomUIDemo` scheme 跑模拟器；组件目录按用途分组，审计视口覆盖 M2/M3/M4 的 **21 件**（4 件弹层从详情页打开）。
+1. **demo app（推荐：可交互 + 可审计）**：`open Examples/WisdomUIDemo/WisdomUIDemo.xcodeproj`，选 `WisdomUIDemo` scheme 跑模拟器；组件目录按用途分组，审计视口覆盖 M2/M3/M4 的 **21 件**（4 件弹层从详情页打开），另有 **2 个组合场景**（卡片容器 / 底部面板容器）展示容器与组件的联合使用。
 2. **快照画廊（不用 Xcode）**：`Scripts/preview-components.sh` —— 从 `Tests/WisdomUISnapshotTests/Baselines/` 生成 `.build/component-gallery.html` 并在浏览器打开（**208 张基线**；M4 九件各 8 态，`WDListSection` 为 4 变体）。
 3. **Xcode SwiftUI 预览**：打开 `Package.swift` 后在组件文件的 `#Preview` 里看；**需要宿主 app**（本仓用 demo），且 release 不编译预览。
