@@ -196,6 +196,9 @@
 
 ### Fixed
 
+- **`WDSegmentedControl` 选中指示块不显示**（2026-11-13）：原用 `GeometryReader` 背景量测段宽，
+  首帧/快照/真机首屏可能拿到 0 宽 ⇒ 只剩字重差异；改为自定义 `Layout` 直接等分并定位指示块，
+  同时补上禁用态 40% 不透明度。8 张基线同步重录。
 - **`WDTabBar` 图标整体偏上**（2026-11-13）：单行标签此前用 `wdLineBox(..., lines: 2)` 预留了两行行盒，
   图标/标签/圆点被顶到容器顶部；改为单行行盒 + `lineLimit(2)`，单行时垂直居中、两行时自然增高。
 - **demo 审计夹具**（2026-11-12）：为 theme 页 `launch-count` 的 iOS 26 "Contrast nearly passed"

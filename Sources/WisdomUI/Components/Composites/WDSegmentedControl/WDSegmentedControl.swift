@@ -40,8 +40,7 @@ public struct WDSegmentedControl: View {
   @Environment(\.wdColors) private var colors
   @Environment(\.wdAppearance) private var appearance
   @Environment(\.wdEffectsBudget) private var budget
-
-  @State private var contentWidth: CGFloat = 0
+  @Environment(\.isEnabled) private var isEnabled
 
   /// 构造：项数组 + 受控选中 id + 外观档。
   public init(
@@ -54,15 +53,24 @@ public struct WDSegmentedControl: View {
     self.style = style
   }
 
-  /// 指示块 + 等分段落。
+  /// 指示块 + 等分段落（用 `Layout` 直接定位，避免量测在首帧/快照/真机首屏取不到宽度）。
   public var body: some View {
-    ZStack(alignment: .leading) {
+    WDSegmentedControlLayout(
+      count: max(items.count, 1),
+      selectedIndex: selectedIndex,
+      contentHeight: Self.contentHeight,
+      minSegmentWidth: Self.minSegmentWidth
+    ) {
       indicator
-      segments
+      ForEach(items) { item in
+        segment(item)
+      }
     }
     .padding(Self.containerPadding)
     .background(Capsule().fill(containerFill))
     .overlay(Capsule().stroke(containerStroke, lineWidth: 1))
+    .opacity(isEnabled ? 1 : disabledOpacity)
+    .animation(WDMotion.Spring.snappy, value: selection)
     .accessibilityElement(children: .contain)
     .onAppear {
       assert(
@@ -73,20 +81,6 @@ public struct WDSegmentedControl: View {
   }
 
   // MARK: - 零件
-
-  private var segments: some View {
-    HStack(spacing: 0) {
-      ForEach(items) { item in
-        segment(item)
-      }
-    }
-    .background(
-      GeometryReader { proxy in
-        Color.clear.preference(key: WDSegmentedWidthKey.self, value: proxy.size.width)
-      }
-    )
-    .onPreferenceChange(WDSegmentedWidthKey.self) { contentWidth = $0 }
-  }
 
   private func segment(_ item: WDSegmentedControlItem) -> some View {
     let isSelected = item.id == selection
@@ -101,7 +95,6 @@ public struct WDSegmentedControl: View {
         .fontWeight(isSelected ? .semibold : .medium)
         .foregroundStyle(isSelected ? colors.textPrimary : colors.textSecondary)
         .frame(maxWidth: .infinity, minHeight: Self.contentHeight)
-        .frame(minWidth: Self.minSegmentWidth)
         .contentShape(Rectangle())
     }
     .buttonStyle(WDSegmentedPressStyle())
@@ -112,10 +105,8 @@ public struct WDSegmentedControl: View {
     if items.count > 1 {
       Capsule()
         .fill(colors.surfaceCardSolid)
+        .overlay(Capsule().stroke(colors.borderHairline, lineWidth: 1))
         .wdShadow(WDElevation.e1)
-        .frame(width: segmentWidth, height: Self.contentHeight)
-        .offset(x: CGFloat(selectedIndex) * segmentWidth)
-        .animation(WDMotion.Spring.snappy, value: selection)
         .accessibilityHidden(true)
     }
   }
@@ -126,9 +117,9 @@ public struct WDSegmentedControl: View {
     items.firstIndex { $0.id == selection } ?? 0
   }
 
-  private var segmentWidth: CGFloat {
-    guard !items.isEmpty else { return 0 }
-    return contentWidth / CGFloat(items.count)
+  /// 禁用态整体不透明度（`state.disabled.alpha` = 40，百分数换算）。
+  private var disabledOpacity: CGFloat {
+    WDState.disabledAlpha / Self.percentScale
   }
 
   /// 容器底色：玻璃档走唯一入口；实底档 `fill.field`。
@@ -174,13 +165,41 @@ public struct WDSegmentedControl: View {
   private static let contentHeight: CGFloat = 32  // wd-structure-check:disable R7 — 设计值
   /// 单段最小宽 56（设计 21 §3）。
   private static let minSegmentWidth: CGFloat = 56  // wd-structure-check:disable R7 — 设计值
+  /// 百分数换算的分母。
+  private static let percentScale: CGFloat = 100  // wd-structure-check:disable R7 — 百分数
 }
 
-/// 段宽量测（`.background` 里的 `GeometryReader`，不包内容）。
-private struct WDSegmentedWidthKey: PreferenceKey {
-  static let defaultValue: CGFloat = 0
-  static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-    value = nextValue()
+/// 分段控件布局：第 0 个子视图 = 指示块，其余 = 等分段。
+///
+/// 用 `Layout` 直接按容器宽度等分并放置指示块，避免 `GeometryReader` 量测在首帧/快照/真机首屏
+/// 取不到宽度（表现为"选中态没有指示块"）。
+private struct WDSegmentedControlLayout: Layout {
+  let count: Int
+  let selectedIndex: Int
+  let contentHeight: CGFloat
+  let minSegmentWidth: CGFloat
+
+  func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+    let minimum = minSegmentWidth * CGFloat(count)
+    let width = max(proposal.width ?? minimum, minimum)
+    return CGSize(width: width, height: proposal.height ?? contentHeight)
+  }
+
+  func placeSubviews(
+    in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()
+  ) {
+    guard subviews.count > count, count > 0 else { return }
+    let segmentWidth = bounds.width / CGFloat(count)
+    for index in 0...count {
+      let x = bounds.minX + segmentWidth * CGFloat(max(index - 1, 0))
+      let isIndicator = index == 0
+      if isIndicator, selectedIndex < 0 || selectedIndex >= count { continue }
+      subviews[index].place(
+        at: CGPoint(
+          x: isIndicator ? bounds.minX + segmentWidth * CGFloat(selectedIndex) : x, y: bounds.minY),
+        proposal: ProposedViewSize(width: segmentWidth, height: bounds.height)
+      )
+    }
   }
 }
 

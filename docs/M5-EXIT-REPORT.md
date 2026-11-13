@@ -67,7 +67,7 @@ nightly 本轮实跑（2026-11-13）：设备编译 **7.72 s** + 快照 **53.26 
 | ④ | `WDStepper` 字号/节奏 | 标准字号用 subheadline 15（设计 14，+1）；长按节奏取 0.45s/0.2s→0.06s（设计未给值）；紧凑档 30 视觉但整体布局 ≥44 | 已登记；设计给值后可改 |
 | ⑤ | `WDChip` 图标/溢出 | 图标用 token sm 16（设计 15，+1）；横向滚动/换行由调用方布局；删除键与芯片相邻（不重叠） | 已登记 |
 | ⑥ | `WDAvatarStack` | 描边色固定 `surfaceCard`（容器底色不可注入）；点击展开不可表达；sm 档图标仍 20 | M6 前如需可扩签名 |
-| ⑦ | `WDSegmentedControl` | 无 `tablist`/`tab` 角色与位置文案；指示块用 `GeometryReader` 背景量测 + offset（`matchedGeometryEffect` 被禁）；不支持段间横向拖动；玻璃档为纯色填充（未做强模糊） | 已登记 |
+| ⑦ | `WDSegmentedControl` | 无 `tablist`/`tab` 角色与位置文案；指示块改为自定义 `Layout` 直接定位（原 `GeometryReader` 量测会取到 0 宽导致选中态只剩字重差异，已修）；不支持段间横向拖动；玻璃档为纯色填充（未做强模糊） | 已修/已登记 |
 | ⑧ | `WDPicker` 形态 | 只做菜单（系统 Menu）与滚轮（系统 wheel）；内联形态未实现；系统菜单的宽度/定位不可控；滚轮弹层无确认键（下滑关闭） | M6 前可补内联 |
 | ⑨ | `WDDatePicker` 形态 | `.date` 自建月历；`.time` 系统滚轮；`.dateAndTime` = 月历 + 滚轮；**范围变体/清除按钮/二维方向键网格导航未实现**；弹层高度固定 | M6 前可补范围/清除 |
 | ⑩ | `WDFormRow` 标签关联 | 标签与控件靠阅读顺序 + 错误 hint 关联，非程序化 `accessibilityLabel` 合并；错误替换说明 | M6 无障碍回归复核 |
