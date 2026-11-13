@@ -51,6 +51,8 @@ struct WDBottomSheetPanel<Content: View, Footer: View>: View {
   let content: Content
   let footer: Footer
   let bottomInset: CGFloat
+  let onScrollPull: ((CGFloat) -> Void)?
+  let onScrollPullEnd: ((CGFloat, CGFloat) -> Void)?
 
   @Environment(\.wdColors) private var colors
 
@@ -62,7 +64,9 @@ struct WDBottomSheetPanel<Content: View, Footer: View>: View {
     onClose: @escaping () -> Void,
     content: Content,
     footer: Footer,
-    bottomInset: CGFloat = 0
+    bottomInset: CGFloat = 0,
+    onScrollPull: ((CGFloat) -> Void)? = nil,
+    onScrollPullEnd: ((CGFloat, CGFloat) -> Void)? = nil
   ) {
     self.title = title
     self.closeButtonAccessibilityLabel = closeButtonAccessibilityLabel
@@ -70,6 +74,8 @@ struct WDBottomSheetPanel<Content: View, Footer: View>: View {
     self.content = content
     self.footer = footer
     self.bottomInset = bottomInset
+    self.onScrollPull = onScrollPull
+    self.onScrollPullEnd = onScrollPullEnd
   }
 
   var body: some View {
@@ -77,10 +83,17 @@ struct WDBottomSheetPanel<Content: View, Footer: View>: View {
       handle
       header
       ScrollView {
-        content
-          .frame(maxWidth: .infinity, alignment: .leading)
-          .padding(.horizontal, WDSpacing.s5)
-          .padding(.top, WDSpacing.s4)
+        VStack(spacing: 0) {
+          WDBottomSheetScrollProbe(
+            onPull: { onScrollPull?($0) },
+            onEnd: { onScrollPullEnd?($0, $1) }
+          )
+          .frame(width: 0, height: 0)
+          content
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, WDSpacing.s5)
+            .padding(.top, WDSpacing.s4)
+        }
       }
       .scrollIndicators(.hidden)
       if Footer.self != EmptyView.self {

@@ -7,6 +7,7 @@ final class WDActionSheetPresenter {
   static let shared = WDActionSheetPresenter()
 
   private var host: UIViewController?
+  private var previousFocus: Any?
 
   /// 立即呈现（无系统 modal 过渡；面板自己动画）。
   func present<V: View>(_ content: V) {
@@ -14,6 +15,7 @@ final class WDActionSheetPresenter {
     guard let presenter = topViewController() else {
       return
     }
+    previousFocus = UIAccessibility.focusedElement(using: nil)
     let controller = UIHostingController(rootView: content)
     controller.view.backgroundColor = .clear
     controller.modalPresentationStyle = .overFullScreen
@@ -21,10 +23,18 @@ final class WDActionSheetPresenter {
     host = controller
   }
 
-  /// 立即移除宿主（面板的滑出动画已由 WDActionSheetLayer 完成）。
+  /// 立即移除宿主（面板的滑出动画已由 WDActionSheetLayer 完成），并把焦点还给触发元素。
   func dismiss() {
+    let hadHost = host != nil
     host?.dismiss(animated: false)
     host = nil
+    guard hadHost, let previousFocus else {
+      return
+    }
+    self.previousFocus = nil
+    DispatchQueue.main.async {
+      UIAccessibility.post(notification: .layoutChanged, argument: previousFocus)
+    }
   }
 
   private func topViewController() -> UIViewController? {

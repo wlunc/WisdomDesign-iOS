@@ -172,6 +172,31 @@ final class WisdomUIDemoUITests: XCTestCase {
     add(attachment)
   }
 
+  /// BottomSheet：内容在顶部时下滑，应拖动面板并关闭（UIScrollView 桥接路径）。
+  func testBottomSheetSwipeDownFromContentCloses() {
+    let app = XCUIApplication()
+    app.launch()
+
+    let row = app.buttons["component-row-WDBottomSheet"]
+    XCTAssertTrue(row.waitForExistence(timeout: 20), "WDBottomSheet 行未出现")
+    row.tap()
+
+    let trigger = app.buttons["打开底部面板"]
+    XCTAssertTrue(trigger.waitForExistence(timeout: 20), "打开底部面板按钮未出现")
+    trigger.tap()
+
+    let close = app.buttons["关闭成员选择"]
+    XCTAssertTrue(close.waitForExistence(timeout: 20), "BottomSheet 未出现")
+    let content = app.staticTexts.containing(
+      NSPredicate(format: "label CONTAINS %@", "下滑关闭")
+    ).firstMatch
+    XCTAssertTrue(content.waitForExistence(timeout: 20), "面板内容未出现")
+    let start = content.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+    let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95))
+    start.press(forDuration: 0.1, thenDragTo: end, withVelocity: .fast, thenHoldForDuration: 0)
+    XCTAssertFalse(close.waitForExistence(timeout: 2), "内容顶部下滑应关闭 BottomSheet")
+  }
+
   /// 单个页签的严格审计。**只放行两类别有理由的窄例外**（其余一律失败）：
   ///   · 固定字号组件（头像首字 12pt / 徽标 11pt）的 dynamicType —— 设计例外，登记 M2 出口报告 §4；
   ///   · 列表行标题/副标题的 textClipped —— 设计 18 §7 要求单行截断，审计按 `lineLimit(1)` 判"可能截断"。

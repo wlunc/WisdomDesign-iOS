@@ -122,7 +122,8 @@
 - **`WDBottomSheet` 按设计 26 补齐并改自绘贴边**：标题 `title3`、头部 56；内容 `ScrollView` + 12
   顶距；底部操作区固定、1pt 分割线、高 72、右对齐；面板左右/底部贴屏幕、顶部 32 圆角、把手 36×5；
   half/large 档位、把手拖拽/点击切换、下滑关闭、点遮罩关闭、键盘上移；焦点归还（layoutChanged）
-  与 VoiceOver `.escape` 动作；键盘避让有 UI 测试（字段在键盘上方）。8 态基线重录。
+  与 VoiceOver `.escape` 动作；键盘避让有 UI 测试（字段在键盘上方）；内容滚到顶后下拉经
+  UIScrollView 桥接拖动面板（有 UI 测试）。8 态基线重录。
 - **`WDActionSheet` 按设计 27 参考重排**：左右 16 内距；标题/说明移入列表卡片顶部（caption1 /
   text.secondary + 底部分隔线）；行左对齐、可选 20pt 前置图标；取消为独立 48pt **圆角卡片**
   （18 圆角、semibold、e2 阴影）；破坏性项置底。呈现改为 **窗口级 presenter + 自绘遮罩**：

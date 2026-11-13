@@ -239,4 +239,4 @@ public struct WDProgressRing: View {
   呈现改为窗口级 presenter + 自绘遮罩（透明背景、无系统 sheet 边框；遮罩静态、面板滑入/滑出；点遮罩 = 取消）。
 - **BottomSheet 设计对齐（2026-11-12）**：标题 `title3` + 头部 56、内容 12 顶距 + 滚动、底部操作区固定
   1pt 分割线 + 高 72 + 右对齐、宽屏面板上限 480。**呈现改为窗口级自绘贴边面板**（系统 `.sheet` 在 iOS 26
-  对 partial detent 浮动约 16pt）；焦点归还与 VoiceOver `.escape` 已补；**滚到顶再拖面板仍未复刻**。
+  对 partial detent 浮动约 16pt）；焦点归还、VoiceOver `.escape`、内容滚到顶再拖面板（UIScrollView 桥接）均已补。

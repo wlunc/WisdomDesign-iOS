@@ -75,7 +75,7 @@ Scripts/ci.sh measure   # 过程成本测量（分阶段计时；**未测不写�
 - `Scripts/ci.sh pr`：**首次全绿**（2026-10-06；Xcode 26.6 + iOS 26.5 模拟器）。
 - `Scripts/ci.sh pr`：**2026-11-10 复核全绿**（M2 两件补齐六类断言后；`passed=106 failed=0`、符号 641 零 diff、`WisdomUI` 覆盖率 **61.06%**、warm 21.30 s——**n=1 复核值，不替换下表的三态预算**）。
 - `Scripts/ci.sh pr`：**2026-11-12 M3 复核全绿**（`passed=113 failed=0`、符号 **661** 零 diff、`Foundation/**` **97.73%（603/617）≥ 80% 硬门槛**、`--strict` 结构门禁 0 warning、warm 20.84 s——n=1，含新增快照目标编译）。
-- `Scripts/ci.sh pr`：**2026-11-12 M4 复核全绿**（`passed=123 failed=0`、符号 **860** 零 diff、`Foundation/**` **97.26%（603/620）**、`--strict` 0 warning、warm 27.57 s——n=1）。
+- `Scripts/ci.sh pr`：**2026-11-13 M4 复核全绿**（`passed=124 failed=0`、符号 **861** 零 diff、`Foundation/**` **97.26%（603/620）**、`--strict` 0 warning、warm 27.57 s——n=1）。
 
 **门禁预算（实测，2026-10-07；`Scripts/ci.sh measure 3 --states=warm,clean,cold`，每态 n=3 取中位数；单位 = 秒）**：
 

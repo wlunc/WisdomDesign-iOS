@@ -148,7 +148,15 @@ struct WDBottomSheetLayer<Content: View, Footer: View>: View {
       },
       content: content,
       footer: footer,
-      bottomInset: bottomInset
+      bottomInset: bottomInset,
+      onScrollPull: { translation in
+        if translation >= 0 {
+          dragOffset = translation
+        }
+      },
+      onScrollPullEnd: { translation, velocity in
+        endDrag(translation: translation, velocity: velocity)
+      }
     )
   }
 

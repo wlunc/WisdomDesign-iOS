@@ -245,7 +245,7 @@ PY
 **出口判据（7 条）**：① 批前冻结完成（9 件契约入库）；② 玻璃档位单测（档位 × `appearance` × `textLevel` → `opaque|glass|glassStrong`，含两条"必须红"用例）绿；③ **效果配额 7 条**各自的计数/降级断言绿，且"同屏模糊面数量**可数**"；④ 对比度门槛按**最不利取色**验证（`contrast` 审计 + 每套 scheme 的对比度账目进契约）；⑤ 该批性能数字进报告；⑥ 六态快照入库（玻璃类 6 件用 `UIHostingController` + `drawHierarchy`）；⑦ 发布物冒烟（demo 构建 + 归档可产出）。
 **门禁强度**：`PR+nightly₃+发布前`。
 
-> **实现状态（2026-11-12）**：**9 件已落地**；签名冻结 = `docs/M4-SIGNATURE-FREEZE.md`（Q1–Q4 项目负责人「都按建议」）；9 个契约 yaml + `contrast.json` 已回填设计仓；**72 张 8 态基线**（总 208）；demo 扩到 **21 件**；PR **123 tests / 860 符号零 diff / Foundation 97.26%**；demo 构建 + 3 条 UITest + 归档均通过。出口报告 = `docs/M4-EXIT-REPORT.md`（**7/7**；nightly 按项目负责人 2026-11-12 决定不阻塞）。
+> **实现状态（2026-11-13）**：**9 件已落地**；签名冻结 = `docs/M4-SIGNATURE-FREEZE.md`（Q1–Q4 项目负责人「都按建议」）；9 个契约 yaml + `contrast.json` 已回填设计仓；**72 张 8 态基线**（总 208）；demo 扩到 **21 件**；PR **124 tests / 861 符号零 diff / Foundation 97.26%**；demo 构建 + **7 条 UITest** + 归档（1,412 KB）通过。出口报告 = `docs/M4-EXIT-REPORT.md`（**7/7 + 2026-11-13 复核**；nightly 按项目负责人 2026-11-12 决定不阻塞）。
 
 ### 2.6 M5 — 导航与表单（15 件）
 
