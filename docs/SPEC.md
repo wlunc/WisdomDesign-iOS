@@ -963,7 +963,7 @@ extension View {
 | 29 | `WDBanner` | `visible` / `isVisible` ✓ | `message`,`actions` | **`variant = .info`**；软底而非玻璃 | 2 行允许 | polite | M4 |
 | 30 | `WDEmptyState` | — | `title`,`message`,`actions` | — | 说明 2 行允许 | — | M4 |
 | 31 | `WDSkeleton` | — | 无 | 减弱动效→静态 | — | **整区只播报一次** | M4 |
-| 32 | `WDPullToRefresh` | `refreshing` / `isRefreshing` ✓ | `label` | **默认 `.refreshable`（系统视觉）**（O-7 裁决） | — | 到阈值一次触觉 | M5 |
+| 32 | `WDPullRefresh` | `refreshing` / `isRefreshing` ✓ | `label` | **默认 `.refreshable`（系统视觉）**（O-7 裁决） | — | 到阈值一次触觉 | M5 |
 | 33 | `WDNavigationBar` | — | `title`,`leading`,`trailing` | 玻璃档由文字级别决定 | 标题 1 行 | — | M5 |
 | 34 | `WDTabBar` | `selection` ✓ | `items` | 深色不透明表面（O-13） | **2 行允许**（U7） | 切换一次 | M5 |
 | 35 | `WDToolbar` | — | `items` | 溢出收菜单 | 1 行 | — | M5 |
@@ -1207,7 +1207,7 @@ extension View {
 | **F47** | **玻璃档位作为额外输入**（来源：`22-ios-leader-review-r2.md` §6 预备裁定 S-2 = `20-ios-leader-review.md` §3-附记；**已核对（t17）**） | `WDGlass.resolve` 只接**文字级别** `WDTextLevel`（无档位形参） | `WDGlassLevel` 六档作为**额外输入** | U10 的 canonical 输入集合（`textLevel` + `appearance` + `capabilities` + `effectsBudget`）与输出 `{opaque, glass, glassStrong}` **不变**；额外档位不得改变输出语义 |
 | **F48**（第 2 批补记 · t17 裁定） | **槽位 / 内容参数的实现分类**（来源：t15 §8.1 的 D09/D18 + android-dev 的 S-3；与 D02/D04/D05/D06 同批裁定） | 同一内容名可为 `@ViewBuilder` 泛型槽、值参数（`subtitle: Text?`、`valueText: Text?`、`placeholder: Text?`）或值数组（`options: [WDOption]`、`items: [WDSegment<ID>]`） | 同一内容名可为 `@Composable` content lambda 槽位或平铺参数 | **U3 统一的是「名字 + 同一组件的语义（同一名字 = 同一内容 + 同一读屏结果）」；API 形态（槽位/参数/值数组）各端自由**。判据：`contracts/README.md` 的 U3 段只锁 21 名清单 + `{组件 → 名称\|无}` 37 行表（名字逐字相同）；分类差异登记本行 |
 | **F49**（第 2 批补记 · t17 裁定） | **`WDToolbar` 的 leading/trailing 表达**（来源：t15 §8.1 D14） | 走系统 `ToolbarItem` 语义表达 leading/trailing（无显式形参） | 显式 `leading`/`trailing` 槽位 | 名称集合按 U3 对齐（`items` + `leading` + `trailing`）；形态自由 |
-| **F50**（第 2 批补记 · t17 裁定） | **`WDPullToRefresh` 的刷新动作与视觉载体**（来源：t15 §8.1 D17；已由 O-7 裁决覆盖） | `.refreshable` + `onRefresh: () async -> Void`（系统视觉） | 自实现下拉指示器（无 async 动作） | 行为一致："到阈值触发一次 + 进行中不可重复触发 + 到阈值一次触觉"；视觉载体自由（O-7） |
+| **F50**（第 2 批补记 · t17 裁定） | **`WDPullRefresh` 的刷新动作与视觉载体**（来源：t15 §8.1 D17；已由 O-7 裁决覆盖） | `.refreshable` + `onRefresh: () async -> Void`（系统视觉） | 自实现下拉指示器（无 async 动作） | 行为一致："到阈值触发一次 + 进行中不可重复触发 + 到阈值一次触觉"；视觉载体自由（O-7） |
 
 > **iOS 副本的同步状态（t25）**：本副本 = **F21–F50 连续 30 行**（F46/F47 = 第 1 批补记，**已核对（t17）**；F48/F49/F50 = 第 2 批补记，t17 裁定），与唯一登记处 `20-ios-leader-review.md` §3 + §3-附记**逐行一致**；F21–F45 的编号与条目一字未动。
 
@@ -1334,7 +1334,7 @@ extension View {
 | O-4 符号快照进 PR | 进，但**必须走规范化**（原始 symbolgraph 不入库） | §1.5.3 |
 | O-5 审计进 CI | nightly 报警不拦；4 类目固定（可选 `contracts/audit.yaml`） | §1.5.2 |
 | O-6 demo 进 CI | nightly + 补 UITest target | §1.6 |
-| O-7 `WDPullToRefresh` | **默认 `.refreshable`（系统视觉）+ 登记差异**；设计若坚持自绘，M4 前给结论 | §2.10-#32 |
+| O-7 `WDPullRefresh` | **默认 `.refreshable`（系统视觉）+ 登记差异**；设计若坚持自绘，M4 前给结论 | §2.10-#32 |
 | O-8 拖拽排序 | 不入库；多选验收放 demo | §3.4 |
 | O-9 高对比补偿 | 只做第 1 条；第 2/3 排 M4 + 设计签发 | §3.2 |
 | O-10 `WDTextStyle` 构造器 | internal；`WDType.*` 仍 public | §2.1 |
@@ -1431,7 +1431,7 @@ extension View {
 | **CR-5** | 「左滑」是物理方向 vs RTL 语义统一 | `specs/01-basic.md:1688,1715,1729`（左滑/右滑）与 `04-a11y-i18n-dx.md:247`（把"左滑"映射为"leading 边缘"） | 不改：按 04 字面实现会把删除按钮挂 `leading`，与 `NavigationStack` 返回手势竞争 | 用 §3.4 的**一句契约**统一（手指向 leading 移动 / 按钮挂 trailing 边缘 / v1.0 只允许 trailing）；**改文档不改代码** |
 | **Q-i1** | `WDListRow` 的"三行 76"缺第三文本槽 | `specs/01-basic.md:1652-1653`（只有标题+副标题）vs `:1660-1662`（三行 76） | 不改：`76` 不可达或实现者自造槽位 | **删 `tertiary`**；判定"三行 = 标题 + 副标题 + 尾部值文本"；触发条件 = "有副标题且有尾部文本/徽标"（§2.4） |
 | **Q-i2** | iPad 宽屏下 sheet 的最大宽 480 居中 | `specs/02-advanced.md:591`（≥600 时最大宽 480 居中）vs iOS sheet 宽度由系统 formSheet 决定 | 若引 `presentationSizing`（iOS 18+）会抬高最低系统要求（与 deployment target 17 冲突） | **不引 `presentationSizing`**：内容层 `frame(maxWidth: 480)`；"iPad 面板宽度由系统决定"并入 **F21** 登记 |
-| **O-7** | `WDPullToRefresh` 的自绘下拉环 | 规格要求自绘环 + Reduce Motion 静态环 | 自绘需接管滚动手势（与系统冲突、焦点/键盘自管） | **默认 `.refreshable`（系统视觉）+ 登记差异**；设计若坚持自绘，**M4 前**给结论（不阻塞 M0–M4） |
+| **O-7** | `WDPullRefresh` 的自绘下拉环 | 规格要求自绘环 + Reduce Motion 静态环 | 自绘需接管滚动手势（与系统冲突、焦点/键盘自管） | **默认 `.refreshable`（系统视觉）+ 登记差异**；设计若坚持自绘，**M4 前**给结论（不阻塞 M0–M4） |
 | **O-9** | 高对比度的第 2/3 条补偿 | §3.2 的三条（玻璃不透明 / 描边加粗 / 次要文字提质） | 第 2/3 条会改对比度账目与视觉档 | 只做第 1 条（玻璃→不透明）；第 2/3 条排 **M4 + 设计签发** |
 | **disabled 对比度（IOS-06，**已决**）** | `state.disabled.alpha = 40%` 是否豁免对比度 | `contracts/contrast.json` 的达标要求 vs 40% 透明在浅底上易低于 3:1 | **阻塞 M0-1**：M0-1 是唯一一次 schema 冻结窗口，推到 M2 = 二次 breaking | **已决（用户决策 #3）**：**新增 `text.disabled` 色槽 ⇒ U12 = 32 槽位、两端计数断言同步**（M0-1 内冻结；色值由设计给）；~~方案 ② 维持 40% opacity + `contrast.json` 豁免~~ 已否决。配套 **F45** 登记两端机制差异 |
 
@@ -1463,7 +1463,7 @@ extension View {
 | D-12 | CR-5 方向契约回写 3 处文档 | 设计 + 架构师 | 否 | 先按 §3.4 的一句契约；iOS 实现已正确 |
 | D-13 | `text.disabled` 的**色值**（IOS-06；**槽位数已决 = 32**） | 设计 + 架构师 | **是（阻塞 M0-1，不是 M2）** | **已决（用户决策 #3）：新增 `text.disabled` 色槽 ⇒ U12 = 32 槽位**，两端计数断言同步、**不豁免**对比度；设计需给**该槽位的色值**，未给按默认执行项先冻结；两端机制差异登记 **F45** |
 | D-14 | O-9 高对比第 2/3 条 | 设计 | 否（M4） | 先只做第 1 条 |
-| D-15 | O-7 `WDPullToRefresh` 是否自绘 | 设计 + iOS | 否（M5；M4 前给结论） | 先按 `.refreshable` + 登记差异 |
+| D-15 | O-7 `WDPullRefresh` 是否自绘 | 设计 + iOS | 否（M5；M4 前给结论） | 先按 `.refreshable` + 登记差异 |
 | D-16 | Q-i1/Q-i2 的设计复核 | 设计 | 否（默认已执行） | 见 §7.3 |
 | D-17 | 金标设备选型（快照/审计固定机型与运行时） | tech-lead | 否（nightly 前） | 先按 `resolve_sim` 取最新可用设备跑 PR；金标另写 `Baselines/manifest.json` |
 | D-18 | D-i2 验收句"不得要求 iOS 侧恢复状态"进 acceptance | 架构师 | 否（但 M0-5 同批最省） | 随 M0-5 一起落 |

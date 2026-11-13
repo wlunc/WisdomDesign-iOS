@@ -1,7 +1,7 @@
 #if WD_PREVIEWS
   import SwiftUI
 
-  private struct WDPullToRefreshPreviewHost: View {
+  private struct WDPullRefreshPreviewHost: View {
     @State private var isRefreshing = false
     @State private var rows = Array(1...8)
 
@@ -13,7 +13,7 @@
           }
         }
       }
-      .wdPullToRefresh(
+      .wdPullRefresh(
         isRefreshing: $isRefreshing,
         label: Text(verbatim: "刷新")
       ) {
@@ -35,12 +35,12 @@
     }
   }
 
-  #Preview("WDPullToRefresh 浅色") {
-    WDPullToRefreshPreviewHost()
+  #Preview("WDPullRefresh 浅色") {
+    WDPullRefreshPreviewHost()
   }
 
-  #Preview("WDPullToRefresh 深色") {
-    WDPullToRefreshPreviewHost()
+  #Preview("WDPullRefresh 深色") {
+    WDPullRefreshPreviewHost()
       .preferredColorScheme(.dark)
   }
 #endif

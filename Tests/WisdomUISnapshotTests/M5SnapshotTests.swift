@@ -89,9 +89,9 @@ struct M5SnapshotTests {
     snap("formrow", sample: FormRowSample())
   }
 
-  @Test("WDPullToRefresh：8 态")
-  func pullToRefresh() {
-    snap("pulltorefresh", sample: PullToRefreshSample())
+  @Test("WDPullRefresh：8 态")
+  func pullRefresh() {
+    snap("pullrefresh", sample: PullToRefreshSample())
   }
 
   @Test("WDNavigationBar：8 态（玻璃类渲染器）")
@@ -342,7 +342,7 @@ private struct PullToRefreshSample: View {
       }
     }
     .frame(minHeight: 320)
-    .wdPullToRefresh(isRefreshing: .constant(false), label: Text(verbatim: "刷新")) {}
+    .wdPullRefresh(isRefreshing: .constant(false), label: Text(verbatim: "刷新")) {}
   }
 }
 

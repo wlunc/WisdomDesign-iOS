@@ -23,7 +23,7 @@ struct M5PerfTests {
       ("WDPicker", AnyView(PerfPicker())),
       ("WDDatePicker", AnyView(PerfDatePicker())),
       ("WDFormRow", AnyView(PerfFormRow())),
-      ("WDPullToRefresh", AnyView(PerfPullToRefresh())),
+      ("WDPullRefresh", AnyView(PerfPullToRefresh())),
       ("WDNavigationBar", AnyView(PerfNavigationBar())),
       ("WDTabBar", AnyView(PerfTabBar())),
       ("WDToolbar", AnyView(PerfToolbar())),
@@ -202,7 +202,7 @@ private struct PerfPullToRefresh: View {
       }
     }
     .frame(minHeight: 240)
-    .wdPullToRefresh(isRefreshing: .constant(false), label: Text(verbatim: "刷新")) {}
+    .wdPullRefresh(isRefreshing: .constant(false), label: Text(verbatim: "刷新")) {}
   }
 }
 

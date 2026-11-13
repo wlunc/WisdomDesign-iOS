@@ -196,8 +196,8 @@ public struct WDFormRow<Control: View>: View {
   )
 }
 
-// MARK: #32 WDPullToRefresh（设计 32；O-7 默认：.refreshable + 系统视觉）
-public struct WDPullToRefresh: ViewModifier {
+// MARK: #32 WDPullRefresh（设计 32；O-7 默认：.refreshable + 系统视觉）
+public struct WDPullRefresh: ViewModifier {
   public init(
     isRefreshing: Binding<Bool>,
     label: Text? = nil,                 // 提供时同时挂「刷新」自定义无障碍操作（设计 §10）
@@ -206,7 +206,7 @@ public struct WDPullToRefresh: ViewModifier {
   public func body(content: Content) -> some View
 }
 extension View {
-  public func wdPullToRefresh(
+  public func wdPullRefresh(
     isRefreshing: Binding<Bool>,
     label: Text? = nil,
     onRefresh: @escaping @Sendable () async -> Void
@@ -329,7 +329,7 @@ public struct WDBadge: View {
 | `WDPicker` | `selection` / `selection` | `label`,`options` | `placeholder = nil`；`style = .menu` | `WDPickerStyle`(menu,wheel) |
 | `WDDatePicker` | `date` / `date` | `label` | `mode = .date`；`placeholder = nil`；`quickOptions = []`；`bounds = nil` | `WDDatePickerMode`(date,time,dateAndTime) |
 | `WDFormRow` | — | `label`,`control` | `layout = .horizontal`；`helper/error/requiredLabel = nil` | `WDFormRowLayout`(horizontal,vertical) |
-| `WDPullToRefresh` | `refreshing` / `isRefreshing` | `label` | `label = nil` | — |
+| `WDPullRefresh` | `refreshing` / `isRefreshing` | `label` | `label = nil` | — |
 | `WDNavigationBar` | — | `title`,`leading`,`trailing` | `mode = .standard`；`style = .transparent`；`back/actions = nil/[]` | `WDNavigationBarMode`(inline,standard,largeTitle)/`WDNavigationBarStyle`(transparent,glass) |
 | `WDTabBar` | `selection` / `selection` | `items` | `badge = nil` | — |
 | `WDToolbar` | — | `items` | `overflowAccessibilityLabel = nil` | — |
@@ -381,3 +381,5 @@ public struct WDBadge: View {
 - **门禁修复**：M4 Toast 与 M5 的 UIHostingController 快照并发时窗口互顶 ⇒ nightly 快照加
   `-parallel-testing-enabled NO`（`Scripts/ci.sh`），实测 336 张全绿。
 - **nightly₃**：本轮只实跑 1 次完整 nightly；按项目负责人 2026-11-12 对 M3/M4 的豁免先例待确认。
+- **更名（2026-11-13，用户裁决）**：`WDPullToRefresh` → `WDPullRefresh`，修饰符 `.wdPullToRefresh` → `.wdPullRefresh`；
+  契约 yaml 同名更新；**Android 侧契约名待同步**（C-15 #32，android-lead）；CHANGELOG 的 Breaking 段已记。

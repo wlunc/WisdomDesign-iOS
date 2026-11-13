@@ -137,7 +137,7 @@ PY
 | 层 | 数量 | 内容 |
 | --- | --- | --- |
 | `Components/Primitives` | **20** | `WDButton`、`WDIconButton`、`WDTextField`、`WDSearchField`、`WDSwitch`、`WDCheckbox`、`WDRadio`、`WDSlider`、`WDStepper`、`WDChip`、`WDBadge`、`WDAvatar`、`WDAvatarStack`、`WDDivider`、`WDProgressBar`、`WDProgressRing`、`WDCard`、`WDListRow`、`WDListSection`、`WDIcon` |
-| `Components/Composites` | **17** | `WDSegmentedControl`、`WDPicker`、`WDDatePicker`、`WDFormRow`、`WDAlert`、`WDBottomSheet`、`WDActionSheet`、`WDToast`、`WDBanner`、`WDEmptyState`、`WDSkeleton`、`WDPullToRefresh`、`WDNavigationBar`、`WDTabBar`、`WDToolbar`、`WDFAB`、`WDAssigneePicker` |
+| `Components/Composites` | **17** | `WDSegmentedControl`、`WDPicker`、`WDDatePicker`、`WDFormRow`、`WDAlert`、`WDBottomSheet`、`WDActionSheet`、`WDToast`、`WDBanner`、`WDEmptyState`、`WDSkeleton`、`WDPullRefresh`、`WDNavigationBar`、`WDTabBar`、`WDToolbar`、`WDFAB`、`WDAssigneePicker` |
 | `Foundation`（层 0） | — | 令牌（含生成物）、主题、排版、布局、动效、材质、无障碍、图标帮助函数 |
 | `Internal` | — | 内部实现，**零 `public`** |
 | 测试 | — | `WisdomUITests`（逻辑/契约/无障碍断言）＋ `WisdomUISnapshotTests`（六态快照） |
@@ -249,7 +249,7 @@ PY
 
 ### 2.6 M5 — 导航与表单（15 件）
 
-**本端任务**：`WDSegmentedControl`、`WDDatePicker`、`WDPullToRefresh`、`WDNavigationBar`、`WDTabBar`、`WDSearchField`、`WDRadio`、`WDSlider`、`WDStepper`、`WDChip`、`WDAvatarStack`、`WDPicker`、`WDFormRow`、`WDToolbar`、`WDFAB`（含 6 件 primitives：`WDSearchField`/`WDRadio`/`WDSlider`/`WDStepper`/`WDChip`/`WDAvatarStack`）。
+**本端任务**：`WDSegmentedControl`、`WDDatePicker`、`WDPullRefresh`、`WDNavigationBar`、`WDTabBar`、`WDSearchField`、`WDRadio`、`WDSlider`、`WDStepper`、`WDChip`、`WDAvatarStack`、`WDPicker`、`WDFormRow`、`WDToolbar`、`WDFAB`（含 6 件 primitives：`WDSearchField`/`WDRadio`/`WDSlider`/`WDStepper`/`WDChip`/`WDAvatarStack`）。
 **入口判据**：I-2（15 件契约入库）；U7（动态字体上界）已定值。
 **出口判据（6 条）**：① **20/20 primitives 完成**（11 + 1 + 2 + 6）；② 动态字体降级矩阵（含 compact 三条规则）绿；③ RTL 六态截图（LTR/RTL 两态）入库；④ 该批性能数字进报告；⑤ 组件类型名清单与 U3/F 注册表集合相等；⑥ 无新增未登记差异（差异须进 §6 的回写/登记清单）。
 **门禁强度**：`PR+nightly₃`。
@@ -278,7 +278,7 @@ PY
 | **M2** | **11** | `WDTextField`(C)、`WDListRow`(C)、`WDButton`、`WDIconButton`、`WDSwitch`、`WDCheckbox`、`WDBadge`、`WDAvatar`、`WDDivider`、`WDCard`、`WDIcon` | 11 件签名 + 契约入库；受控值名按 §5.3 内联表 | 六态快照 + 无障碍断言 + **行高 44 断言** + 冒烟退役 |
 | **M3** | **1 + 封板** | `WDListSection` | 1 件签名 + 契约；同时冻结**公开 API 基线** | `api/*.json` 入库、覆盖率 ≥80%、体积门槛定值、12 件 primitives 占位 |
 | **M4** | **9** | `WDBottomSheet`(C)、`WDAlert`(C)、`WDActionSheet`(C)、`WDToast`(C)、`WDProgressBar`、`WDProgressRing`、`WDBanner`、`WDEmptyState`、`WDSkeleton` | 9 件签名 + 契约；玻璃/配额/对比度三件套参数化 | 玻璃矩阵单测 + 配额 7 条断言 + 最不利对比度 + 发布物冒烟 |
-| **M5** | **15** | `WDSegmentedControl`(C)、`WDDatePicker`(C)、`WDPullToRefresh`(C)、`WDNavigationBar`(C)、`WDTabBar`(C)、`WDSearchField`、`WDRadio`、`WDSlider`、`WDStepper`、`WDChip`、`WDAvatarStack`、`WDPicker`、`WDFormRow`、`WDToolbar`、`WDFAB` | 15 件签名 + 契约 | **20/20 primitives** 完成 + 动态字体降级矩阵 + RTL 截图 |
+| **M5** | **15** | `WDSegmentedControl`(C)、`WDDatePicker`(C)、`WDPullRefresh`(C)、`WDNavigationBar`(C)、`WDTabBar`(C)、`WDSearchField`、`WDRadio`、`WDSlider`、`WDStepper`、`WDChip`、`WDAvatarStack`、`WDPicker`、`WDFormRow`、`WDToolbar`、`WDFAB` | 15 件签名 + 契约 | **20/20 primitives** 完成 + 动态字体降级矩阵 + RTL 截图 |
 | **M6** | **1 + 回归** | `WDAssigneePicker` | 1 件签名 + 契约 | 无障碍回归 + 截图封板 + 发布前层 + **双端 tag `v1.0.0`** |
 
 > **图例（放在表外 —— 插进表头与数据行之间会让 GFM 表格降级，见 §4.6 固定项 ⑥）**：组件名后的 **`(C)` = 该批内串行在前的「关键路径件」**（下游批依赖其冻结；历史标记写法）；**与层级无关** —— 层级看 §1 的 20 primitives / 17 composites 名单。
@@ -501,7 +501,7 @@ awk '/^\|/{if(!b){k++;n=0;f=NR} b=1;n++; if(n==2 && $0 !~ /^\|[-: |]*-[-: |]*\|[
 | 29 | `WDBanner` | `isVisible` | **`visible`** |
 | 30 | `WDEmptyState` | — | — |
 | 31 | `WDSkeleton` | — | — |
-| 32 | `WDPullToRefresh` | `isRefreshing` | **`refreshing`** |
+| 32 | `WDPullRefresh` | `isRefreshing` | **`refreshing`** |
 | 33 | `WDNavigationBar` | — | — |
 | 34 | `WDTabBar` | `selection` | **`selection`** |
 | 35 | `WDToolbar` | — | — |
@@ -715,7 +715,7 @@ awk '/^\|/{if(!b){k++;n=0;f=NR} b=1;n++; if(n==2 && $0 !~ /^\|[-: |]*-[-: |]*\|[
 | `WDBanner` | ✅ | M4 | 否 | `Components/Composites/WDBanner/`（`WDBanner.swift` + `WDBanner+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#29 | 受控值 `visible` / `isVisible` ✓；槽位 `message`,`actions`；特例 **`variant = .info`**；软底而非玻璃 | 快照 = `ImageRenderer`（普通类）；行盒断言：2 行允许；无障碍：polite | 同批（§3 批内顺序） |
 | `WDEmptyState` | ✅ | M4 | 否 | `Components/Composites/WDEmptyState/`（`WDEmptyState.swift` + `WDEmptyState+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#30 | 受控值 —；槽位 `title`,`message`,`actions`；特例 — | 快照 = `ImageRenderer`（普通类）；行盒断言：说明 2 行允许；无障碍：— | 同批（§3 批内顺序） |
 | `WDSkeleton` | ✅ | M4 | 否 | `Components/Composites/WDSkeleton/`（`WDSkeleton.swift` + `WDSkeleton+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#31 | 受控值 —；槽位 无；特例 减弱动效→静态 | 快照 = `ImageRenderer`（普通类）；无障碍：**整区只播报一次** | 同批（§3 批内顺序） |
-| `WDPullToRefresh` | 🚧 | M5 | **是** | `Components/Composites/WDPullToRefresh/`（`WDPullToRefresh.swift` + `WDPullToRefresh+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#32 | 受控值 `refreshing` / `isRefreshing` ✓；槽位 `label`；特例 **默认 `.refreshable`（系统视觉）**（O-7 裁决） | 快照 = `ImageRenderer`（普通类）；无障碍：到阈值一次触觉 | 关键路径件（下游批前置） |
+| `WDPullRefresh` | 🚧 | M5 | **是** | `Components/Composites/WDPullRefresh/`（`WDPullRefresh.swift` + `WDPullRefresh+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#32 | 受控值 `refreshing` / `isRefreshing` ✓；槽位 `label`；特例 **默认 `.refreshable`（系统视觉）**（O-7 裁决） | 快照 = `ImageRenderer`（普通类）；无障碍：到阈值一次触觉 | 关键路径件（下游批前置） |
 | `WDNavigationBar` | 🚧 | M5 | **是** | `Components/Composites/WDNavigationBar/`（`WDNavigationBar.swift` + `WDNavigationBar+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#33 | 受控值 —；槽位 `title`,`leading`,`trailing`；特例 玻璃档由文字级别决定 | 快照 = `UIHostingController`+`drawHierarchy`（玻璃类 6 个之一）；行盒断言：标题 1 行；无障碍：— | 关键路径件（下游批前置） |
 | `WDTabBar` | 🚧 | M5 | **是** | `Components/Composites/WDTabBar/`（`WDTabBar.swift` + `WDTabBar+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#34 | 受控值 `selection` ✓；槽位 `items`；特例 深色不透明表面（O-13） | 快照 = `UIHostingController`+`drawHierarchy`（玻璃类 6 个之一）；行盒断言：**2 行允许**（U7）；无障碍：切换一次 | 关键路径件（下游批前置） |
 | `WDToolbar` | 🚧 | M5 | 否 | `Components/Composites/WDToolbar/`（`WDToolbar.swift` + `WDToolbar+Previews.swift`；样式件按需） | `docs/SPEC.md` §2.10-#35 | 受控值 —；槽位 `items`；特例 溢出收菜单 | 快照 = `UIHostingController`+`drawHierarchy`（玻璃类 6 个之一）；行盒断言：1 行；无障碍：— | 同批（§3 批内顺序） |
@@ -1212,7 +1212,7 @@ awk '/^# 18 · ListRow/,/^# 19 · /' docs/specs/01-basic.md | grep -n '验收清
 | `WDBanner` | 29 | `../wisdomdesign/docs/specs/02-advanced.md#29--banner` | `wisdom-advanced.html` · `Banner`（3） | P0 | M4 |
 | `WDEmptyState` | 30 | `../wisdomdesign/docs/specs/02-advanced.md#30--emptystate` | `wisdom-advanced.html` · `EmptyState`（3） | P1 | M4 |
 | `WDSkeleton` | 31 | `../wisdomdesign/docs/specs/02-advanced.md#31--skeleton` | `wisdom-advanced.html` · `Skeleton`（3） | P1 | M4 |
-| `WDPullToRefresh` | 32 | `../wisdomdesign/docs/specs/02-advanced.md#32--pulltorefresh` | `wisdom-advanced.html` · `PullToRefresh`（3） | P1 | M5 |
+| `WDPullRefresh` | 32 | `../wisdomdesign/docs/specs/02-advanced.md#32--pullrefresh` | `wisdom-advanced.html` · `PullToRefresh`（3） | P1 | M5 |
 | `WDNavigationBar` | 33 | `../wisdomdesign/docs/specs/02-advanced.md#33--navigationbar` | `wisdom-advanced.html` · `NavigationBar`（3） | P0 | M5 |
 | `WDTabBar` | 34 | `../wisdomdesign/docs/specs/02-advanced.md#34--tabbar` | `wisdom-advanced.html` · `TabBar`（4） | P0 | M5 |
 | `WDToolbar` | 35 | `../wisdomdesign/docs/specs/02-advanced.md#35--toolbar` | `wisdom-advanced.html` · `Toolbar`（4） | P1 | M5 |
@@ -1788,7 +1788,7 @@ awk '/^# 18 · ListRow/,/^# 19 · /' docs/specs/01-basic.md | grep -n '验收清
 9. 行内控件（Switch/Stepper/Checkbox）整行是否可点（除控件外区域也可触发）？
 10. 与 `WDTextField` 的标签语义是否一致（不出现两套"标签"概念）？
 
-**32 `WDPullToRefresh`**（设计 32）
+**32 `WDPullRefresh`**（设计 32）
 
 1. 触发阈值是否 **64**（下拉超过此距离松手才刷新）？
 2. 指示器直径是否 **24**、环线宽 **2**、指示器与首行间距 `space.4`（12）？

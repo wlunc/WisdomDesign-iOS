@@ -8,7 +8,7 @@ import SwiftUI
 /// - 提供 `label` 时同时挂一个「刷新」自定义无障碍操作（读屏用户不必会下拉）；
 /// - 系统视觉下自绘阈值 64 / 环 24 / 环线宽 2 / 三态文案 / 阈值触觉**未实现**，差异登记在
 ///   `docs/M5-EXIT-REPORT.md`。
-public struct WDPullToRefresh: ViewModifier {
+public struct WDPullRefresh: ViewModifier {
   @Binding private var isRefreshing: Bool
   private let label: Text?
   private let onRefresh: @Sendable () async -> Void
@@ -31,7 +31,7 @@ public struct WDPullToRefresh: ViewModifier {
     content
       .refreshable { await performRefresh() }
       .modifier(
-        WDPullToRefreshAccessibility(
+        WDPullRefreshAccessibility(
           label: label,
           isRefreshing: $isRefreshing,
           onRefresh: onRefresh
@@ -51,19 +51,19 @@ public struct WDPullToRefresh: ViewModifier {
 
 extension View {
   /// 下拉刷新（系统 `.refreshable` 载体；`isRefreshing` 反映刷新状态）。
-  public func wdPullToRefresh(
+  public func wdPullRefresh(
     isRefreshing: Binding<Bool>,
     label: Text? = nil,
     onRefresh: @escaping @Sendable () async -> Void
   ) -> some View {
     modifier(
-      WDPullToRefresh(isRefreshing: isRefreshing, label: label, onRefresh: onRefresh)
+      WDPullRefresh(isRefreshing: isRefreshing, label: label, onRefresh: onRefresh)
     )
   }
 }
 
 /// 读屏辅助操作：`label` 非 nil 时挂「刷新」动作（不强制手势）。
-private struct WDPullToRefreshAccessibility: ViewModifier {
+private struct WDPullRefreshAccessibility: ViewModifier {
   let label: Text?
   let isRefreshing: Binding<Bool>
   let onRefresh: @Sendable () async -> Void

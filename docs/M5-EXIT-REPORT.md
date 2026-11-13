@@ -25,7 +25,7 @@ nightly 本轮实跑（2026-11-13）：设备编译 **7.72 s** + 快照 **53.26 
 
 | 项 | 内容 |
 | --- | --- |
-| 组件 | `WDSearchField` / `WDRadio` / `WDSlider` / `WDStepper` / `WDChip` / `WDAvatarStack` / `WDSegmentedControl` / `WDPicker` / `WDDatePicker` / `WDFormRow` / `WDPullToRefresh` / `WDNavigationBar` / `WDTabBar` / `WDToolbar` / `WDFAB` |
+| 组件 | `WDSearchField` / `WDRadio` / `WDSlider` / `WDStepper` / `WDChip` / `WDAvatarStack` / `WDSegmentedControl` / `WDPicker` / `WDDatePicker` / `WDFormRow` / `WDPullRefresh` / `WDNavigationBar` / `WDTabBar` / `WDToolbar` / `WDFAB` |
 | 落点 | `Components/Primitives/` 6 个新目录、`Components/Composites/` 9 个新目录（各含 `+Previews.swift`） |
 | 增量 | `WDBadge` 新增 `WDBadgeValue.init(count:)` / `.dot` 与 `WDBadge.init(value:)`（只增不改；`WDListRow` 改用同一值形态） |
 | 契约 | 15 个新 yaml + `WDBadge.yaml` 增量（共 **36** 个 yaml）；params / slots / default / enums |
@@ -49,7 +49,7 @@ nightly 本轮实跑（2026-11-13）：设备编译 **7.72 s** + 快照 **53.26 
 | `WDPicker` | 4.46 | 3.31 |
 | `WDDatePicker` | 4.00 | 1.87 |
 | `WDFormRow` | 2.39 | 1.23 |
-| `WDPullToRefresh` | 4.35 | 2.15 |
+| `WDPullRefresh` | 4.35 | 2.15 |
 | `WDNavigationBar` | 1.36 | 0.71 |
 | `WDTabBar` | 6.56 | 4.44 |
 | `WDToolbar` | 0.83 | 0.79 |
@@ -71,7 +71,7 @@ nightly 本轮实跑（2026-11-13）：设备编译 **7.72 s** + 快照 **53.26 
 | ⑧ | `WDPicker` 形态 | 只做菜单（系统 Menu）与滚轮（系统 wheel）；内联形态未实现；系统菜单的宽度/定位不可控；滚轮弹层无确认键（下滑关闭） | M6 前可补内联 |
 | ⑨ | `WDDatePicker` 形态 | `.date` 自建月历；`.time` 系统滚轮；`.dateAndTime` = 月历 + 滚轮；**范围变体/清除按钮/二维方向键网格导航未实现**；弹层高度固定 | M6 前可补范围/清除 |
 | ⑩ | `WDFormRow` 标签关联 | 标签与控件靠阅读顺序 + 错误 hint 关联，非程序化 `accessibilityLabel` 合并；错误替换说明 | M6 无障碍回归复核 |
-| ⑪ | `WDPullToRefresh` 自绘项 | 系统 `.refreshable` 视觉；阈值 64 / 环 24 / 三态文案 / 阈值触觉未自绘；`isRefreshing` 由组件在刷新期置位（外部置 true 不会启动刷新） | 已登记（O-7 默认） |
+| ⑪ | `WDPullRefresh` 自绘项 | 系统 `.refreshable` 视觉；阈值 64 / 环 24 / 三态文案 / 阈值触觉未自绘；`isRefreshing` 由组件在刷新期置位（外部置 true 不会启动刷新） | 已登记（O-7 默认） |
 | ⑫ | `WDNavigationBar` 滚动联动 | 不做透明→玻璃、大标题收缩；`style` 由调用方给；右侧 >2 动作 debug 断言后只渲染前 2；玻璃档为纯色填充 | Q6 已拍板；M6 前可补 |
 | ⑬ | `WDTabBar` 尺寸/角标 | 高度用令牌 **56**（设计 58，-2）；图标 20（设计 22，-2）；标签 caption2 11（设计 10，+1）；角标 a11y 未并入宿主朗读（同 M2 ⑬）；滚动收缩未实现；深色不透明已实现 | 已登记（Q3/Q7） |
 | ⑭ | `WDToolbar` 位置/尺寸 | 顶部/底部/键盘上方由调用方放置；垂直内边距 2（44 热区 + 2×2 = 48；设计视觉 6）；玻璃档纯色；长按 tooltip 未实现 | 已登记 |
@@ -79,6 +79,7 @@ nightly 本轮实跑（2026-11-13）：设备编译 **7.72 s** + 快照 **53.26 
 | ⑯ | `WDBadge` 增量 | 计数底用 `WDGradient.destructive`（设计 --g-danger）；圆点只有品牌色一档；M2 的六种状态变体仍未表达 | 已登记（Q7 + M2 ⑤） |
 | ⑰ | 快照并发 | M4 Toast 与 M5 的 UIHostingController 快照并发时窗口互顶（像素差 8–14%）；nightly 快照加 `-parallel-testing-enabled NO` 后全绿（`Scripts/ci.sh` 已改） | 已修复（2026-11-13） |
 | ⑱ | 真机 / VoiceOver / Thinning | 真机观感、读屏播报音频、Thinning 增量仍【未验证】 | M6 前 / 发布前层 |
+| ⑲ | **`WDPullToRefresh` → `WDPullRefresh`** | 2026-11-13 用户裁决的更名（含 `.wdPullRefresh`）：公开类型/修饰符/契约/快照/API 基线同步；**Android 侧契约名待同步**（C-15 #32） | android-lead；iOS 侧已完成 |
 
 ## 5. 判定记录
 

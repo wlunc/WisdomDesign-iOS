@@ -74,7 +74,7 @@ enum DemoComponentID: String, CaseIterable, Identifiable, Hashable, Sendable {
   case picker = "WDPicker"
   case datePicker = "WDDatePicker"
   case formRow = "WDFormRow"
-  case pullToRefresh = "WDPullToRefresh"
+  case pullRefresh = "WDPullRefresh"
   case navigationBar = "WDNavigationBar"
   case tabBar = "WDTabBar"
   case toolbar = "WDToolbar"
@@ -536,7 +536,7 @@ enum DemoComponentCatalog {
       hasEnumSettings: true
     ),
     DemoComponentEntry(
-      id: .pullToRefresh,
+      id: .pullRefresh,
       category: .actions,
       icon: .redo,
       summary: "下拉刷新。系统 .refreshable 载体（O-7），isRefreshing 反映状态并提供读屏刷新操作。",
@@ -932,7 +932,7 @@ struct DemoComponentSettings {
       return items
     case .icon:
       return [iconName.rawValue, iconSize.demoTitle]
-    case .radio, .pullToRefresh:
+    case .radio, .pullRefresh:
       return []
     case .searchField:
       return [searchFieldShowsCancel ? "带取消" : "标准"]

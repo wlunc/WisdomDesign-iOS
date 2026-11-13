@@ -205,13 +205,13 @@ struct M5ComponentsTests {
     #expect(WDFormRowLayout.allCases.map(\.rawValue) == ["horizontal", "vertical"])
   }
 
-  // MARK: - WDPullToRefresh
+  // MARK: - WDPullRefresh
 
-  @Test("WDPullToRefresh：不改变锚点高度（系统 refreshable）")
-  func pullToRefreshModifier() {
+  @Test("WDPullRefresh：不改变锚点高度（系统 refreshable）")
+  func pullRefreshModifier() {
     let plain = size(Text(verbatim: "anchor"))
     let modified = size(
-      Text(verbatim: "anchor").wdPullToRefresh(
+      Text(verbatim: "anchor").wdPullRefresh(
         isRefreshing: .constant(false),
         label: Text(verbatim: "刷新")
       ) {})
@@ -365,7 +365,7 @@ struct M5ComponentsTests {
       "WDAlert", "WDActionSheet", "WDBottomSheet", "WDToast",
       "WDSearchField", "WDRadio", "WDSlider", "WDStepper", "WDChip", "WDAvatarStack",
       "WDSegmentedControl", "WDPicker", "WDDatePicker", "WDFormRow",
-      "WDPullToRefresh", "WDNavigationBar", "WDTabBar", "WDToolbar", "WDFAB",
+      "WDPullRefresh", "WDNavigationBar", "WDTabBar", "WDToolbar", "WDFAB",
     ]
     #expect(names == expected, "契约集合与实现清单不一致：\(names.symmetricDifference(expected))")
     #expect(names.count == 36)

@@ -143,7 +143,7 @@ M0-1 令牌冻结 → M0-2 生成器 → M0-3/4 生成物 + apiDump（apiCheck �
 | **M2** | **11** | `WDTextField`(C)、`WDListRow`(C)、`WDButton`、`WDIconButton`、`WDSwitch`、`WDCheckbox`、`WDBadge`、`WDAvatar`、`WDDivider`、`WDCard`、`WDIcon` | 批前冻结 + PR 绿 + nightly 六态快照 + **行高 44 / Android 布局盒 48** 断言 + 冒烟退役 |
 | **M3** | **1 + 封板** | `WDListSection`（第 20 件 primitive） | 公开 API 冻结（ABI/符号快照入库）+ 覆盖率转门槛 + 体积门槛值定 |
 | **M4** | **9** | `WDBottomSheet`(C)、`WDAlert`(C)、`WDActionSheet`(C)、`WDToast`(C)、`WDProgressBar`、`WDProgressRing`、`WDBanner`、`WDEmptyState`、`WDSkeleton` | 玻璃档位单测 + 效果配额单测 + E2/体积转门槛 + 发布物冒烟 |
-| **M5** | **15** | `WDSegmentedControl`(C)、`WDDatePicker`(C)、`WDPullToRefresh`(C)、`WDNavigationBar`(C)、`WDTabBar`(C)、`WDSearchField`、`WDRadio`、`WDSlider`、`WDStepper`、`WDChip`、`WDAvatarStack`、`WDPicker`、`WDFormRow`、`WDToolbar`、`WDFAB` | 动态字体降级（U7）+ RTL + 该批性能指标 |
+| **M5** | **15** | `WDSegmentedControl`(C)、`WDDatePicker`(C)、`WDPullRefresh`(C)、`WDNavigationBar`(C)、`WDTabBar`(C)、`WDSearchField`、`WDRadio`、`WDSlider`、`WDStepper`、`WDChip`、`WDAvatarStack`、`WDPicker`、`WDFormRow`、`WDToolbar`、`WDFAB` | 动态字体降级（U7）+ RTL + 该批性能指标 |
 | **M6** | **1 + 回归** | `WDAssigneePicker`(C) | 无障碍回归 + 截图封板 + 发布前层 + **双端 tag `v1.0.0`** |
 
 > 计数自证：11 + 1 + 9 + 15 + 1 = **37**；与 `07` §6.3 的 3 处差异为**已批改判** G-01…G-03（`docs/DEV-PLAN.md` §3）。每批第 0 步都是**批前签名冻结**（`docs/DEV-PLAN.md` §3）。

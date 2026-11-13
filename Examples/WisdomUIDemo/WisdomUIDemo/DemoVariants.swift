@@ -34,7 +34,7 @@ struct DemoVariantsSection: View {
       DemoListSectionVariants()
     case .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
       .segmentedControl, .picker, .datePicker, .formRow,
-      .pullToRefresh, .navigationBar, .tabBar, .toolbar, .fab:
+      .pullRefresh, .navigationBar, .tabBar, .toolbar, .fab:
       DemoM5VariantsSection(component: component, settings: $settings)
     case .progressBar, .progressRing, .banner, .emptyState, .skeleton,
       .alert, .actionSheet, .bottomSheet, .toast, .switchControl, .checkbox:
@@ -130,7 +130,7 @@ struct DemoStatesSection: View {
       }
     case .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
       .segmentedControl, .picker, .datePicker, .formRow,
-      .pullToRefresh, .navigationBar, .tabBar, .toolbar, .fab:
+      .pullRefresh, .navigationBar, .tabBar, .toolbar, .fab:
       DemoM5StatesSection(component: component, settings: $settings)
     case .card, .badge, .avatar, .icon, .divider, .listSection,
       .progressBar, .progressRing, .banner, .emptyState, .skeleton,

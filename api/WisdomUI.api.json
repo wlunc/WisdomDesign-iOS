@@ -114,9 +114,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "View.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "View.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -432,9 +432,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDAvatar.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDAvatar.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -534,9 +534,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDAvatarStack.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDAvatarStack.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -702,9 +702,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDBadge.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDBadge.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -828,9 +828,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDBanner.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDBanner.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -1026,9 +1026,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDButton.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDButton.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -1224,9 +1224,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDCard.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDCard.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -1350,9 +1350,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDCheckbox.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDCheckbox.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -1464,9 +1464,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDChip.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDChip.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -2652,9 +2652,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDDatePicker.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDDatePicker.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -2808,9 +2808,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDDivider.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDDivider.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -3024,9 +3024,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDEmptyState.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDEmptyState.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -3156,9 +3156,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDFAB.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDFAB.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -3378,9 +3378,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDFormRow.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDFormRow.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -3660,9 +3660,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDIcon.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDIcon.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -3762,9 +3762,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDIconButton.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDIconButton.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -4218,9 +4218,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDListRow.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDListRow.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -4416,9 +4416,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDListSection.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDListSection.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -4638,9 +4638,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDNavigationBar.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDNavigationBar.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -4818,9 +4818,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDPicker.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDPicker.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -4974,9 +4974,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDProgressBar.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDProgressBar.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -5076,9 +5076,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDProgressRing.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDProgressRing.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -5130,21 +5130,21 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor struct WDPullToRefresh",
+      "decl" : "@MainActor struct WDPullRefresh",
       "kind" : "swift.struct",
-      "path" : "WDPullToRefresh"
+      "path" : "WDPullRefresh"
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func body(content: WDPullToRefresh.Content) -> some View",
+      "decl" : "@MainActor func body(content: WDPullRefresh.Content) -> some View",
       "kind" : "swift.method",
-      "path" : "WDPullToRefresh.body(content:)"
+      "path" : "WDPullRefresh.body(content:)"
     },
     {
       "access" : "public",
       "decl" : "@MainActor init(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void)",
       "kind" : "swift.init",
-      "path" : "WDPullToRefresh.init(isRefreshing:label:onRefresh:)"
+      "path" : "WDPullRefresh.init(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -5214,9 +5214,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDRadio.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDRadio.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -5412,9 +5412,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDSearchField.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDSearchField.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -5514,9 +5514,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDSegmentedControl.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDSegmentedControl.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -5910,9 +5910,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDSkeleton.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDSkeleton.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -6036,9 +6036,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDSlider.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDSlider.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -6240,9 +6240,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDStepper.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDStepper.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -6360,9 +6360,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDSwitch.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDSwitch.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -6480,9 +6480,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDTabBar.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDTabBar.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -6618,9 +6618,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDTextField.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDTextField.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",
@@ -7116,9 +7116,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullToRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDToolbar.wdPullToRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDToolbar.wdPullRefresh(isRefreshing:label:onRefresh:)"
     },
     {
       "access" : "public",

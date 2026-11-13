@@ -12,7 +12,7 @@
   `WDStepper`、`WDChip`（展示/可选/可删除三个 init）、`WDAvatarStack`（max 4 + 溢出计数）、
   `WDSegmentedControl`（38 高 + 弹簧指示块）、`WDPicker`（系统 Menu + wheel）、
   `WDDatePicker`（自建月历 + 系统时间滚轮 + 快捷 Chip + min/max）、`WDFormRow`（AX 自动上下排布）、
-  `WDPullToRefresh`（系统 .refreshable + 读屏刷新操作）、`WDNavigationBar`、`WDTabBar`（深色自动不透明）、
+  `WDPullRefresh`（系统 .refreshable + 读屏刷新操作）、`WDNavigationBar`、`WDTabBar`（深色自动不透明）、
   `WDToolbar`（>7 项收进更多）、`WDFAB`（可展开）。同一批把 `WDBadge` 扩了 `count`/`dot` 两种值形态
   （只增不改，闭合 M2 延后项⑤）。
 - **M5 快照与 demo**：15 件 × 8 态 + Badge 计数/圆点 = **128 张新基线**（总 **336**）；
@@ -187,12 +187,17 @@
 
 ### Breaking
 
+- **`WDPullToRefresh` → `WDPullRefresh`**（pre-1.0 源级 breaking，2026-11-13；用户裁决）：
+  公开类型与修饰符 `.wdPullToRefresh` → `.wdPullRefresh`；契约 yaml 同名更新；
+  **Android 侧契约名待同步**（C-15 #32，android-lead）。迁移 = 全局替换两个标识符。
 - `WDTextStyle.init(size:lineHeight:weight:)` **移除**（改为 `internal` 的 4 参数构造器）。
   本仓尚无消费方；迁移 = **不要自行构造字阶**，改用 `WDType.*` 常量。
 - 其余无公开签名移除。本轮 API 基线变化：**+136 / −1**（`api/WisdomUI.api.json` 必须与成因**同一提交**）。
 
 ### Fixed
 
+- **`WDTabBar` 图标整体偏上**（2026-11-13）：单行标签此前用 `wdLineBox(..., lines: 2)` 预留了两行行盒，
+  图标/标签/圆点被顶到容器顶部；改为单行行盒 + `lineLimit(2)`，单行时垂直居中、两行时自然增高。
 - **demo 审计夹具**（2026-11-12）：为 theme 页 `launch-count` 的 iOS 26 "Contrast nearly passed"
   告警加一条**点名窄例外**（13pt 文本；实测 text.primary on surface.card 约 16:1，**非 WCAG 失败**；
   同代码复跑 3/3 绿）。`Contrast failed` 仍严格失败，且不扩大到其他元素。

@@ -192,7 +192,7 @@ struct DemoComponentPreview: View {
       DemoToastPreview()
     case .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
       .segmentedControl, .picker, .datePicker, .formRow,
-      .pullToRefresh, .navigationBar, .tabBar, .toolbar, .fab:
+      .pullRefresh, .navigationBar, .tabBar, .toolbar, .fab:
       DemoM5Preview(component: component, settings: $settings)
     }
   }
