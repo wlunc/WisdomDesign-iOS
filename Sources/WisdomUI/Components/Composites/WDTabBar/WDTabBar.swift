@@ -86,7 +86,7 @@ public struct WDTabBar: View {
         }
         item.label
           .wdFont(WDType.caption2)
-          .wdLineBox(WDType.caption2, lines: Self.labelLineLimit)
+          .wdLineBox(WDType.caption2)
           .fontWeight(isSelected ? .semibold : .medium)
           .foregroundStyle(isSelected ? colors.textBrand : colors.textTertiary)
           .lineLimit(Self.labelLineLimit)
