@@ -205,7 +205,9 @@ mkdir -p .build/perf && xcrun xccov view --report --json .build/dd/pr.xcresult >
 ```bash
 xcodebuild build -scheme "$WD_SCHEME" -destination 'generic/platform=iOS' -derivedDataPath .build/dd -quiet   # 设备编译只在 nightly
 xcodebuild test  -scheme "$WD_SCHEME" -destination "$WD_SIM_ID" -derivedDataPath .build/dd \
-  -only-testing:WisdomUISnapshotTests        # 六态快照（普通组件 ImageRenderer；玻璃类 UIHostingController+drawHierarchy）
+  -parallel-testing-enabled NO \
+  -only-testing:WisdomUISnapshotTests        # 六态快照（普通组件 ImageRenderer；玻璃类 UIHostingController+drawHierarchy）；
+                                             # 必须串行：窗口级 presenter 与 hosting 快照并发会互顶（M5 实测）
 # demo 无障碍审计（4 类目：contrast / hitRegion / textClipped / dynamicType）—— M1 交付物，M1 前不可跑
 xcodebuild test -project Examples/WisdomUIDemo/WisdomUIDemo.xcodeproj -scheme WisdomUIDemo \
   -destination "$WD_SIM_ID" -only-testing:WisdomUIDemoUITests

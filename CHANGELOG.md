@@ -8,6 +8,17 @@
 
 ### Added
 
+- **M5 十五件落地（导航与表单）**：`WDSearchField`、`WDRadio`、`WDSlider`（原生 Slider 载体）、
+  `WDStepper`、`WDChip`（展示/可选/可删除三个 init）、`WDAvatarStack`（max 4 + 溢出计数）、
+  `WDSegmentedControl`（38 高 + 弹簧指示块）、`WDPicker`（系统 Menu + wheel）、
+  `WDDatePicker`（自建月历 + 系统时间滚轮 + 快捷 Chip + min/max）、`WDFormRow`（AX 自动上下排布）、
+  `WDPullToRefresh`（系统 .refreshable + 读屏刷新操作）、`WDNavigationBar`、`WDTabBar`（深色自动不透明）、
+  `WDToolbar`（>7 项收进更多）、`WDFAB`（可展开）。同一批把 `WDBadge` 扩了 `count`/`dot` 两种值形态
+  （只增不改，闭合 M2 延后项⑤）。
+- **M5 快照与 demo**：15 件 × 8 态 + Badge 计数/圆点 = **128 张新基线**（总 **336**）；
+  demo 组件目录扩到 **36 件**，审计视口加入 M5 代表实例。
+- **M5 契约回填（设计仓 `contracts/`，15 个 yaml）**：params / slots / default + 枚举全量 case；
+  `WDBadge.yaml` 增量记录 count/dot 值形态。
 - **M4 九件落地（反馈与弹层）**：`WDBottomSheet`（窗口级自绘贴边面板 + half/large 档位）、`WDActionSheet`、
   `WDAlert`（270 卡片 + 带输入重载 + screenChanged 焦点移入）、`WDToast`（组件内 .task 计时）、
   `WDBanner`（3 变体 + 软底渐变）、`WDEmptyState`、`WDSkeleton`（text/list/card + 2200ms 微光）、
