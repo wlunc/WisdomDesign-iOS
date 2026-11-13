@@ -17,6 +17,7 @@
 		2B00000000000000000000C8 /* DemoVariants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000FB /* DemoVariants.swift */; };
 		2B00000000000000000000C9 /* DemoThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000FC /* DemoThemeView.swift */; };
 		2B00000000000000000000CA /* DemoCompositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000FD /* DemoCompositionView.swift */; };
+		2B00000000000000000000CB /* DemoM5Previews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000FE /* DemoM5Previews.swift */; };
 		2B00000000000000000000B1 /* WisdomUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2B000000000000000000001E /* WisdomUI */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +45,7 @@
 		2B00000000000000000000FB /* DemoVariants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoVariants.swift; sourceTree = "<group>"; };
 		2B00000000000000000000FC /* DemoThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoThemeView.swift; sourceTree = "<group>"; };
 		2B00000000000000000000FD /* DemoCompositionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoCompositionView.swift; sourceTree = "<group>"; };
+		2B00000000000000000000FE /* DemoM5Previews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoM5Previews.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 				2B00000000000000000000FB /* DemoVariants.swift */,
 				2B00000000000000000000FC /* DemoThemeView.swift */,
 				2B00000000000000000000FD /* DemoCompositionView.swift */,
+				2B00000000000000000000FE /* DemoM5Previews.swift */,
 			);
 			path = WisdomUIDemo;
 			sourceTree = "<group>";
@@ -229,6 +232,7 @@
 				2B00000000000000000000C8 /* DemoVariants.swift in Sources */,
 				2B00000000000000000000C9 /* DemoThemeView.swift in Sources */,
 				2B00000000000000000000CA /* DemoCompositionView.swift in Sources */,
+				2B00000000000000000000CB /* DemoM5Previews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

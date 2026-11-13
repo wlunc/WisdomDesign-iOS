@@ -141,8 +141,17 @@ struct DemoAuditViewport: View {
   @Environment(\.wdColors) private var colors
 
   @State private var text = "整理储物间"
+  @State private var searchText = "储物间"
   @State private var switchOn = true
   @State private var checked = true
+  @State private var radioSelection = "self"
+  @State private var sliderValue = 0.62
+  @State private var stepperValue = 3
+  @State private var chipSelected = true
+  @State private var segment = "today"
+  @State private var pickerSelection: String? = "chore"
+  @State private var date: Date? = Date()
+  @State private var tabSelection = "today"
 
   private struct AuditSectionItem: Identifiable {
     let id: Int
@@ -242,6 +251,86 @@ struct DemoAuditViewport: View {
         )
 
         WDSkeleton(variant: .text, lineCount: 3, accessibilityLabel: Text(verbatim: "加载中"))
+
+        WDSearchField(
+          text: $searchText,
+          placeholder: Text(verbatim: "搜索任务或成员"),
+          clearAccessibilityLabel: Text(verbatim: "清除搜索内容"))
+
+        WDSegmentedControl(
+          items: [
+            .init(id: "today", label: Text(verbatim: "今天")),
+            .init(id: "week", label: Text(verbatim: "本周")),
+          ],
+          selection: $segment)
+
+        WDPicker(
+          selection: $pickerSelection,
+          label: Text(verbatim: "分类"),
+          options: [
+            .init(id: "chore", label: Text(verbatim: "家务")),
+            .init(id: "task", label: Text(verbatim: "任务")),
+          ])
+
+        WDDatePicker(date: $date, label: Text(verbatim: "截止日期"))
+
+        WDRadio(
+          selection: $radioSelection,
+          label: Text(verbatim: "可见范围"),
+          options: [
+            .init(id: "self", label: Text(verbatim: "仅自己可见")),
+            .init(id: "family", label: Text(verbatim: "共享给全家")),
+          ])
+
+        WDStepper(value: $stepperValue, label: Text(verbatim: "数量"), in: 0...10)
+
+        WDSlider(value: $sliderValue, label: Text(verbatim: "完成度"))
+
+        HStack(spacing: WDSpacing.s3) {
+          WDChip(label: Text(verbatim: "全家共享"))
+          WDChip(label: Text(verbatim: "已完成"), isSelected: $chipSelected)
+        }
+
+        WDAvatarStack(
+          items: [
+            .init(id: "me", avatar: WDAvatarValue(label: Text(verbatim: "我"))),
+            .init(id: "mom", avatar: WDAvatarValue(label: Text(verbatim: "妈"))),
+            .init(id: "dad", avatar: WDAvatarValue(label: Text(verbatim: "爸"))),
+            .init(id: "sis", avatar: WDAvatarValue(label: Text(verbatim: "妹"))),
+            .init(id: "a", avatar: WDAvatarValue(label: Text(verbatim: "甲"))),
+          ],
+          accessibilityLabel: Text(verbatim: "家庭成员 5 人"))
+
+        WDFormRow(
+          label: Text(verbatim: "截止日期"),
+          helper: Text(verbatim: "最晚今天 18:00"),
+          requiredLabel: Text(verbatim: "必填")
+        ) {
+          Text(verbatim: "明天").wdFont(WDType.subheadline)
+        }
+
+        WDNavigationBar(
+          title: Text(verbatim: "家庭"),
+          backAccessibilityLabel: Text(verbatim: "返回家庭列表"))
+
+        WDToolbar(
+          items: [
+            .init(id: "undo", icon: .undo, accessibilityLabel: Text(verbatim: "撤销"), action: {}),
+            .init(id: "redo", icon: .redo, accessibilityLabel: Text(verbatim: "重做"), action: {}),
+          ],
+          accessibilityLabel: Text(verbatim: "编辑工具"))
+
+        HStack(alignment: .bottom, spacing: WDSpacing.s5) {
+          WDFAB(icon: .add, accessibilityLabel: Text(verbatim: "新建任务"))
+          Spacer(minLength: 0)
+        }
+
+        WDTabBar(
+          items: [
+            .init(id: "today", icon: .home, label: Text(verbatim: "今天")),
+            .init(id: "tasks", icon: .todo, label: Text(verbatim: "任务")),
+          ],
+          selection: $tabSelection)
       }
       .padding(WDSpacing.s4)
       .frame(maxWidth: 720)

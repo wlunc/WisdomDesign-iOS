@@ -191,7 +191,10 @@ private struct DemoComponentSettingsView: View {
       return [.medium, .large]
     case .switchControl, .checkbox, .badge, .avatar, .divider, .listSection,
       .progressBar, .progressRing, .banner, .emptyState, .skeleton,
-      .alert, .actionSheet, .bottomSheet, .toast:
+      .alert, .actionSheet, .bottomSheet, .toast,
+      .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
+      .segmentedControl, .picker, .datePicker, .formRow,
+      .pullToRefresh, .navigationBar, .tabBar, .toolbar, .fab:
       return [.medium]
     }
   }
@@ -402,7 +405,10 @@ private struct DemoComponentSettingsView: View {
 
     case .switchControl, .checkbox, .badge, .avatar, .divider, .listSection,
       .progressBar, .progressRing, .banner, .emptyState, .skeleton,
-      .alert, .actionSheet, .bottomSheet, .toast:
+      .alert, .actionSheet, .bottomSheet, .toast,
+      .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
+      .segmentedControl, .picker, .datePicker, .formRow,
+      .pullToRefresh, .navigationBar, .tabBar, .toolbar, .fab:
       Section {
         Text(verbatim: "该组件没有可切换的枚举。")
           .wdFont(WDType.body)

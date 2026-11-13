@@ -64,6 +64,21 @@ enum DemoComponentID: String, CaseIterable, Identifiable, Hashable, Sendable {
   case actionSheet = "WDActionSheet"
   case bottomSheet = "WDBottomSheet"
   case toast = "WDToast"
+  case searchField = "WDSearchField"
+  case radio = "WDRadio"
+  case slider = "WDSlider"
+  case stepper = "WDStepper"
+  case chip = "WDChip"
+  case avatarStack = "WDAvatarStack"
+  case segmentedControl = "WDSegmentedControl"
+  case picker = "WDPicker"
+  case datePicker = "WDDatePicker"
+  case formRow = "WDFormRow"
+  case pullToRefresh = "WDPullToRefresh"
+  case navigationBar = "WDNavigationBar"
+  case tabBar = "WDTabBar"
+  case toolbar = "WDToolbar"
+  case fab = "WDFAB"
 
   var id: String { rawValue }
 }
@@ -691,7 +706,10 @@ struct DemoComponentSettings {
       return [iconName.rawValue, iconSize.demoTitle]
     case .switchControl, .checkbox, .badge, .avatar, .divider, .listSection,
       .progressBar, .progressRing, .banner, .emptyState, .skeleton,
-      .alert, .actionSheet, .bottomSheet, .toast:
+      .alert, .actionSheet, .bottomSheet, .toast,
+      .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
+      .segmentedControl, .picker, .datePicker, .formRow,
+      .pullToRefresh, .navigationBar, .tabBar, .toolbar, .fab:
       return []
     }
   }

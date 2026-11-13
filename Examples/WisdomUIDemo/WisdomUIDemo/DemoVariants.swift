@@ -33,7 +33,10 @@ struct DemoVariantsSection: View {
     case .listSection:
       DemoListSectionVariants()
     case .progressBar, .progressRing, .banner, .emptyState, .skeleton,
-      .alert, .actionSheet, .bottomSheet, .toast, .switchControl, .checkbox:
+      .alert, .actionSheet, .bottomSheet, .toast, .switchControl, .checkbox,
+      .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
+      .segmentedControl, .picker, .datePicker, .formRow,
+      .pullToRefresh, .navigationBar, .tabBar, .toolbar, .fab:
       EmptyView()
     }
   }
@@ -126,7 +129,10 @@ struct DemoStatesSection: View {
       }
     case .card, .badge, .avatar, .icon, .divider, .listSection,
       .progressBar, .progressRing, .banner, .emptyState, .skeleton,
-      .alert, .actionSheet, .bottomSheet, .toast:
+      .alert, .actionSheet, .bottomSheet, .toast,
+      .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
+      .segmentedControl, .picker, .datePicker, .formRow,
+      .pullToRefresh, .navigationBar, .tabBar, .toolbar, .fab:
       EmptyView()
     }
   }
