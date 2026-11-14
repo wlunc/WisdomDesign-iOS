@@ -1,6 +1,6 @@
 // 本文件由 wisdomdesign/tools/token-build/build.js 生成，请勿手改。
 // 修改请编辑 wisdomdesign/contracts/icons.json 后重新生成。
-// contracts v1.0.0 · sha256:aab3bb93f508
+// contracts v1.0.0 · sha256:a4fcbf7d1113
 
 import Foundation
 
@@ -88,7 +88,7 @@ public enum WDIconName: String, CaseIterable, Sendable, Hashable {
     case .hidePassword: return "eye.slash"
     case .date: return "calendar"
     case .time: return "clock"
-    case .unassigned: return "person.crop.circle.badge.xmark"
+    case .unassigned: return "person.fill.xmark"
     case .task: return "list.bullet"
     case .chore: return "sparkles"
     case .shopping: return "basket"

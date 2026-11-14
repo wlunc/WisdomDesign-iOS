@@ -62,7 +62,7 @@ public struct WDAssigneePickerUnassigned: Sendable, Equatable {
 /// - 名字可选（`type.caption1`、≤ 4 汉字、超出截断）、与头像间距 `space.2` 4；
 /// - 最多直接显示 **6** 个（含「未指派」），超出显示 `+n`；
 /// - 单选默认（点已选项不取消）/ 多选（参与人）/ 带未指派 / 紧凑 四类变体；
-/// - 选中：头像缩放 1.05 + 品牌环（200ms `spring.bouncy`、环 160ms 淡入）；按下 0.94；
+/// - 选中：头像弹到 1.05 后回弹到 1.0（200ms `spring.bouncy`）+ 品牌环（160ms 淡入）；按下 0.94；
 /// - 已离开成员 40% 去饱和、仍可见不可选；横向滚动、初始滚到选中项。
 ///
 /// 冻结签名与差异见 `docs/M6-SIGNATURE-FREEZE.md`（D1–D9）。
@@ -86,6 +86,8 @@ public struct WDAssigneePicker: View {
   @Environment(\.isEnabled) private var isEnabled
   @Environment(\.wdAppearance) private var appearance
   @Environment(\.wdEffectsBudget) private var budget
+
+  @State private var bouncingID: String?
 
   /// 单选（默认）：`nil` = 未指派/未选；点已选项**不取消**（设计 37 §12）。
   public init(
@@ -138,7 +140,7 @@ public struct WDAssigneePicker: View {
           .foregroundStyle(colors.textSecondary)
           .accessibilityHidden(true)
         ScrollView(.horizontal) {
-          HStack(alignment: .top, spacing: 0) {
+          HStack(alignment: .top, spacing: WDSpacing.s4) {
             if let unassigned {
               unassignedView(unassigned)
                 .id(Self.unassignedID)
@@ -160,6 +162,9 @@ public struct WDAssigneePicker: View {
       .onAppear {
         scrollToSelection(proxy)
       }
+      .task(id: bouncingID) {
+        await resetBounce()
+      }
     }
   }
 
@@ -176,7 +181,8 @@ public struct WDAssigneePicker: View {
         title: size == .standard ? item.name : nil,
         avatar: item.avatar,
         unassigned: false,
-        itemEnabled: item.isEnabled
+        itemEnabled: item.isEnabled,
+        bounce: bouncingID == item.id
       )
     }
     .buttonStyle(WDAssigneePickerItemStyle())
@@ -197,7 +203,8 @@ public struct WDAssigneePicker: View {
         title: size == .standard ? unassigned.label : nil,
         avatar: nil,
         unassigned: true,
-        itemEnabled: true
+        itemEnabled: true,
+        bounce: bouncingID == Self.unassignedID
       )
     }
     .buttonStyle(WDAssigneePickerItemStyle())
@@ -230,45 +237,25 @@ public struct WDAssigneePicker: View {
     }
   }
 
-  /// 头像槽：选中环 + 头像（或未指派虚线圈）+ 可选名字。
+  /// 头像槽：52 选择圈 + 头像（或未指派虚线圈）+ 可选名字。
   @ViewBuilder private func slot(
     selected: Bool,
     title: Text?,
     avatar: WDAvatarValue?,
     unassigned: Bool,
-    itemEnabled: Bool
+    itemEnabled: Bool,
+    bounce: Bool
   ) -> some View {
     VStack(spacing: WDSpacing.s2) {
-      ZStack {
-        if selected {
-          Circle()
-            .strokeBorder(colors.textBrand, lineWidth: Self.ringWidth)
-            .frame(width: outerDiameter, height: outerDiameter)
-            .transition(.opacity)
-        }
-        if let avatar {
-          WDAvatar(value: avatar, diameter: avatarDiameter)
-            .scaleEffect(selected ? Self.selectedScale : 1)
-        } else if unassigned {
-          Circle()
-            .stroke(
-              colors.textTertiary,
-              style: StrokeStyle(lineWidth: Self.dashedWidth, dash: Self.dashedPattern)
-            )
-            .frame(width: avatarDiameter, height: avatarDiameter)
-          WDIcon(icon: .unassigned, size: .md)
-            .foregroundStyle(colors.textTertiary)
-        }
-      }
-      .frame(width: outerDiameter, height: outerDiameter)
-      .animation(selectionAnimation, value: selected)
+      pickCircle(selected: selected, avatar: avatar, unassigned: unassigned, bounce: bounce)
 
       if let title {
         title
           .wdFont(WDType.caption1)
           .wdLineBox(WDType.caption1)
           .lineLimit(1)
-          .foregroundStyle(colors.textSecondary)
+          .fontWeight(selected ? .semibold : .regular)
+          .foregroundStyle(selected ? colors.textBrand : colors.textSecondary)
           .frame(width: outerDiameter)
       }
     }
@@ -276,6 +263,40 @@ public struct WDAssigneePicker: View {
     .opacity(itemEnabled ? 1 : disabledOpacity)
     .saturation(itemEnabled ? 1 : 0)
     .contentShape(Rectangle())
+  }
+
+  /// 选择圈 = 52 槽（紧凑 44）：选中 = 2pt 品牌描边；未指派未选 = 1.5pt 虚线。
+  /// 头像静止为 1.0（与圈留 4 间隙）；「缩放 1.05 后回弹」只做一次性 bounce，不改变静止尺寸。
+  @ViewBuilder private func pickCircle(
+    selected: Bool,
+    avatar: WDAvatarValue?,
+    unassigned: Bool,
+    bounce: Bool
+  ) -> some View {
+    ZStack {
+      if selected {
+        Circle()
+          .strokeBorder(colors.textBrand, lineWidth: Self.ringWidth)
+          .transition(.opacity)
+      } else if unassigned {
+        Circle()
+          .strokeBorder(
+            colors.borderHairlineStrong,
+            style: StrokeStyle(lineWidth: Self.dashedWidth, dash: Self.dashedPattern)
+          )
+      }
+      if let avatar {
+        WDAvatar(value: avatar, diameter: avatarDiameter)
+          .scaleEffect(bounce ? Self.selectedScale : 1)
+      } else if unassigned {
+        WDIcon(icon: .unassigned, size: .md)
+          .foregroundStyle(selected ? colors.textBrand : colors.textTertiary)
+          .scaleEffect(bounce ? Self.selectedScale : 1)
+      }
+    }
+    .frame(width: outerDiameter, height: outerDiameter)
+    .animation(selectionAnimation, value: selected)
+    .animation(selectionAnimation, value: bounce)
   }
 
   // MARK: - 行为
@@ -296,6 +317,7 @@ public struct WDAssigneePicker: View {
       binding.wrappedValue = selection
     }
     WDHaptics.shared.play(.toggle, budget: budget)
+    bouncingID = item.id
   }
 
   private func selectUnassigned() {
@@ -303,6 +325,15 @@ public struct WDAssigneePicker: View {
     guard binding.wrappedValue != nil else { return }
     binding.wrappedValue = nil
     WDHaptics.shared.play(.toggle, budget: budget)
+    bouncingID = Self.unassignedID
+  }
+
+  /// 选中弹一下后回到 1.0（设计 37 §5/§9：200ms bouncy 后回弹，静止尺寸不变）。
+  private func resetBounce() async {
+    guard let id = bouncingID else { return }
+    try? await Task.sleep(for: .seconds(Self.bounceReset))
+    guard !Task.isCancelled, bouncingID == id else { return }
+    bouncingID = nil
   }
 
   /// 初始渲染把当前选中项滚到可视区中间（设计 37 §6/§9）。
@@ -440,6 +471,8 @@ public struct WDAssigneePicker: View {
   private static let dashedPattern: [CGFloat] = [3, 3]  // wd-structure-check:disable R7 — 设计未给值
   /// 百分数换算的分母。
   private static let percentScale: CGFloat = 100  // wd-structure-check:disable R7 — 百分数
+  /// 选中回弹的复位延迟 200ms（设计 37 §5/§9）。
+  private static let bounceReset: TimeInterval = 0.2  // wd-structure-check:disable R7 — 设计37
   /// 未指派项的滚动锚点 id。
   private static let unassignedID = "__wd_assigneePicker_unassigned__"
 }

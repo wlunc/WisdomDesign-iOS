@@ -100,11 +100,13 @@ public struct WDAssigneePicker: View {
 
 | 设计 37 | 冻结口径 |
 | --- | --- |
-| §3 头像 40 / 间距 `space.4` 12 / 选中外环 2pt + 4 间隙（外径 52） | 头像 40（紧凑 32）、HStack 间距 12、外环 `strokeBorder` 2pt / 外径 52（紧凑 44），间隙 4 |
+| §3 头像 40 / 间距 `space.4` 12 / 选中外环 2pt + 4 间隙（外径 52） | 头像 40（紧凑 32）；**项槽 = 52（紧凑 44），槽间距 12**（对齐画廊 `.wd-assign` 的 gap；头像视觉间距 24）；选中环 = 52 槽 `strokeBorder` 2pt（内边 48）+ 头像**静止 1.0** ⇒ 圈内间隙 **4**（紧凑同） |
 | §3 名字与头像间距 `space.2` 4；名字 `type.caption1` | VStack 间距 4；`.wdFont(WDType.caption1)` + `.wdLineBox(WDType.caption1)`；`lineLimit(1)` 截断 |
+| §2 未指派项 虚线圈 + `user-x` | **52 槽虚线圈**（1.5pt `borderHairlineStrong`，dash 3/3）+ `person.fill.xmark`（契约 `icons.json` 的 iOS 映射由 `person.crop.circle.badge.xmark` 修正；Android 仍 `person_off`）；选中时换 2pt 品牌实线圈 + 品牌色图标 |
+| §5 选中名字 | 品牌色 + 600（`.fontWeight(.semibold)`）；未选 `text.secondary` |
 | §3 最多直接显示 6 个（含「未指派」），超出显示 `+n` | `maxVisible = 6`（含未指派）；超出时 6 个 + `+n` 圆片（n = 总数 − 6），样式对齐 `WDAvatarStack` 的溢出片 |
 | §4 单选 / 多选 / 带未指派 / 紧凑 | 两个 init（单选/多选）+ `unassigned` 参数 + `WDAssigneePickerSize` |
-| §5 选中：头像缩放 1.05 + 品牌环；200ms `spring.bouncy`、环 160ms 淡入 | `scaleEffect(isSelected ? 1.05 : 1)` + `WDMotion.Spring.bouncy`；环 `.easeOut(0.16)`（`WDMotion.Duration.fast`）；Reduce Motion ⇒ 无动画 |
+| §5 选中：头像缩放 1.05 + 品牌环；200ms `spring.bouncy`、环 160ms 淡入 | **先弹到 1.05 再回弹到 1.0**（`bouncingID` + 200ms 后复位；静止尺寸不变）+ `WDMotion.Spring.bouncy`；环 `.easeOut(0.16)`（`WDMotion.Duration.fast`）；Reduce Motion ⇒ 无动画 |
 | §5 按下：缩放 0.94 / 100ms | `ButtonStyle` `scaleEffect(0.94)` + `WDMotion.Duration.instant` |
 | §5 禁用成员：40% 去饱和、仍可见不可选 | `isEnabled: false` ⇒ 该项 `.opacity(0.4)` + `.saturation(0)`；**仍留在无障碍树**（读屏 hint = `unavailableReason`） |
 | §5 整体禁用：全部 40% | `@Environment(\.isEnabled)` ⇒ 整组 40% + 全部不可交互 |
@@ -176,6 +178,7 @@ enums: {WDAssigneePickerSize: [standard, compact]}
 | **D8** | 外边距 16 | **调用方给**（组件不自带外边距，与库内其余组件一致） |
 | **D9** | 选中项不可见时 | 第 6 位之后被选中 ⇒ **替换进可见窗口**（保证「初始渲染选中项在可视区内」）；顺序以外的置换登记为实现细节 |
 | **D10** | 双端 tag | **本轮只做 iOS**；`v1.0.0` 待 Android M2–M5 追平后双端同时打（项目负责人 2026-11-14 确认） |
+| **D11** | **2026-11-14 视觉复核（用户指出未指派/圈间隙不一致）** | 未指派改 **52 虚线圈 + `person.fill.xmark`**（契约 iOS 映射修正）；选中环按 **52 槽 2pt**、头像**静止 1.0**（选中只做 200ms 弹到 1.05 后回弹，原 1.05 常驻是错误）；项槽间距按画廊 **12**；选中名字品牌色 + 600 |
 
 ## 6. 确认与合并记录
 

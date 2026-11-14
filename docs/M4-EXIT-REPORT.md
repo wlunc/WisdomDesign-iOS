@@ -56,7 +56,7 @@
 | ① | **Alert 焦点归还** | 出现时用 `UIAccessibility.post(.screenChanged)` 把焦点移入；**关闭后归还触发元素未实现**（`WDA11yFocusID` 无公开构造器，调用方无法传回焦点 ID） | M5/M6；需 U 项或签名扩展 |
 | ② | Toast 悬停暂停 / 上滑关闭 | 未实现；自动消失用组件内 `.task`（随视图消失取消），同屏一条由调用方控制 | M5/M6（如需真机指针/手势验收） |
 | ③ | Banner `success` 变体 | 按 Q1 **不纳入**（C-15/U2 的 Android 集合为 3 个）；设计 §4 的 success 用 info 表达 | 已记录（M4-SIGNATURE-FREEZE Q1） |
-| ④ | ProgressBar 分段变体 | **已补（2026-11-14，M6 期间；用户指出设计 15 缺口）**：新增 `init(segments:completed:...)`；同时补齐**不确定 1s 延迟**、**禁用 45%**、**完成 300ms**、**首次出现 3200ms**、**`accessibilityRepresentation`（progressbar 角色）**。**2026-11-14 复跑**：M4 快照 10 tests / 352 基线绿；PR 164 tests / 1246 符号；nightly 快照 44 tests 75.08 s + demo 审计 14 tests 221.64 s = 302.21 s | 已修（已复跑） |
+| ④ | ProgressBar 分段变体 | **已补（2026-11-14，M6 期间；用户指出设计 15 缺口）**：新增 `init(segments:completed:...)`；同时补齐**不确定 1s 延迟**、**禁用 45%**、**完成 300ms**、**首次出现 3200ms**、**`accessibilityRepresentation`（progressbar 角色）**。**2026-11-14 复跑**：M4 快照 10 tests / 352 基线绿；PR 164 tests / 1246 符号（35.51 s）；nightly 快照 44 tests 75.64 s + demo 审计 14 tests 223.49 s = 302.62 s | 已修（已复跑） |
 | ⑤ | ProgressBar 填充色 | 设计的 `gradient.mid` 浅端在 `surface.tint` 上仅 **2.02:1**（<3:1）⇒ 改 `textBrand → statusInfo` 渐变（**3.91:1 / 6.71:1**） | 已记录（对比度优先） |
 | ⑥ | 进度阈值播报（25/50/75/100） | 未实现组件内播报；标签由调用方给（与 M2 错误态播报同口径） | 调用方 / M5 |
 | ⑦ | BottomSheet/ActionSheet 快照 | 快照的是**面板内容**（系统/窗口 chrome 不进 hierarchy）；ActionSheet/BottomSheet 已改窗口级自绘，焦点/键盘由自绘层接管（Bottomsheet 键盘用通知观察，未用文本字段验收） | 已记录 |
@@ -74,7 +74,7 @@
   旧的 8 张 `progressbar-*` 基线已删，需重录 **16 张**（8 主 + 8 不确定）。
 - **已复跑（2026-11-14）**：`WisdomUITests` **164 tests 全过**（+1 分段断言）；M4 快照 **10 tests / 352 基线绿**
   （主样本 hierarchy + settle 3.4s；不确定样本 ImageRenderer 固定「1 秒内」）；`ci.sh pr` **全绿**
-  （1246 符号零 diff / 97.11% / warm 33.03 s）；`ci.sh nightly` **绿**（快照 44 tests 75.1 s + demo 审计 14 tests，见最终 nightly 记录）。
+  （1246 符号零 diff / 97.11% / warm 35.51 s）；`ci.sh nightly` **绿**（快照 44 tests 75.64 s + demo 审计 14 tests 223.49 s = 302.62 s）。
 - **快照顺序约束**：hierarchy 渲染会创建 UIWindow，之后同进程的 ImageRenderer 用例（Toast）会漂移 8–14%
   （实测；`resignKey` / 拆 `rootViewController` 均无效）⇒ ProgressBar 的 hierarchy 用例放在 M4 suite 末尾。
 - **快照终态**：离屏 hierarchy 窗口里 CoreAnimation 不推进，首次出现动画会停在 0 ⇒ 快照样本通过内部

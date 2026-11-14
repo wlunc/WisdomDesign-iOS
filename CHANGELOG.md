@@ -8,6 +8,12 @@
 
 ### Added
 
+- **`WDAssigneePicker` 视觉对齐设计 37 画廊（2026-11-14，用户复核）**：未指派改 **52 虚线圈 +
+  `person.fill.xmark`**（图标契约 `icons.json` 的 iOS 映射由 `person.crop.circle.badge.xmark` 修正；
+  Android 仍 `person_off`）；选中环按 **52 槽 2pt**、头像**静止 1.0**（选中只做 200ms 弹到 1.05 后回弹，
+  原 1.05 常驻是错误），圈内间隙 **4**；项槽间距 **12**；选中名字品牌色 + 600。
+  重录 AssigneePicker **8 张** + WDAvatar **8 张**基线（未指派图标变更）。
+
 - **`WDProgressBar` 补齐设计 15（2026-11-14，用户指出缺口）**：新增**分段变体**
   `init(segments:completed:label:valueText:)`（n 段表示 n 项完成几项，段间距 2，全完成换成功色）；
   并补齐此前登记/未实现的设计项——**不确定态超过 1 秒才出现**、**禁用整体 45%**、
