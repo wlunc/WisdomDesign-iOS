@@ -140,8 +140,9 @@
 - **`WDButton` 填充/柔色对齐画廊 01**（2026-11-14，用户裁决）：`tonal` 底由 `surface.tint`
   改为 **`gradient.surface`**（与画廊 `.wd-btn.tonal` 的 `--g-surface` 一致）；`filled` / `tonal`
   补 **1px 顶部内高光**（画廊 `inset 0 1px 0`；令牌 `border.glass-top` 全值，浅色 .8 更接近真机可见度）；
-  按钮 8 态快照基线重录。设计仓 `docs/specs/01-basic.md` 的 `surface.tint` 口径与
-  `Chip 已选` / `Badge shared` 仍走 tint，属跨仓待同步项（本轮不改设计仓）。
+  按钮 8 态快照基线重录。设计仓已同步（2026-11-14）：`design/preview` 的 tonal 改渐变、
+  `docs/specs/01-basic.md` / `contracts/WDButton.yaml` / `contrast.json` 回填；
+  `Chip 已选` / `Badge shared` 仍走 `surface.tint`（Button 单点例外）。
 
 - **勾的绘制按设计稿重做**（2026-11-14，用户裁决）：`WDCheckbox` 的勾改为**2.2pt、rotate(42°) 的 5×10 L**
   （与画廊 06 的 `border-right + border-bottom` 同形，butt 端、miter 角），`WDPicker` 菜单勾改为
@@ -241,7 +242,7 @@
   锚点高度；iOS 17 回退系统 `.refreshable`（登记差异）。三态文案不进库（L-B 零文案），
   组件实现设计 32 §4 的「极简」变体（只有环）；公开签名与 `api/WisdomUI.api.json` **零 diff**。
   新增单测 7 条 + demo XCUITest 1 条（下拉→计数 +1，含刷新中/完成截图）。契约 yaml 的载体注释
-  待设计仓同步（`../wisdomdesign/contracts/WDPullRefresh.yaml`，跨仓只读）。
+  已同步（`../wisdomdesign/contracts/WDPullRefresh.yaml`，2026-11-14）。
 
 - **`WDSegmentedControl` 选中指示块不显示 / 详情页被拉满高度**（2026-11-13）：原用
   `GeometryReader` 背景量测段宽，首帧/快照/真机首屏可能拿到 0 宽 ⇒ 只剩字重差异；改为自定义
