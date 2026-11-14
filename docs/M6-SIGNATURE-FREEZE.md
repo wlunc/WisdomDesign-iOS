@@ -189,7 +189,7 @@ enums: {WDAssigneePickerSize: [standard, compact]}
 ## 7. 实现完成与差异（2026-11-14）
 
 - 1 件落地（`Components/Composites/WDAssigneePicker/`）；结构断言 **7 条**（`M6ComponentsTests`）；
-  快照 **8 张**（总 **344**）；demo **37 件**；`Scripts/ci.sh pr` **163 tests / 1245 符号 / Foundation 97.26%**；
+  快照 **8 张**（M6 时总 **344**；后续 ProgressBar 补齐 +8 ⇒ 当前 **352**）；demo **37 件**；`Scripts/ci.sh pr` **164 tests / 1246 符号 / Foundation 97.26%**；
   demo **14 条 UITest** 全过（含四类目无障碍审计与 AssigneePicker 交互）。
 - 契约已回填设计仓：`contracts/WDAssigneePicker.yaml`（设计仓提交 `fa08037`）。
 - **已接受差异**（逐条见 `docs/M6-EXIT-REPORT.md` §4）：溢出展开走 `onOverflowTap` 回调；长按资料浮层不做；

@@ -12,7 +12,7 @@
 | ① | **批前冻结（1 件）** | `docs/M6-SIGNATURE-FREEZE.md`（D1–D9）+ `contracts/WDAssigneePicker.yaml` 已回填 | ✅ |
 | ② | **无障碍回归**：VoiceOver 闭眼走查记录 + demo 层 `performAccessibilityAudit` 四类目 | 四类目 **✅**（nightly-2 的 14 条 UITest 全过，含审计视口新增的 M6 实例）；**VoiceOver 人审【未验证】**（无 USB 真机，见 §5） | ⚠️ 自动面通过、人审未验证 |
 | ③ | **截图基线封板**（全部 37 件 × 浅/深 × 默认/AX3 × LTR/RTL） | **344 张基线**（M6 新增 8 张，`assigneepicker-*`）；快照套件 **43 tests 全绿**（`-parallel-testing-enabled NO`） | ✅ |
-| ④ | **全量门禁**：`Scripts/ci.sh pr` + nightly 连续绿 | PR **✅**（163 tests / 1245 符号零 diff / Foundation 97.26% / warm 27.82 s）；nightly **第 1/3 日绿**（2026-11-14：设备编译 3.59 s + 快照 43 tests / 45.73 s + demo 审计 **14 tests** / 221.35 s，整条 **270.67 s**）；基线改用 `drawHierarchy` 后快照套件单独复核 **43 tests 绿（22.99 s）** | ⚠️ nightly 1/3（连续 3 日未到，按 M3/M4/M5 先例待确认） |
+| ④ | **全量门禁**：`Scripts/ci.sh pr` + nightly 连续绿 | PR **✅**（164 tests / 1246 符号零 diff / Foundation 97.26% / warm 33.43 s）；nightly **第 1/3 日绿**（2026-11-14：设备编译 3.54 s + 快照 **44 tests / 74.67 s** + demo 审计 **14 tests** / 229.01 s，整条 **307.21 s**） | ⚠️ nightly 1/3（连续 3 日未到，按 M3/M4/M5 先例待确认） |
 | ⑤ | **发布前层**：归档 Thinning 增量 + 真机 hitch + tag 校验 | 归档**可产出**（2026-11-14 实测 `ARCHIVE SUCCEEDED`，`.build/m6.xcarchive` 1.5 MB，未签名）；**Thinning 增量【未验证】**（未签名归档不能导出 thinned IPA）；**真机 hitch【未验证】**（U-05 无 USB 真机）；**tag 校验**：当前无 tag（见 ⑥） | ⚠️ 部分 |
 | ⑥ | **双端同 tag `v1.0.0`**，tag 前确认三仓 HEAD 与版本台账一致 | **不成立**：Android 仓停在 M1（M2–M5 未实现），双端同 tag 无法闭合；项目负责人 2026-11-14 已确认 **iOS 先行、tag 待 Android 追平** | ❌ 待 Android |
 | ⑦ | **发布 checklist 可勾选完成** | `docs/DEV-PLAN.md` §10 的 6 步：设计仓 tag 未打 / 本批生成物无变更 / 门禁 PR 绿 + nightly 1/3 / 发布前层部分 / 双端 tag 未打 / CHANGELOG 已写 | ⚠️ 部分 |
@@ -27,11 +27,12 @@
 | 值类型 | `WDAssigneePickerItem`、`WDAssigneePickerUnassigned`、`WDAssigneePickerSize`(standard, compact) |
 | 签名 | 单选 `selection: Binding<String?>` / 多选 `selection: Binding<Set<String>>` 两个 init；`unassigned`、`size`、`positionText`、`onOverflowTap`、`overflowAccessibilityLabel` |
 | 契约 | `../wisdomdesign/contracts/WDAssigneePicker.yaml`（params / slots / default / enums；多选重载在注释登记） |
-| API 基线 | **1212 → 1245 符号（+33）**，无移除；`dump-api` 零 diff |
+| API 基线 | **1212 → 1245 符号（+33）**，无移除；`dump-api` 零 diff（后续 ProgressBar 补齐再 +1 ⇒ 当前 **1246**） |
 | 测试 | 结构断言 **7 条**（`M6ComponentsTests`）：档位 40/32、外环 52/44、溢出 6+`+n`、选中项可视、位置朗读、高度、枚举 |
-| 快照 | **8 张** 8 态基线（总 344）；样本含单选 + 未指派 / 多选 / 紧凑 / 整体禁用 / 溢出；**渲染器 = `UIHostingController` + `drawHierarchy`**（横向 `ScrollView` 在 `ImageRenderer` 下为空白，实测） |
+| 快照 | **8 张** 8 态基线（M6 时总 344；后续 ProgressBar 补齐 +8 ⇒ 当前总 **352**）；样本含单选 + 未指派 / 多选 / 紧凑 / 整体禁用 / 溢出；**渲染器 = `UIHostingController` + `drawHierarchy`**（横向 `ScrollView` 在 `ImageRenderer` 下为空白，实测） |
 | demo | 组件目录 **36 → 37 件**；详情页六场景（实时预览 + 变体 + 状态 + 尺寸设置）；审计视口新增 M6 实例 |
 | 文档 | `docs/M6-SIGNATURE-FREEZE.md`、本报告、`HANDOVER.md` / `DEV-PLAN.md` §2.7 状态、`CHANGELOG.md` |
+| **M6 期间补丁** | **2026-11-14** 用户指出 `WDProgressBar` 未完成设计 15 ⇒ 已补齐**分段变体 / 不确定 1s 延迟 / 禁用 45% / 完成 300ms / 首次出现 3200ms / progressbar 无障碍语义**；API +1（1246）、基线 +8（352）、PR 164 tests；复跑结果见 `docs/M4-EXIT-REPORT.md` §4.1 |
 
 ## 3. 无障碍回归记录（判据 ②）
 
@@ -78,8 +79,8 @@
 
 ```bash
 cd iOS
-Scripts/ci.sh pr        # 163 tests / 1245 符号零 diff / Foundation 97.26% / warm 27.82 s（2026-11-14）
-Scripts/ci.sh nightly   # 设备编译 3.59 s + 快照 344 张 45.73 s + demo 审计 14 tests 221.35 s = 270.67 s（2026-11-14，第 1/3 日）
+Scripts/ci.sh pr        # 164 tests / 1246 符号零 diff / Foundation 97.26% / warm 33.43 s（2026-11-14）
+Scripts/ci.sh nightly   # 设备编译 3.54 s + 快照 44 tests / 74.67 s + demo 审计 14 tests / 229.01 s = 307.21 s（2026-11-14，第 1/3 日）
 
 # 发布前层（本轮已跑的部分）
 xcodebuild archive -scheme WisdomDesign-iOS-Package -destination 'generic/platform=iOS' \
@@ -105,7 +106,7 @@ Scripts/check-structure.sh --strict && Scripts/check-format.sh
 Scripts/ci.sh pr
 Scripts/ci.sh nightly
 xcodebuild test -scheme WisdomDesign-iOS-Package -destination 'platform=iOS Simulator,id=<UDID>' \
-  -parallel-testing-enabled NO -only-testing:WisdomUISnapshotTests     # 344 张基线（43 tests / 22.99 s，2026-11-14 复核）
+  -parallel-testing-enabled NO -only-testing:WisdomUISnapshotTests     # 352 张基线（44 tests，2026-11-14 复核）
 xcodebuild test -project Examples/WisdomUIDemo/WisdomUIDemo.xcodeproj -scheme WisdomUIDemo \
   -destination 'platform=iOS Simulator,id=<UDID>' -only-testing:WisdomUIDemoUITests
 ```

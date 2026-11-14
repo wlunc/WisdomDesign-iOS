@@ -268,6 +268,8 @@ PY
 > **实现状态（2026-11-14）**：**`WDAssigneePicker` 已落地**；签名冻结 = `docs/M6-SIGNATURE-FREEZE.md`（D1–D9 按默认执行项）；
 > 契约 `../wisdomdesign/contracts/WDAssigneePicker.yaml` 已回填；**8 张 8 态基线**（总 344）；
 > demo 扩到 **37 件**（审计视口含 M6 实例）；PR **163 tests / 1245 符号**；demo **14 条 UITest** 全过。
+> **2026-11-14 补丁**：`WDProgressBar` 补齐设计 15（分段 / 1s 延迟 / 禁用 45% / 完成 300ms / 首次 3200ms / progressbar 语义）
+> ⇒ 当前 **164 tests / 1246 符号 / 352 张基线**；M4 出口报告 §4.1 已回填复跑结果。
 > **出口待判**：真机 VoiceOver 走查（人审）/ Thinning 增量 / 真机 hitch 仍【未验证】；**双端 tag 待 Android 追平**。
 
 ---
