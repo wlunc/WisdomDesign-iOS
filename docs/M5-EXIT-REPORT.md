@@ -1,7 +1,7 @@
 # M5 出口报告 —— 导航与表单（15 件）
 
-> 里程碑：**M5**（口径来源 = `docs/DEV-PLAN.md` §2.6）｜报告日期：**2026-11-13**
-> 判定人：ios-lead｜**状态：技术判据 6/6 通过；nightly₃ 未连续 3 日（按项目负责人 2026-11-12 的豁免先例待确认）**
+> 里程碑：**M5**（口径来源 = `docs/DEV-PLAN.md` §2.6）｜报告日期：**2026-11-13**（**2026-11-14 复核**）
+> 判定人：ios-lead｜**状态：技术判据 6/6 通过；nightly 连续 **2/3** 日（2026-11-13、11-14 绿；11-15 待跑或按负责人豁免先例确认）**
 > 判定环境：Xcode 26.6（17F113）／iOS 26.5 模拟器（iPhone Air，UDID 711BF16D-…）
 > 关联：`docs/M5-SIGNATURE-FREEZE.md`、`docs/DEV-PLAN.md` §21.6 的 M5 十问、`../wisdomdesign/contracts/`
 
@@ -16,10 +16,10 @@
 | ⑤ | 组件类型名清单与 U3/F 注册表集合相等 | `M5ComponentsTests.contractTypeNames`：已实现的 **36** 件与 `contracts/*.yaml` 的 `component` 集合相等（M6 的 `WDAssigneePicker` 尚无契约，37 件在 M6 闭合） | ✅（36/36 已实现件） |
 | ⑥ | 无新增未登记差异（差异须进 §6 的回写/登记清单） | §4 逐条登记；Q1–Q7 拍板记录在 `docs/M5-SIGNATURE-FREEZE.md` §5 | ✅ |
 
-**门禁**：`PR + nightly₃`。PR 全绿（**146 tests / 1211 符号零 diff** / `Foundation/**` **97.26% ≥ 80%** / `--strict` 0 warning）。
-nightly 本轮实跑（2026-11-13）：设备编译 **7.72 s** + 快照 **53.26 s**（336 张全绿，`-parallel-testing-enabled NO` 串行）
-+ demo 无障碍审计 **186.71 s**（11 条 UITest 全过），整条 **247.70 s 绿**；**连续 3 日 nightly 未完成（本轮 1/3）**
-（M3/M4 已有项目负责人 2026-11-12 豁免先例，M5 待同口径确认）。
+**门禁**：`PR + nightly₃`。PR 全绿（**2026-11-14 复核：156 tests / 1212 符号零 diff** / `Foundation/**` **97.26% ≥ 80%** / `--strict` 0 warning；整条 **33.03 s**）。
+nightly **2026-11-14 复核**（金标 iPhone Air）：设备编译 **7.81 s** + 快照 **45.29 s**（336 张全绿，`-parallel-testing-enabled NO` 串行）
++ demo 无障碍审计 **202.76 s**（**13 条** UITest 全过），整条 **255.86 s 绿**；**连续 3 日 nightly = 2/3**
+（11-13、11-14 连续绿；11-15 待跑，或按 M3/M4 的 2026-11-12 豁免先例确认）。
 
 ## 2. 本批交付物
 
@@ -29,9 +29,9 @@ nightly 本轮实跑（2026-11-13）：设备编译 **7.72 s** + 快照 **53.26 
 | 落点 | `Components/Primitives/` 6 个新目录、`Components/Composites/` 9 个新目录（各含 `+Previews.swift`） |
 | 增量 | `WDBadge` 新增 `WDBadgeValue.init(count:)` / `.dot` 与 `WDBadge.init(value:)`（只增不改；`WDListRow` 改用同一值形态） |
 | 契约 | 15 个新 yaml + `WDBadge.yaml` 增量（共 **36** 个 yaml）；params / slots / default / enums |
-| API 基线 | **1211 符号**（M4 的 861 + **350**）；`dump-api` 零 diff |
-| 测试 | 结构断言 **24 条**（M5Components 24 + 性能 1）；快照 **16 个测试 / 128 张基线**；PR **146 tests** |
-| demo | 组件目录 **36 件**（M5 +15）；M5 详情页含**档位 / 状态 / 设置**（13 件可切枚举）与可交互实时预览；审计视口加入 M5 代表实例；demo 构建通过；`WisdomUIDemoUITests` **11 tests / 0 failures**（含四类目审计） |
+| API 基线 | **1212 符号**（M4 的 861 + **351**）；`dump-api` 零 diff |
+| 测试 | 结构断言 **24 条**（M5Components 24 + 性能 1）；快照 **16 个测试 / 128 张基线**；PR **156 tests** |
+| demo | 组件目录 **36 件**（M5 +15）；M5 详情页含**档位 / 状态 / 设置**（13 件可切枚举）与可交互实时预览；审计视口加入 M5 代表实例；demo 构建通过；`WisdomUIDemoUITests` **13 tests / 0 failures**（含四类目审计） |
 
 ## 3. 性能数字（ImageRenderer；只报不拦）
 
@@ -82,22 +82,23 @@ nightly 本轮实跑（2026-11-13）：设备编译 **7.72 s** + 快照 **53.26 
 | ⑲ | **`WDPullToRefresh` → `WDPullRefresh`** | 2026-11-13 用户裁决的更名（含 `.wdPullRefresh`）：公开类型/修饰符/契约/快照/API 基线同步；**Android 侧契约名待同步**（C-15 #32） | android-lead；iOS 侧已完成 |
 | ⑳ | **`WDPullRefresh` 自绘修正** | **2026-11-14 用户裁决**：指示器动画与设计 32 不符 ⇒ iOS 18+ 改自绘。已实现：24pt 环 / 2pt 线宽 / 阈值 64 / 最大下拉 120 / 下拉随位移画进度 / 刷新中品牌弧 1s 线性旋转 / 完成后 160ms 收起 / 到阈值一次 `.medium` 触觉 / Reduce Motion 静态弧；环覆盖列表顶部、保持释放位置、不改锚点高度；进行中不重复触发；外部 `isRefreshing=true` 也会显示环。**未实现/残留**：三态文案（L-B：库内零文案，组件只画环 = 设计 32 §4 极简变体；无阈值进度回调）、刷新开始/结束播报（库内零文案 / 无 announcer 注入点）、10s 超时失败 Toast（无失败通道/库内零文案）、内容不足以滚动时的下拉（系统 ScrollView 不回弹 ⇒ 不触发，设计 32 q9 允许"明确禁用"）、iOS 17 回退系统 `.refreshable` 视觉 | 已修（单测 7 + demo XCUITest 1 绿；API 基线零 diff）；契约 yaml 载体注释待设计仓同步（跨仓只读） |
 | ㉑ | **`WDPicker` 全量对齐设计 22** | **2026-11-14 用户裁决「完全按照设计稿」**：菜单改窗口级自绘浮层（圆角 14 / 行高 44 / 水平内距 14 / 最小宽 180 / 最大宽 = 屏宽 − 32 / 与入口间距 4 / 空间不足翻转 / 当前项打勾并滚到可视区中间（选中行 = brand 10% 底 + brand 字 + 600，对齐画廊 22 `.sel`）/ 遮罩与硬件 Esc 关闭不提交 / `motion.spring.gentle` 入场 + 160ms 淡出 / 分组标题 `type.overline` + 组内缩进 `space.5`）；新增 `.inline` 内联形态；触发箭头 `chevron.right → chevron.down`；遮罩由新增 `WDPickerMenuPresenter` 承载（与 `WDBottomSheetPresenter` 同构，锚点定位不同）。**残留**：滚轮形态仍是系统 `Picker(.wheel)` 且滚动即时提交（设计 22 §11 指定系统载体，§8 的"关闭不改变值"按菜单形态执行）；触发入口的"展开选择"/未选"未选择"朗读文案属调用方（L-B 零文案，未加 hint 参数）；`listbox`/`option` 角色 SwiftUI 无对应 trait ⇒ 只加 `.isModal` + `.isSelected`（同 `WDRadio` ③ 口径）；菜单未做硬件键盘方向键环形焦点。 | 已修（M5 单测 22 绿 + picker 8 态基线重录 + 菜单浮层实机截图核对；API 基线 +1 case）；契约 `WDPickerStyle` 已同步 `[menu, wheel, inline]`（2026-11-14，含 Android C-15 副本） |
+| ㉒ | **快照稳定性与审计误判** | **2026-11-14 复核发现并修复**：① `DatePicker` 快照用 `Date()`，跨日会漂移（实测 11-14 两张 RTL 基线过期）⇒ 改用固定 `Date` + UTC/`zh_CN`，8 张基线重录；② `WDButton` 顶部高光原为独立 overlay，demo 对比度审计把它当按钮背景，`提交` 深色对比度被误判 ⇒ 高光移入 `background` 层，视觉不变、审计恢复绿。 | 已修（336 张快照 + 13 条 demo UITest 绿） |
 
 ## 5. 判定记录
 
 | 项 | 值 |
 | --- | --- |
 | 技术判据 | **6/6 ✅**（§1） |
-| 门禁 | PR ✅（146 tests / 1211 符号 / 97.26%）；nightly ✅（设备 7.72 s + 快照 336 张 53.26 s + demo 审计 11 tests 186.71 s；整条 247.70 s）；nightly 第 **1/3** 日 |
-| 结论 | **技术判据通过（2026-11-13，ios-lead）**；nightly 第 1/3 日绿，是否要求连续 3 日按项目负责人 2026-11-12 豁免先例待确认 |
-| 条件 | §4 的差异/未验证项已登记；nightly 仅 1/3；真机与 Thinning 留 M6 |
+| 门禁 | PR ✅（156 tests / 1212 符号 / 97.26%）；nightly ✅（设备 7.81 s + 快照 336 张 45.29 s + demo 审计 13 tests 202.76 s；整条 255.86 s）；nightly 第 **2/3** 日 |
+| 结论 | **技术判据通过（2026-11-13，ios-lead；2026-11-14 复核仍 6/6）**；nightly 2/3 日绿，11-15 待跑或按负责人豁免先例确认 |
+| 条件 | §4 的差异/未验证项已登记；nightly 2/3；真机与 Thinning 留 M6 |
 | 后续 | M6（`WDAssigneePicker` + 无障碍回归 + 截图封板 + 双端 tag `v1.0.0`） |
 
 ## 6. 复跑命令
 
 ```bash
 cd iOS
-Scripts/ci.sh pr                    # 146 tests / 1211 符号 / Foundation ≥80% / --strict
+Scripts/ci.sh pr                    # 156 tests / 1212 符号 / Foundation ≥80% / --strict
 xcodebuild test -scheme WisdomDesign-iOS-Package -destination 'platform=iOS Simulator,id=<UDID>' \
   -parallel-testing-enabled NO -only-testing:WisdomUISnapshotTests     # 336 张基线
 Scripts/ci.sh nightly                # 设备编译 + 快照（串行）+ demo 审计

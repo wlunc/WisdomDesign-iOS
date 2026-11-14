@@ -229,6 +229,11 @@
 
 ### Fixed
 
+- **快照稳定性与 demo 对比度审计误判**（2026-11-14 复核）：`WDDatePicker` 快照改用固定 `Date`
+  （UTC / `zh_CN`），消除跨日与 RTL 漂移；`WDButton` 的 1pt 顶部高光从独立 overlay 移入
+  `background` 层，视觉不变，但不再被 `performAccessibilityAudit(.contrast)` 当成按钮背景
+  （`提交` 的深色对比度曾被误判；移入背景层后 demo 13 条 UITest 全绿）。
+
 - **`WDPullRefresh` 指示器与设计 32 不符**（2026-11-14，用户裁决）：原系统 `.refreshable` 的
   旋转 spinner 与设计稿的 24pt 品牌环不一致。iOS 18+ 改为自绘：24pt 环 / 2pt 线宽 /
   阈值 64 / 最大下拉 120 / 下拉随位移画进度 / 刷新中品牌弧 1s 线性旋转 / 完成后 160ms 收起 /
