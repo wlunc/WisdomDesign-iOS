@@ -8,6 +8,14 @@
 
 ### Added
 
+- **`WDSlider` 自绘载体（2026-11-14，B 类遗留①）**：手势/读屏改由 Internal `UISlider` 承载（系统拖拽、
+  键盘方向键、读屏可调整语义；避免自造 `DragGesture`），视觉改 SwiftUI 覆盖层——轨道 6pt
+  （`border.hairline-strong`）、填充 `gradient.mid`、手柄 26（白 + 1pt hairline + `elevation.1`）、两端内缩
+  13、拖拽 1.15（100ms）、禁用 45%、松手按 `step` 吸附、RTL 自动镜像；热区 44、最小宽 120 不变。
+  **公开签名零变化**（API 1246 符号零 diff）；`slider-*` **8 张快照基线重录**、manifest 哈希同步；
+  新增 1 条吸附/热区结构断言（PR 165 tests）。**残留**：刻度点、点击轨道 200ms 过渡、聚焦光环、
+  端点阻力触觉、数值标签跟随、范围双手柄（后两者需签名扩展）。
+
 - **`WDAssigneePicker` 视觉对齐设计 37 画廊（2026-11-14，用户复核）**：未指派改 **52 虚线圈 +
   `person.fill.xmark`**（图标契约 `icons.json` 的 iOS 映射由 `person.crop.circle.badge.xmark` 修正；
   Android 仍 `person_off`）；选中环按 **52 槽 2pt**、头像**静止 1.0**（选中只做 200ms 弹到 1.05 后回弹，

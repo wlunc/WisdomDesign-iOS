@@ -64,11 +64,22 @@ struct M5ComponentsTests {
 
   // MARK: - WDSlider
 
-  @Test("WDSlider：最小宽 120；标签增加高度")
+  @Test("WDSlider：最小宽 120；标签增加高度；热区 >= 44")
   func sliderGeometry() {
     let plain = size(WDSlider(value: .constant(0.5), label: Text(verbatim: "完成度")))
     #expect(plain.width >= 120)
     #expect(plain.height > 0)
+    #expect(plain.height >= WDSize.touchTargetMin)
+  }
+
+  @Test("WDSlider：离散档位松手吸附到最近刻度")
+  func sliderSnapping() {
+    #expect(WDSliderSnapping.snap(2.4, in: 0...4, step: 1) == 2)
+    #expect(WDSliderSnapping.snap(2.6, in: 0...4, step: 1) == 3)
+    #expect(WDSliderSnapping.snap(-3, in: 0...4, step: 1) == 0)
+    #expect(WDSliderSnapping.snap(9, in: 0...4, step: 1) == 4)
+    #expect(WDSliderSnapping.snap(0.37, in: 0...1, step: nil) == 0.37)
+    #expect(WDSliderSnapping.snap(0.37, in: 0...1, step: 0) == 0.37)
   }
 
   // MARK: - WDStepper

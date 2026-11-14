@@ -362,6 +362,9 @@ public struct WDBadge: View {
 
 > 其余实现细节（Chip 图标尺寸、TabBar 标签字号 10 vs 令牌 caption2 11、Toolbar/FAB 的滚动联动、DatePicker 清除按钮、
 > Picker 内联形态、Slider 范围双手柄）按"最小可验证实现 + 差异登记"处理，逐条进 `docs/M5-EXIT-REPORT.md` 的差异表。
+>
+> **2026-11-14 更新（Q1 落地）**：`WDSlider` 已按 Q1 的"不改签名替换载体"完成自绘——手势/读屏由 Internal
+> `UISlider` 承载，轨道/填充/手柄由 SwiftUI 覆盖层绘制；公开签名与契约零变化，`docs/M5-EXIT-REPORT.md` 差异①已回填。
 
 ## 6. 确认与合并记录
 

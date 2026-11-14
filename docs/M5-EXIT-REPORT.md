@@ -9,7 +9,7 @@
 
 | # | 判据 | 证据 | 结论 |
 | --- | --- | --- | --- |
-| ① | **20/20 primitives 完成**（11 + 1 + 2 + 6） | `Components/Primitives/` 20 个目录：M2 11 + M3 1 + M4 2 + M5 6（SearchField/Radio/Slider/Stepper/Chip/AvatarStack）；M5 结构测试 `M5ComponentsTests` 22 条 | ✅ |
+| ① | **20/20 primitives 完成**（11 + 1 + 2 + 6） | `Components/Primitives/` 20 个目录：M2 11 + M3 1 + M4 2 + M5 6（SearchField/Radio/Slider/Stepper/Chip/AvatarStack）；M5 结构测试 `M5ComponentsTests` 23 条 | ✅ |
 | ② | 动态字体降级矩阵（含 compact 三条规则）绿 | 8 态快照含 **AX3**（15 件 × 8）；`WDFormRow` 在 AX3 下横向→上下（单测）；compact 三条规则（不缩字号 / 只压留白 / 热区仍 44）单测绿 | ✅ |
 | ③ | RTL 六态截图（LTR/RTL 两态）入库 | 8 态矩阵含 LTR/RTL；**128 张新基线**（总 **336**），`xcodebuild test -parallel-testing-enabled NO` 全绿 | ✅ |
 | ④ | 该批性能数字进报告 | §3 的 15 件 ImageRenderer 耗时（n=12，只报不拦） | ✅ |
@@ -17,6 +17,7 @@
 | ⑥ | 无新增未登记差异（差异须进 §6 的回写/登记清单） | §4 逐条登记；Q1–Q7 拍板记录在 `docs/M5-SIGNATURE-FREEZE.md` §5 | ✅ |
 
 **门禁**：`PR + nightly₃`。PR 全绿（**2026-11-14 复核：156 tests / 1212 符号零 diff** / `Foundation/**` **97.26% ≥ 80%** / `--strict` 0 warning；整条 **33.03 s**）。
+**2026-11-14 自绘载体复跑**：PR **165 tests / 1246 符号零 diff / 33.52 s**；快照 **44 tests / 352 张全绿**（slider 8 张重录）。
 nightly **2026-11-14 复核**（金标 iPhone Air）：设备编译 **7.81 s** + 快照 **45.29 s**（336 张全绿，`-parallel-testing-enabled NO` 串行）
 + demo 无障碍审计 **202.76 s**（**13 条** UITest 全过），整条 **255.86 s 绿**；**连续 3 日 nightly = 2/3**
 （11-13、11-14 连续绿；11-15 待跑，或按 M3/M4 的 2026-11-12 豁免先例确认）。
@@ -61,7 +62,7 @@ nightly **2026-11-14 复核**（金标 iPhone Air）：设备编译 **7.81 s** +
 
 | # | 项 | 现状 | 时点 / owner |
 | --- | --- | --- | --- |
-| ① | `WDSlider` 视觉载体 | 本轮用**原生 `Slider`**（Q1）：系统手势/读屏合规；轨道 6 / 手柄 26 / 刻度 / 拖拽放大 / 点击轨道跳转未自绘；数值文本由调用方组合；范围双手柄未实现 | 自绘后续在不改签名前提下替换（M6 前可议） |
+| ① | `WDSlider` 视觉载体 | **已修（2026-11-14，B 类遗留）**：手势与读屏改由 Internal `UISlider` 承载（系统拖拽/键盘/可调整语义；不自造 `DragGesture`），视觉改 SwiftUI 覆盖层——轨道 6（`border.hairline-strong`）、填充 `gradient.mid`、手柄 26（白 + 1pt hairline + `elevation.1`）、两端内缩 13、拖拽 1.15（100ms）、禁用 45%、松手按 `step` 吸附、RTL 由 leading 对齐自动镜像。**残留**：带刻度变体只做数值吸附、未画刻度点；点击轨道的 200ms 过渡沿用系统行为（未单独验）；聚焦光环、端点阻力触觉、数值标签跟随、范围双手柄仍未实现（后两者需签名扩展） | 已修（快照 8 张重录；PR 165 tests / 1246 符号零 diff）；残留项仍登记 |
 | ② | `WDSearchField` 结果播报/防抖 | 300ms 防抖与结果数 polite 播报由调用方负责（库内零文案、无 announcer 注入点） | 调用方 / M6 前如需再议 |
 | ③ | `WDRadio` 角色与紧凑档 | 紧凑 22 不可表达；`radiogroup`/`radio` 角色与"第 n 项，共 m 项"SwiftUI 无对应 trait ⇒ 只加 `.isSelected` | M6 无障碍回归复核 |
 | ④ | `WDStepper` 字号/节奏 | 标准字号用 subheadline 15（设计 14，+1）；长按节奏取 0.45s/0.2s→0.06s（设计未给值）；紧凑档 30 视觉但整体布局 ≥44 | 已登记；设计给值后可改 |
