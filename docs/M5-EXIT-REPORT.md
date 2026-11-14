@@ -77,7 +77,7 @@ nightly **2026-11-14 复核**（金标 iPhone Air）：设备编译 **7.81 s** +
 | ⑬ | `WDTabBar` 尺寸/角标 | 高度用令牌 **56**（设计 58，-2）；图标 20（设计 22，-2）；标签 caption2 11（设计 10，+1）；角标 a11y 未并入宿主朗读（同 M2 ⑬）；滚动收缩未实现；深色不透明已实现 | 已登记（Q3/Q7） |
 | ⑭ | `WDToolbar` 位置/尺寸 | 顶部/底部/键盘上方由调用方放置；垂直内边距 2（44 热区 + 2×2 = 48；设计视觉 6）；玻璃档纯色；长按 tooltip 未实现 | 已登记 |
 | ⑮ | `WDFAB` 交互增强 | 滚动缩小、遮罩收起、焦点移入第一个子操作、安全区/TabBar 避让未实现 | M6 前可补 |
-| ⑯ | `WDBadge` 增量 | 计数底用 `WDGradient.destructive`（设计 --g-danger）；圆点只有品牌色一档；M2 的六种状态变体仍未表达 | 已登记（Q7 + M2 ⑤） |
+| ⑯ | `WDBadge` 增量 | 计数底用 `WDGradient.destructive`（设计 --g-danger）；圆点只有品牌色一档；**M2 ⑥ 六种状态变体已由 B1 补齐**（`WDBadgeVariant`，2026-11-14；对比度优先偏差见 `docs/B1-SIGNATURE-FREEZE.md`） | 六态已闭合；计数/圆点配色仍登记 |
 | ⑰ | 快照并发 | M4 Toast 与 M5 的 UIHostingController 快照并发时窗口互顶（像素差 8–14%）；nightly 快照加 `-parallel-testing-enabled NO` 后全绿（`Scripts/ci.sh` 已改） | 已修复（2026-11-13） |
 | ⑱ | 真机 / VoiceOver / Thinning | 真机观感、读屏播报音频、Thinning 增量仍【未验证】 | M6 前 / 发布前层 |
 | ⑲ | **`WDPullToRefresh` → `WDPullRefresh`** | 2026-11-13 用户裁决的更名（含 `.wdPullRefresh`）：公开类型/修饰符/契约/快照/API 基线同步；**Android 侧契约名待同步**（C-15 #32） | android-lead；iOS 侧已完成 |

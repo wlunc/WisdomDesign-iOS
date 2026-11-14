@@ -8,6 +8,14 @@
 
 ### Added
 
+- **`WDBadge` 六种状态变体（2026-11-14，B1；项目负责人授权扩公开）**：新增公开 `WDBadgeVariant`
+  （shared / schedule / pending / success / warning / danger）与 `init(label:variant:)`；既有
+  `init(label:)` / `init(value:)`、计数/圆点形态不变，**API 1246 → 1254（+8）**。**对比度优先**（DF-04）：
+  soft 变体文字统一 `text.on-soft`（原 status 色 success 4.32 / danger 3.94 不达 4.5）；schedule 改
+  `status.info` 实底（原 `gradient.mid` 白字仅 2.51–4.23），浅色白 / 深色 `text.on-light-primary`。
+  新增 8 张 `badge-variants-*` 基线（总 **360**）+ 2 条单测（六态/高度、6×2 对比度）。契约增量见
+  `docs/B1-CONTRACT-CHANGE-REQUEST.md`（设计仓落库待办，发布前必须闭合）。
+
 - **`WDSlider` 自绘载体 + 交互补齐（2026-11-14，B 类遗留）**：手势/读屏改由 Internal `UISlider` 承载
   （系统拖拽、键盘方向键、读屏可调整语义；避免自造 `DragGesture`），视觉改 SwiftUI 覆盖层——轨道 6pt
   （`border.hairline-strong`）、填充 `gradient.mid`、手柄 26（白 + 1pt hairline + `elevation.1`）、两端内缩

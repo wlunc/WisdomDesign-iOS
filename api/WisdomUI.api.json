@@ -846,6 +846,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(label: Text, variant: WDBadgeVariant)",
+      "kind" : "swift.init",
+      "path" : "WDBadge.init(label:variant:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor init(value: WDBadgeValue)",
       "kind" : "swift.init",
       "path" : "WDBadge.init(value:)"
@@ -957,6 +963,48 @@
       "decl" : "init(label: Text)",
       "kind" : "swift.init",
       "path" : "WDBadgeValue.init(label:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDBadgeVariant",
+      "kind" : "swift.enum",
+      "path" : "WDBadgeVariant"
+    },
+    {
+      "access" : "public",
+      "decl" : "case danger",
+      "kind" : "swift.enum.case",
+      "path" : "WDBadgeVariant.danger"
+    },
+    {
+      "access" : "public",
+      "decl" : "case pending",
+      "kind" : "swift.enum.case",
+      "path" : "WDBadgeVariant.pending"
+    },
+    {
+      "access" : "public",
+      "decl" : "case schedule",
+      "kind" : "swift.enum.case",
+      "path" : "WDBadgeVariant.schedule"
+    },
+    {
+      "access" : "public",
+      "decl" : "case shared",
+      "kind" : "swift.enum.case",
+      "path" : "WDBadgeVariant.shared"
+    },
+    {
+      "access" : "public",
+      "decl" : "case success",
+      "kind" : "swift.enum.case",
+      "path" : "WDBadgeVariant.success"
+    },
+    {
+      "access" : "public",
+      "decl" : "case warning",
+      "kind" : "swift.enum.case",
+      "path" : "WDBadgeVariant.warning"
     },
     {
       "access" : "public",

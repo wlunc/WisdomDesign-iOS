@@ -2,7 +2,7 @@ import SwiftUI
 import Testing
 import UIKit
 
-import WisdomUI
+@testable import WisdomUI
 
 /// `WDBadge`（M2）的组件级断言：胶囊几何、固定字号（设计例外）、宽度不截断。
 ///
@@ -12,10 +12,14 @@ import WisdomUI
 @Suite("WDBadge（M2）")
 struct WDBadgeTests {
   private static func size(
-    _ text: String, typeSize: DynamicTypeSize = .large
+    _ text: String, variant: WDBadgeVariant? = nil, typeSize: DynamicTypeSize = .large
   ) -> CGSize {
+    let badge =
+      variant.map { WDBadge(label: Text(verbatim: text), variant: $0) }
+      ?? WDBadge(label: Text(verbatim: text))
     let controller = UIHostingController(
-      rootView: WDBadge(label: Text(verbatim: text))
+      rootView:
+        badge
         .environment(\.dynamicTypeSize, typeSize)
         .wdTheme(.light)
     )
@@ -40,6 +44,34 @@ struct WDBadgeTests {
   func growsWithText() {
     #expect(Self.size("99").width > Self.size("9").width)
     #expect(Self.size("已逾期").width > Self.size("3").width)
+  }
+
+  @Test("WDBadge：六变体齐、rawValue 稳定、高度 24 ± 1")
+  func variants() {
+    #expect(
+      WDBadgeVariant.allCases.map(\.rawValue)
+        == ["shared", "schedule", "pending", "success", "warning", "danger"])
+    for variant in WDBadgeVariant.allCases {
+      let measured = Self.size("已完成", variant: variant).height
+      #expect(abs(measured - 24) <= 1, "\(variant.rawValue) 高度 \(measured)")
+    }
+  }
+
+  @Test("WDBadge：六变体文字/背景对比度 ≥ 4.5:1（浅深两套）")
+  func variantContrast() {
+    let schemes: [(WDColorValues, ColorScheme)] = [(.light, .light), (.dark, .dark)]
+    for (colors, scheme) in schemes {
+      for variant in WDBadgeVariant.allCases {
+        let text = WDBadge.statusTextColor(for: variant, colors: colors, scheme: scheme)
+        let raw = WDBadge.statusBackgroundColor(for: variant, colors: colors)
+        let background =
+          variant == .pending ? WDContrast.composite(raw, over: colors.bgCanvas) : raw
+        let ratio = WDContrast.ratio(text, background)
+        #expect(
+          WDContrast.meetsBodyText(ratio),
+          "\(variant.rawValue)/\(scheme) 对比度 \(ratio)")
+      }
+    }
   }
 
   @Test("WDBadgeValue 可构造、可比较（值形态送给 WDListRowTrailing.badge）")

@@ -1,5 +1,15 @@
 import SwiftUI
 
+/// 状态胶囊的六种语义变体（设计 11 §4；新增公开类型，不改既有枚举）。
+public enum WDBadgeVariant: String, CaseIterable, Sendable, Equatable {
+  case shared
+  case schedule
+  case pending
+  case success
+  case warning
+  case danger
+}
+
 /// 徽标的值形态（`WDListRowTrailing.badge(_:)` 的载荷；SPEC §2.4 / 冻结表单 §5.2）。
 ///
 /// M5 增量（`docs/M5-SIGNATURE-FREEZE.md` §2.3）：新增 `count` 与 `dot` 两种值形态；
@@ -41,22 +51,32 @@ public struct WDBadgeValue: Sendable, Equatable {
 /// - 圆点 **7×7**；计数高 **20**、最小宽 **20**、等宽数字，0 隐藏、>99 显示 `99+`；
 /// - 徽标**不可点**、**不进入无障碍焦点序列**（作为宿主朗读内容的一部分）。
 ///
-/// 配色：状态胶囊用中性 `shared`（`surface.tint` + `text.on-soft`）；计数用品牌破坏色渐变
-/// （`WDGradient.destructive`，白字，浅深两端均 ≥4.5:1）——设计 11 的六种状态变体仍未表达，
-/// 差异登记在 `docs/M5-EXIT-REPORT.md`。
+/// 配色：`init(label:variant:)` 覆盖设计 11 §4 的六种状态变体；**对比度优先**（DF-04）：
+/// soft 变体文字统一 `text.on-soft`、schedule 背景用 `status.info` 实底（原 `gradient.mid` 上白字仅
+/// 2.5–4.2:1），详见 `docs/B1-SIGNATURE-FREEZE.md`。计数仍用品牌破坏色渐变（白字，≥4.5:1）。
 public struct WDBadge: View {
   private let value: WDBadgeValue
+  private let variant: WDBadgeVariant?
 
   @Environment(\.wdColors) private var colors
+  @Environment(\.wdAppearance) private var appearance
 
   /// 构造（既有；SPEC §2.10-#11，文字由调用方给）。
   public init(label: Text) {
     value = WDBadgeValue(label: label)
+    variant = nil
+  }
+
+  /// 构造（B1 增量；状态胶囊的六种语义变体，设计 11 §4）。
+  public init(label: Text, variant: WDBadgeVariant) {
+    value = WDBadgeValue(label: label)
+    self.variant = variant
   }
 
   /// 构造（M5 增量；状态胶囊 / 计数 / 圆点三种值形态）。
   public init(value: WDBadgeValue) {
     self.value = value
+    variant = nil
   }
 
   /// 按值形态渲染。
@@ -78,13 +98,57 @@ public struct WDBadge: View {
   private func statusCapsule(_ label: Text) -> some View {
     label
       .font(statusFont)
-      .foregroundStyle(colors.textOnSoft)
+      .foregroundStyle(statusTextColor)
       .lineLimit(1)
       .fixedSize(horizontal: true, vertical: false)
       .padding(.horizontal, Self.statusHorizontalPadding)
       .frame(minHeight: Self.statusHeight)
-      .background(Capsule().fill(colors.surfaceTint))
+      .background { statusBackground }
       .accessibilityHidden(true)
+  }
+
+  /// 当前变体（`init(value:)` 的 label 形态保持旧行为 = shared）。
+  private var resolvedVariant: WDBadgeVariant {
+    variant ?? .shared
+  }
+
+  /// 状态胶囊文字色（**对比度优先**：soft 变体统一 `text.on-soft`，见 B1 签名冻结）。
+  private var statusTextColor: Color {
+    Self.statusTextColor(
+      for: resolvedVariant, colors: colors, scheme: appearance.colorScheme)
+  }
+
+  /// 状态胶囊背景（**对比度优先**：schedule 用 `status.info` 实底，见 B1 签名冻结）。
+  private var statusBackground: some View {
+    Capsule().fill(
+      Self.statusBackgroundColor(for: resolvedVariant, colors: colors))
+  }
+
+  // MARK: - 变体配色（内部；单测直接核对对比度）
+
+  /// 文字色：soft 变体用 `text.on-soft`（status 原色在浅色 soft 底上 3.9–4.3:1，不达 4.5）。
+  static func statusTextColor(
+    for variant: WDBadgeVariant, colors: WDColorValues, scheme: ColorScheme
+  ) -> Color {
+    switch variant {
+    case .shared, .success, .warning, .danger: return colors.textOnSoft
+    case .pending: return colors.textBrand
+    case .schedule: return scheme == .dark ? colors.textOnLightPrimary : colors.textOnDark
+    }
+  }
+
+  /// 背景色：soft 变体用 soft 槽位；pending 用 glass-strong；schedule 用 status.info。
+  static func statusBackgroundColor(
+    for variant: WDBadgeVariant, colors: WDColorValues
+  ) -> Color {
+    switch variant {
+    case .shared: return colors.surfaceTint
+    case .schedule: return colors.statusInfo
+    case .pending: return colors.surfaceGlassStrong
+    case .success: return colors.statusSoftSuccess
+    case .warning: return colors.statusSoftWarning
+    case .danger: return colors.statusSoftDanger
+    }
   }
 
   // MARK: - 计数胶囊

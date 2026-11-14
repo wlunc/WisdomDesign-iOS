@@ -75,6 +75,7 @@
 
 - ①–④：`WDTextField` 播报归属 / 显隐切换 selection / 渲染器表 P17 / `WDA11yFocusID` 无公开构造器；
 - ⑤–⑦：`WDBadge` 变体、`WDDivider` 内缩档、`WDAvatar` 五档/配色/在线态；
+  **B1（2026-11-14）已闭合 ⑤**：`WDBadgeVariant` 六态 + `init(label:variant:)`，见 `docs/B1-SIGNATURE-FREEZE.md`；其余仍开放；
 - ⑧–⑪：`WDSwitch` 紧凑档/描述位、`WDCheckbox` 半选/紧凑档、`WDCard` sunken/media/可点、
   `WDIconButton` 其余四变体；
 - ⑫–⑭：`WDButton` 字号/图标档近似与聚焦光环、`WDListRow` 徽标朗读合并/`selectionIndicator` 语义、

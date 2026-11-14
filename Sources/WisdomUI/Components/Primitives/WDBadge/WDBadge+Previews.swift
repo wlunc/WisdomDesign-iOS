@@ -17,6 +17,11 @@
         HStack(spacing: WDSpacing.s3) {
           WDBadge(label: Text(verbatim: "最大四个汉字"))
         }
+        HStack(spacing: WDSpacing.s3) {
+          ForEach(WDBadgeVariant.allCases, id: \.self) { variant in
+            WDBadge(label: Text(verbatim: variant.rawValue), variant: variant)
+          }
+        }
       }
       .padding(WDSpacing.s5)
     }
