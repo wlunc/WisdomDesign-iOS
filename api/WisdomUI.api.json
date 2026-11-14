@@ -366,6 +366,204 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor struct WDAssigneePicker",
+      "kind" : "swift.struct",
+      "path" : "WDAssigneePicker"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor var body: some View { get }",
+      "kind" : "swift.property",
+      "path" : "WDAssigneePicker.body"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(selection: Binding<Set<String>>, label: Text, items: [WDAssigneePickerItem], size: WDAssigneePickerSize = .standard, positionText: ((Int, Int) -> Text)? = nil, onOverflowTap: (() -> Void)? = nil, overflowAccessibilityLabel: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDAssigneePicker.init(selection:label:items:size:positionText:onOverflowTap:overflowAccessibilityLabel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(selection: Binding<String?>, label: Text, items: [WDAssigneePickerItem], unassigned: WDAssigneePickerUnassigned? = nil, size: WDAssigneePickerSize = .standard, positionText: ((Int, Int) -> Text)? = nil, onOverflowTap: (() -> Void)? = nil, overflowAccessibilityLabel: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDAssigneePicker.init(selection:label:items:unassigned:size:positionText:onOverflowTap:overflowAccessibilityLabel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdAlert(isPresented:title:message:actions:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdColors(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdDensity(_ density: WDLayoutDensity) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdDensity(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdEffectsBudget(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdFont(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdLineBox(_:lines:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdPullRefresh(isRefreshing:label:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdShadow(_ layers: [WDShadowLayer]) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdShadow(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdTheme(_ theme: WDTheme) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdTheme(_:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdTheme(scheme:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDAssigneePickerItem",
+      "kind" : "swift.struct",
+      "path" : "WDAssigneePickerItem"
+    },
+    {
+      "access" : "public",
+      "decl" : "let accessibilityLabel: Text",
+      "kind" : "swift.property",
+      "path" : "WDAssigneePickerItem.accessibilityLabel"
+    },
+    {
+      "access" : "public",
+      "decl" : "let avatar: WDAvatarValue",
+      "kind" : "swift.property",
+      "path" : "WDAssigneePickerItem.avatar"
+    },
+    {
+      "access" : "public",
+      "decl" : "let id: String",
+      "kind" : "swift.property",
+      "path" : "WDAssigneePickerItem.id"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(id: String, avatar: WDAvatarValue, accessibilityLabel: Text, name: Text? = nil, isEnabled: Bool = true, unavailableReason: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDAssigneePickerItem.init(id:avatar:accessibilityLabel:name:isEnabled:unavailableReason:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let isEnabled: Bool",
+      "kind" : "swift.property",
+      "path" : "WDAssigneePickerItem.isEnabled"
+    },
+    {
+      "access" : "public",
+      "decl" : "let name: Text?",
+      "kind" : "swift.property",
+      "path" : "WDAssigneePickerItem.name"
+    },
+    {
+      "access" : "public",
+      "decl" : "let unavailableReason: Text?",
+      "kind" : "swift.property",
+      "path" : "WDAssigneePickerItem.unavailableReason"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDAssigneePickerSize",
+      "kind" : "swift.enum",
+      "path" : "WDAssigneePickerSize"
+    },
+    {
+      "access" : "public",
+      "decl" : "case compact",
+      "kind" : "swift.enum.case",
+      "path" : "WDAssigneePickerSize.compact"
+    },
+    {
+      "access" : "public",
+      "decl" : "case standard",
+      "kind" : "swift.enum.case",
+      "path" : "WDAssigneePickerSize.standard"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDAssigneePickerUnassigned",
+      "kind" : "swift.struct",
+      "path" : "WDAssigneePickerUnassigned"
+    },
+    {
+      "access" : "public",
+      "decl" : "let accessibilityLabel: Text",
+      "kind" : "swift.property",
+      "path" : "WDAssigneePickerUnassigned.accessibilityLabel"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(label: Text, accessibilityLabel: Text)",
+      "kind" : "swift.init",
+      "path" : "WDAssigneePickerUnassigned.init(label:accessibilityLabel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "let label: Text",
+      "kind" : "swift.property",
+      "path" : "WDAssigneePickerUnassigned.label"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor struct WDAvatar",
       "kind" : "swift.struct",
       "path" : "WDAvatar"

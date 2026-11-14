@@ -36,6 +36,8 @@ struct DemoVariantsSection: View {
       .segmentedControl, .picker, .datePicker, .formRow,
       .pullRefresh, .navigationBar, .tabBar, .toolbar, .fab:
       DemoM5VariantsSection(component: component, settings: $settings)
+    case .assigneePicker:
+      DemoM6VariantsSection(settings: $settings)
     case .progressBar, .progressRing, .banner, .emptyState, .skeleton,
       .alert, .actionSheet, .bottomSheet, .toast, .switchControl, .checkbox:
       EmptyView()
@@ -137,6 +139,8 @@ struct DemoStatesSection: View {
       .segmentedControl, .picker, .datePicker, .formRow,
       .pullRefresh, .navigationBar, .tabBar, .toolbar, .fab:
       DemoM5StatesSection(component: component, settings: $settings)
+    case .assigneePicker:
+      DemoM6StatesSection(settings: $settings)
     case .card, .badge, .avatar, .icon, .divider, .listSection,
       .progressBar, .progressRing, .banner, .emptyState, .skeleton,
       .alert, .actionSheet, .bottomSheet, .toast:

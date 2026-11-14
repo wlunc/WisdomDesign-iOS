@@ -194,7 +194,7 @@ private struct DemoComponentSettingsView: View {
       .alert, .actionSheet, .bottomSheet, .toast,
       .searchField, .radio, .slider, .stepper, .chip, .avatarStack,
       .segmentedControl, .picker, .datePicker, .formRow,
-      .pullRefresh, .navigationBar, .tabBar, .toolbar, .fab:
+      .pullRefresh, .navigationBar, .tabBar, .toolbar, .fab, .assigneePicker:
       return [.medium]
     }
   }
@@ -609,6 +609,20 @@ private struct DemoComponentSettingsView: View {
         )
       } header: {
         DemoSettingHeader(title: "形态")
+      }
+
+    case .assigneePicker:
+      Section {
+        DemoChoiceRow(
+          title: "尺寸",
+          selection: $settings.assigneePickerSize,
+          options: WDAssigneePickerSize.allCases,
+          identifier: "setting-assigneepicker-size"
+        ) { value in
+          value == .compact ? "紧凑 32" : "标准 40"
+        }
+      } header: {
+        DemoSettingHeader(title: "外观")
       }
 
     case .switchControl, .checkbox, .badge, .avatar, .divider, .listSection,

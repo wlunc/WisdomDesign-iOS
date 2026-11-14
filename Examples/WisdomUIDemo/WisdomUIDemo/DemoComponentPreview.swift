@@ -194,6 +194,8 @@ struct DemoComponentPreview: View {
       .segmentedControl, .picker, .datePicker, .formRow,
       .pullRefresh, .navigationBar, .tabBar, .toolbar, .fab:
       DemoM5Preview(component: component, settings: $settings)
+    case .assigneePicker:
+      DemoM6Preview(component: component, settings: $settings)
     }
   }
 }

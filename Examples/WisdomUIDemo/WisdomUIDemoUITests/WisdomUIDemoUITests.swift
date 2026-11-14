@@ -37,6 +37,44 @@ final class WisdomUIDemoUITests: XCTestCase {
     XCTAssertEqual(app.state, .runningForeground, "切换后 app 必须仍在前台")
   }
 
+  /// WDAssigneePicker：单选点已选项不取消、点「未指派」清空、紧凑设置生效。
+  func testAssigneePickerSelectionAndSettings() {
+    let app = XCUIApplication()
+    app.launch()
+
+    let row = app.buttons["component-row-WDAssigneePicker"]
+    XCTAssertTrue(row.waitForExistence(timeout: 20), "WDAssigneePicker 行未出现")
+    row.tap()
+    XCTAssertTrue(
+      app.navigationBars["WDAssigneePicker"].waitForExistence(timeout: 20), "详情未出现")
+
+    let single = app.otherElements["assignee-picker-single"]
+    XCTAssertTrue(single.waitForExistence(timeout: 20), "单选预览未出现")
+    let dad = single.buttons["爸爸"]
+    XCTAssertTrue(dad.waitForExistence(timeout: 20), "成员按钮未出现")
+    dad.tap()
+    XCTAssertTrue(dad.isSelected, "点成员后应选中")
+    dad.tap()
+    XCTAssertTrue(dad.isSelected, "单选点已选项不应取消")
+
+    let unassigned = single.buttons["未指派"]
+    XCTAssertTrue(unassigned.waitForExistence(timeout: 20), "未指派项未出现")
+    unassigned.tap()
+    XCTAssertTrue(unassigned.isSelected, "点未指派应选中它（清空选择）")
+    XCTAssertFalse(dad.isSelected, "清空后成员不应仍选中")
+
+    let settingsButton = app.buttons["component-settings-button"]
+    XCTAssertTrue(settingsButton.waitForExistence(timeout: 20), "设置按钮未出现")
+    settingsButton.tap()
+    let compact = app.buttons["setting-assigneepicker-size-1"]
+    XCTAssertTrue(compact.waitForExistence(timeout: 20), "紧凑尺寸选项未出现")
+    compact.tap()
+    app.buttons["settings-done-button"].tap()
+    let chip = app.staticTexts["config-chip-0"]
+    XCTAssertTrue(chip.waitForExistence(timeout: 20), "配置摘要未出现")
+    XCTAssertEqual(chip.label, "compact", "切换尺寸后配置摘要必须更新")
+  }
+
   /// 无障碍审计四类目（contrast / hitRegion / textClipped / dynamicType）。
   ///
   /// 用 `issueHandler` 逐条**打印**违规明细（auditType + 描述 + 元素）后再让它失败：

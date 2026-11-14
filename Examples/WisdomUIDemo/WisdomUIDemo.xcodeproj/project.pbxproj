@@ -19,6 +19,7 @@
 		2B00000000000000000000CA /* DemoCompositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000FD /* DemoCompositionView.swift */; };
 		2B00000000000000000000CB /* DemoM5Previews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000FE /* DemoM5Previews.swift */; };
 		2B00000000000000000000CC /* DemoM5Variants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B00000000000000000000FF /* DemoM5Variants.swift */; };
+		2B0000000000000000000101 /* DemoM6Previews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0000000000000000000100 /* DemoM6Previews.swift */; };
 		2B00000000000000000000B1 /* WisdomUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2B000000000000000000001E /* WisdomUI */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +49,7 @@
 		2B00000000000000000000FD /* DemoCompositionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoCompositionView.swift; sourceTree = "<group>"; };
 		2B00000000000000000000FE /* DemoM5Previews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoM5Previews.swift; sourceTree = "<group>"; };
 		2B00000000000000000000FF /* DemoM5Variants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoM5Variants.swift; sourceTree = "<group>"; };
+		2B0000000000000000000100 /* DemoM6Previews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoM6Previews.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				2B00000000000000000000FD /* DemoCompositionView.swift */,
 				2B00000000000000000000FE /* DemoM5Previews.swift */,
 				2B00000000000000000000FF /* DemoM5Variants.swift */,
+				2B0000000000000000000100 /* DemoM6Previews.swift */,
 			);
 			path = WisdomUIDemo;
 			sourceTree = "<group>";
@@ -237,6 +240,7 @@
 				2B00000000000000000000CA /* DemoCompositionView.swift in Sources */,
 				2B00000000000000000000CB /* DemoM5Previews.swift in Sources */,
 				2B00000000000000000000CC /* DemoM5Variants.swift in Sources */,
+				2B0000000000000000000101 /* DemoM6Previews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

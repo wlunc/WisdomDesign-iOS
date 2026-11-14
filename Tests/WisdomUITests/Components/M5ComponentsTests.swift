@@ -392,7 +392,7 @@ struct M5ComponentsTests {
     #expect(height(stepper.wdDensity(.compact)) >= WDSize.touchTargetMin)
   }
 
-  @Test("组件类型名清单 == contracts/*.yaml 的 component 集合（已实现的 36 件）")
+  @Test("组件类型名清单 == contracts/*.yaml 的 component 集合（已实现的 37 件）")
   func contractTypeNames() throws {
     let directory = try WDContracts.locate()
     let urls = try FileManager.default.contentsOfDirectory(
@@ -416,8 +416,9 @@ struct M5ComponentsTests {
       "WDSearchField", "WDRadio", "WDSlider", "WDStepper", "WDChip", "WDAvatarStack",
       "WDSegmentedControl", "WDPicker", "WDDatePicker", "WDFormRow",
       "WDPullRefresh", "WDNavigationBar", "WDTabBar", "WDToolbar", "WDFAB",
+      "WDAssigneePicker",
     ]
     #expect(names == expected, "契约集合与实现清单不一致：\(names.symmetricDifference(expected))")
-    #expect(names.count == 36)
+    #expect(names.count == 37)
   }
 }

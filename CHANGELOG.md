@@ -8,6 +8,19 @@
 
 ### Added
 
+- **M6 场景组件 `WDAssigneePicker`（指派选择）**（2026-11-14）：头像横排 **40**（紧凑 **32**）、
+  选中外环外径 **52**（紧凑 44）、最多直接显示 **6** 个 + `+n`；**单选**
+  `selection: Binding<String?>` 与 **多选** `selection: Binding<Set<String>>` 两个 init
+  （编译期分离，同 `WDChip` 口径）；「未指派」内置虚拟项（`WDAssigneePickerUnassigned`，
+  点它清空选择）；已离开成员 `isEnabled: false` + `unavailableReason`（40% 去饱和、仍进无障碍树）；
+  `positionText: ((Int, Int) -> Text)?` 给「第 n 项，共 m 项」措辞（L-B 零文案）；
+  溢出展开由 `onOverflowTap` 交给调用方（库不自弹面板）。签名冻结 =
+  `docs/M6-SIGNATURE-FREEZE.md`；契约 `contracts/WDAssigneePicker.yaml`；API 基线
+  **1212 → 1245 符号（+33）**无移除。
+- **M6 快照与 demo**：`WDAssigneePicker` **8 张新基线**（总 **344**）；demo 组件目录扩到
+  **37 件**（新增 M6 详情页：单选 + 未指派 / 多选 / 紧凑 / 溢出 / 整体禁用），审计视口加入
+  AssigneePicker 代表实例。
+
 - **`WDCheckbox` 半选态**（2026-11-14，用户裁决；设计 06 §5）：新增 `isIndeterminate: Bool = false`
   （additive、源码兼容；不改受控值类型）。视觉 = 同已选底 + **12×2.4 白色横杠**；点半选 → 变全选
   （不做三态循环）；demo（静态 + 可交互两例）/previews/快照均补半选；API 基线 `WDCheckbox.init` 更新。

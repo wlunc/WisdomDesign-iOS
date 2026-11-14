@@ -79,6 +79,7 @@ enum DemoComponentID: String, CaseIterable, Identifiable, Hashable, Sendable {
   case tabBar = "WDTabBar"
   case toolbar = "WDToolbar"
   case fab = "WDFAB"
+  case assigneePicker = "WDAssigneePicker"
 
   var id: String { rawValue }
 }
@@ -606,6 +607,20 @@ enum DemoComponentCatalog {
       ],
       hasEnumSettings: true
     ),
+    DemoComponentEntry(
+      id: .assigneePicker,
+      category: .input,
+      icon: .members,
+      summary: "指派选择。头像横排 40（紧凑 32），选中外环外径 52，最多直接显示 6 个 + 溢出 \"+n\"。",
+      layer: "Composites",
+      batch: "M6",
+      highlights: [
+        "单选 / 多选两个 init；点已选项在单选下不取消",
+        "已离开成员 40% 去饱和、仍可见不可选",
+        "初始渲染把选中项滚进可视区；溢出通过 onOverflowTap 交给调用方",
+      ],
+      hasEnumSettings: true
+    ),
   ]
 
   /// 某个分组下的条目（保持目录里的书写顺序）。
@@ -901,6 +916,7 @@ struct DemoComponentSettings {
   var fabSize: WDFABSize = .standard
   var fabShape: WDFABShape = .roundedSquare
   var fabExpandable = true
+  var assigneePickerSize: WDAssigneePickerSize = .standard
 
   /// 当前配置摘要（显示在实时预览上方的小胶囊里）。
   func summary(for id: DemoComponentID) -> [String] {
@@ -961,6 +977,8 @@ struct DemoComponentSettings {
       return [toolbarShowsOverflow ? "9 项（更多）" : "4 项"]
     case .fab:
       return [fabSize.rawValue, fabShape.rawValue, fabExpandable ? "可展开" : "主操作"]
+    case .assigneePicker:
+      return [assigneePickerSize.rawValue]
     case .switchControl, .checkbox, .badge, .avatar, .divider, .listSection,
       .progressBar, .progressRing, .banner, .emptyState, .skeleton,
       .alert, .actionSheet, .bottomSheet, .toast:

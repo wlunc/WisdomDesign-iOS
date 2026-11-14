@@ -105,7 +105,7 @@ struct DemoThemeView: View {
           Text(verbatim: "无障碍审计视口")
             .wdFont(WDType.headline)
             .foregroundStyle(colors.textPrimary)
-          Text(verbatim: "M2/M3/M4 的 21 件组件；4 件弹层从组件详情页打开，其余实例在这里审计。")
+          Text(verbatim: "M2–M6 的代表实例；弹层从组件详情页打开，其余实例在这里审计。")
             .wdFont(WDType.caption1)
             .foregroundStyle(colors.textSecondary)
             .multilineTextAlignment(.leading)
@@ -152,6 +152,7 @@ struct DemoAuditViewport: View {
   @State private var pickerSelection: String? = "chore"
   @State private var date: Date? = Date()
   @State private var tabSelection = "today"
+  @State private var assigneeSelection: String? = "mom"
 
   private struct AuditSectionItem: Identifiable {
     let id: Int
@@ -300,6 +301,14 @@ struct DemoAuditViewport: View {
             .init(id: "a", avatar: WDAvatarValue(label: Text(verbatim: "甲"))),
           ],
           accessibilityLabel: Text(verbatim: "家庭成员 5 人"))
+
+        WDAssigneePicker(
+          selection: $assigneeSelection,
+          label: Text(verbatim: "指派给"),
+          items: DemoAssigneePickerSamples.items,
+          unassigned: .init(
+            label: Text(verbatim: "未指派"), accessibilityLabel: Text(verbatim: "未指派")),
+          positionText: { index, total in Text(verbatim: "第 \(index) 项，共 \(total) 项") })
 
         WDFormRow(
           label: Text(verbatim: "截止日期"),
