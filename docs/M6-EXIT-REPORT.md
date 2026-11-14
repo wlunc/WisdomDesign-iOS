@@ -29,7 +29,7 @@
 | 契约 | `../wisdomdesign/contracts/WDAssigneePicker.yaml`（params / slots / default / enums；多选重载在注释登记） |
 | API 基线 | **1212 → 1245 符号（+33）**，无移除；`dump-api` 零 diff |
 | 测试 | 结构断言 **7 条**（`M6ComponentsTests`）：档位 40/32、外环 52/44、溢出 6+`+n`、选中项可视、位置朗读、高度、枚举 |
-| 快照 | **8 张** 8 态基线（总 344）；样本含单选 + 未指派 / 多选 / 紧凑 / 整体禁用 / 溢出 |
+| 快照 | **8 张** 8 态基线（总 344）；样本含单选 + 未指派 / 多选 / 紧凑 / 整体禁用 / 溢出；**渲染器 = `UIHostingController` + `drawHierarchy`**（横向 `ScrollView` 在 `ImageRenderer` 下为空白，实测） |
 | demo | 组件目录 **36 → 37 件**；详情页六场景（实时预览 + 变体 + 状态 + 尺寸设置）；审计视口新增 M6 实例 |
 | 文档 | `docs/M6-SIGNATURE-FREEZE.md`、本报告、`HANDOVER.md` / `DEV-PLAN.md` §2.7 状态、`CHANGELOG.md` |
 

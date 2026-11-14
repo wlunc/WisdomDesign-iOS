@@ -158,7 +158,7 @@ enums: {WDAssigneePickerSize: [standard, compact]}
    - 溢出：7 项 → 6 + `+1`；含未指派时计入 6；`onOverflowTap` 回调；
    - 禁用成员：点击无回调、仍在无障碍树；整体禁用：无回调；
    - `positionText` 收到 (index, total) 且顺序含「未指派」为第 1 项。
-4. 八态快照（浅/深 × 默认/AX3 × LTR/RTL）：`WDAssigneePicker` **8 张新基线**（总 **344**）；单选 + 未指派 / 多选 / 紧凑 / 整体禁用 / 溢出 `+n` 全部并入同一画布样本（`assigneepicker-*`）。
+4. 八态快照（浅/深 × 默认/AX3 × LTR/RTL）：`WDAssigneePicker` **8 张新基线**（总 **344**）；单选 + 未指派 / 多选 / 紧凑 / 整体禁用 / 溢出 `+n` 全部并入同一画布样本（`assigneepicker-*`）。**渲染器 = `UIHostingController` + `drawHierarchy`**：组件内含横向 `ScrollView`，`ImageRenderer` 会把滚动内容画成空白（2026-11-14 实测后改）。
 5. 无障碍：`performAccessibilityAudit` 四类目（demo 审计视口 + M6 代表实例）；VoiceOver 走查记录见 `docs/M6-EXIT-REPORT.md`。
 6. demo：组件目录 36 → **37 件**；详情页含单选/多选/未指派/紧凑/禁用/溢出六个场景。
 

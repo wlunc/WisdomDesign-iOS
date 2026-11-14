@@ -24,7 +24,9 @@ struct M6SnapshotTests {
     for state in SnapshotSupport.matrix {
       let values = SnapshotSupport.values(for: state)
       let view = framed(sample, values: values)
-      SnapshotSupport.verify(
+      // 组件内含横向 ScrollView：ImageRenderer 会把滚动内容画成空白（同 UIKit 接管型），
+      // 必须走 UIHostingController + drawHierarchy 渲染器（SPEC §1.6 的显式表口径）。
+      SnapshotSupport.verifyHierarchy(
         name: "\(name)-\(state.id)", view: view, state: state, size: Self.canvas)
     }
   }
