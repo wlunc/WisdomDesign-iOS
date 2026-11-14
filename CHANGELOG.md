@@ -16,6 +16,7 @@
   （同一次操作仍只抖一次）。**公开签名零变化**（API 1246 符号零 diff）；`slider-*` **8 张快照基线重录**、
   manifest 哈希同步；新增 2 条结构断言（吸附/热区 + 点击换算 LTR/RTL；PR **166 tests**）。
   **残留**：聚焦光环、数值标签跟随、范围双手柄（后两者需签名扩展）；带刻度 = `step` 吸附（画廊无可见刻度点）。
+  demo 新增 `testSliderTapJumps`（点 15% 位置后值必须变化）；完整 demo 套件 **15 条 / 220.88 s** 全绿。
 
 - **`WDAlert` 焦点归还（2026-11-14，B 类遗留）**：出现前用 `UIAccessibility.focusedElement` 捕获当前读屏
   焦点元素，关闭后用 `.layoutChanged` 归还；不改公开签名（无需公开 `WDA11yFocusID` 构造器）。

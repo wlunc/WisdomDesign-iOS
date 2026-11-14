@@ -131,6 +131,30 @@ final class WisdomUIDemoUITests: XCTestCase {
     XCTAssertEqual(configChip.label, "柔色", "切换变体后配置摘要必须更新")
   }
 
+  /// WDSlider：点击轨道必须跳到触点位置（UITapGestureRecognizer 集成验证）。
+  func testSliderTapJumps() {
+    let app = XCUIApplication()
+    app.launch()
+
+    let row = app.buttons["component-row-WDSlider"]
+    XCTAssertTrue(row.waitForExistence(timeout: 20), "WDSlider 行未出现")
+    row.tap()
+    XCTAssertTrue(app.navigationBars["WDSlider"].waitForExistence(timeout: 20), "WDSlider 详情未出现")
+
+    let slider = app.sliders["完成度"].firstMatch
+    XCTAssertTrue(slider.waitForExistence(timeout: 20), "滑杆未进入无障碍树")
+
+    let before = slider.value as? String
+    XCTAssertNotNil(before, "滑杆应有当前值")
+
+    slider.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.5)).tap()
+    // 等 200ms 过渡结束。
+    Thread.sleep(forTimeInterval: 0.4)
+
+    let after = slider.value as? String
+    XCTAssertNotEqual(before, after, "点击轨道后值必须变化（200ms 过渡后）")
+  }
+
   /// WDPicker：菜单形态必须走自绘浮层（展开出现、选中后关闭）。
   func testPickerMenuOpensAndSelects() {
     let app = XCUIApplication()
