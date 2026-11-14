@@ -179,6 +179,44 @@ final class WisdomUIDemoUITests: XCTestCase {
     XCTAssertFalse(message.waitForExistence(timeout: 2), "上滑后 Toast 应立即关闭")
   }
 
+  /// WDToast：窗口层浮层只占自身区域，页面其余位置仍可交互（非阻塞）。
+  func testToastDoesNotBlockPage() {
+    let app = XCUIApplication()
+    app.launch()
+
+    let row = app.buttons["component-row-WDToast"]
+    XCTAssertTrue(row.waitForExistence(timeout: 20), "WDToast 行未出现")
+    row.tap()
+    XCTAssertTrue(app.navigationBars["WDToast"].waitForExistence(timeout: 20), "WDToast 详情未出现")
+
+    app.buttons["显示 Toast"].tap()
+    XCTAssertTrue(app.staticTexts["任务已保存"].waitForExistence(timeout: 20), "Toast 未出现")
+
+    // Toast 在底部；页面中间的触发按钮必须仍能命中，而不是被全屏浮层拦截。
+    let trigger = app.buttons["显示 Toast"]
+    XCTAssertTrue(trigger.isHittable, "Toast 出现时页面按钮应仍可点")
+    trigger.tap()
+    XCTAssertTrue(app.staticTexts["任务已保存"].waitForExistence(timeout: 20), "页面点击应生效")
+  }
+
+  /// WDToast：带操作停留 5 秒后自动消失（窗口层计时与移除）。
+  func testToastAutoDismisses() {
+    let app = XCUIApplication()
+    app.launch()
+
+    let row = app.buttons["component-row-WDToast"]
+    XCTAssertTrue(row.waitForExistence(timeout: 20), "WDToast 行未出现")
+    row.tap()
+    XCTAssertTrue(app.navigationBars["WDToast"].waitForExistence(timeout: 20), "WDToast 详情未出现")
+    app.buttons["显示 Toast"].tap()
+
+    let message = app.staticTexts["任务已保存"]
+    XCTAssertTrue(message.waitForExistence(timeout: 20), "Toast 未出现")
+
+    let gone = expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: message)
+    wait(for: [gone], timeout: 8)
+  }
+
   /// WDPicker：菜单形态必须走自绘浮层（展开出现、选中后关闭）。
   func testPickerMenuOpensAndSelects() {
     let app = XCUIApplication()

@@ -2,7 +2,7 @@
 
 > **这份文件回答三件事**：仓库里的文档**在哪**、**怎么读**、**哪些还没验证**。
 > 它**不是**开发计划本身——计划在 [`DEV-PLAN.md`](DEV-PLAN.md)，规格在 [`SPEC.md`](SPEC.md)，结构在 [`ARCHITECTURE.md`](ARCHITECTURE.md)，操作手册在 [`../AGENTS.md`](../AGENTS.md)。
-> 状态快照（**2026-11-14 晚间**）：**M0–M4 已交付并判定通过**；**M5 已判定通过**（技术判据 6/6；nightly 2/3 按项目负责人 2026-11-14 先例豁免，记录 = `docs/M5-EXIT-REPORT.md`）。**M6 场景组件 `WDAssigneePicker` 已落地**：签名冻结 = `docs/M6-SIGNATURE-FREEZE.md`、契约 `contracts/WDAssigneePicker.yaml`、**8 张新基线（总 344）**、demo 扩到 **37 件**（审计视口含 M6 实例）；`Scripts/ci.sh pr` **163 tests / 1245 符号**、demo **14 条 UITest**（含四类目审计与 AssigneePicker 交互）全过。**2026-11-14 补丁**：`WDProgressBar` 补齐设计 15（分段 + 1s 延迟 + 禁用 45% + 完成 300ms + 首次 3200ms + progressbar 语义）；**B 类遗留推进**：`WDSlider` 自绘 + 点击 200ms/端点 rigid、`WDAlert` 焦点归还、`WDToast` 悬停/上滑 ⇒ 当前 **167 tests / 1246 符号 / 352 张基线**，demo **16 条 UITest / 237.78 s** 全绿。**M6 出口待判**：真机 VoiceOver 走查 / Thinning 增量 / 真机 hitch 仍【未验证】，**双端 tag 待 Android 追平**。文档改动以 `git log` 为准。
+> 状态快照（**2026-11-14 晚间**）：**M0–M4 已交付并判定通过**；**M5 已判定通过**（技术判据 6/6；nightly 2/3 按项目负责人 2026-11-14 先例豁免，记录 = `docs/M5-EXIT-REPORT.md`）。**M6 场景组件 `WDAssigneePicker` 已落地**：签名冻结 = `docs/M6-SIGNATURE-FREEZE.md`、契约 `contracts/WDAssigneePicker.yaml`、**8 张新基线（总 344）**、demo 扩到 **37 件**（审计视口含 M6 实例）；`Scripts/ci.sh pr` **163 tests / 1245 符号**、demo **14 条 UITest**（含四类目审计与 AssigneePicker 交互）全过。**2026-11-14 补丁**：`WDProgressBar` 补齐设计 15（分段 + 1s 延迟 + 禁用 45% + 完成 300ms + 首次 3200ms + progressbar 语义）；**B 类遗留推进**：`WDSlider` 自绘 + 点击 200ms/端点 rigid、`WDAlert` 焦点归还、`WDToast` 窗口层/悬停/上滑 ⇒ 当前 **167 tests / 1246 符号 / 352 张基线**，demo **18 条 UITest / 265.44 s** 全绿。**M6 出口待判**：真机 VoiceOver 走查 / Thinning 增量 / 真机 hitch 仍【未验证】，**双端 tag 待 Android 追平**。文档改动以 `git log` 为准。
 
 ---
 

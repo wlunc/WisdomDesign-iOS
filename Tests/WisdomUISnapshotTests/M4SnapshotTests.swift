@@ -264,15 +264,18 @@ private struct AlertSample: View {
 
 private struct ToastSample: View {
   var body: some View {
-    Text(verbatim: "背景内容")
-      .frame(maxWidth: .infinity, minHeight: 420)
-      .wdToast(
-        isPresented: .constant(true),
+    ZStack(alignment: .bottom) {
+      Text(verbatim: "背景内容")
+        .frame(maxWidth: .infinity, minHeight: 420)
+      WDToastCard(
         variant: .success,
         message: Text(verbatim: "任务已保存"),
         action: .init(label: Text(verbatim: "撤销"), action: {}),
-        durationMilliseconds: 60_000
+        onAction: {}
       )
+      .padding(.horizontal, WDSpacing.s9)
+      .padding(.bottom, WDSpacing.s5)
+    }
   }
 }
 
