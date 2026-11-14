@@ -12,7 +12,7 @@
 | ① | **批前冻结（1 件）** | `docs/M6-SIGNATURE-FREEZE.md`（D1–D9）+ `contracts/WDAssigneePicker.yaml` 已回填 | ✅ |
 | ② | **无障碍回归**：VoiceOver 闭眼走查记录 + demo 层 `performAccessibilityAudit` 四类目 | 四类目 **✅**（nightly-2 的 14 条 UITest 全过，含审计视口新增的 M6 实例）；**VoiceOver 人审【未验证】**（无 USB 真机，见 §5） | ⚠️ 自动面通过、人审未验证 |
 | ③ | **截图基线封板**（全部 37 件 × 浅/深 × 默认/AX3 × LTR/RTL） | **344 张基线**（M6 新增 8 张，`assigneepicker-*`）；快照套件 **43 tests 全绿**（`-parallel-testing-enabled NO`） | ✅ |
-| ④ | **全量门禁**：`Scripts/ci.sh pr` + nightly 连续绿 | PR **✅**（163 tests / 1245 符号零 diff / Foundation 97.26% / warm 27.82 s）；nightly **第 1/3 日绿**（2026-11-14：设备编译 3.59 s + 快照 43 tests / 45.73 s + demo 审计 **14 tests** / 221.35 s，整条 **270.67 s**） | ⚠️ nightly 1/3（连续 3 日未到，按 M3/M4/M5 先例待确认） |
+| ④ | **全量门禁**：`Scripts/ci.sh pr` + nightly 连续绿 | PR **✅**（163 tests / 1245 符号零 diff / Foundation 97.26% / warm 27.82 s）；nightly **第 1/3 日绿**（2026-11-14：设备编译 3.59 s + 快照 43 tests / 45.73 s + demo 审计 **14 tests** / 221.35 s，整条 **270.67 s**）；基线改用 `drawHierarchy` 后快照套件单独复核 **43 tests 绿（22.99 s）** | ⚠️ nightly 1/3（连续 3 日未到，按 M3/M4/M5 先例待确认） |
 | ⑤ | **发布前层**：归档 Thinning 增量 + 真机 hitch + tag 校验 | 归档**可产出**（2026-11-14 实测 `ARCHIVE SUCCEEDED`，`.build/m6.xcarchive` 1.5 MB，未签名）；**Thinning 增量【未验证】**（未签名归档不能导出 thinned IPA）；**真机 hitch【未验证】**（U-05 无 USB 真机）；**tag 校验**：当前无 tag（见 ⑥） | ⚠️ 部分 |
 | ⑥ | **双端同 tag `v1.0.0`**，tag 前确认三仓 HEAD 与版本台账一致 | **不成立**：Android 仓停在 M1（M2–M5 未实现），双端同 tag 无法闭合；项目负责人 2026-11-14 已确认 **iOS 先行、tag 待 Android 追平** | ❌ 待 Android |
 | ⑦ | **发布 checklist 可勾选完成** | `docs/DEV-PLAN.md` §10 的 6 步：设计仓 tag 未打 / 本批生成物无变更 / 门禁 PR 绿 + nightly 1/3 / 发布前层部分 / 双端 tag 未打 / CHANGELOG 已写 | ⚠️ 部分 |
@@ -94,7 +94,7 @@ git describe --tags --exact-match           # 无 tag（Android 未追平，本�
 | 技术判据 | **iOS 面全绿**：①③ ✅；② 自动面 ✅（人审未验证）；④ PR ✅ / nightly 1/3 |
 | 发布面 | ⑤ 部分（归档可产出；Thinning / hitch 未验证）；⑥ 待 Android；⑦ 部分 |
 | 结论 | **M6 iOS 面完成，可以进入 1.0 发布准备；发布层 3 项外部条件未闭合**（真机人审 / Thinning / 双端 tag） |
-| 条件 | 上述未验证项按 `docs/SPEC.md` §8.2 记【未验证】；Android 追平后补双端 tag |
+| 条件 | 上述未验证项按 `docs/SPEC.md` §8.2 记【未验证】；Android 追平后补双端 tag。**环境限制**：最终 tree 的 nightly 重跑需完整权限审批、本轮未重跑——设备编译未变、快照 43 绿、demo 审计 14 绿均在最终 tree 的前后一提交内分别实跑 |
 | 后续 | ① 真机 USB 走查（V1–V8）；② 签名归档导出 Thinning 增量；③ Android M2–M5；④ 双端 `v1.0.0` |
 
 ## 7. 复跑命令
@@ -105,7 +105,7 @@ Scripts/check-structure.sh --strict && Scripts/check-format.sh
 Scripts/ci.sh pr
 Scripts/ci.sh nightly
 xcodebuild test -scheme WisdomDesign-iOS-Package -destination 'platform=iOS Simulator,id=<UDID>' \
-  -parallel-testing-enabled NO -only-testing:WisdomUISnapshotTests     # 344 张基线
+  -parallel-testing-enabled NO -only-testing:WisdomUISnapshotTests     # 344 张基线（43 tests / 22.99 s，2026-11-14 复核）
 xcodebuild test -project Examples/WisdomUIDemo/WisdomUIDemo.xcodeproj -scheme WisdomUIDemo \
   -destination 'platform=iOS Simulator,id=<UDID>' -only-testing:WisdomUIDemoUITests
 ```
