@@ -38,7 +38,9 @@ struct DemoVariantsSection: View {
       DemoM5VariantsSection(component: component, settings: $settings)
     case .assigneePicker:
       DemoM6VariantsSection(settings: $settings)
-    case .progressBar, .progressRing, .banner, .emptyState, .skeleton,
+    case .progressBar:
+      DemoProgressBarVariants()
+    case .progressRing, .banner, .emptyState, .skeleton,
       .alert, .actionSheet, .bottomSheet, .toast, .switchControl, .checkbox:
       EmptyView()
     }
@@ -145,6 +147,38 @@ struct DemoStatesSection: View {
       .progressBar, .progressRing, .banner, .emptyState, .skeleton,
       .alert, .actionSheet, .bottomSheet, .toast:
       EmptyView()
+    }
+  }
+}
+
+// MARK: - ProgressBar
+
+/// 设计 15 的四个变体 + 禁用态（确定 / 分段 / 不确定 / 完成）。
+private struct DemoProgressBarVariants: View {
+  var body: some View {
+    DemoSection(
+      "四个变体",
+      subtitle: "确定按百分比填充；分段用 n 段表示 n 项完成几项；不确定 1 秒后才出现；完成换成功色。"
+    ) {
+      VStack(alignment: .leading, spacing: WDSpacing.s6) {
+        WDProgressBar(value: 0.45, label: Text(verbatim: "确定"), valueText: Text(verbatim: "45%"))
+        WDProgressBar(segments: 5, completed: 3, label: Text(verbatim: "分段"))
+        WDProgressBar(label: Text(verbatim: "不确定"))
+        WDProgressBar(
+          value: 1, label: Text(verbatim: "完成"), valueText: Text(verbatim: "100%"))
+        WDProgressBar(value: 0.6, label: Text(verbatim: "禁用"))
+          .disabled(true)
+      }
+    }
+
+    DemoSection(
+      "分段段数",
+      subtitle: "段数等于总量；完成数超过段数时钳制到满段，不超出。"
+    ) {
+      VStack(alignment: .leading, spacing: WDSpacing.s4) {
+        WDProgressBar(segments: 3, completed: 1, label: Text(verbatim: "3 项完成 1 项"))
+        WDProgressBar(segments: 8, completed: 8, label: Text(verbatim: "8 项全部完成"))
+      }
     }
   }
 }

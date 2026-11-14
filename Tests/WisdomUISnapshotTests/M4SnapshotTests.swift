@@ -20,19 +20,6 @@ struct M4SnapshotTests {
       .wdTheme(WDTheme(colors: values))
   }
 
-  @Test("WDProgressBar：8 态")
-  func progressBar() {
-    for state in SnapshotSupport.matrix {
-      let values = SnapshotSupport.values(for: state)
-      SnapshotSupport.verify(
-        name: "progressbar-\(state.id)",
-        view: framed(ProgressBarSample(), values: values),
-        state: state,
-        size: Self.canvas
-      )
-    }
-  }
-
   @Test("WDProgressRing：8 态")
   func progressRing() {
     for state in SnapshotSupport.matrix {
@@ -136,6 +123,39 @@ struct M4SnapshotTests {
       )
     }
   }
+
+  // MARK: - ProgressBar（放在 suite 末尾）
+
+  // 顺序约束：hierarchy 渲染会创建 UIWindow，之后同进程的 ImageRenderer 用例（Toast）会漂移
+  // 8–14%（2026-11-14 实测；resignKey / 拆 rootViewController 均无效）。本 suite 串行执行，
+  // 把 hierarchy 用例放在所有 ImageRenderer 用例之后。
+
+  @Test("WDProgressBar：8 态（hierarchy；settle 3.4s 等首次出现 3200ms 动画落终态）")
+  func progressBar() {
+    for state in SnapshotSupport.matrix {
+      let values = SnapshotSupport.values(for: state)
+      SnapshotSupport.verifyHierarchy(
+        name: "progressbar-\(state.id)",
+        view: framed(ProgressBarSample(), values: values),
+        state: state,
+        size: Self.canvas,
+        settle: 3.4
+      )
+    }
+  }
+
+  @Test("WDProgressBar 不确定态：1 秒内不出现（ImageRenderer：无 task，只有轨道）")
+  func progressBarIndeterminateDelay() {
+    for state in SnapshotSupport.matrix {
+      let values = SnapshotSupport.values(for: state)
+      SnapshotSupport.verify(
+        name: "progressbar-indeterminate-\(state.id)",
+        view: framed(ProgressBarIndeterminateSample(), values: values),
+        state: state,
+        size: Self.canvas
+      )
+    }
+  }
 }
 
 // MARK: - 样本
@@ -144,8 +164,18 @@ private struct ProgressBarSample: View {
   var body: some View {
     VStack(alignment: .leading, spacing: WDSpacing.s6) {
       WDProgressBar(value: 0.45, label: Text(verbatim: "上传进度"), valueText: Text(verbatim: "45%"))
-      WDProgressBar(label: Text(verbatim: "加载中"))
+      WDProgressBar(segments: 5, completed: 3, label: Text(verbatim: "家务完成度"))
       WDProgressBar(value: 1, label: Text(verbatim: "整理储物间"), valueText: Text(verbatim: "100%"))
+      WDProgressBar(value: 0.6, label: Text(verbatim: "禁用"))
+        .disabled(true)
+    }
+  }
+}
+
+private struct ProgressBarIndeterminateSample: View {
+  var body: some View {
+    VStack(alignment: .leading, spacing: WDSpacing.s6) {
+      WDProgressBar(label: Text(verbatim: "加载中"))
     }
   }
 }

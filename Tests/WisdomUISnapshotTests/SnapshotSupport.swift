@@ -76,7 +76,7 @@ enum SnapshotSupport {
   /// 用 `UIHostingController` + `drawHierarchy`：先挂到一个离屏 `UIWindow` 完成布局，
   /// 否则 `afterScreenUpdates` 拿到的可能是空白图（M1 登记过这条口径，M4 的玻璃类同样用它）。
   static func pngHierarchy(
-    _ view: some View, state: State, size: CGSize, scale: CGFloat = 2
+    _ view: some View, state: State, size: CGSize, scale: CGFloat = 2, settle: TimeInterval = 0.05
   ) -> Data? {
     let content = styled(view, state: state)
       .frame(width: size.width, height: size.height, alignment: .topLeading)
@@ -90,7 +90,7 @@ enum SnapshotSupport {
     controller.view.layoutIfNeeded()
     // 让 SwiftUI 把本轮布局提交到 layer 树，再按图层渲染（drawHierarchy 在无 scene 的测试进程里
     // 会拿到全透明图，实测）。
-    RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.05))
+    RunLoop.main.run(until: Date(timeIntervalSinceNow: settle))
 
     let format = UIGraphicsImageRendererFormat()
     format.scale = scale
@@ -99,6 +99,10 @@ enum SnapshotSupport {
       controller.view.layer.render(in: context.cgContext)
     }
     window.isHidden = true
+    // 彻底拆掉 hosting 层级：窗口保持 key 会把 traits 泄漏给后续 ImageRenderer 快照
+    // （2026-11-14 实测 Toast 漂移 8–14%）；先 resignKey 再拆 rootViewController。
+    window.resignKey()
+    window.rootViewController = nil
     return image.pngData()
   }
 
@@ -239,8 +243,11 @@ enum SnapshotSupport {
   }
 
   /// 同 `verify`，但走 `UIHostingController` 渲染器（`TextField`/玻璃类）。
-  static func verifyHierarchy(name: String, view: some View, state: State, size: CGSize) {
-    verifyPNG(name: name, state: state, png: pngHierarchy(view, state: state, size: size))
+  static func verifyHierarchy(
+    name: String, view: some View, state: State, size: CGSize, settle: TimeInterval = 0.05
+  ) {
+    verifyPNG(
+      name: name, state: state, png: pngHierarchy(view, state: state, size: size, settle: settle))
   }
 
   private static func verifyPNG(name: String, state: State, png: Data?) {

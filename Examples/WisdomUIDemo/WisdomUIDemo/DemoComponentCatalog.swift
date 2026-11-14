@@ -302,13 +302,13 @@ enum DemoComponentCatalog {
       id: .progressBar,
       category: .display,
       icon: .inProgress,
-      summary: "线性进度。确定态按百分比填充，不确定态来回移动，完成态换成功色。",
+      summary: "线性进度。确定 / 分段 / 不确定 / 完成四变体；完成换成功色并触发一次成功触觉。",
       layer: "Primitives",
       batch: "M4",
       highlights: [
-        "轨道高 6、圆角 full、最小宽 100",
-        "数值钳制到 0...1；完成时成功触觉一次",
-        "只跨 25/50/75/100 播报（由调用方给标签）",
+        "轨道高 6、圆角 full、最小宽 100；分段间距 2",
+        "不确定态超过 1 秒才出现；值变化 240ms 线性、完成 300ms",
+        "禁用整体 45%；首次出现 3200ms 缓出",
       ],
       hasEnumSettings: false
     ),

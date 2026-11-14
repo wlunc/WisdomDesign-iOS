@@ -56,7 +56,7 @@
 | ① | **Alert 焦点归还** | 出现时用 `UIAccessibility.post(.screenChanged)` 把焦点移入；**关闭后归还触发元素未实现**（`WDA11yFocusID` 无公开构造器，调用方无法传回焦点 ID） | M5/M6；需 U 项或签名扩展 |
 | ② | Toast 悬停暂停 / 上滑关闭 | 未实现；自动消失用组件内 `.task`（随视图消失取消），同屏一条由调用方控制 | M5/M6（如需真机指针/手势验收） |
 | ③ | Banner `success` 变体 | 按 Q1 **不纳入**（C-15/U2 的 Android 集合为 3 个）；设计 §4 的 success 用 info 表达 | 已记录（M4-SIGNATURE-FREEZE Q1） |
-| ④ | ProgressBar 分段变体 | 按 Q4 **暂缓**；确定/不确定已交付 | M5/M6（如调用方需要） |
+| ④ | ProgressBar 分段变体 | **已补（2026-11-14，M6 期间；用户指出设计 15 缺口）**：新增 `init(segments:completed:...)`；同时补齐**不确定 1s 延迟**、**禁用 45%**、**完成 300ms**、**首次出现 3200ms**、**`accessibilityRepresentation`（progressbar 角色）**。门禁/快照待复跑（见 §6 附注） | 已修（待门禁复核） |
 | ⑤ | ProgressBar 填充色 | 设计的 `gradient.mid` 浅端在 `surface.tint` 上仅 **2.02:1**（<3:1）⇒ 改 `textBrand → statusInfo` 渐变（**3.91:1 / 6.71:1**） | 已记录（对比度优先） |
 | ⑥ | 进度阈值播报（25/50/75/100） | 未实现组件内播报；标签由调用方给（与 M2 错误态播报同口径） | 调用方 / M5 |
 | ⑦ | BottomSheet/ActionSheet 快照 | 快照的是**面板内容**（系统/窗口 chrome 不进 hierarchy）；ActionSheet/BottomSheet 已改窗口级自绘，焦点/键盘由自绘层接管（Bottomsheet 键盘用通知观察，未用文本字段验收） | 已记录 |
@@ -65,6 +65,15 @@
 | ⑩ | Skeleton 微光形态 | 由设计稿的"斜向微光扫过"改为**水平 sourceAtop 扫光**（只落在灰块上，避免斜方块观感）；行宽改 `maxWidth` + 固定短行留白，修复 demo 横向溢出 | 已修复（2026-11-12） |
 | ⑪ | BottomSheet 与设计 26 的布局差异 | 标题 `title3`、头部 56；内容 12 顶距 + `ScrollView`；底部操作区固定 + 1pt 分割线 + 高 72 + 右对齐；宽屏面板上限 480。**窗口级自绘贴边面板**：左右/底部贴屏幕、顶部 32 圆角、把手 36×5、half/large、把手拖拽/点击切换、下滑关闭、点遮罩关闭、键盘上移；**焦点归还 + `.escape`**；**内容顶部下拉经 UIScrollView 桥接拖面板**。系统 `.sheet` 不再使用（iOS 26 partial detent 浮动约 16pt） | 已改自绘并补齐（2026-11-12/13）；7 条 demo UITest 全过 |
 | ⑫ | ActionSheet 间距与取消形态 | 按设计 27 参考重排：左右 16 内距；标题/说明移入列表卡片顶部（caption1/secondary + 底部分隔线）；行左对齐 + 可选 20pt 前置图标；取消为独立 48pt **圆角卡片**（18 圆角/semibold/e2）；破坏性置底。**窗口级 presenter + 自绘遮罩**：透明背景、无系统 sheet 边框；遮罩静态出现，面板滑入/滑出；点遮罩 = 取消；**焦点归还已实现** | 已重排并补齐（2026-11-12/13） |
+
+## 4.1 M6 期间的设计 15 补齐（2026-11-14）
+
+- 分段变体、不确定 1s 延迟、禁用 45%、完成 300ms、首次出现 3200ms、progressbar 无障碍语义已实现；
+  `WDProgressBar`/demo/previews/契约/API 基线同批更新（API **1246** 符号）。
+- 快照改为 **hierarchy 渲染器 + settle**（主样本 3.4s 等首次动画落终态；不确定样本 0.5s 固定为「1 秒内」）；
+  旧的 8 张 `progressbar-*` 基线已删，需重录 **16 张**（8 主 + 8 不确定）。
+- **待复跑**：`WisdomUITests`（+1 断言）、快照重录与复核、`Scripts/ci.sh pr` / `nightly`。
+  本轮沙箱无法启动模拟器测试（PTY / Swift 宏插件受限），完整权限审批未通过，故未写成「已通过」。
 
 ## 5. 判定记录
 

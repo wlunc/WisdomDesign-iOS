@@ -5124,6 +5124,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(segments: Int, completed: Int, label: Text? = nil, valueText: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDProgressBar.init(segments:completed:label:valueText:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor init(value: Double, label: Text? = nil, valueText: Text? = nil)",
       "kind" : "swift.init",
       "path" : "WDProgressBar.init(value:label:valueText:)"

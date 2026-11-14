@@ -37,6 +37,24 @@ struct M4ComponentsTests {
     #expect(height(WDProgressBar(value: 7)) == height(WDProgressBar(value: 1)))
   }
 
+  @Test("WDProgressBar：分段态与确定态同高；段数/完成数钳制；读屏值「3 / 5」")
+  func progressBarSegmented() {
+    let determinate = height(
+      WDProgressBar(value: 0.6, label: Text(verbatim: "家务完成度")))
+    #expect(
+      height(WDProgressBar(segments: 5, completed: 3, label: Text(verbatim: "家务完成度")))
+        == determinate)
+    _ = WDProgressBar(segments: 0, completed: 9)  // 段数 0 按 1 处理
+    _ = WDProgressBar(segments: 5, completed: -2)  // 完成数钳制到 0
+    #expect(
+      WDProgressBar(segments: 5, completed: 3).accessibilityValueText
+        == Text(verbatim: "3 / 5"))
+    #expect(
+      WDProgressBar(segments: 5, completed: 9, valueText: Text(verbatim: "5 / 5"))
+        .accessibilityValueText == Text(verbatim: "5 / 5"))
+    #expect(height(WDProgressBar(value: 0.5).disabled(true)) == height(WDProgressBar(value: 0.5)))
+  }
+
   @Test("WDProgressRing：标准 60 > 紧凑 44；标签增加高度")
   func progressRingSizes() {
     let standard = height(WDProgressRing(value: 0.5))

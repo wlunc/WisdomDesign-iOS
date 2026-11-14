@@ -9,13 +9,15 @@
           label: Text(verbatim: "上传进度"),
           valueText: Text(verbatim: "45%")
         )
+        WDProgressBar(segments: 5, completed: 3, label: Text(verbatim: "家务完成度"))
+        WDProgressBar(label: Text(verbatim: "加载中"))
         WDProgressBar(
           value: 1,
           label: Text(verbatim: "整理储物间"),
           valueText: Text(verbatim: "100%")
         )
-        WDProgressBar(label: Text(verbatim: "加载中"))
-        WDProgressBar(value: 0, label: Text(verbatim: "0%"))
+        WDProgressBar(value: 0.6, label: Text(verbatim: "禁用"))
+          .disabled(true)
       }
       .padding(WDSpacing.s5)
     }

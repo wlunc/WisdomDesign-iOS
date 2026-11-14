@@ -8,6 +8,14 @@
 
 ### Added
 
+- **`WDProgressBar` 补齐设计 15（2026-11-14，用户指出缺口）**：新增**分段变体**
+  `init(segments:completed:label:valueText:)`（n 段表示 n 项完成几项，段间距 2，全完成换成功色）；
+  并补齐此前登记/未实现的设计项——**不确定态超过 1 秒才出现**、**禁用整体 45%**、
+  **完成 300ms 过渡**、**首次出现 3200ms 缓出**、以及 **progressbar 无障碍语义**
+  （`accessibilityRepresentation` 借 `ProgressView` 提供角色/当前值；不确定态不给 valuenow）。
+  新增 1 条结构断言；API 基线 1245 → **1246 符号（+1，无移除）**；契约 `contracts/WDProgressBar.yaml` 补
+  `segments`/`completed`。分段填充用品牌色（沿用 M4 的对比度改判）。
+
 - **M6 场景组件 `WDAssigneePicker`（指派选择）**（2026-11-14）：头像横排 **40**（紧凑 **32**）、
   选中外环外径 **52**（紧凑 44）、最多直接显示 **6** 个 + `+n`；**单选**
   `selection: Binding<String?>` 与 **多选** `selection: Binding<Set<String>>` 两个 init
