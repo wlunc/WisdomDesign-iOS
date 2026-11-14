@@ -23,6 +23,7 @@ public struct WDProgressBar: View {
   @Environment(\.wdAppearance) private var appearance
   @Environment(\.wdEffectsBudget) private var budget
   @Environment(\.isEnabled) private var isEnabled
+  @Environment(\.wdInstantMotion) private var instantMotion
 
   @State private var indeterminatePhase = false
   @State private var showsIndeterminate = false
@@ -204,7 +205,7 @@ public struct WDProgressBar: View {
   /// 首次出现：3200ms 缓出（设计 15 §9）；Reduce Motion 直接落终态。
   private func reveal() {
     guard !hasAppeared else { return }
-    if appearance.reduceMotion {
+    if instantMotion || appearance.reduceMotion {
       hasAppeared = true
       if case .indeterminate = mode {
         showsIndeterminate = true
@@ -219,7 +220,7 @@ public struct WDProgressBar: View {
   /// 不确定态超过 1 秒才显示（设计 15 §9）；Reduce Motion 立即显示静态段。
   private func revealIndeterminate() async {
     guard case .indeterminate = mode else { return }
-    if !appearance.reduceMotion {
+    if !(instantMotion || appearance.reduceMotion) {
       try? await Task.sleep(for: Self.indeterminateAppearDelay)
     }
     guard !Task.isCancelled else { return }

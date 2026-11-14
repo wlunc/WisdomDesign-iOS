@@ -169,6 +169,9 @@ private struct ProgressBarSample: View {
       WDProgressBar(value: 0.6, label: Text(verbatim: "禁用"))
         .disabled(true)
     }
+    // 快照注入 instant 入口：跳过 3200ms 首次出现动画（离屏窗口里 CoreAnimation 不推进，
+    // 否则终态会停在 0）。
+    .environment(\.wdInstantMotion, true)
   }
 }
 

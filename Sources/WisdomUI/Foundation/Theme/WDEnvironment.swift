@@ -44,11 +44,21 @@ extension EnvironmentValues {
   }
 }
 
+private struct WDInstantMotionKey: EnvironmentKey {
+  static let defaultValue = false
+}
+
 private struct WDEffectsBudgetKey: EnvironmentKey {
   static let defaultValue: WDEffectsBudget = .default
 }
 
 extension EnvironmentValues {
+  /// 快照/预览专用：跳过入场动画与延迟（**内部**，不是公开 API；组件只读，测试注入）。
+  var wdInstantMotion: Bool {
+    get { self[WDInstantMotionKey.self] }
+    set { self[WDInstantMotionKey.self] = newValue }
+  }
+
   /// 效果预算（组件**只读**；写入口只有本文件的修饰符，且只降不升 —— R18/DF-03）。
   public var wdEffectsBudget: WDEffectsBudget {
     get { self[WDEffectsBudgetKey.self] }
