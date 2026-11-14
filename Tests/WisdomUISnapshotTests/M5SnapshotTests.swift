@@ -283,21 +283,26 @@ private struct PickerSample: View {
 }
 
 private struct DatePickerSample: View {
+  /// 固定锚点：`Date()` 会让日历快照随日期漂移（2026-11-14 实测 RTL 两张过期）。
+  private let anchor = Date(timeIntervalSince1970: 1_800_000_000)
+
   private var quick: [WDDatePickerQuickOption] {
     [
-      .init(id: "today", label: Text(verbatim: "今天"), date: Date()),
-      .init(id: "tomorrow", label: Text(verbatim: "明天"), date: Date()),
+      .init(id: "today", label: Text(verbatim: "今天"), date: anchor),
+      .init(id: "tomorrow", label: Text(verbatim: "明天"), date: anchor.addingTimeInterval(86_400)),
     ]
   }
 
   var body: some View {
     VStack(alignment: .leading, spacing: WDSpacing.s5) {
       WDDatePicker(
-        date: .constant(Date()), label: Text(verbatim: "截止日期"), quickOptions: quick)
+        date: .constant(anchor), label: Text(verbatim: "截止日期"), quickOptions: quick)
       WDDatePicker(date: .constant(nil), label: Text(verbatim: "提醒时间"), mode: .time)
       WDDatePicker(date: .constant(nil), label: Text(verbatim: "无截止日期"))
         .disabled(true)
     }
+    .environment(\.timeZone, TimeZone(secondsFromGMT: 0) ?? .current)
+    .environment(\.locale, Locale(identifier: "zh_CN"))
   }
 }
 

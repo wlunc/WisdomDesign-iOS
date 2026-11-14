@@ -162,9 +162,10 @@ public struct WDButtonStyle: ButtonStyle {
       .padding(.horizontal, size.buttonHorizontalPadding)
       .frame(minHeight: size.controlHeight)
       .foregroundStyle(foregroundColor)
-      .background(background)
+      .background {
+        background.overlay(topHighlight)
+      }
       .clipShape(Capsule())
-      .overlay(topHighlight)
       .overlay(border)
       .modifier(WDButtonShadow(variant: variant, isEnabled: isEnabled))
       .overlay { loadingIndicator }
@@ -226,6 +227,7 @@ public struct WDButtonStyle: ButtonStyle {
           lineWidth: 1
         )
         .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
   }
 
