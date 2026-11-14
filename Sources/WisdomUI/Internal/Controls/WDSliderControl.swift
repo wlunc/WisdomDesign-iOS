@@ -17,8 +17,31 @@ enum WDSliderMetrics {
   static let disabledOpacity: CGFloat = 0.45
   /// 手柄放大与数值更新 100ms（设计 08 §9）。
   static let visualDuration: TimeInterval = 0.10
+  /// 点击轨道跳转 200ms（设计 08 §9）。
+  static let tapDuration: TimeInterval = 0.20
+  /// 端点判定容差。
+  static let edgeEpsilon: Double = 0.0001
   /// 1pt hairline（设计 08 §3 的手柄描边）。
   static let hairlineWidth: CGFloat = 1
+}
+
+/// 点击轨道的位置换算（与覆盖层的 13pt 内缩、RTL 镜像保持一致）。
+enum WDSliderTapMapping {
+  /// 触点 x（控件坐标）→ 目标值；宽度不足时返回 nil。
+  static func value(
+    atX x: CGFloat, width: CGFloat, in bounds: ClosedRange<Double>, step: Double?, isRTL: Bool
+  ) -> Double? {
+    let usable = width - WDSliderMetrics.thumbDiameter
+    guard usable > 0 else { return nil }
+    var local = x - WDSliderMetrics.trackInset
+    if isRTL {
+      local = usable - local
+    }
+    let fraction = min(max(local / usable, 0), 1)
+    let span = bounds.upperBound - bounds.lowerBound
+    let raw = bounds.lowerBound + Double(fraction) * span
+    return WDSliderSnapping.snap(raw, in: bounds, step: step)
+  }
 }
 
 /// 步长吸附（设计 08 §4：离散档位松手吸附；不改变连续拖拽时的实时值）。
@@ -49,10 +72,12 @@ struct WDSliderControl: UIViewRepresentable {
   var isEnabled: Bool
   /// 布局方向（RTL 时反转轨道）。
   var layoutDirection: LayoutDirection
-  /// 拖动中 / 点击轨道时的实时回调。
+  /// 拖动中的实时回调。
   var onValueChange: (Double) -> Void
-  /// 开始 / 结束拖拽。
-  var onEditingChanged: (Bool) -> Void
+  /// 点击轨道：目标值（由 WDSlider 做 200ms 过渡）。
+  var onTapValue: (Double) -> Void
+  /// 开始 / 结束（带当前值，供端点触觉判断）。
+  var onEditingChanged: (Bool, Double) -> Void
 
   /// 协调器：把 UIControl 事件转回 SwiftUI。
   final class Coordinator: NSObject {
@@ -66,22 +91,39 @@ struct WDSliderControl: UIViewRepresentable {
     }
 
     /// 拖动中的值变化。
-    @objc func valueChanged(_ sender: UISlider) {
+    @MainActor @objc func valueChanged(_ sender: UISlider) {
       parent.onValueChange(Double(sender.value))
     }
 
     /// 按下：进入拖拽视觉态。
-    @objc func touchDown(_ sender: UISlider) {
-      parent.onEditingChanged(true)
+    @MainActor @objc func touchDown(_ sender: UISlider) {
+      parent.onEditingChanged(true, Double(sender.value))
     }
 
     /// 松手：离散档位吸附 + 一次有效变更回调。
-    @objc func touchUp(_ sender: UISlider) {
+    @MainActor @objc func touchUp(_ sender: UISlider) {
       let snapped = WDSliderSnapping.snap(
         Double(sender.value), in: parent.bounds, step: parent.step)
       sender.value = Float(snapped)
       parent.onValueChange(snapped)
-      parent.onEditingChanged(false)
+      parent.onEditingChanged(false, snapped)
+    }
+
+    /// 点击轨道：按触点位置换算目标值（与覆盖层的 13pt 内缩一致；RTL 反向）。
+    @MainActor @objc func tapped(_ recognizer: UITapGestureRecognizer) {
+      guard let slider = recognizer.view as? UISlider, slider.isEnabled else { return }
+      guard
+        let target = WDSliderTapMapping.value(
+          atX: recognizer.location(in: slider).x,
+          width: slider.bounds.width,
+          in: parent.bounds,
+          step: parent.step,
+          isRTL: slider.effectiveUserInterfaceLayoutDirection == .rightToLeft
+        )
+      else { return }
+      parent.onEditingChanged(true, Double(slider.value))
+      parent.onTapValue(target)
+      parent.onEditingChanged(false, target)
     }
   }
 
@@ -100,6 +142,10 @@ struct WDSliderControl: UIViewRepresentable {
     }
     slider.isContinuous = true
     slider.isAccessibilityElement = false
+    let tap = UITapGestureRecognizer(
+      target: context.coordinator, action: #selector(Coordinator.tapped(_:)))
+    tap.cancelsTouchesInView = true
+    slider.addGestureRecognizer(tap)
     slider.addTarget(
       context.coordinator, action: #selector(Coordinator.valueChanged(_:)), for: .valueChanged)
     slider.addTarget(

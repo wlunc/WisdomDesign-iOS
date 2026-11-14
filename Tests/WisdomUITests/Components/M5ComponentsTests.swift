@@ -82,6 +82,23 @@ struct M5ComponentsTests {
     #expect(WDSliderSnapping.snap(0.37, in: 0...1, step: 0) == 0.37)
   }
 
+  @Test("WDSlider：点击轨道换算（LTR / RTL / 步长）")
+  func sliderTapMapping() {
+    // 控件宽 226 ⇒ 可用宽 200（两端各内缩 13）。
+    func target(
+      _ x: CGFloat, rtl: Bool = false, bounds: ClosedRange<Double> = 0...1, step: Double? = nil
+    ) -> Double? {
+      WDSliderTapMapping.value(atX: x, width: 226, in: bounds, step: step, isRTL: rtl)
+    }
+    #expect(target(13) == 0)
+    #expect(target(113) == 0.5)
+    #expect(target(213) == 1)
+    #expect(target(13, rtl: true) == 1)
+    #expect(target(213, rtl: true) == 0)
+    #expect(target(163, bounds: 0...4, step: 1) == 3)
+    #expect(WDSliderTapMapping.value(atX: 13, width: 26, in: 0...1, step: nil, isRTL: false) == nil)
+  }
+
   // MARK: - WDStepper
 
   @Test("WDStepper：两档可构造；触控热区 ≥ 44")

@@ -8,13 +8,18 @@
 
 ### Added
 
-- **`WDSlider` 自绘载体（2026-11-14，B 类遗留①）**：手势/读屏改由 Internal `UISlider` 承载（系统拖拽、
-  键盘方向键、读屏可调整语义；避免自造 `DragGesture`），视觉改 SwiftUI 覆盖层——轨道 6pt
+- **`WDSlider` 自绘载体 + 交互补齐（2026-11-14，B 类遗留）**：手势/读屏改由 Internal `UISlider` 承载
+  （系统拖拽、键盘方向键、读屏可调整语义；避免自造 `DragGesture`），视觉改 SwiftUI 覆盖层——轨道 6pt
   （`border.hairline-strong`）、填充 `gradient.mid`、手柄 26（白 + 1pt hairline + `elevation.1`）、两端内缩
-  13、拖拽 1.15（100ms）、禁用 45%、松手按 `step` 吸附、RTL 自动镜像；热区 44、最小宽 120 不变。
-  **公开签名零变化**（API 1246 符号零 diff）；`slider-*` **8 张快照基线重录**、manifest 哈希同步；
-  新增 1 条吸附/热区结构断言（PR 165 tests）。**残留**：刻度点、点击轨道 200ms 过渡、聚焦光环、
-  端点阻力触觉、数值标签跟随、范围双手柄（后两者需签名扩展）。
+  13、拖拽 1.15（100ms）、禁用 45%、RTL 自动镜像；热区 44、最小宽 120 不变。**交互**：点击轨道按触点
+  换算目标值并做 200ms 过渡（Reduce Motion 瞬移）；松手按 `step` 吸附；拖到端点改 `rigid` 触觉
+  （同一次操作仍只抖一次）。**公开签名零变化**（API 1246 符号零 diff）；`slider-*` **8 张快照基线重录**、
+  manifest 哈希同步；新增 2 条结构断言（吸附/热区 + 点击换算 LTR/RTL；PR **166 tests**）。
+  **残留**：聚焦光环、数值标签跟随、范围双手柄（后两者需签名扩展）；带刻度 = `step` 吸附（画廊无可见刻度点）。
+
+- **`WDAlert` 焦点归还（2026-11-14，B 类遗留）**：出现前用 `UIAccessibility.focusedElement` 捕获当前读屏
+  焦点元素，关闭后用 `.layoutChanged` 归还；不改公开签名（无需公开 `WDA11yFocusID` 构造器）。
+  真机 VoiceOver 人审仍【未验证】。
 
 - **`WDAssigneePicker` 视觉对齐设计 37 画廊（2026-11-14，用户复核）**：未指派改 **52 虚线圈 +
   `person.fill.xmark`**（图标契约 `icons.json` 的 iOS 映射由 `person.crop.circle.badge.xmark` 修正；

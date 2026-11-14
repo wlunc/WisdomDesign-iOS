@@ -53,7 +53,7 @@
 
 | # | 项 | 现状 | 时点 / owner |
 | --- | --- | --- | --- |
-| ① | **Alert 焦点归还** | 出现时用 `UIAccessibility.post(.screenChanged)` 把焦点移入；**关闭后归还触发元素未实现**（`WDA11yFocusID` 无公开构造器，调用方无法传回焦点 ID） | M5/M6；需 U 项或签名扩展 |
+| ① | **Alert 焦点归还** | **已修（2026-11-14，B 类遗留）**：出现前用 `UIAccessibility.focusedElement` 捕获当前读屏焦点元素，关闭后用 `.layoutChanged` 归还；不改公开签名（无需公开 `WDA11yFocusID` 构造器）。**未验证**：无真机 USB，VoiceOver 的实际焦点路径未人审 | 已修；真机 VoiceOver 人审待补 |
 | ② | Toast 悬停暂停 / 上滑关闭 | 未实现；自动消失用组件内 `.task`（随视图消失取消），同屏一条由调用方控制 | M5/M6（如需真机指针/手势验收） |
 | ③ | Banner `success` 变体 | 按 Q1 **不纳入**（C-15/U2 的 Android 集合为 3 个）；设计 §4 的 success 用 info 表达 | 已记录（M4-SIGNATURE-FREEZE Q1） |
 | ④ | ProgressBar 分段变体 | **已补（2026-11-14，M6 期间；用户指出设计 15 缺口）**：新增 `init(segments:completed:...)`；同时补齐**不确定 1s 延迟**、**禁用 45%**、**完成 300ms**、**首次出现 3200ms**、**`accessibilityRepresentation`（progressbar 角色）**。**2026-11-14 复跑**：M4 快照 10 tests / 352 基线绿；PR 164 tests / 1246 符号（35.51 s）；nightly 快照 44 tests 75.64 s + demo 审计 14 tests 223.49 s = 302.62 s | 已修（已复跑） |
@@ -89,7 +89,7 @@
 | 结论 | **通过（2026-11-12，ios-lead）** |
 | M4 复核 | **2026-11-13 通过**：PR **124 tests / 861 符号零 diff / Foundation 97.26%**；快照 **9 测试 / 208 基线**；demo **7 条 UITest（89.9 s）**；archive **1,412 KB**；ActionSheet/BottomSheet 自绘 + 焦点归还 + 嵌套滚动 + 键盘全过 |
 | 条件 | ①–⑨ 的差异/未验证项已登记；Thinning 与 nightly₃ 不阻塞本批 |
-| 后续 | M5（导航与表单 15 件）；M6 前补 Alert 焦点归还、Thinning 与双端 tag |
+| 后续 | M5（导航与表单 15 件）；**Alert 焦点归还已于 2026-11-14 补**（真机 VoiceOver 人审待补）；Thinning 与双端 tag 待发布层 |
 
 ## 6. 复跑命令
 

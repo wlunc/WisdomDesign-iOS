@@ -7,4 +7,15 @@ enum WDA11yFocus {
   static func screenChanged() {
     UIAccessibility.post(notification: .screenChanged, argument: nil)
   }
+
+  /// 弹层出现前：捕获当前读屏焦点元素，供关闭后归还。
+  static func captureFocusedElement() -> Any? {
+    UIAccessibility.focusedElement(using: nil)
+  }
+
+  /// 弹层关闭：把焦点还给它出现前的元素（设计 25 的焦点归入/归还）。
+  static func restoreFocus(_ element: Any?) {
+    guard let element else { return }
+    UIAccessibility.post(notification: .layoutChanged, argument: element)
+  }
 }

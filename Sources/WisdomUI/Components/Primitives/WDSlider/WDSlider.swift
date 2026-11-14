@@ -21,6 +21,7 @@ public struct WDSlider: View {
   @Environment(\.isEnabled) private var isEnabled
   @Environment(\.wdEffectsBudget) private var budget
   @Environment(\.layoutDirection) private var layoutDirection
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   /// 轨道可用宽度（由 onGeometryChange 量得；首帧为 0）。
   @State private var trackWidth: CGFloat = 0
@@ -65,6 +66,7 @@ public struct WDSlider: View {
         isEnabled: isEnabled,
         layoutDirection: layoutDirection,
         onValueChange: { newValue in value = newValue },
+        onTapValue: handleTap,
         onEditingChanged: handleEditingChanged
       )
       .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -127,13 +129,24 @@ public struct WDSlider: View {
   }
 
   /// 松手（false）= 一次有效变更：轻触觉 x1 + 调用方回调（设计 08 §8）。
-  private func handleEditingChanged(_ editing: Bool) {
+  /// 拖到端点时改用 rigid（设计 08 §11），同一次操作仍只抖一次。
+  private func handleEditingChanged(_ editing: Bool, value newValue: Double) {
     isEditing = editing
     guard isEnabled else { return }
     if !editing {
-      WDHaptics.shared.play(.press, budget: budget)
+      let atEdge =
+        newValue <= bounds.lowerBound + WDSliderMetrics.edgeEpsilon
+        || newValue >= bounds.upperBound - WDSliderMetrics.edgeEpsilon
+      WDHaptics.shared.play(atEdge ? .edge : .press, budget: budget)
     }
     onEditingChanged?(editing)
+  }
+
+  /// 点击轨道：200ms 过渡跳到目标值（Reduce Motion 时瞬移）。
+  private func handleTap(_ target: Double) {
+    withAnimation(reduceMotion ? nil : .easeOut(duration: WDSliderMetrics.tapDuration)) {
+      value = target
+    }
   }
 
   /// 轨道可用宽度（两端各内缩手柄半径）。

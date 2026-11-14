@@ -11,6 +11,8 @@ enum WDHapticKind: Sendable, Equatable {
   case success
   /// 阈值（下拉刷新的触发阈值，设计 32 §8 / 06 §4）。
   case threshold
+  /// 端点（滑杆拖到边界，设计 08 §11 的 rigid）。
+  case edge
 }
 
 /// 可注入的触觉 sink（测试用捕获器；组件一律经 `WDHaptics` 调用，不直接碰 UIKit）。
@@ -23,6 +25,7 @@ enum WDHapticKind: Sendable, Equatable {
 @MainActor final class WDSystemHapticSink: WDHapticSink {
   private let generator = UIImpactFeedbackGenerator(style: .light)
   private let mediumGenerator = UIImpactFeedbackGenerator(style: .medium)
+  private let rigidGenerator = UIImpactFeedbackGenerator(style: .rigid)
   private let notification = UINotificationFeedbackGenerator()
 
   func play(_ kind: WDHapticKind) {
@@ -35,6 +38,9 @@ enum WDHapticKind: Sendable, Equatable {
     case .threshold:
       // 设计 06 §4：下拉刷新到阈值 = .medium，只触发一次。
       mediumGenerator.impactOccurred()
+    case .edge:
+      // 设计 08 §11：滑杆到端点 = .rigid。
+      rigidGenerator.impactOccurred()
     }
   }
 }

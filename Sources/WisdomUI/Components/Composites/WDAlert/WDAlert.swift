@@ -78,6 +78,8 @@ private struct WDAlertModifier<AlertContent: View>: ViewModifier {
 
   @Environment(\.wdColors) private var colors
   @State private var isSubmitting = false
+  /// 弹窗出现前的读屏焦点（关闭后归还；不改变公开签名）。
+  @State private var previousFocus: Any?
 
   func body(content anchor: Content) -> some View {
     anchor
@@ -92,7 +94,11 @@ private struct WDAlertModifier<AlertContent: View>: ViewModifier {
       .onChange(of: isPresented) { _, presented in
         if presented {
           isSubmitting = false
+          previousFocus = WDA11yFocus.captureFocusedElement()
           WDA11yFocus.screenChanged()
+        } else {
+          WDA11yFocus.restoreFocus(previousFocus)
+          previousFocus = nil
         }
       }
   }
