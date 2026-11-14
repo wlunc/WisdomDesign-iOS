@@ -156,6 +156,15 @@ struct M4ComponentsTests {
     #expect(WDToastVariant.allCases.map(\.rawValue) == ["neutral", "success", "warning", "danger"])
   }
 
+  @Test("WDToast：停留下限 3s / 带操作 5s")
+  func toastDurations() {
+    #expect(WDToastTiming.duration(requestedMilliseconds: 1000, hasAction: false) == .seconds(3))
+    #expect(WDToastTiming.duration(requestedMilliseconds: 6000, hasAction: false) == .seconds(6))
+    #expect(WDToastTiming.duration(requestedMilliseconds: 1000, hasAction: true) == .seconds(5))
+    #expect(WDToastTiming.duration(requestedMilliseconds: 8000, hasAction: true) == .seconds(8))
+    #expect(WDToastTiming.duration(requestedMilliseconds: -5, hasAction: false) == .seconds(3))
+  }
+
   @Test("WDBottomSheet / WDActionSheet：档位与角色齐全；未呈现不改变锚点")
   func sheetModifiers() {
     #expect(WDBottomSheetDetent.allCases.map(\.rawValue) == ["half", "large"])

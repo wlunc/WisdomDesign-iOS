@@ -22,6 +22,12 @@
   焦点元素，关闭后用 `.layoutChanged` 归还；不改公开签名（无需公开 `WDA11yFocusID` 构造器）。
   真机 VoiceOver 人审仍【未验证】。
 
+- **`WDToast` 悬停暂停 + 上滑关闭（2026-11-14，B 类遗留）**：指针悬停时冻结倒计时、移出后按剩余时间恢复
+  （`ContinuousClock` 截止时刻 + task 重启，不新增自建计时器）；上滑（最小 10 / 阈值 16）立即关闭；
+  停留下限仍为纯提示 3s / 带操作 5s。公开签名零变化。demo 新增 `testToastSwipeUpDismisses`，
+  完整套件 **16 条 / 237.78 s** 全绿。**未验证**：模拟器无指针悬停，暂停未人审；Toast 仍是页面
+  overlay、未挂 window 层（设计 28 §11）。
+
 - **`WDAssigneePicker` 视觉对齐设计 37 画廊（2026-11-14，用户复核）**：未指派改 **52 虚线圈 +
   `person.fill.xmark`**（图标契约 `icons.json` 的 iOS 映射由 `person.crop.circle.badge.xmark` 修正；
   Android 仍 `person_off`）；选中环按 **52 槽 2pt**、头像**静止 1.0**（选中只做 200ms 弹到 1.05 后回弹，

@@ -57,8 +57,25 @@ private struct WDToastModifier: ViewModifier {
   @Environment(\.wdAppearance) private var appearance
   @Environment(\.wdEffectsBudget) private var budget
 
-  private static let minimumDuration = 3000  // wd-structure-check:disable R7 — 设计 28 §5 的纯提示 3 秒
-  private static let actionDuration = 5000  // wd-structure-check:disable R7 — 设计 28 §5 的带操作 5 秒
+  /// 当前停留截止时刻（悬停时置空，恢复时重算）。
+  @State private var deadline: ContinuousClock.Instant?
+  /// 悬停时冻结的剩余时长。
+  @State private var hoverRemaining: Duration?
+  /// 指针是否悬停在 Toast 上（设计 28 §5：悬停暂停计时）。
+  @State private var isHovering = false
+  /// 计时运行序号（变化即取消旧 task，用它实现暂停/恢复）。
+  @State private var timerRun = 0
+
+  /// task 的 id：呈现状态或运行序号变化时重启。
+  private struct TimerKey: Hashable {
+    let presented: Bool
+    let run: Int
+  }
+
+  /// 上滑手势的启动阈值。
+  private static let swipeMinimumDistance: CGFloat = 10  // wd-structure-check:disable R7 — 手势阈值
+  /// 上滑关闭阈值。
+  private static let swipeDismissDistance: CGFloat = 16  // wd-structure-check:disable R7 — 手势阈值
 
   func body(content: Content) -> some View {
     content
@@ -71,16 +88,20 @@ private struct WDToastModifier: ViewModifier {
         }
       }
       .animation(.easeOut(duration: WDMotion.Duration.base), value: isPresented)
-      .task(id: isPresented) {
-        guard isPresented else { return }
-        let milliseconds = max(
-          Self.minimumDuration,
-          action == nil ? durationMilliseconds : max(durationMilliseconds, Self.actionDuration)
-        )
-        try? await Task.sleep(for: .milliseconds(milliseconds))
-        guard !Task.isCancelled else { return }
-        isPresented = false
-        onDismiss?()
+      .onAppear {
+        if isPresented { startCountdown() }
+      }
+      .onChange(of: isPresented) { _, presented in
+        if presented {
+          startCountdown()
+        } else {
+          deadline = nil
+          hoverRemaining = nil
+          isHovering = false
+        }
+      }
+      .task(id: TimerKey(presented: isPresented, run: timerRun)) {
+        await countdownIfNeeded()
       }
   }
 
@@ -112,6 +133,8 @@ private struct WDToastModifier: ViewModifier {
     .clipShape(Capsule())
     .overlay(Capsule().stroke(colors.borderHairline, lineWidth: 1))
     .accessibilityElement(children: .contain)
+    .onHover(perform: handleHover)
+    .highPriorityGesture(swipeDismissGesture)
   }
 
   @ViewBuilder private var background: some View {
@@ -143,6 +166,63 @@ private struct WDToastModifier: ViewModifier {
   private func runtimeSupportsGlass() -> Bool {
     if #available(iOS 26.0, *) { return true }
     return false
+  }
+
+  /// 实际停留时长（设计 28 §5）。
+  private var countdownDuration: Duration {
+    WDToastTiming.duration(requestedMilliseconds: durationMilliseconds, hasAction: action != nil)
+  }
+
+  /// 开始 / 重启倒计时。
+  private func startCountdown() {
+    deadline = ContinuousClock.now.advanced(by: countdownDuration)
+    hoverRemaining = nil
+    isHovering = false
+    timerRun += 1
+  }
+
+  /// 睡到截止时刻；悬停或呈现状态变化会取消 task。
+  private func countdownIfNeeded() async {
+    guard isPresented, !isHovering, let deadline else { return }
+    let remaining = ContinuousClock.now.duration(to: deadline)
+    if remaining > .zero {
+      try? await Task.sleep(for: remaining)
+    }
+    guard !Task.isCancelled, isPresented, !isHovering else { return }
+    isPresented = false
+    onDismiss?()
+  }
+
+  /// 悬停暂停 / 恢复剩余时间（设计 28 §5）。
+  private func handleHover(_ hovering: Bool) {
+    guard isPresented else { return }
+    if hovering {
+      guard !isHovering else { return }
+      if let deadline {
+        let remaining = ContinuousClock.now.duration(to: deadline)
+        hoverRemaining = remaining > .zero ? remaining : .zero
+      } else {
+        hoverRemaining = countdownDuration
+      }
+      deadline = nil
+      isHovering = true
+    } else {
+      guard isHovering else { return }
+      deadline = ContinuousClock.now.advanced(by: hoverRemaining ?? countdownDuration)
+      hoverRemaining = nil
+      isHovering = false
+    }
+    timerRun += 1
+  }
+
+  /// 上滑立即关闭（设计 28 §8）。
+  private var swipeDismissGesture: some Gesture {
+    DragGesture(minimumDistance: Self.swipeMinimumDistance)
+      .onEnded { value in
+        guard value.translation.height < -Self.swipeDismissDistance else { return }
+        isPresented = false
+        onDismiss?()
+      }
   }
 
   private var accent: Color {

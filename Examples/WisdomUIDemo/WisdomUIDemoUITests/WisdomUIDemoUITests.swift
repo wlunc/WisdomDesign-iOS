@@ -155,6 +155,30 @@ final class WisdomUIDemoUITests: XCTestCase {
     XCTAssertNotEqual(before, after, "点击轨道后值必须变化（200ms 过渡后）")
   }
 
+  /// WDToast：向上滑必须立即关闭（设计 28 §8）。
+  func testToastSwipeUpDismisses() {
+    let app = XCUIApplication()
+    app.launch()
+
+    let row = app.buttons["component-row-WDToast"]
+    XCTAssertTrue(row.waitForExistence(timeout: 20), "WDToast 行未出现")
+    row.tap()
+    XCTAssertTrue(app.navigationBars["WDToast"].waitForExistence(timeout: 20), "WDToast 详情未出现")
+
+    let trigger = app.buttons["显示 Toast"]
+    XCTAssertTrue(trigger.waitForExistence(timeout: 20), "显示 Toast 按钮未出现")
+    trigger.tap()
+
+    let message = app.staticTexts["任务已保存"]
+    XCTAssertTrue(message.waitForExistence(timeout: 20), "Toast 未出现")
+    XCTAssertTrue(message.isHittable, "Toast 文案应可命中，frame=\(message.frame)")
+
+    let start = message.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+    let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25))
+    start.press(forDuration: 0.2, thenDragTo: end)
+    XCTAssertFalse(message.waitForExistence(timeout: 2), "上滑后 Toast 应立即关闭")
+  }
+
   /// WDPicker：菜单形态必须走自绘浮层（展开出现、选中后关闭）。
   func testPickerMenuOpensAndSelects() {
     let app = XCUIApplication()
