@@ -99,7 +99,7 @@ struct DemoM5VariantsSection: View {
         }
       }
     case .picker:
-      DemoSection("菜单 / 滚轮", subtitle: "触发入口 44；未选显示占位符。") {
+      DemoSection("菜单 / 滚轮 / 内联", subtitle: "触发入口 44；未选显示占位符；内联直接平铺。") {
         VStack(alignment: .leading, spacing: WDSpacing.s5) {
           WDPicker(
             selection: .constant("chore"), label: Text(verbatim: "分类"),
@@ -107,6 +107,9 @@ struct DemoM5VariantsSection: View {
           WDPicker(
             selection: .constant(nil), label: Text(verbatim: "频率"),
             options: Self.pickerOptions, placeholder: Text(verbatim: "请选择"), style: .wheel)
+          WDPicker(
+            selection: .constant("chore"), label: Text(verbatim: "分类"),
+            options: Self.pickerOptions, style: .inline)
         }
       }
     case .datePicker:

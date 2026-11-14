@@ -7,3 +7,6 @@ xcuserdata/
 
 # demo 的本地覆盖（真 team / bundle id 不进仓）
 Examples/WisdomUIDemo/Config/Demo.local.xcconfig
+
+# 本地 IDE 配置
+.vscode/

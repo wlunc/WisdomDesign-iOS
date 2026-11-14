@@ -36,4 +36,14 @@ struct WDHapticsTests {
     WDHaptics.shared.play(.press, budget: .default)
     #expect(spy.kinds.count == 1)
   }
+
+  @Test("阈值触觉（下拉刷新，设计 32 §8）可经网关触发")
+  func thresholdKind() {
+    let spy = SpySink()
+    WDHaptics.shared.sink = spy
+    defer { WDHaptics.shared.sink = nil }
+
+    WDHaptics.shared.play(.threshold, budget: .default)
+    #expect(spy.kinds == [.threshold])
+  }
 }

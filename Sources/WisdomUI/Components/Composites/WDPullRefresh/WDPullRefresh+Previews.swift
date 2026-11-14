@@ -43,4 +43,13 @@
     WDPullRefreshPreviewHost()
       .preferredColorScheme(.dark)
   }
+
+  #Preview("WDPullRefresh 环三态（进度 / 完整 / 刷新中）") {
+    HStack(spacing: WDSpacing.s7) {
+      WDPullRefreshRing(progress: 0.35, isRefreshing: false, isSpinning: false)
+      WDPullRefreshRing(progress: 1, isRefreshing: false, isSpinning: false)
+      WDPullRefreshRing(progress: 1, isRefreshing: true, isSpinning: true)
+    }
+    .padding(WDSpacing.s6)
+  }
 #endif

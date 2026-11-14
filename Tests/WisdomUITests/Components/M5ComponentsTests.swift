@@ -148,7 +148,7 @@ struct M5ComponentsTests {
 
   // MARK: - WDPicker
 
-  @Test("WDPicker：触发入口 ≥ 44；菜单/滚轮两形态可构造")
+  @Test("WDPicker：触发入口 ≥ 44；菜单/滚轮/内联三形态可构造")
   func pickerGeometry() {
     let options = [
       WDPickerOption(id: "a", label: Text(verbatim: "家务")),
@@ -161,9 +161,59 @@ struct M5ComponentsTests {
       WDPicker(
         selection: .constant(nil), label: Text(verbatim: "分类"), options: options,
         placeholder: Text(verbatim: "请选择"), style: .wheel))
+    let inline = size(
+      WDPicker(
+        selection: .constant("a"), label: Text(verbatim: "分类"), options: options,
+        style: .inline))
     #expect(menu.height >= WDSize.controlMd)
     #expect(wheel.height >= WDSize.controlMd)
-    #expect(WDPickerStyle.allCases.map(\.rawValue) == ["menu", "wheel"])
+    #expect(inline.height >= WDSize.controlMd * 2)
+    #expect(WDPickerStyle.allCases.map(\.rawValue) == ["menu", "wheel", "inline"])
+  }
+
+  @Test("WDPicker：菜单浮层定位（下方 / 翻转 / 最小宽 / 高度夹取）")
+  func pickerMenuPlacement() {
+    let container = CGSize(width: 390, height: 700)
+    let safeArea = EdgeInsets(top: 59, leading: 0, bottom: 34, trailing: 0)
+    let anchor = CGRect(x: 24, y: 300, width: 342, height: 44)
+    let natural = CGSize(width: 200, height: 180)
+
+    let below = WDPickerMenuPlacement.resolve(
+      anchorRect: anchor, naturalSize: natural, containerSize: container, safeArea: safeArea)
+    #expect(below.below)
+    #expect(below.size == natural)
+    #expect(abs(below.origin.y - (anchor.maxY + WDPickerMenuMetrics.gap)) < 0.5)
+
+    // 下方放不下、上方更大 ⇒ 翻转。
+    let flipped = WDPickerMenuPlacement.resolve(
+      anchorRect: CGRect(x: 24, y: 600, width: 342, height: 44),
+      naturalSize: natural, containerSize: container, safeArea: safeArea)
+    #expect(!flipped.below)
+    #expect(abs(flipped.origin.y + flipped.size.height - (600 - WDPickerMenuMetrics.gap)) < 0.5)
+
+    // 内容窄 ⇒ 抬到最小宽 180，并夹在屏幕留白内。
+    let narrow = WDPickerMenuPlacement.resolve(
+      anchorRect: CGRect(x: 380, y: 100, width: 10, height: 44),
+      naturalSize: CGSize(width: 100, height: 100), containerSize: container, safeArea: safeArea)
+    #expect(narrow.size.width == WDPickerMenuMetrics.minWidth)
+    #expect(
+      narrow.origin.x + narrow.size.width
+        <= container.width - WDPickerMenuMetrics.screenMargin)
+
+    // RTL：与触发入口的右侧（leading）对齐。
+    let rtl = WDPickerMenuPlacement.resolve(
+      anchorRect: CGRect(x: 40, y: 300, width: 300, height: 44),
+      naturalSize: natural, containerSize: container, safeArea: safeArea, isRTL: true)
+    #expect(abs(rtl.origin.x + rtl.size.width - 340) < 0.5)
+
+    // 超高 ⇒ 夹到可视空间，且不越过底部安全区。
+    let tall = WDPickerMenuPlacement.resolve(
+      anchorRect: anchor, naturalSize: CGSize(width: 200, height: 2000),
+      containerSize: container, safeArea: safeArea)
+    #expect(
+      tall.size.height
+        <= container.height - safeArea.bottom - anchor.maxY - WDPickerMenuMetrics.gap + 0.5)
+    #expect(tall.origin.y + tall.size.height <= container.height - safeArea.bottom + 0.5)
   }
 
   // MARK: - WDDatePicker
@@ -207,7 +257,7 @@ struct M5ComponentsTests {
 
   // MARK: - WDPullRefresh
 
-  @Test("WDPullRefresh：不改变锚点高度（系统 refreshable）")
+  @Test("WDPullRefresh：不改变锚点高度（自绘覆盖层不参与布局）")
   func pullRefreshModifier() {
     let plain = size(Text(verbatim: "anchor"))
     let modified = size(

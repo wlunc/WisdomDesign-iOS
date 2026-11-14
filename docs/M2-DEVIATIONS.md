@@ -29,7 +29,7 @@
 | ⑥ | `WDDivider` 全宽 / **内缩 62** 两档（设计 14） | 只有全宽；行内缩进由 `WDListRow` 自带分隔线实现 | **C → M3**：若 `WDListSection` 需要独立内缩分割线，补 `inset` 参数（带默认值，additive） | B = 新增带默认值参数 | ios-lead + 设计 |
 | ⑦ | `WDAvatar` 五档直径 / 按成员 ID 固定配色 / 在线点 / 停用 / 照片（设计 12） | 只做 md 32 的文字/图标；中性 `surface.tint` 底 | **C → M5**（`WDAvatarStack` 之前）：扩 `size`/`memberID`/`status` 参数；`WDAvatarValue` 需同时扩成员（additive） | B = 改值类型成员 + 新增带默认值参数（源码兼容、快照变更） | ios-lead + 设计 |
 | ⑧ | `WDSwitch` 紧凑档 40×24 / 带描述位 / 按下 1.06 放大（设计 05） | 只做标准 51×31；无描述位；无按下放大 | **A/C**：紧凑档与描述位 **C → M5**；按下放大可 **C**（视觉细节，非验收点） | B = 加 `size`/`description` 参数（additive） | ios-lead + 设计 |
-| ⑨ | `WDCheckbox` 半选三态 / 紧凑档 / 无标签表头（设计 06） | 只有两态标准档；无标签形态可用 `label: Text("")` 变通 | **C → 出现三态场景时**（M5 的列表多选）；半选需改受控值为三态枚举（**源级 breaking**，须走 U 项） | B（半选）= 改受控值类型，breaking；B（紧凑/无标签）= additive | ios-lead + 架构师 |
+| ⑨ | `WDCheckbox` 半选三态 / 紧凑档 / 无标签表头（设计 06） | **半选已补（2026-11-14，用户裁决）**：additive 参数 `isIndeterminate: Bool = false`（**不改受控值类型 ⇒ 源码兼容**）；紧凑档 / 无标签表头仍不可表达 | 半选 = **已修**（契约 `indeterminate` 已补，2026-11-14）；紧凑 / 无标签 = C（出现场景时） | B（紧凑/无标签）= additive | ios-lead + 架构师 |
 | ⑩ | `WDCard` sunken / media / 可点卡（按下 96%）（设计 17） | 三档实底（elevated/outlined/glass）；无可点卡 | **C → M3/M4**：`sunken` 先看 `WDListSection` 是否需要；可点卡等有真实场景再补 `action`（additive） | B = 新增枚举 case（**源级 breaking**）或 action 参数（additive） | ios-lead + 设计 |
 | ⑪ | `WDIconButton` 五个变体（设计 02） | 只有 `.plain`（冻结表单只钉了 plain） | **C → M5**（导航栏/工具栏前）：补 `filled/tonal/glass/outline`（枚举 case，源级 breaking） | B = 新增枚举 case（minor + Breaking 段） | ios-lead + 设计 |
 | ⑫ | `WDButton` 字号 13/15/16、图标 14/16/20、聚焦光环、按下亮度 96%（设计 01） | 字号用 13/15/17（lg 用 body 近似）、图标 16/16/20；只有 0.97 缩放，无光环/亮度 | **A**（字号/图标）：令牌已覆盖，差异可接受；**C**（聚焦光环）：M5 键盘导航验收前补；亮度用缩放替代 | B（光环）= 新增视觉层，不改签名；B（字号 16）= 需新字阶令牌（改令牌 = 两仓变更集） | ios-lead + 设计 |
@@ -56,7 +56,7 @@
 - **C 类（④⑤⑥⑦⑧⑨⑩⑪⑬）**：在 `docs/DEV-PLAN.md` §2.3 的对应条目里写"**延后到 Mn**"，
   并把触发条件写清楚（例如 ⑤ = M4 首个带徽标的调用方出现）。
 - **B 类**：先走契约真源流程（`contracts/README.md` → 两端副本），再改实现 + 符号快照 + CHANGELOG；
-  涉及受控值**类型**变化的（⑨ 半选、⑩ 枚举 case）按 F-20 记为源级 breaking。
+  涉及受控值**类型**变化的（⑩ 枚举 case）按 F-20 记为源级 breaking；⑨ 半选最终用 additive 参数落地（不改受控值类型）。
 
 ## 4. 与出口判据的关系
 

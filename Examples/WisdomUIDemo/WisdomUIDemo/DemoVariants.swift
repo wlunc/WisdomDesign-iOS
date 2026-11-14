@@ -102,10 +102,15 @@ struct DemoStatesSection: View {
         }
       }
     case .checkbox:
-      DemoSection("状态", subtitle: "选中 / 未选中由系统朗读；勾是描边路径。") {
+      DemoSection(
+        "状态", subtitle: "选中 / 未选中 / 半选；勾是 2.2pt 描边、rotate 42°，半选是 12×2.4 横杠。"
+      ) {
         VStack(alignment: .leading, spacing: WDSpacing.s2) {
           WDCheckbox(isChecked: .constant(true), label: Text(verbatim: "已选中"))
           WDCheckbox(isChecked: .constant(false), label: Text(verbatim: "未选中"))
+          WDCheckbox(
+            isChecked: .constant(false), label: Text(verbatim: "半选"), isIndeterminate: true)
+          DemoHalfCheckbox()
           WDCheckbox(isChecked: .constant(true), label: Text(verbatim: "禁用"))
             .disabled(true)
         }
@@ -607,5 +612,24 @@ private struct DemoDividerVariants: View {
         }
       }
     }
+  }
+}
+
+/// 半选 → 点击转全选（受控：调用方同时维护 isChecked 与 isIndeterminate）。
+private struct DemoHalfCheckbox: View {
+  @State private var isChecked = false
+  @State private var isIndeterminate = true
+
+  var body: some View {
+    WDCheckbox(
+      isChecked: Binding(
+        get: { isChecked },
+        set: { newValue in
+          isChecked = newValue
+          isIndeterminate = false
+        }),
+      label: Text(verbatim: "半选（点一下转全选）"),
+      isIndeterminate: isIndeterminate
+    )
   }
 }

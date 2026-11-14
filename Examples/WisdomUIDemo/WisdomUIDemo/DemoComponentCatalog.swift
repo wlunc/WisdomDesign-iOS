@@ -497,7 +497,7 @@ enum DemoComponentCatalog {
       id: .picker,
       category: .input,
       icon: .disclose,
-      summary: "选择器。菜单 = 系统 Menu，滚轮 = 底部系统 Picker(.wheel)；未选显示占位。",
+      summary: "选择器。菜单 = 自绘浮层（44 行 / 翻转 / 滚动到当前项），滚轮 = 底部系统 Picker(.wheel)，内联 = 直接平铺。",
       layer: "Composites",
       batch: "M5",
       highlights: [
@@ -539,12 +539,13 @@ enum DemoComponentCatalog {
       id: .pullRefresh,
       category: .actions,
       icon: .redo,
-      summary: "下拉刷新。系统 .refreshable 载体（O-7），isRefreshing 反映状态并提供读屏刷新操作。",
+      summary: "下拉刷新。iOS 18+ 自绘 24pt 环：阈值 64、下拉画进度、刷新 1s 旋转、到阈值一次触觉；iOS 17 回退系统视觉。",
       layer: "Composites",
       batch: "M5",
       highlights: [
-        "系统视觉；阈值/自绘环差异已登记",
-        "进行中不重复触发",
+        "自绘环（24 / 2 / 间距 12；设计 32）",
+        "阈值 64、最大下拉 120；进行中不重复触发",
+        "组件只画环（极简变体）；三态文案不进库（L-B）",
         "label 提供时挂「刷新」无障碍操作",
       ],
       hasEnumSettings: false

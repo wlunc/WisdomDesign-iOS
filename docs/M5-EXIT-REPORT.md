@@ -68,10 +68,10 @@ nightly 本轮实跑（2026-11-13）：设备编译 **7.72 s** + 快照 **53.26 
 | ⑤ | `WDChip` 图标/溢出 | 图标用 token sm 16（设计 15，+1）；横向滚动/换行由调用方布局；删除键与芯片相邻（不重叠） | 已登记 |
 | ⑥ | `WDAvatarStack` | 描边色固定 `surfaceCard`（容器底色不可注入）；点击展开不可表达；sm 档图标仍 20 | M6 前如需可扩签名 |
 | ⑦ | `WDSegmentedControl` | 无 `tablist`/`tab` 角色与位置文案；指示块改为自定义 `Layout` 直接定位（原 `GeometryReader` 量测会取到 0 宽导致选中态只剩字重差异，已修）；不支持段间横向拖动；玻璃档为纯色填充（未做强模糊） | 已修/已登记 |
-| ⑧ | `WDPicker` 形态 | 只做菜单（系统 Menu）与滚轮（系统 wheel）；内联形态未实现；系统菜单的宽度/定位不可控；滚轮弹层无确认键（下滑关闭） | M6 前可补内联 |
+| ⑧ | `WDPicker` 形态 | **已由 ㉑ 修正（2026-11-14，用户裁决「完全按照设计稿」）**：菜单改自绘浮层（44 行/14 圆角/翻转/滚动到当前项/遮罩与 Esc 不提交），内联形态已补（`.inline`） | 已修；残留 = 滚轮弹层仍是系统 `.wheel`（设计 22 §11 指定）且即时提交 |
 | ⑨ | `WDDatePicker` 形态 | `.date` 自建月历；`.time` 系统滚轮；`.dateAndTime` = 月历 + 滚轮；**范围变体/清除按钮/二维方向键网格导航未实现**；弹层高度固定 | M6 前可补范围/清除 |
 | ⑩ | `WDFormRow` 标签关联 | 标签与控件靠阅读顺序 + 错误 hint 关联，非程序化 `accessibilityLabel` 合并；错误替换说明 | M6 无障碍回归复核 |
-| ⑪ | `WDPullRefresh` 自绘项 | 系统 `.refreshable` 视觉；阈值 64 / 环 24 / 三态文案 / 阈值触觉未自绘；`isRefreshing` 由组件在刷新期置位（外部置 true 不会启动刷新） | 已登记（O-7 默认） |
+| ⑪ | `WDPullRefresh` 自绘项 | **已由 ⑳ 修正（2026-11-14）**：原系统 `.refreshable` 视觉与设计 32 不符 | 已修；残留 = 三态文案/刷新播报不进库（L-B；组件只画环）+ iOS 17 回退系统视觉 |
 | ⑫ | `WDNavigationBar` 滚动联动 | 不做透明→玻璃、大标题收缩；`style` 由调用方给；右侧 >2 动作 debug 断言后只渲染前 2；玻璃档为纯色填充 | Q6 已拍板；M6 前可补 |
 | ⑬ | `WDTabBar` 尺寸/角标 | 高度用令牌 **56**（设计 58，-2）；图标 20（设计 22，-2）；标签 caption2 11（设计 10，+1）；角标 a11y 未并入宿主朗读（同 M2 ⑬）；滚动收缩未实现；深色不透明已实现 | 已登记（Q3/Q7） |
 | ⑭ | `WDToolbar` 位置/尺寸 | 顶部/底部/键盘上方由调用方放置；垂直内边距 2（44 热区 + 2×2 = 48；设计视觉 6）；玻璃档纯色；长按 tooltip 未实现 | 已登记 |
@@ -80,6 +80,8 @@ nightly 本轮实跑（2026-11-13）：设备编译 **7.72 s** + 快照 **53.26 
 | ⑰ | 快照并发 | M4 Toast 与 M5 的 UIHostingController 快照并发时窗口互顶（像素差 8–14%）；nightly 快照加 `-parallel-testing-enabled NO` 后全绿（`Scripts/ci.sh` 已改） | 已修复（2026-11-13） |
 | ⑱ | 真机 / VoiceOver / Thinning | 真机观感、读屏播报音频、Thinning 增量仍【未验证】 | M6 前 / 发布前层 |
 | ⑲ | **`WDPullToRefresh` → `WDPullRefresh`** | 2026-11-13 用户裁决的更名（含 `.wdPullRefresh`）：公开类型/修饰符/契约/快照/API 基线同步；**Android 侧契约名待同步**（C-15 #32） | android-lead；iOS 侧已完成 |
+| ⑳ | **`WDPullRefresh` 自绘修正** | **2026-11-14 用户裁决**：指示器动画与设计 32 不符 ⇒ iOS 18+ 改自绘。已实现：24pt 环 / 2pt 线宽 / 阈值 64 / 最大下拉 120 / 下拉随位移画进度 / 刷新中品牌弧 1s 线性旋转 / 完成后 160ms 收起 / 到阈值一次 `.medium` 触觉 / Reduce Motion 静态弧；环覆盖列表顶部、保持释放位置、不改锚点高度；进行中不重复触发；外部 `isRefreshing=true` 也会显示环。**未实现/残留**：三态文案（L-B：库内零文案，组件只画环 = 设计 32 §4 极简变体；无阈值进度回调）、刷新开始/结束播报（库内零文案 / 无 announcer 注入点）、10s 超时失败 Toast（无失败通道/库内零文案）、内容不足以滚动时的下拉（系统 ScrollView 不回弹 ⇒ 不触发，设计 32 q9 允许"明确禁用"）、iOS 17 回退系统 `.refreshable` 视觉 | 已修（单测 7 + demo XCUITest 1 绿；API 基线零 diff）；契约 yaml 载体注释待设计仓同步（跨仓只读） |
+| ㉑ | **`WDPicker` 全量对齐设计 22** | **2026-11-14 用户裁决「完全按照设计稿」**：菜单改窗口级自绘浮层（圆角 14 / 行高 44 / 水平内距 14 / 最小宽 180 / 最大宽 = 屏宽 − 32 / 与入口间距 4 / 空间不足翻转 / 当前项打勾并滚到可视区中间（选中行 = brand 10% 底 + brand 字 + 600，对齐画廊 22 `.sel`）/ 遮罩与硬件 Esc 关闭不提交 / `motion.spring.gentle` 入场 + 160ms 淡出 / 分组标题 `type.overline` + 组内缩进 `space.5`）；新增 `.inline` 内联形态；触发箭头 `chevron.right → chevron.down`；遮罩由新增 `WDPickerMenuPresenter` 承载（与 `WDBottomSheetPresenter` 同构，锚点定位不同）。**残留**：滚轮形态仍是系统 `Picker(.wheel)` 且滚动即时提交（设计 22 §11 指定系统载体，§8 的"关闭不改变值"按菜单形态执行）；触发入口的"展开选择"/未选"未选择"朗读文案属调用方（L-B 零文案，未加 hint 参数）；`listbox`/`option` 角色 SwiftUI 无对应 trait ⇒ 只加 `.isModal` + `.isSelected`（同 `WDRadio` ③ 口径）；菜单未做硬件键盘方向键环形焦点。 | 已修（M5 单测 22 绿 + picker 8 态基线重录 + 菜单浮层实机截图核对；API 基线 +1 case）；契约 `WDPickerStyle` 已同步 `[menu, wheel, inline]`（2026-11-14，含 Android C-15 副本） |
 
 ## 5. 判定记录
 

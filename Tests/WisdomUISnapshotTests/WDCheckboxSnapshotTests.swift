@@ -15,6 +15,7 @@ struct WDCheckboxSnapshotTests {
       VStack(alignment: .leading, spacing: WDSpacing.s4) {
         WDCheckbox(isChecked: .constant(false), label: Text(verbatim: "共享给家人"))
         WDCheckbox(isChecked: .constant(true), label: Text(verbatim: "每日提醒"))
+        WDCheckbox(isChecked: .constant(false), label: Text(verbatim: "全选"), isIndeterminate: true)
         WDCheckbox(isChecked: .constant(true), label: Text(verbatim: "已完成的选项"))
           .disabled(true)
       }

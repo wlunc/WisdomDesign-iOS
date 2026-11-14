@@ -32,4 +32,19 @@ struct WDCheckboxTests {
   func growsAtAccessibilitySize() {
     #expect(Self.height(.accessibility5) > Self.height(.large))
   }
+
+  @Test("半选：12×2.4 横杠；热区仍 ≥ 44")
+  func indeterminate() {
+    #expect(WDCheckbox.Metrics.barWidth == 12)
+    #expect(WDCheckbox.Metrics.barHeight == 2.4)
+    let controller = UIHostingController(
+      rootView: WDCheckbox(
+        isChecked: .constant(false), label: Text(verbatim: "全选"), isIndeterminate: true
+      )
+      .wdTheme(.light)
+    )
+    #expect(
+      controller.sizeThatFits(in: CGSize(width: 320, height: CGFloat.infinity)).height
+        >= WDSize.touchTargetMin - 0.5)
+  }
 }

@@ -4,6 +4,7 @@
   private struct WDPickerPreviewHost: View {
     @State private var menu: String? = "chore"
     @State private var wheel: String? = nil
+    @State private var inline: String? = "task"
     private let options: [WDPickerOption] = [
       .init(id: "chore", label: Text(verbatim: "家务"), group: Text(verbatim: "家庭")),
       .init(id: "task", label: Text(verbatim: "任务"), group: Text(verbatim: "家庭")),
@@ -17,6 +18,7 @@
         WDPicker(
           selection: $wheel, label: Text(verbatim: "频率"), options: options,
           placeholder: Text(verbatim: "请选择"), style: .wheel)
+        WDPicker(selection: $inline, label: Text(verbatim: "内联"), options: options, style: .inline)
         WDPicker(selection: .constant(nil), label: Text(verbatim: "禁用"), options: options)
           .disabled(true)
       }

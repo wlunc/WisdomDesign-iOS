@@ -93,6 +93,48 @@ final class WisdomUIDemoUITests: XCTestCase {
     XCTAssertEqual(configChip.label, "柔色", "切换变体后配置摘要必须更新")
   }
 
+  /// WDPicker：菜单形态必须走自绘浮层（展开出现、选中后关闭）。
+  func testPickerMenuOpensAndSelects() {
+    let app = XCUIApplication()
+    app.launch()
+
+    let row = app.buttons["component-row-WDPicker"]
+    XCTAssertTrue(row.waitForExistence(timeout: 20), "WDPicker 行未出现")
+    row.tap()
+    XCTAssertTrue(app.navigationBars["WDPicker"].waitForExistence(timeout: 20), "WDPicker 详情未出现")
+
+    // 内联形态已经平铺了一份同名选项；菜单展开后会再多一份。
+    let options = app.buttons.matching(NSPredicate(format: "label == %@", "任务"))
+    let inlineCount = options.count
+
+    let trigger = app.buttons.matching(NSPredicate(format: "label == %@", "分类")).firstMatch
+    XCTAssertTrue(trigger.waitForExistence(timeout: 20), "菜单触发入口未出现")
+    trigger.tap()
+
+    // 菜单展开后同名选项两份；被遮罩盖住的那份不可点，只有菜单里那份可点。
+    let expandedCount = options.count
+    XCTAssertGreaterThan(expandedCount, inlineCount, "菜单未展开")
+    let menuOption = (0..<expandedCount)
+      .map {
+        options.element(boundBy: $0)
+      }
+      .first {
+        $0.isHittable
+      }
+    XCTAssertNotNil(menuOption, "菜单里的选项不可点")
+    menuOption?.tap()
+
+    var closed = false
+    for _ in 0..<20 {
+      if options.count == inlineCount {
+        closed = true
+        break
+      }
+      Thread.sleep(forTimeInterval: 0.1)
+    }
+    XCTAssertTrue(closed, "选中后菜单应关闭")
+  }
+
   /// 切到 dark scheme 后，ActionSheet/BottomSheet 必须跟随主题；截图供人工核对。
   func testSheetsFollowDarkScheme() {
     let app = XCUIApplication()
@@ -326,6 +368,50 @@ final class WisdomUIDemoUITests: XCTestCase {
     let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95))
     start.press(forDuration: 0.1, thenDragTo: end, withVelocity: .fast, thenHoldForDuration: 0)
     XCTAssertFalse(close.waitForExistence(timeout: 2), "内容顶部下滑应关闭 BottomSheet")
+  }
+
+  /// WDPullRefresh：全屏 List 下拉 → 松手触发一次刷新、计数 +1；刷新中截图供人工核对设计 32 的环。
+  func testPullRefreshRingAndTrigger() {
+    let app = XCUIApplication()
+    app.launch()
+
+    let row = app.buttons["component-row-WDPullRefresh"]
+    XCTAssertTrue(row.waitForExistence(timeout: 20), "WDPullRefresh 行未出现")
+    if !row.isHittable { app.swipeUp() }
+    row.tap()
+
+    let fullScreen = app.buttons["pull-refresh-fullscreen"]
+    XCTAssertTrue(fullScreen.waitForExistence(timeout: 20), "全屏下拉演示入口未出现")
+    fullScreen.tap()
+
+    let scroll = app.descendants(matching: .any)
+      .matching(identifier: "pull-refresh-fullscreen-scroll").firstMatch
+    XCTAssertTrue(scroll.waitForExistence(timeout: 20), "全屏列表未出现")
+    let count = app.staticTexts["pull-refresh-fullscreen-count"]
+    XCTAssertTrue(count.waitForExistence(timeout: 20), "刷新计数未出现")
+    XCTAssertEqual(count.label, "刷新 0 次")
+
+    let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25))
+    let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.9))
+    start.press(forDuration: 0.05, thenDragTo: end, withVelocity: .slow, thenHoldForDuration: 0.2)
+
+    // 松手后刷新中：品牌环应覆盖在列表上方（截图供人工核对 24pt / 2pt 环）。
+    let refreshingShot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+    refreshingShot.name = "pull-refresh-refreshing"
+    refreshingShot.lifetime = .keepAlways
+    add(refreshingShot)
+
+    let refreshed = app.staticTexts["刷新 1 次"]
+    XCTAssertTrue(refreshed.waitForExistence(timeout: 5), "松开过阈值应触发一次刷新")
+    XCTAssertEqual(refreshed.label, "刷新 1 次")
+
+    // 刷新完成后环收起：再截一张，确认列表无残留位移。
+    Thread.sleep(forTimeInterval: 0.5)
+    let completedShot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+    completedShot.name = "pull-refresh-completed"
+    completedShot.lifetime = .keepAlways
+    add(completedShot)
+    XCTAssertTrue(count.exists)
   }
 
   /// 单个页签的严格审计。**只放行两类别有理由的窄例外**（其余一律失败）：

@@ -2,22 +2,31 @@ import SwiftUI
 
 /// 复选框（SPEC §2.10-#06；M2）。
 ///
-/// 设计口径（设计 06）：方框 **26**、圆角 **9**（`radius.checkbox`）；未选 = 1.5pt
-/// `border.hairline-strong` 描边 + `fill.field`；已选 = `gradient.mid` + 白色描边勾；
-/// 标签 `subheadline`（15）；热区 ≥ 44；切换轻触觉 ×1。
+/// 设计口径（设计 06）：
+/// - 方框 **26**、圆角 **9**（`radius.checkbox`）；未选 = 1.5pt `border.hairline-strong` 描边 + `fill.field`；
+/// - 已选 = `gradient.mid` + 白色描边勾（**2.2pt、rotate(42°)**，与画廊 06 的 5×10 L 同形，不是图标）；
+/// - 半选 = 同已选底 + **12×2.4** 白色横杠（设计 06 §5）；点半选 → 变全选（不做三态循环）；
+/// - 标签 `subheadline`（15）；热区 ≥ 44；切换轻触觉 ×1。
 ///
-/// 冻结签名只有 `isChecked` + `label`（无紧凑档/无标签/半选参数）⇒ 只做标准两态；
-/// 紧凑档、半选三态、光晕与按下缩放不可表达，差异登记在 `docs/DEV-PLAN.md` §2.3。
+/// `isIndeterminate` 是**显示态**（表头全选等由调用方维护）；半选的朗读文案属调用方
+/// （L-B 零文案），需要时在外层加 `.accessibilityValue(_:)`。紧凑档/无标签表头/光晕/按下缩放
+/// 仍不可表达，差异登记在 `docs/DEV-PLAN.md` §2.3。
 public struct WDCheckbox: View {
   @Binding private var isChecked: Bool
   private let label: Text
+  private let isIndeterminate: Bool
 
   @Environment(\.isEnabled) private var isEnabled
 
-  /// 构造（受控值 `isChecked`；C-15 的唯一改名）。
-  public init(isChecked: Binding<Bool>, label: Text) {
+  /// 构造（受控值 `isChecked`；C-15 的唯一改名）。`isIndeterminate` = 半选显示态。
+  public init(
+    isChecked: Binding<Bool>,
+    label: Text,
+    isIndeterminate: Bool = false
+  ) {
     self._isChecked = isChecked
     self.label = label
+    self.isIndeterminate = isIndeterminate
   }
 
   /// 标签 + 方框；整行可点（含标签）。
@@ -27,7 +36,7 @@ public struct WDCheckbox: View {
         .wdFont(WDType.subheadline)
         .wdLineBox(WDType.subheadline)
     }
-    .toggleStyle(WDCheckboxToggleStyle())
+    .toggleStyle(WDCheckboxToggleStyle(isIndeterminate: isIndeterminate))
     .opacity(isEnabled ? 1 : disabledOpacity)
   }
 
@@ -39,12 +48,17 @@ public struct WDCheckbox: View {
     static let corner: CGFloat = 9  // wd-structure-check:disable R7 — 设计值
     /// 未选态描边宽度。
     static let stroke: CGFloat = 1.5  // wd-structure-check:disable R7 — 设计值
-    /// 勾的描边宽度。
+    /// 勾的描边宽度（设计 06 §2：2.2pt）。
     static let checkStroke: CGFloat = 2.2  // wd-structure-check:disable R7 — 设计值
-    /// 勾的绘制区宽。
-    static let checkWidth: CGFloat = 14  // wd-structure-check:disable R7 — 设计值
-    /// 勾的绘制区高。
-    static let checkHeight: CGFloat = 10  // wd-structure-check:disable R7 — 设计值
+    /// 勾的竖臂长（画廊 06 的 5×10 L）。
+    static let tickWidth: CGFloat = 5  // wd-structure-check:disable R7 — 设计 06 画廊
+    /// 勾的横臂长。
+    static let tickHeight: CGFloat = 10  // wd-structure-check:disable R7 — 设计 06 画廊
+    /// 勾的旋转角（设计 06 §2：rotate(42deg)；存弧度）。
+    static let tickRotation: CGFloat = 42 * .pi / 180  // wd-structure-check:disable R7 — 设计值
+    /// 半选横杠（设计 06 §5：12 × 2.4）。
+    static let barWidth: CGFloat = 12  // wd-structure-check:disable R7 — 设计值
+    static let barHeight: CGFloat = 2.4  // wd-structure-check:disable R7 — 设计值
   }
 
   /// 禁用态整体不透明度（`state.disabled.alpha` = 40，百分数换算）。
@@ -57,6 +71,8 @@ public struct WDCheckbox: View {
 /// 自定义复选框外观：真 `Toggle` 的样式（状态由系统朗读，库内零"选中/未选中"文案）。
 private struct WDCheckboxToggleStyle: ToggleStyle {
   private typealias Metrics = WDCheckbox.Metrics
+
+  let isIndeterminate: Bool
 
   @Environment(\.wdColors) private var colors
   @Environment(\.wdEffectsBudget) private var budget
@@ -73,20 +89,26 @@ private struct WDCheckboxToggleStyle: ToggleStyle {
     .contentShape(Rectangle())
     .onTapGesture {
       guard isEnabled else { return }
-      configuration.isOn.toggle()
+      // 设计 06 §8：半选点击 → 全选（不做三态循环）。
+      if isIndeterminate {
+        configuration.isOn = true
+      } else {
+        configuration.isOn.toggle()
+      }
       WDHaptics.shared.play(.toggle, budget: budget)
     }
     .accessibilityElement(children: .combine)
   }
 
   private func box(_ configuration: Configuration) -> some View {
-    WDCheckboxBox(isChecked: configuration.isOn)
+    WDCheckboxBox(isChecked: configuration.isOn, isIndeterminate: isIndeterminate)
   }
 }
 
 /// 复选框的方框（内部复用：`WDListRow` 的 `.checkbox` 前导槽直接用它，保持同一套视觉）。
 struct WDCheckboxBox: View {
   let isChecked: Bool
+  var isIndeterminate: Bool = false
 
   @Environment(\.wdColors) private var colors
 
@@ -95,17 +117,13 @@ struct WDCheckboxBox: View {
   var body: some View {
     let shape = RoundedRectangle(cornerRadius: Metrics.corner, style: .continuous)
     ZStack {
-      if isChecked {
+      if isIndeterminate || isChecked {
         shape.fill(WDGradient.mid.linearGradient)
-        WDCheckmarkShape()
-          .trim(from: 0, to: 1)
-          .stroke(
-            colors.textOnDark,
-            style: StrokeStyle(
-              lineWidth: Metrics.checkStroke, lineCap: .round, lineJoin: .round)
-          )
-          .frame(width: Metrics.checkWidth, height: Metrics.checkHeight)
-          .animation(.easeOut(duration: WDMotion.Duration.base), value: isChecked)
+        if isIndeterminate {
+          bar
+        } else {
+          check
+        }
       } else {
         shape.fill(colors.fillField)
         shape.stroke(colors.borderHairlineStrong, lineWidth: Metrics.stroke)
@@ -113,15 +131,45 @@ struct WDCheckboxBox: View {
     }
     .frame(width: Metrics.box, height: Metrics.box)
   }
+
+  /// 已选：白色描边勾（5×10 L，rotate 42°，与画廊 06 一致）。
+  private var check: some View {
+    let side = WDSize.iconSm
+    return WDCheckmarkShape()
+      .trim(from: 0, to: 1)
+      .stroke(
+        colors.textOnDark,
+        style: StrokeStyle(
+          lineWidth: Metrics.checkStroke, lineCap: .butt, lineJoin: .miter)
+      )
+      .frame(width: side, height: side)
+  }
+
+  /// 半选：12 × 2.4 白色横杠（设计 06 §5）。
+  private var bar: some View {
+    Rectangle()
+      .fill(colors.textOnDark)
+      .frame(width: Metrics.barWidth, height: Metrics.barHeight)
+  }
 }
 
-/// 勾（描边路径；设计 06：勾是画出来的，不是图标）。
+/// 勾（设计 06 §2：白色描边 2.2、rotate(42°)，与画廊 06 的 5×10 L 同形）。
 private struct WDCheckmarkShape: Shape {
   func path(in rect: CGRect) -> Path {
+    let width = WDCheckbox.Metrics.tickWidth
+    let height = WDCheckbox.Metrics.tickHeight
+    let half = WDCheckbox.Metrics.checkStroke / 2  // wd-structure-check:disable R7 — 描边半宽
     var path = Path()
-    path.move(to: CGPoint(x: rect.minX, y: rect.midY))
-    path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
-    path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
-    return path
+    // 右臂 + 下臂（对应画廊 CSS 的 border-right + border-bottom）。
+    path.move(to: CGPoint(x: width - half, y: 0))
+    path.addLine(to: CGPoint(x: width - half, y: height - half))
+    path.addLine(to: CGPoint(x: 0, y: height - half))
+    // rotate(42deg) translate(-1,-1)，围绕 5×10 中心，再居中到绘制区。
+    let originX = -width / 2 - 1  // wd-structure-check:disable R7 — 居中 + 画廊 1px
+    let originY = -height / 2 - 1  // wd-structure-check:disable R7 — 居中 + 画廊 1px
+    let transform = CGAffineTransform(translationX: originX, y: originY)
+      .concatenating(CGAffineTransform(rotationAngle: WDCheckbox.Metrics.tickRotation))
+      .concatenating(CGAffineTransform(translationX: rect.midX, y: rect.midY))
+    return path.applying(transform)
   }
 }

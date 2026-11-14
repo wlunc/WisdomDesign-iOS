@@ -1296,9 +1296,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor init(isChecked: Binding<Bool>, label: Text)",
+      "decl" : "@MainActor init(isChecked: Binding<Bool>, label: Text, isIndeterminate: Bool = false)",
       "kind" : "swift.init",
-      "path" : "WDCheckbox.init(isChecked:label:)"
+      "path" : "WDCheckbox.init(isChecked:label:isIndeterminate:)"
     },
     {
       "access" : "public",
@@ -4887,6 +4887,12 @@
       "decl" : "enum WDPickerStyle",
       "kind" : "swift.enum",
       "path" : "WDPickerStyle"
+    },
+    {
+      "access" : "public",
+      "decl" : "case inline",
+      "kind" : "swift.enum.case",
+      "path" : "WDPickerStyle.inline"
     },
     {
       "access" : "public",

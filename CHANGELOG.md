@@ -8,6 +8,13 @@
 
 ### Added
 
+- **`WDCheckbox` 半选态**（2026-11-14，用户裁决；设计 06 §5）：新增 `isIndeterminate: Bool = false`
+  （additive、源码兼容；不改受控值类型）。视觉 = 同已选底 + **12×2.4 白色横杠**；点半选 → 变全选
+  （不做三态循环）；demo（静态 + 可交互两例）/previews/快照均补半选；API 基线 `WDCheckbox.init` 更新。
+  半选朗读文案仍属调用方（L-B 零文案，需要时外层加 `.accessibilityValue(_:)`）。
+  契约 `contracts/WDCheckbox.yaml` 已补 `indeterminate`（2026-11-14）；Android 侧 C-15 副本同步
+  （新增默认参数 = 二进制不兼容 ⇒ 走重载/major）。
+
 - **M5 十五件落地（导航与表单）**：`WDSearchField`、`WDRadio`、`WDSlider`（原生 Slider 载体）、
   `WDStepper`、`WDChip`（展示/可选/可删除三个 init）、`WDAvatarStack`（max 4 + 溢出计数）、
   `WDSegmentedControl`（38 高 + 弹簧指示块）、`WDPicker`（系统 Menu + wheel）、
@@ -130,6 +137,26 @@
 
 ### Changed
 
+- **`WDButton` 填充/柔色对齐画廊 01**（2026-11-14，用户裁决）：`tonal` 底由 `surface.tint`
+  改为 **`gradient.surface`**（与画廊 `.wd-btn.tonal` 的 `--g-surface` 一致）；`filled` / `tonal`
+  补 **1px 顶部内高光**（画廊 `inset 0 1px 0`；令牌 `border.glass-top` 全值，浅色 .8 更接近真机可见度）；
+  按钮 8 态快照基线重录。设计仓 `docs/specs/01-basic.md` 的 `surface.tint` 口径与
+  `Chip 已选` / `Badge shared` 仍走 tint，属跨仓待同步项（本轮不改设计仓）。
+
+- **勾的绘制按设计稿重做**（2026-11-14，用户裁决）：`WDCheckbox` 的勾改为**2.2pt、rotate(42°) 的 5×10 L**
+  （与画廊 06 的 `border-right + border-bottom` 同形，butt 端、miter 角），`WDPicker` 菜单勾改为
+  画廊 22 的 **lucide check**（16pt / 24 viewBox / round cap+join，线宽 2 × 16/24）；
+  对应快照基线重录：`checkbox` 8 态 + `listrow` 8 态（后者含 `.checkbox` 前导槽）。
+
+- **`WDPicker` 按设计 22 全量对齐**（2026-11-14，用户裁决「完全按照设计稿」）：菜单形态从系统 `Menu`
+  改为**窗口级自绘浮层**——圆角 14 / 选项行 44 / 最小宽 180 / 最大宽 = 屏宽 − 32 / 与入口间距 4 /
+  空间不足自动翻转 / 当前项打勾并滚到可视区中间、选中行 = brand 10% 底 + brand 字 + 600（画廊 22 `.sel`）/
+  遮罩与硬件键盘 Esc 关闭且不提交 /
+  `motion.spring.gentle` 入场 + 160ms 淡出；分组标题 `type.overline`、组内选项缩进 `space.5`；
+  滚轮形态保持系统 `Picker(.wheel)`（设计 22 §11 的平台差异条款）；新增 `.inline` 内联形态
+  （≤ 8 项直接平铺）；触发入口箭头由 `chevron.right` 改为 **`chevron.down`**（设计 22 §2）。
+  同步：picker 8 态快照基线重录、API 基线 +1 case、demo/previews 补内联样例。
+
 - **BottomSheet 长内容滚动冲突**：内容可滚动时只观察 `UIScrollView` 既有 pan，不再叠加第二套手势；
   不可滚动时才补并行 pan，保证短内容也能从内容区下拉关闭。新增长内容 UI 测试
   （内部滚动到列表末项、关闭键位置不变）。
@@ -187,6 +214,12 @@
 
 ### Breaking
 
+- **`WDPickerStyle` 新增 `.inline`**（pre-1.0 源级 breaking，2026-11-14；设计 22 §4 的三形态要求）：
+  按 F-20，新增枚举 case 属源级 breaking（minor + 本段 + 迁移片段）。迁移 = 一般无需改代码；
+  仅当调用方对 `WDPickerStyle` 做**穷举 `switch`** 时补一个 `.inline` 分支。
+  契约 `contracts/WDPicker.yaml` 的 `enums.WDPickerStyle` 已同步为 `[menu, wheel, inline]`（2026-11-14）；
+  Android 侧 C-15 副本同步为 `WDPickerStyle{Menu, Wheel, Inline}`。
+
 - **`WDPullToRefresh` → `WDPullRefresh`**（pre-1.0 源级 breaking，2026-11-13；用户裁决）：
   公开类型与修饰符 `.wdPullToRefresh` → `.wdPullRefresh`；契约 yaml 同名更新；
   **Android 侧契约名待同步**（C-15 #32，android-lead）。迁移 = 全局替换两个标识符。
@@ -195,6 +228,15 @@
 - 其余无公开签名移除。本轮 API 基线变化：**+136 / −1**（`api/WisdomUI.api.json` 必须与成因**同一提交**）。
 
 ### Fixed
+
+- **`WDPullRefresh` 指示器与设计 32 不符**（2026-11-14，用户裁决）：原系统 `.refreshable` 的
+  旋转 spinner 与设计稿的 24pt 品牌环不一致。iOS 18+ 改为自绘：24pt 环 / 2pt 线宽 /
+  阈值 64 / 最大下拉 120 / 下拉随位移画进度 / 刷新中品牌弧 1s 线性旋转 / 完成后 160ms 收起 /
+  到阈值一次 `.medium` 触觉 / Reduce Motion 静态弧；指示器覆盖在列表顶部、保持释放位置且不改变
+  锚点高度；iOS 17 回退系统 `.refreshable`（登记差异）。三态文案不进库（L-B 零文案），
+  组件实现设计 32 §4 的「极简」变体（只有环）；公开签名与 `api/WisdomUI.api.json` **零 diff**。
+  新增单测 7 条 + demo XCUITest 1 条（下拉→计数 +1，含刷新中/完成截图）。契约 yaml 的载体注释
+  待设计仓同步（`../wisdomdesign/contracts/WDPullRefresh.yaml`，跨仓只读）。
 
 - **`WDSegmentedControl` 选中指示块不显示 / 详情页被拉满高度**（2026-11-13）：原用
   `GeometryReader` 背景量测段宽，首帧/快照/真机首屏可能拿到 0 宽 ⇒ 只剩字重差异；改为自定义

@@ -164,6 +164,7 @@ public struct WDButtonStyle: ButtonStyle {
       .foregroundStyle(foregroundColor)
       .background(background)
       .clipShape(Capsule())
+      .overlay(topHighlight)
       .overlay(border)
       .modifier(WDButtonShadow(variant: variant, isEnabled: isEnabled))
       .overlay { loadingIndicator }
@@ -199,11 +200,32 @@ public struct WDButtonStyle: ButtonStyle {
     case .destructive:
       Capsule().fill(WDGradient.destructive.linearGradient)
     case .tonal:
-      Capsule().fill(colors.surfaceTint)
+      // 画廊 01：tonal 用 gradient.surface（2026-11-14 用户裁决，与预览稿的平涂分开）。
+      Capsule().fill(WDGradient.surface.linearGradient)
     case .glass:
       Capsule().fill(glassFill)
     case .outline, .plain:
       Capsule().fill(Color.clear)
+    }
+  }
+
+  /// 顶部 1px 内高光（画廊 01 的 `inset 0 1px 0`）。
+  ///
+  /// 画廊填充/柔色底都带这一道边；令牌只有 `border.glass-top`（浅 .8 / 深 .161）。
+  /// 画廊的 .35–.4 在真机上过淡（近看几乎不可见），这里取令牌全值，与预览稿的
+  /// `--wd-hairline-top` 一致。
+  @ViewBuilder private var topHighlight: some View {
+    if variant == .filled || variant == .tonal {
+      Capsule()
+        .strokeBorder(
+          LinearGradient(
+            colors: [colors.borderGlassTop, Color.clear],
+            startPoint: .top,
+            endPoint: .center
+          ),
+          lineWidth: 1
+        )
+        .allowsHitTesting(false)
     }
   }
 
