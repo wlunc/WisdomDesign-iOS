@@ -186,4 +186,14 @@ enums: {WDAssigneePickerSize: [standard, compact]}
 | 结论 | 同意豁免 M5 nightly₃ 并开 M6；M6 范围 = iOS 全流程（组件 + 回归 + 截图封板 + 发布前层），双端 tag 待 Android；签名按 §2 冻结，D1–D9 按默认执行项 |
 | 后续 | 契约 yaml 已回填；实现与门禁见 `docs/M6-EXIT-REPORT.md` |
 
-## 7. 实现完成与差异（结批时填）
+## 7. 实现完成与差异（2026-11-14）
+
+- 1 件落地（`Components/Composites/WDAssigneePicker/`）；结构断言 **7 条**（`M6ComponentsTests`）；
+  快照 **8 张**（总 **344**）；demo **37 件**；`Scripts/ci.sh pr` **163 tests / 1245 符号 / Foundation 97.26%**；
+  demo **14 条 UITest** 全过（含四类目无障碍审计与 AssigneePicker 交互）。
+- 契约已回填设计仓：`contracts/WDAssigneePicker.yaml`（设计仓提交 `fa08037`）。
+- **已接受差异**（逐条见 `docs/M6-EXIT-REPORT.md` §4）：溢出展开走 `onOverflowTap` 回调；长按资料浮层不做；
+  `radiogroup`/`radio` 角色不可表达；位置朗读可选；外边距由调用方给；选中项替换进可见窗口。
+- **未验证**：VoiceOver 人审（无 USB 真机）、Thinning 增量（未签名归档）、真机 hitch、
+  双端 tag `v1.0.0`（Android 停在 M1）——按 `docs/SPEC.md` §8.2 记【未验证】。
+- **门禁**：M5 nightly 2/3 按项目负责人 2026-11-14 先例豁免；M6 nightly 第 **1/3** 日绿（2026-11-14，待连续 3 日）。

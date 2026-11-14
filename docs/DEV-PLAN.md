@@ -265,6 +265,11 @@ PY
 **出口判据（7 条）**：① 批前冻结（1 件）；② 无障碍回归：VoiceOver 闭眼走查记录 + demo 层 `performAccessibilityAudit` 四类目；③ 截图基线封板（全部 37 件 × 浅/深 × 默认/AX3 × LTR/RTL）；④ 全量门禁：`Scripts/ci.sh pr` + nightly 连续绿；⑤ 发布前层：归档 Thinning 增量 + 真机 hitch + tag 校验；⑥ **双端同 tag `v1.0.0`**，且 tag 前确认三仓 HEAD 与版本台账一致；⑦ 发布 checklist 可勾选完成。
 **门禁强度**：`PR+nightly₃+发布前`。
 
+> **实现状态（2026-11-14）**：**`WDAssigneePicker` 已落地**；签名冻结 = `docs/M6-SIGNATURE-FREEZE.md`（D1–D9 按默认执行项）；
+> 契约 `../wisdomdesign/contracts/WDAssigneePicker.yaml` 已回填；**8 张 8 态基线**（总 344）；
+> demo 扩到 **37 件**（审计视口含 M6 实例）；PR **163 tests / 1245 符号**；demo **14 条 UITest** 全过。
+> **出口待判**：真机 VoiceOver 走查（人审）/ Thinning 增量 / 真机 hitch 仍【未验证】；**双端 tag 待 Android 追平**。
+
 ---
 
 ## 3. 批次分配（本端逐组件 + 批前冻结 / 出口）

@@ -2,7 +2,7 @@
 
 > **这份文件回答三件事**：仓库里的文档**在哪**、**怎么读**、**哪些还没验证**。
 > 它**不是**开发计划本身——计划在 [`DEV-PLAN.md`](DEV-PLAN.md)，规格在 [`SPEC.md`](SPEC.md)，结构在 [`ARCHITECTURE.md`](ARCHITECTURE.md)，操作手册在 [`../AGENTS.md`](../AGENTS.md)。
-> 状态快照（**2026-11-13 晚间**）：**M0、M1、M2、M3、M4 已交付并判定通过**；**M5 十五件已落地（导航与表单）**：签名冻结 Q1–Q7 已确认、15 个契约 yaml + `WDBadge` 增量已回填设计仓、**128 张 8 态基线（总 336）**、demo 扩到 **36 件**并加入审计视口；`Scripts/ci.sh pr` **146 tests / 1211 符号 / Foundation 97.26%**；**nightly 第 1/3 日绿**（设备 7.72s + 快照 336 张 53.26s + demo 审计 11 tests 186.71s，整条 247.70s）。**M5 技术判据 6/6 通过（2026-11-13）**，记录 = `docs/M5-EXIT-REPORT.md`；nightly₃ 待项目负责人确认（M3/M4 有豁免先例）。记录 = `docs/M5-SIGNATURE-FREEZE.md`；下一步 M6（`WDAssigneePicker` + 回归发布）。文档改动以 `git log` 为准。
+> 状态快照（**2026-11-14 晚间**）：**M0–M4 已交付并判定通过**；**M5 已判定通过**（技术判据 6/6；nightly 2/3 按项目负责人 2026-11-14 先例豁免，记录 = `docs/M5-EXIT-REPORT.md`）。**M6 场景组件 `WDAssigneePicker` 已落地**：签名冻结 = `docs/M6-SIGNATURE-FREEZE.md`、契约 `contracts/WDAssigneePicker.yaml`、**8 张新基线（总 344）**、demo 扩到 **37 件**（审计视口含 M6 实例）；`Scripts/ci.sh pr` **163 tests / 1245 符号**、demo **14 条 UITest**（含四类目审计与 AssigneePicker 交互）全过。**M6 出口待判**：真机 VoiceOver 走查 / Thinning 增量 / 真机 hitch 仍【未验证】，**双端 tag 待 Android 追平**。文档改动以 `git log` 为准。
 
 ---
 
@@ -18,6 +18,8 @@
 | [`M2-SIGNOFF-PACKAGE.md`](M2-SIGNOFF-PACKAGE.md) | **M2 签字包**（出口判定 + M1/M2 签字请求文本 + M3 冻结会议程） | 签字、开 M3 前 | ~7 KB |
 | [`M3-EXIT-REPORT.md`](M3-EXIT-REPORT.md) | **M3 出口报告**（技术判据 6/6；nightly 1/3，未签字） | 结 M3、跑后两日 nightly | ~6 KB |
 | [`M3-API-FREEZE.md`](M3-API-FREEZE.md) | **M3 公开 API 封板记录**（661 符号 / SHA-256 / 复跑命令） | 改公开面之前 | ~3 KB |
+| [`M6-SIGNATURE-FREEZE.md`](M6-SIGNATURE-FREEZE.md) | **M6 批前冻结**（`WDAssigneePicker` + D1–D9 默认执行项） | 改 M6 签名之前 | ~8 KB |
+| [`M6-EXIT-REPORT.md`](M6-EXIT-REPORT.md) | **M6 出口报告**（7 条判据 + 差异/未验证 + VoiceOver 走查清单） | 结 M6 / 1.0 发布前 | ~9 KB |
 | `HANDOVER.md`（本文） | 交接说明 | 第一天接手 | — |
 
 > **评审覆盖范围（如实标注）**：`DEV-PLAN-REVIEW.md` 是针对**较早版本**（约 1,012 行）出具的 pass；当前版本已扩到约 1,829 行，并新增 **§19–§21**（设计查阅 / 逐组件溯源 / 从设计规格到实现）与两套「实现前自检十问」（§21.5/§21.6，共 370 条）。**这些增补尚未经独立复核**——通过前**不要把「文档已评审」当作对当前版本的结论**。
@@ -68,8 +70,8 @@
 | 工具链全链路 | ✅ **已回填**（2026-10-07；2026-11-10 复核全绿）：scheme/耗时/覆盖率/`-resultBundlePath` 均实测 |
 | 冒烟首发 | ✅ **已回填**：`#if WD_API_SMOKE` 随 `ci.sh pr` 的 PR-1a/PR-1b 实跑 |
 | 真机视觉 | **未验证**：真机自然行盒、AX3 与 2.0 档观感、玻璃真机观感（**需 USB 直连**，U-05） |
-| 快照基线 | M1 的 16 + M2 的 88 + M3 的 **32** + M4 的 **72** + M5 的 **128** = **336 张已入库** |
-| 读屏 / 播报 | **未验证（人审）**：`WDSystemAnnouncer` 的音频效果无法机检；真机 VoiceOver 走查属 M6 |
+| 快照基线 | M1 的 16 + M2 的 88 + M3 的 **32** + M4 的 **72** + M5 的 **128** + M6 的 **8** = **344 张已入库** |
+| 读屏 / 播报 | **未验证（人审）**：`WDSystemAnnouncer` 的音频效果无法机检；M6 已产出 VoiceOver 走查清单，**真机人审仍未验证** |
 | 体积 | **门槛已定（2026-11-12）**：E3-iOS-a 增量 P50 = 495,616 B、门槛 = 545,178 B（P50 × 1.10，未 Thinning）；**Thinning 增量仍【未验证】**，M6 发布前层 |
 | 分发 | SPM tag 实验、发布流程实操（M6） |
 
@@ -79,7 +81,7 @@
 
 ## 4. 当前状态与未决项
 
-- **里程碑**：M0–M4 已判定通过（M3/M4 的 nightly 按项目负责人 2026-11-12 决定不阻塞）；**M5 十五件已落地、出口待判**；下一步 **M6（`WDAssigneePicker` + 回归发布）**；
+- **里程碑**：M0–M4 已判定通过（M3/M4 的 nightly 按项目负责人 2026-11-12 决定不阻塞）；**M5 已判定通过**（nightly 2/3 按 2026-11-14 先例豁免）；**M6 `WDAssigneePicker` 已落地、出口待判**（记录 = `docs/M6-EXIT-REPORT.md`）；**双端 tag 待 Android M2–M5 追平**；
 - **契约回填**：11 件 + `WDListSection` = 12 个 yaml 已落 `../wisdomdesign/contracts/`（设计仓提交 `89779f7`）；`WDCheckbox` 的 Android 书面复核仍待 android-lead（契约名 `checked` 已按 android SPEC §2.10 落库）；
 - **设计侧待给值**：见 `DEV-PLAN.md` §7（本端相关项，逐项给默认执行项与"是否阻塞 M0-1"）；
 - **两条待设计裁决**（默认动作已定，可直接开工，设计改口只需改一处）：
