@@ -937,8 +937,8 @@ extension View {
 | 03 | `WDTextField` | `text` / `Binding<String>` ✓ | `label`,`prefix`,`accessory`,`helper` | `.inset` | 1 行 + 错误 1 行 | 错误出现时播报（assertive，一次） | M2 |
 | 04 | `WDSearchField` | `text` / `Binding<String>` ✓ | `placeholder`,`leadingIcon`,`label`（取消） | — | 1 行 | **结果数变化 polite**（阈值由调用方） | M5 |
 | 05 | `WDSwitch` | `on` / `isOn` ✓ | `label` | `size = .standard`；`description = nil`（既有 `init(isOn:label:)` 等价） | 1 行 | 切换轻 ×1 | M2 |
-| 06 | `WDCheckbox` | `checked` / **`isChecked`** ✓ | `label` | — | 1 行 | 轻 ×1 | M2 |
-| 07 | `WDRadio` | `selection` ✓ | `label`（组）,`options` | — | 2 行允许 | 轻 ×1 | M5 |
+| 06 | `WDCheckbox` | `checked` / **`isChecked`** ✓ | `label` | `size = .standard` | 1 行 | 轻 ×1 | M2 |
+| 07 | `WDRadio` | `selection` ✓ | `label`（组）,`options` | `size = .standard` | 2 行允许 | 轻 ×1 | M5 |
 | 08 | `WDSlider` | `value` ✓ | `label` | — | 1 行 | **松手后播报一次** | M5 |
 | 09 | `WDStepper` | `value` ✓ | `label` | — | 1 行 | **高频不给触觉** | M5 |
 | 10 | `WDChip` | `selected` / `isSelected` ✓ | `label`,`leadingIcon` | 删除叉独立可达 | 1 行 | — | M5 |
@@ -948,7 +948,7 @@ extension View {
 | 14 | `WDDivider` | — | 无 | `style = .full`（`inset` 左缩进 62）；`accessibilityHidden` 保留 | — | 不进树 | M2 |
 | 15 | `WDProgressBar` | `value` | `label`,`valueText` | — | 1 行 | **只跨 25/50/75/100** | M4 |
 | 16 | `WDProgressRing` | `value` | 同上 | 环径锁死 | 1 行 | 同上 | M4 |
-| 17 | `WDCard` | — | `content` | `.elevated` | — | 容器 `contain` | M2 |
+| 17 | `WDCard` | — | `content` | `style = .elevated`；`action = nil`（静态卡） | — | 容器 `contain` | M2 |
 | 18 | `WDListRow` | `selected` / `isSelected` | `title`,`subtitle`,`leading`,`trailing` | 44/60/76 | 1 行 ×2 | 整行合并读；删除自定义操作 | M2 |
 | 19 | `WDListSection` | `selection` ✓ | `header`,`footer`,`items` | 末行无分隔 | — | — | M3 |
 | 20 | `WDIcon` | — | `icon` | 装饰：不进树 | — | 不进树 | M2 |
