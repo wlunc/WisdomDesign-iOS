@@ -6666,6 +6666,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(isOn: Binding<Bool>, label: Text, description: Text?, size: WDSwitchSize)",
+      "kind" : "swift.init",
+      "path" : "WDSwitch.init(isOn:label:description:size:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDSwitch.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
@@ -6747,6 +6753,24 @@
       "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDSwitch.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDSwitchSize",
+      "kind" : "swift.enum",
+      "path" : "WDSwitchSize"
+    },
+    {
+      "access" : "public",
+      "decl" : "case compact",
+      "kind" : "swift.enum.case",
+      "path" : "WDSwitchSize.compact"
+    },
+    {
+      "access" : "public",
+      "decl" : "case standard",
+      "kind" : "swift.enum.case",
+      "path" : "WDSwitchSize.standard"
     },
     {
       "access" : "public",

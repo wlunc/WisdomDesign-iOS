@@ -10,9 +10,22 @@ import UIKit
 @MainActor
 @Suite("WDSwitch（M2）")
 struct WDSwitchTests {
-  private static func height(_ typeSize: DynamicTypeSize = .large) -> CGFloat {
+  private static func height(
+    _ typeSize: DynamicTypeSize = .large,
+    description: Text? = nil,
+    size: WDSwitchSize = .standard
+  ) -> CGFloat {
+    let toggle: WDSwitch
+    if description == nil, size == .standard {
+      toggle = WDSwitch(isOn: .constant(true), label: Text(verbatim: "共享给家人"))
+    } else {
+      toggle = WDSwitch(
+        isOn: .constant(true), label: Text(verbatim: "共享给家人"),
+        description: description, size: size)
+    }
     let controller = UIHostingController(
-      rootView: WDSwitch(isOn: .constant(true), label: Text(verbatim: "共享给家人"))
+      rootView:
+        toggle
         .environment(\.dynamicTypeSize, typeSize)
         .wdTheme(.light)
     )
@@ -25,6 +38,23 @@ struct WDSwitchTests {
     #expect(
       WDSwitch.Metrics.knobTravel == WDSwitch.Metrics.trackWidth - WDSwitch.Metrics.knobDiameter - 4
     )
+  }
+
+  @Test("紧凑档几何自洽（40×24 / 滑块 20 / 行程 16）；rawValue 稳定")
+  func compactMetrics() {
+    #expect(WDSwitchSize.allCases.map(\.rawValue) == ["standard", "compact"])
+    #expect(WDSwitch.Metrics.compactKnobDiameter == WDSwitch.Metrics.compactTrackHeight - 4)
+    #expect(
+      WDSwitch.Metrics.compactKnobTravel
+        == WDSwitch.Metrics.compactTrackWidth - WDSwitch.Metrics.compactKnobDiameter - 4)
+  }
+
+  @Test("描述位增加一行高度")
+  func descriptionAddsHeight() {
+    let plain = Self.height(.accessibility3)
+    let described = Self.height(.accessibility3, description: Text(verbatim: "关闭后不再收到推送"))
+    #expect(described > plain, "带描述 \(described) 应高于无描述 \(plain)")
+    #expect(Self.height(size: .compact) >= WDSize.touchTargetMin - 0.5)
   }
 
   @Test("整行触控下限 ≥ 44（标签 + 轨道）")

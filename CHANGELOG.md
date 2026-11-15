@@ -8,6 +8,13 @@
 
 ### Added
 
+- **`WDSwitch` 紧凑档 + 描述位（2026-11-15，B5；授权扩公开）**：新增公开 `WDSwitchSize`
+  （standard 51×31 / compact 40×24，滑块 27/20、行程 20/16）与
+  `init(isOn:label:description:size:)`；既有 `init(isOn:label:)` 保留。描述位在标签下方一行
+  footnote / text.secondary。**API 1270 → 1274（+4）**；`switch-*` 8 张扩展重录。
+  **残留**：拖动滑块/松手吸附、写入失败回弹、聚焦光环、精确 260/300ms 曲线。
+  契约增量见 `docs/B5-CONTRACT-CHANGE-REQUEST.md`。
+
 - **`WDIconButton` 五变体（2026-11-15，B4；授权扩公开）**：`WDIconButtonVariant` 新增
   filled / tonal / glass / outline（既有 plain 不变），按下缩放 0.97、禁用 40%。**对比度优先**：
   filled 用 `text.brand` 实底 + 浅色白 / 深色 `text.on-light-primary`（设计 `gradient.mid` + 白

@@ -1,37 +1,65 @@
 import SwiftUI
 
-/// 开关（SPEC §2.10-#05；M2）。
+/// 开关尺寸档（设计 05 §3：标准 51×31 / 紧凑 40×24）。
+public enum WDSwitchSize: String, CaseIterable, Sendable, Equatable {
+  case standard
+  case compact
+}
+
+/// 开关（SPEC §2.10-#05；M2；B5 扩紧凑档/描述位）。
 ///
-/// 设计口径（设计 05 §3–§5）：轨道 **51×31**、滑块 **27**（轨道高 − 4）、行程 **20**；
-/// 关 = `border.hairline-strong` 描边 + 白滑块；开 = `gradient.mid`；切换轻触觉 ×1；
-/// 角色 = switch（由真 `Toggle` 提供），状态由系统朗读（库内零"开/关"文案）。
-///
-/// 冻结签名只有 `isOn` + `label`（无紧凑档/描述位/受控尺寸参数）⇒ 只做标准档；
-/// 紧凑档 40×24 与"带描述"形态不可表达，差异登记在 `docs/DEV-PLAN.md` §2.3。
+/// 设计口径（设计 05 §3–§5）：
+/// - 标准轨道 51×31、滑块 27、行程 20；紧凑 40×24、滑块 20、行程 16；
+/// - 关 = border.hairline-strong 描边 + 白滑块；开 = gradient.mid；切换轻触觉 ×1；
+/// - 角色 = switch（由真 Toggle 提供），状态由系统朗读（库内零"开/关"文案）；
+/// - 描述位在标签下方一行 footnote / text.secondary。
 public struct WDSwitch: View {
   @Binding private var isOn: Bool
   private let label: Text
+  private let description: Text?
+  private let size: WDSwitchSize
 
+  @Environment(\.wdColors) private var colors
   @Environment(\.isEnabled) private var isEnabled
 
-  /// 构造（受控值 `isOn`；槽位 `label`）。
+  /// 构造（既有；标准档、无描述）。
   public init(isOn: Binding<Bool>, label: Text) {
     self._isOn = isOn
     self.label = label
+    self.description = nil
+    self.size = .standard
   }
 
-  /// 标签 + 轨道；整行可点（含标签区域）。
+  /// 构造（B5 增量；紧凑/标准 + 可选描述）。
+  public init(
+    isOn: Binding<Bool>, label: Text, description: Text?, size: WDSwitchSize
+  ) {
+    self._isOn = isOn
+    self.label = label
+    self.description = description
+    self.size = size
+  }
+
+  /// 标签（+ 描述）+ 轨道；整行可点（含标签区域）。
   public var body: some View {
     Toggle(isOn: $isOn) {
-      label
-        .wdFont(WDType.body)
-        .wdLineBox(WDType.body)
+      VStack(alignment: .leading, spacing: WDSpacing.s1) {
+        label
+          .wdFont(WDType.body)
+          .wdLineBox(WDType.body)
+        if let description {
+          description
+            .wdFont(WDType.footnote)
+            .wdLineBox(WDType.footnote)
+            .foregroundStyle(colors.textSecondary)
+        }
+      }
     }
-    .toggleStyle(WDSwitchToggleStyle())
+    .toggleStyle(WDSwitchToggleStyle(size: size))
     .opacity(isEnabled ? 1 : disabledOpacity)
   }
 
-  /// 标准档几何（设计 05 §3；令牌无这些值；内部暴露给单测做自洽断言）。
+  /// 几何（设计 05 §3；令牌无这些值；内部暴露给单测做自洽断言）。
   enum Metrics {
     /// 标准档轨道宽。
     static let trackWidth: CGFloat = 51  // wd-structure-check:disable R7 — 设计值
@@ -43,22 +71,58 @@ public struct WDSwitch: View {
     static let knobTravel: CGFloat = 20  // wd-structure-check:disable R7 — 设计值
     /// 滑块与轨道的上下左右内边距（设计「各留 2」）。
     static let knobInset: CGFloat = 2  // wd-structure-check:disable R7 — 设计值
+
+    /// 紧凑档轨道宽 40。
+    static let compactTrackWidth: CGFloat = 40  // wd-structure-check:disable R7 — 设计值
+    /// 紧凑档轨道高 24。
+    static let compactTrackHeight: CGFloat = 24  // wd-structure-check:disable R7 — 设计值
+    /// 紧凑档滑块 20。
+    static let compactKnobDiameter: CGFloat = 20  // wd-structure-check:disable R7 — 设计值
+    /// 紧凑档行程 16。
+    static let compactKnobTravel: CGFloat = 16  // wd-structure-check:disable R7 — 设计值
+
+    /// 档位几何。
+    struct SizeMetrics {
+      let trackWidth: CGFloat
+      let trackHeight: CGFloat
+      let knobDiameter: CGFloat
+      let knobTravel: CGFloat
+      let knobInset: CGFloat
+    }
+
+    /// 取档位几何。
+    static func metrics(for size: WDSwitchSize) -> SizeMetrics {
+      switch size {
+      case .standard:
+        return SizeMetrics(
+          trackWidth: trackWidth, trackHeight: trackHeight, knobDiameter: knobDiameter,
+          knobTravel: knobTravel, knobInset: knobInset)
+      case .compact:
+        return SizeMetrics(
+          trackWidth: compactTrackWidth, trackHeight: compactTrackHeight,
+          knobDiameter: compactKnobDiameter, knobTravel: compactKnobTravel, knobInset: knobInset)
+      }
+    }
   }
 
-  /// 禁用态整体不透明度（`state.disabled.alpha` = 40，百分数换算）。
+  /// 禁用态整体不透明度（state.disabled.alpha = 40，百分数换算）。
   private var disabledOpacity: CGFloat {
     WDState.disabledAlpha / Self.percentScale
   }
   private static let percentScale: CGFloat = 100  // wd-structure-check:disable R7 — 百分数分母
 }
 
-/// 自定义开关外观：真 `Toggle` 的样式（角色/状态由 Toggle 提供，库内不写"开/关"文案）。
+/// 自定义开关外观：真 Toggle 的样式（角色/状态由 Toggle 提供，库内不写"开/关"文案）。
 private struct WDSwitchToggleStyle: ToggleStyle {
-  private typealias Metrics = WDSwitch.Metrics
+  let size: WDSwitchSize
 
   @Environment(\.wdColors) private var colors
   @Environment(\.wdEffectsBudget) private var budget
   @Environment(\.isEnabled) private var isEnabled
+
+  private var metrics: WDSwitch.Metrics.SizeMetrics {
+    WDSwitch.Metrics.metrics(for: size)
+  }
 
   func makeBody(configuration: Configuration) -> some View {
     HStack(spacing: WDSpacing.s4) {
@@ -91,11 +155,11 @@ private struct WDSwitchToggleStyle: ToggleStyle {
       }
       Circle()
         .fill(colors.textOnDark)
-        .frame(width: Metrics.knobDiameter, height: Metrics.knobDiameter)
-        .padding(.leading, Metrics.knobInset)
-        .offset(x: configuration.isOn ? Metrics.knobTravel : 0)
+        .frame(width: metrics.knobDiameter, height: metrics.knobDiameter)
+        .padding(.leading, metrics.knobInset)
+        .offset(x: configuration.isOn ? metrics.knobTravel : 0)
         .animation(WDMotion.Spring.gentle, value: configuration.isOn)
     }
-    .frame(width: Metrics.trackWidth, height: Metrics.trackHeight)
+    .frame(width: metrics.trackWidth, height: metrics.trackHeight)
   }
 }

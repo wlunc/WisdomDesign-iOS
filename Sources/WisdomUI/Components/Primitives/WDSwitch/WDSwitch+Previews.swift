@@ -11,6 +11,10 @@
         WDSwitch(isOn: .constant(false), label: Text(verbatim: "每日提醒"))
         WDSwitch(isOn: $disabled, label: Text(verbatim: "免打扰"))
           .disabled(true)
+        WDSwitch(
+          isOn: $enabled, label: Text(verbatim: "共享给家人"),
+          description: Text(verbatim: "关闭后不再收到推送"), size: .standard)
+        WDSwitch(isOn: $enabled, label: Text(verbatim: "紧凑档"), description: nil, size: .compact)
       }
       .padding(WDSpacing.s5)
     }
