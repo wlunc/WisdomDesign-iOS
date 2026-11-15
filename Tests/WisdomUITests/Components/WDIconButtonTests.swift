@@ -37,4 +37,29 @@ struct WDIconButtonTests {
         measured.height >= WDSize.touchTargetMin - 0.5, "\(size.rawValue) 高 \(measured.height)")
     }
   }
+
+  @Test("五变体齐、rawValue 稳定")
+  func variants() {
+    #expect(
+      WDIconButtonVariant.allCases.map(\.rawValue)
+        == ["plain", "filled", "tonal", "glass", "outline"])
+  }
+
+  @Test("五变体图标/背景对比度 ≥ 3:1（DF-04 图形门槛，浅深两套）")
+  func contrast() {
+    let schemes: [(WDColorValues, ColorScheme)] = [(.light, .light), (.dark, .dark)]
+    for (colors, scheme) in schemes {
+      for variant in WDIconButtonVariant.allCases {
+        let icon = WDIconButton.iconColor(for: variant, colors: colors, scheme: scheme)
+        let raw = WDIconButton.backgroundColor(for: variant, colors: colors)
+        let background =
+          raw.map { WDContrast.composite($0, over: colors.bgCanvas) }
+          ?? colors.bgCanvas
+        let ratio = WDContrast.ratio(icon, background)
+        #expect(
+          WDContrast.meetsGraphics(ratio),
+          "\(variant.rawValue)/\(scheme) 对比度 \(ratio)")
+      }
+    }
+  }
 }

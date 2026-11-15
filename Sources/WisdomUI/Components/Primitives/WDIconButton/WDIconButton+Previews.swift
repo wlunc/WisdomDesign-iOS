@@ -13,6 +13,13 @@
         WDIconButton(icon: .delete, accessibilityLabel: Text(verbatim: "删除")) {}
           .disabled(true)
       }
+      HStack(spacing: WDSpacing.s4) {
+        ForEach(WDIconButtonVariant.allCases, id: \.self) { variant in
+          WDIconButton(
+            icon: .add, accessibilityLabel: Text(verbatim: variant.rawValue), variant: variant
+          ) {}
+        }
+      }
       .padding(WDSpacing.s5)
     }
   }

@@ -8,6 +8,13 @@
 
 ### Added
 
+- **`WDIconButton` 五变体（2026-11-15，B4；授权扩公开）**：`WDIconButtonVariant` 新增
+  filled / tonal / glass / outline（既有 plain 不变），按下缩放 0.97、禁用 40%。**对比度优先**：
+  filled 用 `text.brand` 实底 + 浅色白 / 深色 `text.on-light-primary`（设计 `gradient.mid` + 白
+  仅 2.51:1，不达图形 3:1）。**API 1266 → 1270（+4）**；`iconbutton-*` 8 张扩展重录。
+  **残留**：圆角方形形态、聚焦光环、长按提示、加载态语义。契约增量见
+  `docs/B4-CONTRACT-CHANGE-REQUEST.md`（设计仓待落库）。
+
 - **`WDCard` sunken + `WDDivider` 内缩（2026-11-15，B3；授权扩公开）**：`WDCardStyle` 新增
   `.sunken`（`surface.card-sunken`、无描边、无阴影）；`WDDivider` 新增 `WDDividerStyle`
   （full / inset，内缩起点 62）与 `init(style:)`，既有 `init()` 保留。**API 1261 → 1266（+5）**。
@@ -284,6 +291,12 @@
   **M2 的 11 件公开面全部进入基线**。
 
 ### Breaking
+
+- **`WDIconButtonVariant` 新增 4 个 case**（pre-1.0 源级 breaking，2026-11-15；设计 02 §4）：
+  按 F-20，新增枚举 case 属源级 breaking（minor + 本段 + 迁移片段）。迁移 = 一般无需改代码；
+  仅当调用方对该枚举做**穷举 `switch`** 时补 filled/tonal/glass/outline 分支。
+  契约 `contracts/WDIconButton.yaml` 的 enums 需同步为 `[plain, filled, tonal, glass, outline]`
+  （见 `docs/B4-CONTRACT-CHANGE-REQUEST.md`）。
 
 - **`WDCardStyle` 新增 `.sunken`**（pre-1.0 源级 breaking，2026-11-15；设计 17 §4 的第四档）：
   按 F-20，新增枚举 case 属源级 breaking（minor + 本段 + 迁移片段）。迁移 = 一般无需改代码；

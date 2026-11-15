@@ -4122,9 +4122,33 @@
     },
     {
       "access" : "public",
+      "decl" : "case filled",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconButtonVariant.filled"
+    },
+    {
+      "access" : "public",
+      "decl" : "case glass",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconButtonVariant.glass"
+    },
+    {
+      "access" : "public",
+      "decl" : "case outline",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconButtonVariant.outline"
+    },
+    {
+      "access" : "public",
       "decl" : "case plain",
       "kind" : "swift.enum.case",
       "path" : "WDIconButtonVariant.plain"
+    },
+    {
+      "access" : "public",
+      "decl" : "case tonal",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconButtonVariant.tonal"
     },
     {
       "access" : "public",

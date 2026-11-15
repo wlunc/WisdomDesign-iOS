@@ -27,6 +27,13 @@ struct WDIconButtonSnapshotTests {
           WDIconButton(icon: .delete, accessibilityLabel: Text(verbatim: "删除")) {}
             .disabled(true)
         }
+        HStack(spacing: WDSpacing.s3) {
+          ForEach(WDIconButtonVariant.allCases, id: \.self) { variant in
+            WDIconButton(
+              icon: .add, accessibilityLabel: Text(verbatim: variant.rawValue), variant: variant
+            ) {}
+          }
+        }
       }
       .padding(WDSpacing.s5)
       .frame(maxWidth: .infinity, alignment: .leading)
