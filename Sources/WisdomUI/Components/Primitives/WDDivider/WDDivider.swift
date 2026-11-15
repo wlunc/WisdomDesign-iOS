@@ -1,22 +1,44 @@
 import SwiftUI
 
-/// 分割线（SPEC §2.10-#14；M2）。
+/// 分割线档位（设计 14 §4：全宽 / 内缩）。
+public enum WDDividerStyle: String, CaseIterable, Sendable, Equatable {
+  /// 全宽（卡片内整体分区）。
+  case full
+  /// 内缩到文本区起点 62（列表行之间）。
+  case inset
+}
+
+/// 分割线（SPEC §2.10-#14；M2；B3 扩内缩档）。
 ///
-/// 设计口径（设计 14）：1pt 高、`border.hairline`、无圆角、无状态、**不进无障碍树**。
-/// 冻结签名只有 `init()` ⇒ **只实现全宽档**；内缩 62 档由 `WDListRow` 自带的分隔线负责
-/// （差异已登记在 `docs/DEV-PLAN.md` §2.3）。
+/// 设计口径（设计 14）：1pt 高、border.hairline、无圆角、无状态、**不进无障碍树**；
+/// 内缩档起点 **62**（16 + 34 + 12，与列表行文本区对齐）。
 public struct WDDivider: View {
+  private let style: WDDividerStyle
+
   @Environment(\.wdColors) private var colors
 
-  /// 构造（装饰件，无参数）。
-  public init() {}
+  /// 构造（既有；全宽档）。
+  public init() {
+    style = .full
+  }
 
-  /// 渲染：一条全宽的 hairline。
+  /// 构造（B3 增量；全宽 / 内缩）。
+  public init(style: WDDividerStyle) {
+    self.style = style
+  }
+
+  /// 渲染：一条 hairline；内缩档左侧留 62。
   public var body: some View {
     Rectangle()
       .fill(colors.borderHairline)
       .frame(height: 1)
       .frame(maxWidth: .infinity)
+      .padding(.leading, style == .inset ? insetLeading : 0)
       .accessibilityHidden(true)
+  }
+
+  /// 内缩起点 62（设计 14 §3）。
+  private var insetLeading: CGFloat {
+    WDDividerMetrics.insetLeading
   }
 }

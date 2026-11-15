@@ -17,6 +17,16 @@ struct WDDividerTests {
     #expect(abs(size.width - 300) <= 0.5, "实测宽度 \(size.width)，应为 300")
   }
 
+  @Test("两档可构造；内缩档仍是 1pt 高、宽度吃满容器")
+  func styles() {
+    #expect(WDDividerStyle.allCases.map(\.rawValue) == ["full", "inset"])
+    let controller = UIHostingController(
+      rootView: WDDivider(style: .inset).frame(width: 300).wdTheme(.light))
+    let size = controller.sizeThatFits(in: CGSize(width: 300, height: 100))
+    #expect(abs(size.height - 1) <= 0.5, "实测高度 \(size.height)")
+    #expect(abs(size.width - 300) <= 0.5, "实测宽度 \(size.width)")
+  }
+
   @Test("颜色 = border.hairline（叠在白底上的合成色，浅色档）")
   func color() {
     let renderer = ImageRenderer(

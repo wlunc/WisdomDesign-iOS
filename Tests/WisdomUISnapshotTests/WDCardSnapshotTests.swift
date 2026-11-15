@@ -36,6 +36,11 @@ struct WDCardSnapshotTests {
             .wdFont(WDType.body)
             .foregroundStyle(values.textPrimary)
         }
+        WDCard(style: .sunken) {
+          Text(verbatim: "下沉卡")
+            .wdFont(WDType.body)
+            .foregroundStyle(values.textPrimary)
+        }
       }
       .padding(WDSpacing.s5)
       .frame(maxWidth: .infinity, alignment: .leading)

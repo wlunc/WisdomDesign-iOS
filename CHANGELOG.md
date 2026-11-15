@@ -8,6 +8,12 @@
 
 ### Added
 
+- **`WDCard` sunken + `WDDivider` 内缩（2026-11-15，B3；授权扩公开）**：`WDCardStyle` 新增
+  `.sunken`（`surface.card-sunken`、无描边、无阴影）；`WDDivider` 新增 `WDDividerStyle`
+  （full / inset，内缩起点 62）与 `init(style:)`，既有 `init()` 保留。**API 1261 → 1266（+5）**。
+  `card-*`、`divider-*` 各 8 张扩展重录（总 **360**）。**残留**：Card 的 media 变体与可点卡。
+  契约增量见 `docs/B3-CONTRACT-CHANGE-REQUEST.md`（设计仓待落库）。
+
 - **`WDAvatar` 五档 / 在线 / 停用（2026-11-15，B2；授权扩公开）**：新增公开 `WDAvatarSize`
   （xs 20 / sm 28 / md 32 / lg 40 / xl 56，首字号 9/11/12/14/18）与
   `init(value:size:isOnline:isDisabled:)`；既有 `init(value:)`（md 32）不变。在线点 10×10 +
@@ -278,6 +284,12 @@
   **M2 的 11 件公开面全部进入基线**。
 
 ### Breaking
+
+- **`WDCardStyle` 新增 `.sunken`**（pre-1.0 源级 breaking，2026-11-15；设计 17 §4 的第四档）：
+  按 F-20，新增枚举 case 属源级 breaking（minor + 本段 + 迁移片段）。迁移 = 一般无需改代码；
+  仅当调用方对 `WDCardStyle` 做**穷举 `switch`** 时补一个 `.sunken` 分支。
+  契约 `contracts/WDCard.yaml` 的 `enums.WDCardStyle` 需同步为 `[elevated, outlined, glass, sunken]`
+  （见 `docs/B3-CONTRACT-CHANGE-REQUEST.md`）。
 
 - **`WDPickerStyle` 新增 `.inline`**（pre-1.0 源级 breaking，2026-11-14；设计 22 §4 的三形态要求）：
   按 F-20，新增枚举 case 属源级 breaking（minor + 本段 + 迁移片段）。迁移 = 一般无需改代码；

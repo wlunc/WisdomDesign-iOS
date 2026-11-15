@@ -22,6 +22,10 @@
             Text(verbatim: "玻璃卡")
               .wdFont(WDType.body)
           }
+          WDCard(style: .sunken) {
+            Text(verbatim: "下沉卡")
+              .wdFont(WDType.body)
+          }
         }
         .padding(WDSpacing.s5)
       }

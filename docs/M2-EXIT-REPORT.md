@@ -75,7 +75,7 @@
 
 - ①–④：`WDTextField` 播报归属 / 显隐切换 selection / 渲染器表 P17 / `WDA11yFocusID` 无公开构造器；
 - ⑤–⑦：`WDBadge` 变体、`WDDivider` 内缩档、`WDAvatar` 五档/配色/在线态；
-  **B1（2026-11-14）已闭合 ⑤**：`WDBadgeVariant` 六态 + `init(label:variant:)`；**B2（2026-11-15）已闭合 ⑦ 的五档/在线/停用**：`WDAvatarSize` + `init(value:size:isOnline:isDisabled:)`（成员四色底色与照片仍开放）；⑥ 仍开放；记录见 `docs/B1-SIGNATURE-FREEZE.md`、`docs/B2-SIGNATURE-FREEZE.md`；
+  **B1（2026-11-14）已闭合 ⑤**：`WDBadgeVariant` 六态 + `init(label:variant:)`；**B2（2026-11-15）已闭合 ⑦ 的五档/在线/停用**：`WDAvatarSize` + `init(value:size:isOnline:isDisabled:)`（成员四色底色与照片仍开放）；**B3（2026-11-15）已闭合 ⑥ 内缩档与 ⑩ 的 sunken**（Card media/可点仍开放）；记录见 `docs/B1-SIGNATURE-FREEZE.md`、`docs/B2-SIGNATURE-FREEZE.md`、`docs/B3-SIGNATURE-FREEZE.md`；
 - ⑧–⑪：`WDSwitch` 紧凑档/描述位、`WDCheckbox` 半选/紧凑档、`WDCard` sunken/media/可点、
   `WDIconButton` 其余四变体；
 - ⑫–⑭：`WDButton` 字号/图标档近似与聚焦光环、`WDListRow` 徽标朗读合并/`selectionIndicator` 语义、

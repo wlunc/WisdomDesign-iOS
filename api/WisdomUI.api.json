@@ -1572,6 +1572,12 @@
     },
     {
       "access" : "public",
+      "decl" : "case sunken",
+      "kind" : "swift.enum.case",
+      "path" : "WDCardStyle.sunken"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor struct WDCheckbox",
       "kind" : "swift.struct",
       "path" : "WDCheckbox"
@@ -3048,6 +3054,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(style: WDDividerStyle)",
+      "kind" : "swift.init",
+      "path" : "WDDivider.init(style:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDDivider.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
@@ -3129,6 +3141,24 @@
       "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDDivider.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDDividerStyle",
+      "kind" : "swift.enum",
+      "path" : "WDDividerStyle"
+    },
+    {
+      "access" : "public",
+      "decl" : "case full",
+      "kind" : "swift.enum.case",
+      "path" : "WDDividerStyle.full"
+    },
+    {
+      "access" : "public",
+      "decl" : "case inset",
+      "kind" : "swift.enum.case",
+      "path" : "WDDividerStyle.inset"
     },
     {
       "access" : "public",

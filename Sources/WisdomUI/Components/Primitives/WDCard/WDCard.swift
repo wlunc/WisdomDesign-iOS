@@ -8,6 +8,8 @@ public enum WDCardStyle: String, CaseIterable, Sendable, Equatable {
   case outlined
   /// 玻璃卡：`surface.glass-strong`（iOS 26 走系统 `glassEffect`，17–25 纯色降级）。
   case glass
+  /// 下沉卡（B3 增量；`surface.card-sunken`，无描边、无阴影）。
+  case sunken
 }
 
 /// 卡片（SPEC §2.10-#17；M2）。
@@ -15,8 +17,8 @@ public enum WDCardStyle: String, CaseIterable, Sendable, Equatable {
 /// 设计口径（设计 17）：内边距 **16（固定）**、圆角 **`radius.xl` 24**；
 /// 只有 `.glass` 带背景模糊；静态卡 `.accessibilityElement(children: .contain)`。
 ///
-/// 冻结签名只有三档（`elevated`/`outlined`/`glass`）⇒ 设计里的 `sunken`/`media` 与
-/// "可点卡"（按下 96%）不可表达，差异登记在 `docs/DEV-PLAN.md` §2.3。
+/// 现有四档：`elevated`/`outlined`/`glass` + **B3 的 `sunken`**（下沉底、无描边、无阴影）。
+/// `media` 与 "可点卡"（按下 96%）仍不可表达，差异登记在 `docs/DEV-PLAN.md` §2.3。
 public struct WDCard<Content: View>: View {
   private let style: WDCardStyle
   private let content: Content
@@ -46,7 +48,7 @@ public struct WDCard<Content: View>: View {
       .frame(maxWidth: .infinity, alignment: .leading)
       .background(background)
       .clipShape(shape)
-      .overlay(shape.stroke(colors.borderHairline, lineWidth: 1))
+      .overlay { borderOverlay }
       .modifier(WDCardShadow(style: style))
       .accessibilityElement(children: .contain)
   }
@@ -56,6 +58,14 @@ public struct WDCard<Content: View>: View {
     case .elevated: return colors.surfaceCard
     case .outlined: return .clear
     case .glass: return glassFill
+    case .sunken: return colors.surfaceCardSunken
+    }
+  }
+
+  /// 描边：只有 `sunken` 不带描边（设计 17 §4）。
+  @ViewBuilder private var borderOverlay: some View {
+    if style != .sunken {
+      shape.stroke(colors.borderHairline, lineWidth: 1)
     }
   }
 
@@ -90,7 +100,7 @@ private struct WDCardShadow: ViewModifier {
   let style: WDCardStyle
 
   @ViewBuilder func body(content: Content) -> some View {
-    if style == .outlined {
+    if style == .outlined || style == .sunken {
       content
     } else {
       content.wdShadow(WDElevation.e1)

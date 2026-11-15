@@ -4,7 +4,7 @@ import UIKit
 
 import WisdomUI
 
-/// `WDCard`（M2）的组件级断言：内边距固定 16、三档齐、玻璃降级可渲染。
+/// `WDCard`（M2；B3 扩 sunken）的组件级断言：内边距固定 16、四档齐、玻璃降级可渲染。
 @MainActor
 @Suite("WDCard（M2）")
 struct WDCardTests {
@@ -30,8 +30,8 @@ struct WDCardTests {
     }
   }
 
-  @Test("三档齐：elevated（默认）/ outlined / glass")
+  @Test("四档齐：elevated（默认）/ outlined / glass / sunken")
   func styles() {
-    #expect(WDCardStyle.allCases == [.elevated, .outlined, .glass])
+    #expect(WDCardStyle.allCases == [.elevated, .outlined, .glass, .sunken])
   }
 }
