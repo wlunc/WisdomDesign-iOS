@@ -38,11 +38,15 @@ public struct WDDatePickerQuickOption: Identifiable, Sendable, Equatable {
 /// 库内零文案：标签、占位、快捷 Chip 文案由调用方给；月份/星期/日期文案全部走系统本地化格式。
 public struct WDDatePicker: View {
   @Binding private var date: Date?
+  @Binding private var range: ClosedRange<Date>?
   private let label: Text
   private let mode: WDDatePickerMode
   private let placeholder: Text?
   private let quickOptions: [WDDatePickerQuickOption]
   private let bounds: ClosedRange<Date>?
+  private let isRange: Bool
+  private let showsClearButton: Bool
+  private let clearAccessibilityLabel: Text?
 
   @Environment(\.wdColors) private var colors
   @Environment(\.isEnabled) private var isEnabled
@@ -62,18 +66,66 @@ public struct WDDatePicker: View {
     in bounds: ClosedRange<Date>? = nil
   ) {
     self._date = date
+    self._range = .constant(nil)
     self.label = label
     self.mode = mode
     self.placeholder = placeholder
     self.quickOptions = quickOptions
     self.bounds = bounds
+    self.isRange = false
+    self.showsClearButton = false
+    self.clearAccessibilityLabel = nil
+  }
+
+  /// 构造（B6 增量；单日期 + 可选清除按钮）。
+  public init(
+    date: Binding<Date?>,
+    label: Text,
+    mode: WDDatePickerMode = .date,
+    placeholder: Text? = nil,
+    quickOptions: [WDDatePickerQuickOption] = [],
+    in bounds: ClosedRange<Date>? = nil,
+    showsClearButton: Bool,
+    clearAccessibilityLabel: Text?
+  ) {
+    self._date = date
+    self._range = .constant(nil)
+    self.label = label
+    self.mode = mode
+    self.placeholder = placeholder
+    self.quickOptions = quickOptions
+    self.bounds = bounds
+    self.isRange = false
+    self.showsClearButton = showsClearButton
+    self.clearAccessibilityLabel = clearAccessibilityLabel
+  }
+
+  /// 构造（B6 增量；日期范围 + 可选清除按钮；仅日期模式）。
+  public init(
+    range: Binding<ClosedRange<Date>?>,
+    label: Text,
+    placeholder: Text? = nil,
+    in bounds: ClosedRange<Date>? = nil,
+    showsClearButton: Bool = false,
+    clearAccessibilityLabel: Text? = nil
+  ) {
+    self._date = .constant(nil)
+    self._range = range
+    self.label = label
+    self.mode = .date
+    self.placeholder = placeholder
+    self.quickOptions = []
+    self.bounds = bounds
+    self.isRange = true
+    self.showsClearButton = showsClearButton
+    self.clearAccessibilityLabel = clearAccessibilityLabel
   }
 
   /// 触发入口（+ 快捷 Chip）。
   public var body: some View {
     VStack(alignment: .leading, spacing: WDSpacing.s3) {
       trigger
-      if mode == .date, !quickOptions.isEmpty {
+      if !isRange, mode == .date, !quickOptions.isEmpty {
         quickChips
       }
     }
@@ -85,7 +137,7 @@ public struct WDDatePicker: View {
     }
     .onChange(of: showsSheet) { _, presented in
       if presented {
-        visibleMonth = date ?? bounds?.lowerBound ?? Date()
+        visibleMonth = date ?? range?.lowerBound ?? bounds?.lowerBound ?? Date()
       }
     }
   }
@@ -93,43 +145,84 @@ public struct WDDatePicker: View {
   // MARK: - 触发入口
 
   private var trigger: some View {
-    Button {
-      guard isEnabled else { return }
-      showsSheet = true
-    } label: {
-      HStack(spacing: WDSpacing.s3) {
-        label
-          .wdFont(WDType.subheadline)
-          .wdLineBox(WDType.subheadline)
-          .foregroundStyle(colors.textPrimary)
-        Spacer(minLength: WDSpacing.s3)
-        if let displayText {
-          displayText
+    HStack(spacing: WDSpacing.s2) {
+      Button {
+        guard isEnabled else { return }
+        showsSheet = true
+      } label: {
+        HStack(spacing: WDSpacing.s3) {
+          label
             .wdFont(WDType.subheadline)
             .wdLineBox(WDType.subheadline)
-            .foregroundStyle(date == nil ? colors.textTertiary : colors.textPrimary)
-            .lineLimit(1)
+            .foregroundStyle(colors.textPrimary)
+          Spacer(minLength: WDSpacing.s3)
+          if let displayText {
+            displayText
+              .wdFont(WDType.subheadline)
+              .wdLineBox(WDType.subheadline)
+              .foregroundStyle(hasValue ? colors.textPrimary : colors.textTertiary)
+              .lineLimit(1)
+          }
+          WDIcon(icon: isRange || mode != .time ? .calendar : .time, size: .sm)
+            .foregroundStyle(colors.textTertiary)
         }
-        WDIcon(icon: mode == .time ? .time : .calendar, size: .sm)
-          .foregroundStyle(colors.textTertiary)
+        .frame(minHeight: WDSize.controlMd)
+        .contentShape(Rectangle())
       }
-      .frame(minHeight: WDSize.controlMd)
-      .contentShape(Rectangle())
+      .buttonStyle(.plain)
+      .accessibilityLabel(label)
+      .accessibilityValue(displayText ?? Text(verbatim: ""))
+
+      if showsClearButton, hasValue, let clearAccessibilityLabel {
+        WDIconButton(
+          icon: .close,
+          accessibilityLabel: clearAccessibilityLabel,
+          variant: .plain,
+          size: .sm
+        ) {
+          clearSelection()
+        }
+      }
     }
-    .buttonStyle(.plain)
-    .accessibilityLabel(label)
-    .accessibilityValue(displayText ?? Text(verbatim: ""))
+  }
+
+  /// 范围显示（同一年用“月日 – 月日”，跨年带年份；跟随系统区域格式）。
+  private func rangeDisplayText(_ range: ClosedRange<Date>) -> Text {
+    let sameYear =
+      calendar.component(.year, from: range.lowerBound)
+      == calendar.component(.year, from: range.upperBound)
+    let style: Date.FormatStyle =
+      sameYear
+      ? .dateTime.month(.abbreviated).day()
+      : .dateTime.year().month(.abbreviated).day()
+    let text = range.lowerBound.formatted(style) + " – " + range.upperBound.formatted(style)
+    return Text(verbatim: text)  // wd-structure-check:disable R21 — 行盒
+  }
+
+  /// 是否已有选中值（单日期 / 范围通用）。
+  private var hasValue: Bool {
+    isRange ? range != nil : date != nil
+  }
+
+  /// 清除当前值（清除按钮；调用方的 binding 即信号）。
+  private func clearSelection() {
+    date = nil
+    range = nil
   }
 
   private var displayText: Text? {
+    if isRange {
+      guard let range else { return placeholder }
+      return rangeDisplayText(range)
+    }
     guard let date else { return placeholder }
     switch mode {
     case .date:
-      return Text(date, style: .date)  // wd-structure-check:disable R21 — 调用点统一加 wdLineBox
+      return Text(date, style: .date)  // wd-structure-check:disable R21 — 加行盒
     case .time:
-      return Text(date, style: .time)  // wd-structure-check:disable R21 — 调用点统一加 wdLineBox
+      return Text(date, style: .time)  // wd-structure-check:disable R21 — 加行盒
     case .dateAndTime:
-      return Text(date, format: .dateTime)  // wd-structure-check:disable R21 — 调用点统一加 wdLineBox
+      return Text(date, format: .dateTime)  // wd-structure-check:disable R21 — 加行盒
     }
   }
 
@@ -164,16 +257,20 @@ public struct WDDatePicker: View {
   // MARK: - 弹层
 
   @ViewBuilder private var sheetContent: some View {
-    switch mode {
-    case .date:
+    if isRange {
       calendarView
-    case .time:
-      timeWheel
-    case .dateAndTime:
-      VStack(spacing: WDSpacing.s3) {
+    } else {
+      switch mode {
+      case .date:
         calendarView
-        Divider().overlay(colors.borderHairline)
+      case .time:
         timeWheel
+      case .dateAndTime:
+        VStack(spacing: WDSpacing.s3) {
+          calendarView
+          Divider().overlay(colors.borderHairline)
+          timeWheel
+        }
       }
     }
   }
@@ -250,6 +347,7 @@ public struct WDDatePicker: View {
 
   private func dayCell(_ day: Date) -> some View {
     let selected = isSelected(day)
+    let inRange = isInRange(day)
     let allowed = isAllowed(day)
     let today = calendar.isDateInToday(day)
     let dayNumber = calendar.component(.day, from: day)
@@ -259,6 +357,8 @@ public struct WDDatePicker: View {
       ZStack {
         if selected {
           Circle().fill(colors.textBrand)
+        } else if inRange {
+          Circle().fill(colors.surfaceTint)
         }
         VStack(spacing: 1) {
           Text(verbatim: "\(dayNumber)")
@@ -331,8 +431,28 @@ public struct WDDatePicker: View {
   }
 
   private func isSelected(_ day: Date) -> Bool {
+    if isRange {
+      return isRangeEndpoint(day)
+    }
     guard let date else { return false }
     return calendar.isDate(date, inSameDayAs: day)
+  }
+
+  /// 范围内部（不含端点之外的任意中间日）。
+  private func isInRange(_ day: Date) -> Bool {
+    guard isRange, let range else { return false }
+    let target = calendar.startOfDay(for: day)
+    let lower = calendar.startOfDay(for: range.lowerBound)
+    let upper = calendar.startOfDay(for: range.upperBound)
+    return target >= lower && target <= upper
+  }
+
+  /// 范围端点（实心圆）。
+  private func isRangeEndpoint(_ day: Date) -> Bool {
+    guard isRange, let range else { return false }
+    let target = calendar.startOfDay(for: day)
+    return target == calendar.startOfDay(for: range.lowerBound)
+      || target == calendar.startOfDay(for: range.upperBound)
   }
 
   private func isAllowed(_ day: Date) -> Bool {
@@ -344,6 +464,14 @@ public struct WDDatePicker: View {
 
   private func select(_ day: Date) {
     guard isAllowed(day) else { return }
+    if isRange {
+      let result = WDDateRangeSelection.applying(day, to: range, calendar: calendar)
+      range = result.range
+      if result.completed {
+        showsSheet = false
+      }
+      return
+    }
     date = mergedDate(daySource: day, timeSource: date)
     if mode == .date {
       showsSheet = false
@@ -363,6 +491,9 @@ public struct WDDatePicker: View {
   // MARK: - 状态/几何
 
   private var sheetHeight: CGFloat {
+    if isRange {
+      return Self.dateSheetHeight
+    }
     switch mode {
     case .date: return Self.dateSheetHeight
     case .time: return Self.timeSheetHeight

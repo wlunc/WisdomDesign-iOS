@@ -2898,6 +2898,18 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(date: Binding<Date?>, label: Text, mode: WDDatePickerMode = .date, placeholder: Text? = nil, quickOptions: [WDDatePickerQuickOption] = [], in bounds: ClosedRange<Date>? = nil, showsClearButton: Bool, clearAccessibilityLabel: Text?)",
+      "kind" : "swift.init",
+      "path" : "WDDatePicker.init(date:label:mode:placeholder:quickOptions:in:showsClearButton:clearAccessibilityLabel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(range: Binding<ClosedRange<Date>?>, label: Text, placeholder: Text? = nil, in bounds: ClosedRange<Date>? = nil, showsClearButton: Bool = false, clearAccessibilityLabel: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDDatePicker.init(range:label:placeholder:in:showsClearButton:clearAccessibilityLabel:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDDatePicker.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"

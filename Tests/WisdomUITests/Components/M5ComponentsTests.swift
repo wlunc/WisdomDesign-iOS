@@ -265,6 +265,47 @@ struct M5ComponentsTests {
     #expect(WDDatePickerMode.allCases.map(\.rawValue) == ["date", "time", "dateAndTime"])
   }
 
+  @Test("WDDatePicker：范围触发入口 ≥ 44；清除按钮不影响行高")
+  func datePickerRangeAndClear() {
+    let anchor = Date(timeIntervalSince1970: 1_800_000_000)
+    let range = size(
+      WDDatePicker(
+        range: .constant(anchor...anchor.addingTimeInterval(4 * 86_400)),
+        label: Text(verbatim: "日期范围")))
+    let clearable = size(
+      WDDatePicker(
+        date: .constant(anchor), label: Text(verbatim: "截止日期"),
+        showsClearButton: true, clearAccessibilityLabel: Text(verbatim: "清除截止日期")))
+    #expect(range.height >= WDSize.controlMd)
+    #expect(clearable.height >= WDSize.controlMd)
+  }
+
+  @Test("日期范围两步选择：首次设起点、第二次完成、往前点重开")
+  func dateRangeSelection() {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .current
+    let base = Date(timeIntervalSince1970: 1_800_000_000)
+    let day2 = calendar.startOfDay(for: base)
+    let day1 = calendar.date(byAdding: .day, value: -1, to: day2) ?? day2
+    let day3 = calendar.date(byAdding: .day, value: 1, to: day2) ?? day2
+
+    let first = WDDateRangeSelection.applying(day2, to: nil, calendar: calendar)
+    #expect(first.range == day2...day2)
+    #expect(!first.completed)
+
+    let earlier = WDDateRangeSelection.applying(day1, to: first.range, calendar: calendar)
+    #expect(earlier.range == day1...day1)
+    #expect(!earlier.completed)
+
+    let completed = WDDateRangeSelection.applying(day3, to: first.range, calendar: calendar)
+    #expect(completed.range == day2...day3)
+    #expect(completed.completed)
+
+    let restart = WDDateRangeSelection.applying(day1, to: completed.range, calendar: calendar)
+    #expect(restart.range == day1...day1)
+    #expect(!restart.completed)
+  }
+
   // MARK: - WDFormRow
 
   @Test("WDFormRow：上下排布高于左右；AX3 下横向自动降级")

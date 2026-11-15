@@ -300,6 +300,12 @@ private struct DatePickerSample: View {
       WDDatePicker(date: .constant(nil), label: Text(verbatim: "提醒时间"), mode: .time)
       WDDatePicker(date: .constant(nil), label: Text(verbatim: "无截止日期"))
         .disabled(true)
+      WDDatePicker(
+        range: .constant(anchor...anchor.addingTimeInterval(4 * 86_400)),
+        label: Text(verbatim: "日期范围"))
+      WDDatePicker(
+        date: .constant(anchor), label: Text(verbatim: "可清除"),
+        showsClearButton: true, clearAccessibilityLabel: Text(verbatim: "清除截止日期"))
     }
     .environment(\.timeZone, TimeZone(secondsFromGMT: 0) ?? .current)
     .environment(\.locale, Locale(identifier: "zh_CN"))

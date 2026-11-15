@@ -8,6 +8,13 @@
 
 ### Added
 
+- **`WDDatePicker` 范围 + 清除（2026-11-15，B6；授权扩公开）**：新增范围重载
+  `init(range:label:placeholder:in:showsClearButton:clearAccessibilityLabel:)`（仅日期模式）与
+  单日期清除重载；范围两步选择（起点→终点，往前点重开），同年“月日 – 月日”、跨年带年份，
+  跟随系统区域格式；清除仅在提供标签时渲染。**API 1274 → 1276（+2）**；`datepicker-*`
+  8 张扩展重录。**残留**：范围+时间、范围中点视觉、清除回调、过期色。契约增量见
+  `docs/B6-CONTRACT-CHANGE-REQUEST.md`。
+
 - **`WDSwitch` 紧凑档 + 描述位（2026-11-15，B5；授权扩公开）**：新增公开 `WDSwitchSize`
   （standard 51×31 / compact 40×24，滑块 27/20、行程 20/16）与
   `init(isOn:label:description:size:)`；既有 `init(isOn:label:)` 保留。描述位在标签下方一行
