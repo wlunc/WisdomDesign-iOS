@@ -1596,6 +1596,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(isChecked: Binding<Bool>, accessibilityLabel: Text, size: WDCheckboxSize = .standard, isIndeterminate: Bool = false)",
+      "kind" : "swift.init",
+      "path" : "WDCheckbox.init(isChecked:accessibilityLabel:size:isIndeterminate:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor init(isChecked: Binding<Bool>, label: Text, isIndeterminate: Bool = false)",
       "kind" : "swift.init",
       "path" : "WDCheckbox.init(isChecked:label:isIndeterminate:)"
@@ -4074,6 +4080,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(icon: WDIconName, accessibilityLabel: Text, variant: WDIconButtonVariant = .plain, size: WDButtonSize = .md, shape: WDIconButtonShape, isLoading: Bool = false, action: @escaping () -> Void)",
+      "kind" : "swift.init",
+      "path" : "WDIconButton.init(icon:accessibilityLabel:variant:size:shape:isLoading:action:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDIconButton.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
@@ -4155,6 +4167,24 @@
       "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDIconButton.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDIconButtonShape",
+      "kind" : "swift.enum",
+      "path" : "WDIconButtonShape"
+    },
+    {
+      "access" : "public",
+      "decl" : "case circle",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconButtonShape.circle"
+    },
+    {
+      "access" : "public",
+      "decl" : "case roundedSquare",
+      "kind" : "swift.enum.case",
+      "path" : "WDIconButtonShape.roundedSquare"
     },
     {
       "access" : "public",

@@ -305,6 +305,42 @@ struct M5ComponentsTests {
     #expect(clearable.height >= WDSize.controlMd)
   }
 
+  @Test("WDDatePicker：isExpired 按 startOfDay 比较（昨天过期、今天 / 明天不过期）")
+  func datePickerExpiredLogic() {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .current
+    let now = Date(timeIntervalSince1970: 1_800_000_000)
+    let today = calendar.startOfDay(for: now)
+    let yesterday = calendar.date(byAdding: .day, value: -1, to: today) ?? today
+    let tomorrow = calendar.date(byAdding: .day, value: 1, to: today) ?? today
+
+    #expect(WDDatePicker.isExpired(yesterday, now: now, calendar: calendar))
+    #expect(!WDDatePicker.isExpired(today, now: now, calendar: calendar))
+    #expect(!WDDatePicker.isExpired(tomorrow, now: now, calendar: calendar))
+  }
+
+  @Test("WDDatePicker：isExpired 不受时分影响")
+  func datePickerExpiredIgnoresTime() {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .current
+    let now = Date(timeIntervalSince1970: 1_800_000_000)
+    let today = calendar.startOfDay(for: now)
+    let yesterday = calendar.date(byAdding: .day, value: -1, to: today) ?? today
+    let todayLate = calendar.date(byAdding: .hour, value: 23, to: today) ?? today
+    let yesterdayLate = calendar.date(byAdding: .hour, value: 23, to: yesterday) ?? today
+
+    #expect(!WDDatePicker.isExpired(todayLate, now: today, calendar: calendar))
+    #expect(WDDatePicker.isExpired(yesterdayLate, now: today, calendar: calendar))
+  }
+
+  @Test("WDDatePicker：过去日期可构造（已过期态不崩）")
+  func datePickerPastDateConstruction() {
+    let past = Date(timeIntervalSince1970: 0)
+    let measured = size(
+      WDDatePicker(date: .constant(past), label: Text(verbatim: "截止日期")))
+    #expect(measured.height >= WDSize.controlMd)
+  }
+
   @Test("日期范围两步选择：首次设起点、第二次完成、往前点重开")
   func dateRangeSelection() {
     var calendar = Calendar(identifier: .gregorian)

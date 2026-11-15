@@ -18,6 +18,16 @@ struct WDIconButtonTests {
     return controller.sizeThatFits(in: CGSize(width: 200, height: 200))
   }
 
+  private static func size(_ size: WDButtonSize, shape: WDIconButtonShape) -> CGSize {
+    let controller = UIHostingController(
+      rootView: WDIconButton(
+        icon: .search, accessibilityLabel: Text(verbatim: "搜索"), size: size, shape: shape
+      ) {}
+      .wdTheme(.light)
+    )
+    return controller.sizeThatFits(in: CGSize(width: 200, height: 200))
+  }
+
   @Test("档位映射：视觉 sm 32 / md 44 / lg 52；图标 sm 16 / md 24 / lg 28")
   func mapping() {
     #expect(WDIconButton.visualSize(for: .sm) == 32)
@@ -43,6 +53,25 @@ struct WDIconButtonTests {
     #expect(
       WDIconButtonVariant.allCases.map(\.rawValue)
         == ["plain", "filled", "tonal", "glass", "outline"])
+  }
+
+  @Test("两形态齐、rawValue 稳定")
+  func shapes() {
+    #expect(
+      WDIconButtonShape.allCases.map(\.rawValue) == ["circle", "roundedSquare"])
+  }
+
+  @Test("两种形态可构造，视觉尺寸与既有 init（circle）一致")
+  func shapeKeepsVisualSize() {
+    for size in WDButtonSize.allCases {
+      let legacy = Self.size(size)
+      for shape in WDIconButtonShape.allCases {
+        let measured = Self.size(size, shape: shape)
+        #expect(
+          measured == legacy,
+          "\(shape.rawValue)/\(size.rawValue) 视觉尺寸 \(measured) ≠ \(legacy)")
+      }
+    }
   }
 
   @Test("五变体图标/背景对比度 ≥ 3:1（DF-04 图形门槛，浅深两套）")

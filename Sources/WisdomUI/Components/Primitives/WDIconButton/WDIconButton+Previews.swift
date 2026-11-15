@@ -20,6 +20,20 @@
           ) {}
         }
       }
+      HStack(spacing: WDSpacing.s4) {
+        WDIconButton(
+          icon: .add, accessibilityLabel: Text(verbatim: "圆角方形填充"), variant: .filled,
+          shape: .roundedSquare
+        ) {}
+        WDIconButton(
+          icon: .search, accessibilityLabel: Text(verbatim: "圆角方形描边"), variant: .outline,
+          shape: .roundedSquare
+        ) {}
+        WDIconButton(
+          icon: .more, accessibilityLabel: Text(verbatim: "圆角方形玻璃"), variant: .glass,
+          size: .lg, shape: .roundedSquare
+        ) {}
+      }
       .padding(WDSpacing.s5)
     }
   }

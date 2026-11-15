@@ -933,11 +933,11 @@ extension View {
 | # | 组件 | 受控值（**契约名** / 本端形态；C-15 `40-contract-names.md`） | 槽位（∈21 名词表；分类见上方副表） | 关键默认 | **文本策略** | **播报/触觉** | 批次 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 01 | `WDButton` | `loading` / `isLoading`（值） | `label`,`leadingIcon`,`trailingIcon` | `.filled`/`.md` | 1 行 | 按下轻触觉 ×1 | M2 |
-| 02 | `WDIconButton` | `loading` / `isLoading` | `icon`,**a11y 标签（必填）** | `.plain` | — | ×1 | M2 |
+| 02 | `WDIconButton` | `loading` / `isLoading` | `icon`,**a11y 标签（必填）** | `.plain`；`shape = .circle` | — | ×1 | M2 |
 | 03 | `WDTextField` | `text` / `Binding<String>` ✓ | `label`,`prefix`,`accessory`,`helper` | `.inset` | 1 行 + 错误 1 行 | 错误出现时播报（assertive，一次） | M2 |
 | 04 | `WDSearchField` | `text` / `Binding<String>` ✓ | `placeholder`,`leadingIcon`,`label`（取消） | — | 1 行 | **结果数变化 polite**（阈值由调用方） | M5 |
 | 05 | `WDSwitch` | `on` / `isOn` ✓ | `label` | `size = .standard`；`description = nil`（既有 `init(isOn:label:)` 等价） | 1 行 | 切换轻 ×1 | M2 |
-| 06 | `WDCheckbox` | `checked` / **`isChecked`** ✓ | `label` | `size = .standard` | 1 行 | 轻 ×1 | M2 |
+| 06 | `WDCheckbox` | `checked` / **`isChecked`** ✓ | `label` | `size = .standard`；无标签重载 `accessibilityLabel` 必填 | 1 行 | 轻 ×1 | M2 |
 | 07 | `WDRadio` | `selection` ✓ | `label`（组）,`options` | `size = .standard` | 2 行允许 | 轻 ×1 | M5 |
 | 08 | `WDSlider` | `value` ✓ | `label` | — | 1 行 | **松手后播报一次** | M5 |
 | 09 | `WDStepper` | `value` ✓ | `label` | — | 1 行 | **高频不给触觉** | M5 |

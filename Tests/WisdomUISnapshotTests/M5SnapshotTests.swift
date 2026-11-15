@@ -312,6 +312,8 @@ private struct DatePickerSample: View {
       WDDatePicker(
         date: .constant(anchor), label: Text(verbatim: "可清除"),
         showsClearButton: true, clearAccessibilityLabel: Text(verbatim: "清除截止日期"))
+      WDDatePicker(
+        date: .constant(Date(timeIntervalSince1970: 0)), label: Text(verbatim: "已过期"))
     }
     .environment(\.timeZone, TimeZone(secondsFromGMT: 0) ?? .current)
     .environment(\.locale, Locale(identifier: "zh_CN"))

@@ -8,7 +8,7 @@ import WisdomUI
 @MainActor
 @Suite("WDIconButton 快照", .serialized)
 struct WDIconButtonSnapshotTests {
-  static let canvas = CGSize(width: 360, height: 200)
+  static let canvas = CGSize(width: 360, height: 340)
 
   private struct Sample: View {
     let values: WDColorValues
@@ -33,6 +33,16 @@ struct WDIconButtonSnapshotTests {
               icon: .add, accessibilityLabel: Text(verbatim: variant.rawValue), variant: variant
             ) {}
           }
+        }
+        HStack(spacing: WDSpacing.s3) {
+          WDIconButton(
+            icon: .add, accessibilityLabel: Text(verbatim: "方形实底"), variant: .filled,
+            shape: .roundedSquare
+          ) {}
+          WDIconButton(
+            icon: .search, accessibilityLabel: Text(verbatim: "方形描边"), variant: .outline,
+            shape: .roundedSquare
+          ) {}
         }
       }
       .padding(WDSpacing.s5)

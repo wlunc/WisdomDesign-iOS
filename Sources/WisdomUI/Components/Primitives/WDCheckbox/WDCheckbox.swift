@@ -16,11 +16,15 @@ public enum WDCheckboxSize: String, CaseIterable, Sendable, Equatable {
 /// - 标准档标签 `subheadline`（15）、紧凑档标签 `footnote`（13）；热区 ≥ 44；切换轻触觉 ×1。
 ///
 /// `isIndeterminate` 是**显示态**（表头全选等由调用方维护）；半选的朗读文案属调用方
-/// （L-B 零文案），需要时在外层加 `.accessibilityValue(_:)`。无标签表头/光晕/按下缩放
+/// （L-B 零文案），需要时在外层加 `.accessibilityValue(_:)`。无标签变体（设计 06 §4）走
+/// `accessibilityLabel` 构造：仅渲染方框、读屏文案由调用方提供，只用于表头全选；光晕/按下缩放
 /// 仍不可表达，差异登记在 `docs/DEV-PLAN.md` §2.3。
 public struct WDCheckbox: View {
   @Binding private var isChecked: Bool
-  private let label: Text
+  /// 可见标签；nil = 无标签变体（只渲染方框）。
+  private let label: Text?
+  /// 无标签变体的读屏文案（有可见标签时为 nil，由标签自身朗读）。
+  private let accessibilityLabel: Text?
   private let size: WDCheckboxSize
   private let isIndeterminate: Bool
 
@@ -34,6 +38,7 @@ public struct WDCheckbox: View {
   ) {
     self._isChecked = isChecked
     self.label = label
+    self.accessibilityLabel = nil
     self.size = .standard
     self.isIndeterminate = isIndeterminate
   }
@@ -47,19 +52,50 @@ public struct WDCheckbox: View {
   ) {
     self._isChecked = isChecked
     self.label = label
+    self.accessibilityLabel = nil
     self.size = size
     self.isIndeterminate = isIndeterminate
   }
 
-  /// 标签 + 方框；整行可点（含标签）。
+  /// 构造（无标签：仅方框；`accessibilityLabel` 必填）。
+  ///
+  /// 设计 06 §4 的「无标签」变体，只用于表头全选：行内不显示文字，读屏文案完全由调用方提供
+  /// （库内零文案）。
+  public init(
+    isChecked: Binding<Bool>,
+    accessibilityLabel: Text,
+    size: WDCheckboxSize = .standard,
+    isIndeterminate: Bool = false
+  ) {
+    self._isChecked = isChecked
+    self.label = nil
+    self.accessibilityLabel = accessibilityLabel
+    self.size = size
+    self.isIndeterminate = isIndeterminate
+  }
+
+  /// 标签（可选）+ 方框；整行可点。无标签时只渲染方框，读屏读 `accessibilityLabel`。
   public var body: some View {
     Toggle(isOn: $isChecked) {
-      label
-        .wdFont(textStyle)
-        .wdLineBox(textStyle)
+      if let label {
+        label
+          .wdFont(textStyle)
+          .wdLineBox(textStyle)
+      }
     }
-    .toggleStyle(WDCheckboxToggleStyle(size: size, isIndeterminate: isIndeterminate))
+    .toggleStyle(
+      WDCheckboxToggleStyle(
+        size: size,
+        isIndeterminate: isIndeterminate,
+        showsLabel: label != nil,
+        accessibilityLabel: accessibilityLabel)
+    )
     .opacity(isEnabled ? 1 : disabledOpacity)
+  }
+
+  /// 点击后的受控值：半选 → 全选（不做三态循环），其余取反（设计 06 §8）。
+  static func toggledValue(isOn: Bool, isIndeterminate: Bool) -> Bool {
+    isIndeterminate ? true : !isOn
   }
 
   /// 标签字阶：标准 `subheadline`、紧凑 `footnote`（设计 06 §3）。
@@ -105,31 +141,46 @@ private struct WDCheckboxToggleStyle: ToggleStyle {
 
   let size: WDCheckboxSize
   let isIndeterminate: Bool
+  /// 是否有可见标签（决定是否渲染文字、是否留方框与文字的间距）。
+  let showsLabel: Bool
+  /// 无标签变体的读屏文案；有可见标签时为 nil。
+  let accessibilityLabel: Text?
 
   @Environment(\.wdColors) private var colors
   @Environment(\.wdEffectsBudget) private var budget
   @Environment(\.isEnabled) private var isEnabled
 
   func makeBody(configuration: Configuration) -> some View {
-    HStack(spacing: WDSpacing.s3) {
-      box(configuration)
-      configuration.label
-        .foregroundStyle(colors.textPrimary)
-      Spacer(minLength: 0)
-    }
-    .frame(minHeight: WDSize.touchTargetMin)
-    .contentShape(Rectangle())
-    .onTapGesture {
-      guard isEnabled else { return }
-      // 设计 06 §8：半选点击 → 全选（不做三态循环）。
-      if isIndeterminate {
-        configuration.isOn = true
-      } else {
-        configuration.isOn.toggle()
+    let row =
+      HStack(spacing: showsLabel ? WDSpacing.s3 : 0) {
+        box(configuration)
+        if showsLabel {
+          configuration.label
+            .foregroundStyle(colors.textPrimary)
+        }
+        Spacer(minLength: 0)
       }
-      WDHaptics.shared.play(.toggle, budget: budget)
+      // 无标签时行内只有方框，仍保证 44×44 热区（设计 06 §3）。
+      .frame(minWidth: WDSize.touchTargetMin, minHeight: WDSize.touchTargetMin)
+      .contentShape(Rectangle())
+      .onTapGesture {
+        guard isEnabled else { return }
+        configuration.isOn = WDCheckbox.toggledValue(
+          isOn: configuration.isOn, isIndeterminate: isIndeterminate)
+        WDHaptics.shared.play(.toggle, budget: budget)
+      }
+      .accessibilityElement(children: .combine)
+    return labeled(row)
+  }
+
+  /// 无标签时把调用方给的读屏文案挂到整行（状态/半选语义仍由 `Toggle` 提供）。
+  @ViewBuilder
+  private func labeled(_ row: some View) -> some View {
+    if let accessibilityLabel {
+      row.accessibilityLabel(accessibilityLabel)
+    } else {
+      row
     }
-    .accessibilityElement(children: .combine)
   }
 
   private func box(_ configuration: Configuration) -> some View {

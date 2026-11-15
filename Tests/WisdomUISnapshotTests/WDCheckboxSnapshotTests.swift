@@ -22,6 +22,14 @@ struct WDCheckboxSnapshotTests {
         WDCheckbox(
           isChecked: .constant(false), label: Text(verbatim: "紧凑半选"), size: .compact,
           isIndeterminate: true)
+        HStack(spacing: WDSpacing.s3) {
+          WDCheckbox(
+            isChecked: .constant(true), accessibilityLabel: Text(verbatim: "全选"),
+            isIndeterminate: true)
+          WDCheckbox(
+            isChecked: .constant(false), accessibilityLabel: Text(verbatim: "未全选"),
+            size: .compact)
+        }
       }
       .padding(WDSpacing.s5)
       .frame(maxWidth: .infinity, alignment: .leading)

@@ -5,9 +5,11 @@
     @State private var first = true
     @State private var second = false
     @State private var compact = false
+    @State private var selectAll = false
 
     var body: some View {
       VStack(alignment: .leading, spacing: WDSpacing.s4) {
+        WDCheckbox(isChecked: $selectAll, accessibilityLabel: Text(verbatim: "全选"))
         WDCheckbox(isChecked: $first, label: Text(verbatim: "共享给家人"))
         WDCheckbox(isChecked: $second, label: Text(verbatim: "每日提醒"))
         WDCheckbox(
@@ -16,6 +18,9 @@
           isChecked: .constant(false), label: Text(verbatim: "紧凑半选"), size: .compact,
           isIndeterminate: true)
         WDCheckbox(isChecked: .constant(false), label: Text(verbatim: "半选"), isIndeterminate: true)
+        WDCheckbox(
+          isChecked: .constant(false), accessibilityLabel: Text(verbatim: "全选（紧凑半选）"),
+          size: .compact, isIndeterminate: true)
         WDCheckbox(isChecked: .constant(true), label: Text(verbatim: "已完成的选项"))
           .disabled(true)
       }

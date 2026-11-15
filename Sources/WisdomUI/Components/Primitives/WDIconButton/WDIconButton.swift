@@ -16,6 +16,16 @@ public enum WDIconButtonVariant: String, CaseIterable, Sendable, Equatable {
   case outline
 }
 
+/// 图标按钮的容器形态（设计 01-basic §02 §3：`radius.full` 或 `radius.sm`）。
+///
+/// F-20：新增 case 属源级 breaking（穷尽 switch 需补分支）。
+public enum WDIconButtonShape: String, CaseIterable, Sendable, Equatable {
+  /// 圆形：`radius.full`（默认；与既有 init 的行为一致）。
+  case circle
+  /// 圆角方形：`radius.sm`（设计 02 §3 的备选形态）。
+  case roundedSquare
+}
+
 /// 图标按钮（SPEC §2.10-#02；M2；B4 扩五变体）。
 ///
 /// 设计口径（设计 02）：sm 视觉 32、md 视觉 44、lg 52，**热区恒 44×44**；图标按档取；
@@ -24,12 +34,15 @@ public enum WDIconButtonVariant: String, CaseIterable, Sendable, Equatable {
 /// 对比度优先（DF-04 图形 3:1）：filled 用 text.brand 实底 + 浅色白 / 深色 text.on-light-primary
 /// （设计 02 的 gradient.mid + 白在浅端仅 2.51:1，不达 3:1）。
 ///
-/// 仍未表达：圆角方形形态（设计 02 §3 的 radius.sm 备选）、聚焦光环、长按提示。
+/// 形态（设计 02 §3）：`circle`（`radius.full`，默认）与 `roundedSquare`（`radius.sm`）。
+///
+/// 仍未表达：聚焦光环、长按提示。
 public struct WDIconButton: View {
   private let icon: WDIconName
   private let accessibilityLabel: Text
   private let variant: WDIconButtonVariant
   private let size: WDButtonSize
+  private let shape: WDIconButtonShape
   private let isLoading: Bool
   private let action: () -> Void
 
@@ -38,7 +51,7 @@ public struct WDIconButton: View {
   @Environment(\.isEnabled) private var isEnabled
   @Environment(\.colorScheme) private var colorScheme
 
-  /// 构造（accessibilityLabel 必填；库内零文案）。
+  /// 构造（accessibilityLabel 必填；库内零文案）；形态固定 `circle`，与既有行为一致。
   public init(
     icon: WDIconName,
     accessibilityLabel: Text,
@@ -47,10 +60,32 @@ public struct WDIconButton: View {
     isLoading: Bool = false,
     action: @escaping () -> Void
   ) {
+    self.init(
+      icon: icon,
+      accessibilityLabel: accessibilityLabel,
+      variant: variant,
+      size: size,
+      shape: .circle,
+      isLoading: isLoading,
+      action: action
+    )
+  }
+
+  /// 构造（accessibilityLabel 与 shape 必填；库内零文案）。
+  public init(
+    icon: WDIconName,
+    accessibilityLabel: Text,
+    variant: WDIconButtonVariant = .plain,
+    size: WDButtonSize = .md,
+    shape: WDIconButtonShape,
+    isLoading: Bool = false,
+    action: @escaping () -> Void
+  ) {
     self.icon = icon
     self.accessibilityLabel = accessibilityLabel
     self.variant = variant
     self.size = size
+    self.shape = shape
     self.isLoading = isLoading
     self.action = action
   }
@@ -74,7 +109,7 @@ public struct WDIconButton: View {
       .background { backgroundShape }
       .overlay { borderShape }
       .frame(minWidth: WDSize.touchTargetMin, minHeight: WDSize.touchTargetMin)
-      .contentShape(Rectangle())
+      .contentShape(containerShape)
     }
     .buttonStyle(WDIconButtonPressStyle())
     .accessibilityLabel(accessibilityLabel)
@@ -111,25 +146,30 @@ public struct WDIconButton: View {
     }
   }
 
+  /// 容器形状；背景、描边与热区形状共用（设计 02 §3 的两种圆角口径）。
+  private var containerShape: some InsettableShape {
+    WDIconButtonContainerShape(kind: shape)
+  }
+
   @ViewBuilder private var backgroundShape: some View {
     switch variant {
     case .plain, .outline:
       Color.clear
     case .filled:
-      Circle().fill(colors.textBrand)
+      containerShape.fill(colors.textBrand)
     case .tonal:
-      Circle().fill(colors.surfaceTint)
+      containerShape.fill(colors.surfaceTint)
     case .glass:
-      Circle().fill(colors.surfaceGlassStrong)
+      containerShape.fill(colors.surfaceGlassStrong)
     }
   }
 
   @ViewBuilder private var borderShape: some View {
     switch variant {
     case .glass:
-      Circle().strokeBorder(colors.borderHairline, lineWidth: 1)
+      containerShape.strokeBorder(colors.borderHairline, lineWidth: 1)
     case .outline:
-      Circle().strokeBorder(colors.borderHairlineStrong, lineWidth: 1)
+      containerShape.strokeBorder(colors.borderHairlineStrong, lineWidth: 1)
     case .plain, .filled, .tonal:
       EmptyView()
     }
@@ -160,6 +200,28 @@ public struct WDIconButton: View {
 
   /// 百分数换算分母。
   private static let percentScale: CGFloat = 100  // wd-structure-check:disable R7 — 百分数
+}
+
+/// 图标按钮容器形状；`strokeBorder` 需要可内缩，故实现 `InsettableShape`。
+private struct WDIconButtonContainerShape: InsettableShape {
+  let kind: WDIconButtonShape
+  var insetAmount: CGFloat = 0
+
+  func path(in rect: CGRect) -> Path {
+    switch kind {
+    case .circle:
+      return Circle().inset(by: insetAmount).path(in: rect)
+    case .roundedSquare:
+      return RoundedRectangle(cornerRadius: WDRadius.sm, style: .continuous)
+        .inset(by: insetAmount).path(in: rect)
+    }
+  }
+
+  func inset(by amount: CGFloat) -> Self {
+    var copy = self
+    copy.insetAmount += amount
+    return copy
+  }
 }
 
 /// 按下缩放 0.97（设计 02 §5 / 09 §9 的 instant）。

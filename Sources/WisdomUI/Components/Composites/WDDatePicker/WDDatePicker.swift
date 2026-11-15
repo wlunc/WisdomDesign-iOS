@@ -160,7 +160,7 @@ public struct WDDatePicker: View {
             displayText
               .wdFont(WDType.subheadline)
               .wdLineBox(WDType.subheadline)
-              .foregroundStyle(hasValue ? colors.textPrimary : colors.textTertiary)
+              .foregroundStyle(displayTextColor)
               .lineLimit(1)
           }
           WDIcon(icon: isRange || mode != .time ? .calendar : .time, size: .sm)
@@ -224,6 +224,23 @@ public struct WDDatePicker: View {
     case .dateAndTime:
       return Text(date, format: .dateTime)  // wd-structure-check:disable R21 — 加行盒
     }
+  }
+
+  /// 触发入口文字色：已过期（仅单日期 .date / .dateAndTime）→ danger；否则按有无值。
+  private var displayTextColor: Color {
+    if isExpiredSelection { return colors.statusDanger }
+    return hasValue ? colors.textPrimary : colors.textTertiary
+  }
+
+  /// 单日期已过期（范围不适用；.time 不参与）。
+  private var isExpiredSelection: Bool {
+    guard !isRange, mode != .time, let date else { return false }
+    return Self.isExpired(date, now: Date(), calendar: calendar)
+  }
+
+  /// 纯逻辑：日期是否早于 now 所在日（按 startOfDay 比较；仅单日期语义）。
+  static func isExpired(_ date: Date, now: Date, calendar: Calendar) -> Bool {
+    calendar.startOfDay(for: date) < calendar.startOfDay(for: now)
   }
 
   // MARK: - 快捷 Chip

@@ -8,6 +8,14 @@
 
 ### Added
 
+- **B8 实现欠账（2026-11-15；授权扩公开）**：`WDIconButton` 新增 `WDIconButtonShape`
+  （circle / roundedSquare，radius.sm）与 shape 重载；`WDCheckbox` 新增无标签重载（仅方框 +
+  必填 accessibilityLabel，用于表头全选）；`WDDatePicker` 单日期早于今天时文字改用
+  `status.danger`（范围 / `.time` 不套用）。**API 1285 → 1290（+5）**；`iconbutton-*`、
+  `checkbox-*`、`datepicker-*` 各 8 张重录。契约已同步 IconButton/Checkbox 两个 yaml。
+  **残留**：IconButton lg 方形视觉复核、Checkbox 光晕/无标签朗读实测、DatePicker 跨午夜不自动翻转、
+  读屏未播报“已过期”。
+
 - **B7 实现欠账（2026-11-15；授权扩公开）**：`WDCard` 新增可点卡（按下亮度 96%、instant、
   禁用 40%、button 语义）；`WDCheckbox` / `WDRadio` 新增紧凑档（22px 方框/外圆，标签 footnote）；
   `WDFAB` 展开时读屏焦点移入第一个子操作。**API 1276 → 1285（+9）**；`checkbox-*`、`card-*`、
