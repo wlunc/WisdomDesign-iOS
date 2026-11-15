@@ -1,8 +1,10 @@
 # B2 契约变更请求 —— WDAvatar.yaml（2026-11-15）
 
+> **状态：已落库**（2026-11-15，设计仓 contracts/WDAvatar.yaml）。
+
 > **背景**：项目负责人 2026-11-14 授权扩公开；B2 新增 WDAvatarSize 与 init(value:size:isOnline:isDisabled:)。
 > **为什么是"请求"**：契约真源在设计仓 ../wisdomdesign/contracts/，本仓对设计仓只读。
-> **待办**：设计/架构侧把增量落到 ../wisdomdesign/contracts/WDAvatar.yaml；发布前必须闭合。
+> **落库记录**：2026-11-15 已落库设计仓 contracts/WDAvatar.yaml。
 
 ## 增量
 

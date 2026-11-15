@@ -13,27 +13,27 @@
   单日期清除重载；范围两步选择（起点→终点，往前点重开），同年“月日 – 月日”、跨年带年份，
   跟随系统区域格式；清除仅在提供标签时渲染。**API 1274 → 1276（+2）**；`datepicker-*`
   8 张扩展重录。**残留**：范围+时间、范围中点视觉、清除回调、过期色。契约增量见
-  `docs/B6-CONTRACT-CHANGE-REQUEST.md`。
+  `docs/B6-CONTRACT-CHANGE-REQUEST.md`；已落库设计仓（2026-11-15）。
 
 - **`WDSwitch` 紧凑档 + 描述位（2026-11-15，B5；授权扩公开）**：新增公开 `WDSwitchSize`
   （standard 51×31 / compact 40×24，滑块 27/20、行程 20/16）与
   `init(isOn:label:description:size:)`；既有 `init(isOn:label:)` 保留。描述位在标签下方一行
   footnote / text.secondary。**API 1270 → 1274（+4）**；`switch-*` 8 张扩展重录。
   **残留**：拖动滑块/松手吸附、写入失败回弹、聚焦光环、精确 260/300ms 曲线。
-  契约增量见 `docs/B5-CONTRACT-CHANGE-REQUEST.md`。
+  契约增量见 `docs/B5-CONTRACT-CHANGE-REQUEST.md`；已落库设计仓（2026-11-15）。
 
 - **`WDIconButton` 五变体（2026-11-15，B4；授权扩公开）**：`WDIconButtonVariant` 新增
   filled / tonal / glass / outline（既有 plain 不变），按下缩放 0.97、禁用 40%。**对比度优先**：
   filled 用 `text.brand` 实底 + 浅色白 / 深色 `text.on-light-primary`（设计 `gradient.mid` + 白
   仅 2.51:1，不达图形 3:1）。**API 1266 → 1270（+4）**；`iconbutton-*` 8 张扩展重录。
   **残留**：圆角方形形态、聚焦光环、长按提示、加载态语义。契约增量见
-  `docs/B4-CONTRACT-CHANGE-REQUEST.md`（设计仓待落库）。
+  `docs/B4-CONTRACT-CHANGE-REQUEST.md`（已于 2026-11-15 落库设计仓）。
 
 - **`WDCard` sunken + `WDDivider` 内缩（2026-11-15，B3；授权扩公开）**：`WDCardStyle` 新增
   `.sunken`（`surface.card-sunken`、无描边、无阴影）；`WDDivider` 新增 `WDDividerStyle`
   （full / inset，内缩起点 62）与 `init(style:)`，既有 `init()` 保留。**API 1261 → 1266（+5）**。
   `card-*`、`divider-*` 各 8 张扩展重录（总 **360**）。**残留**：Card 的 media 变体与可点卡。
-  契约增量见 `docs/B3-CONTRACT-CHANGE-REQUEST.md`（设计仓待落库）。
+  契约增量见 `docs/B3-CONTRACT-CHANGE-REQUEST.md`（已于 2026-11-15 落库设计仓）。
 
 - **`WDAvatar` 五档 / 在线 / 停用（2026-11-15，B2；授权扩公开）**：新增公开 `WDAvatarSize`
   （xs 20 / sm 28 / md 32 / lg 40 / xl 56，首字号 9/11/12/14/18）与
@@ -41,7 +41,7 @@
   2pt 描边，停用整体 50% 去饱和；图标档按直径近似（xs/sm 16、md 20、lg/xl 24，已登记）。
   **API 1254 → 1261（+7）**。`avatar-*` 8 张扩展重录，受字号/图标档影响的 `avatarstack-*`、
   `assigneepicker-*` 各 8 张同步重录（总 **360**）。**残留**：成员四色底色（缺 token）、照片形态、
-  在线状态读屏措辞（L-B）。契约增量见 `docs/B2-CONTRACT-CHANGE-REQUEST.md`（设计仓待落库）。
+  在线状态读屏措辞（L-B）。契约增量见 `docs/B2-CONTRACT-CHANGE-REQUEST.md`（已于 2026-11-15 落库设计仓）。
 
 - **`WDBadge` 六种状态变体（2026-11-14，B1；项目负责人授权扩公开）**：新增公开 `WDBadgeVariant`
   （shared / schedule / pending / success / warning / danger）与 `init(label:variant:)`；既有
@@ -49,7 +49,7 @@
   soft 变体文字统一 `text.on-soft`（原 status 色 success 4.32 / danger 3.94 不达 4.5）；schedule 改
   `status.info` 实底（原 `gradient.mid` 白字仅 2.51–4.23），浅色白 / 深色 `text.on-light-primary`。
   新增 8 张 `badge-variants-*` 基线（总 **360**）+ 2 条单测（六态/高度、6×2 对比度）。契约增量见
-  `docs/B1-CONTRACT-CHANGE-REQUEST.md`（设计仓落库待办，发布前必须闭合）。
+  `docs/B1-CONTRACT-CHANGE-REQUEST.md`（已于 2026-11-15 落库设计仓）。
 
 - **`WDSlider` 自绘载体 + 交互补齐（2026-11-14，B 类遗留）**：手势/读屏改由 Internal `UISlider` 承载
   （系统拖拽、键盘方向键、读屏可调整语义；避免自造 `DragGesture`），视觉改 SwiftUI 覆盖层——轨道 6pt

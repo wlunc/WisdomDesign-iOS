@@ -1,8 +1,10 @@
 # B1 契约变更请求 —— WDBadge.yaml（2026-11-14）
 
+> **状态：已落库**（2026-11-15，设计仓 contracts/WDBadge.yaml）。
+
 > **背景**：项目负责人 2026-11-14 授权扩公开；B1 新增 WDBadgeVariant 与 init(label:variant:)。
 > **为什么是"请求"**：契约真源在设计仓 ../wisdomdesign/contracts/，本仓对设计仓只读（跨仓写入零容忍）。
-> **待办**：设计/架构侧把下面的增量落到 ../wisdomdesign/contracts/WDBadge.yaml 并提交；落库前本批按"契约增量已登记、源码已实现"状态推进，**发布前必须闭合**。
+> **落库记录**：2026-11-15 已落库设计仓 contracts/WDBadge.yaml。
 
 ## 增量（在既有文件末尾追加/合并）
 

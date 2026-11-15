@@ -1,8 +1,10 @@
 # B5 契约变更请求 —— WDSwitch.yaml（2026-11-15）
 
+> **状态：已落库**（2026-11-15，设计仓 contracts/WDSwitch.yaml）。
+
 > **背景**：项目负责人 2026-11-14 授权扩公开；B5 新增 WDSwitchSize 与描述位重载。
 > **为什么是"请求"**：契约真源在设计仓 ../wisdomdesign/contracts/，本仓只读。
-> **待办**：设计/架构侧落库；发布前必须闭合。
+> **落库记录**：2026-11-15 已落库设计仓 contracts/WDSwitch.yaml。
 
 ## 增量
 
