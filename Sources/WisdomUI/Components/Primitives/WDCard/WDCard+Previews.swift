@@ -26,6 +26,20 @@
             Text(verbatim: "下沉卡")
               .wdFont(WDType.body)
           }
+          WDCard(style: .elevated, action: {}) {
+            VStack(alignment: .leading, spacing: WDSpacing.s3) {
+              Text(verbatim: "可点卡")
+                .wdFont(WDType.headline)
+              Text(verbatim: "整卡响应；按下亮度 96%")
+                .wdFont(WDType.footnote)
+                .foregroundStyle(.secondary)
+            }
+          }
+          WDCard(style: .outlined, action: {}) {
+            Text(verbatim: "可点卡（禁用）")
+              .wdFont(WDType.body)
+          }
+          .disabled(true)
         }
         .padding(WDSpacing.s5)
       }

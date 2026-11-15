@@ -18,6 +18,10 @@ struct WDCheckboxSnapshotTests {
         WDCheckbox(isChecked: .constant(false), label: Text(verbatim: "全选"), isIndeterminate: true)
         WDCheckbox(isChecked: .constant(true), label: Text(verbatim: "已完成的选项"))
           .disabled(true)
+        WDCheckbox(isChecked: .constant(true), label: Text(verbatim: "紧凑已选"), size: .compact)
+        WDCheckbox(
+          isChecked: .constant(false), label: Text(verbatim: "紧凑半选"), size: .compact,
+          isIndeterminate: true)
       }
       .padding(WDSpacing.s5)
       .frame(maxWidth: .infinity, alignment: .leading)

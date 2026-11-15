@@ -8,6 +8,12 @@
 
 ### Added
 
+- **B7 实现欠账（2026-11-15；授权扩公开）**：`WDCard` 新增可点卡（按下亮度 96%、instant、
+  禁用 40%、button 语义）；`WDCheckbox` / `WDRadio` 新增紧凑档（22px 方框/外圆，标签 footnote）；
+  `WDFAB` 展开时读屏焦点移入第一个子操作。**API 1276 → 1285（+9）**；`checkbox-*`、`card-*`、
+  `radio-*` 各 8 张扩展重录。契约已同步 Checkbox/Radio/Card 三个 yaml。**残留**：Card media、
+  Checkbox 光晕/无标签、Radio 角色、FAB 遮罩/滚动/安全区、可点卡嵌套子元素约束。
+
 - **`WDDatePicker` 范围 + 清除（2026-11-15，B6；授权扩公开）**：新增范围重载
   `init(range:label:placeholder:in:showsClearButton:clearAccessibilityLabel:)`（仅日期模式）与
   单日期清除重载；范围两步选择（起点→终点，往前点重开），同年“月日 – 月日”、跨年带年份，

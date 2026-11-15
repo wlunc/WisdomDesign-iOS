@@ -4,6 +4,7 @@
   private struct WDRadioPreviewHost: View {
     @State private var selection = "self"
     @State private var described = "today"
+    @State private var compact = "week"
 
     var body: some View {
       VStack(alignment: .leading, spacing: WDSpacing.s6) {
@@ -22,6 +23,15 @@
             .init(id: "today", label: Text(verbatim: "今天"), detail: Text(verbatim: "当天 09:00 提醒")),
             .init(
               id: "tomorrow", label: Text(verbatim: "明天"), detail: Text(verbatim: "次日 09:00 提醒")),
+          ]
+        )
+        WDRadio(
+          selection: $compact,
+          label: Text(verbatim: "紧凑档"),
+          size: .compact,
+          options: [
+            .init(id: "day", label: Text(verbatim: "按天")),
+            .init(id: "week", label: Text(verbatim: "按周")),
           ]
         )
         WDRadio(

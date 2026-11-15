@@ -1,24 +1,32 @@
 import SwiftUI
 
+/// 复选框尺寸档（设计 06 §3：标准 26 / 圆角 9 / `subheadline`；紧凑 22 / 圆角 7 / `footnote`）。
+public enum WDCheckboxSize: String, CaseIterable, Sendable, Equatable {
+  case standard
+  case compact
+}
+
 /// 复选框（SPEC §2.10-#06；M2）。
 ///
 /// 设计口径（设计 06）：
-/// - 方框 **26**、圆角 **9**（`radius.checkbox`）；未选 = 1.5pt `border.hairline-strong` 描边 + `fill.field`；
+/// - 标准档方框 **26**、圆角 **9**（`radius.checkbox`）；紧凑档方框 **22**、圆角 **7**；
+/// - 未选 = 1.5pt `border.hairline-strong` 描边 + `fill.field`；
 /// - 已选 = `gradient.mid` + 白色描边勾（**2.2pt、rotate(42°)**，与画廊 06 的 5×10 L 同形，不是图标）；
 /// - 半选 = 同已选底 + **12×2.4** 白色横杠（设计 06 §5）；点半选 → 变全选（不做三态循环）；
-/// - 标签 `subheadline`（15）；热区 ≥ 44；切换轻触觉 ×1。
+/// - 标准档标签 `subheadline`（15）、紧凑档标签 `footnote`（13）；热区 ≥ 44；切换轻触觉 ×1。
 ///
 /// `isIndeterminate` 是**显示态**（表头全选等由调用方维护）；半选的朗读文案属调用方
-/// （L-B 零文案），需要时在外层加 `.accessibilityValue(_:)`。紧凑档/无标签表头/光晕/按下缩放
+/// （L-B 零文案），需要时在外层加 `.accessibilityValue(_:)`。无标签表头/光晕/按下缩放
 /// 仍不可表达，差异登记在 `docs/DEV-PLAN.md` §2.3。
 public struct WDCheckbox: View {
   @Binding private var isChecked: Bool
   private let label: Text
+  private let size: WDCheckboxSize
   private let isIndeterminate: Bool
 
   @Environment(\.isEnabled) private var isEnabled
 
-  /// 构造（受控值 `isChecked`；C-15 的唯一改名）。`isIndeterminate` = 半选显示态。
+  /// 构造（受控值 `isChecked`；C-15 的唯一改名）。`isIndeterminate` = 半选显示态；标准档。
   public init(
     isChecked: Binding<Bool>,
     label: Text,
@@ -26,6 +34,20 @@ public struct WDCheckbox: View {
   ) {
     self._isChecked = isChecked
     self.label = label
+    self.size = .standard
+    self.isIndeterminate = isIndeterminate
+  }
+
+  /// 构造（显式档位：标准/紧凑）。`size` 无默认值，避免与既有 init 的调用歧义。
+  public init(
+    isChecked: Binding<Bool>,
+    label: Text,
+    size: WDCheckboxSize,
+    isIndeterminate: Bool = false
+  ) {
+    self._isChecked = isChecked
+    self.label = label
+    self.size = size
     self.isIndeterminate = isIndeterminate
   }
 
@@ -33,11 +55,16 @@ public struct WDCheckbox: View {
   public var body: some View {
     Toggle(isOn: $isChecked) {
       label
-        .wdFont(WDType.subheadline)
-        .wdLineBox(WDType.subheadline)
+        .wdFont(textStyle)
+        .wdLineBox(textStyle)
     }
-    .toggleStyle(WDCheckboxToggleStyle(isIndeterminate: isIndeterminate))
+    .toggleStyle(WDCheckboxToggleStyle(size: size, isIndeterminate: isIndeterminate))
     .opacity(isEnabled ? 1 : disabledOpacity)
+  }
+
+  /// 标签字阶：标准 `subheadline`、紧凑 `footnote`（设计 06 §3）。
+  private var textStyle: WDTextStyle {
+    size == .standard ? WDType.subheadline : WDType.footnote
   }
 
   /// 标准档几何（设计 06 §2–§3；令牌无这些值；内部暴露给单测）。
@@ -46,6 +73,10 @@ public struct WDCheckbox: View {
     static let box: CGFloat = 26  // wd-structure-check:disable R7 — 设计值
     /// 方框圆角（= `WDRadius.checkbox` 9）。
     static let corner: CGFloat = 9  // wd-structure-check:disable R7 — 设计值
+    /// 紧凑档方框边长（设计 06 §3：22）。
+    static let compactBox: CGFloat = 22  // wd-structure-check:disable R7 — 设计值
+    /// 紧凑档方框圆角（设计 06 §3：7）。
+    static let compactCorner: CGFloat = 7  // wd-structure-check:disable R7 — 设计值
     /// 未选态描边宽度。
     static let stroke: CGFloat = 1.5  // wd-structure-check:disable R7 — 设计值
     /// 勾的描边宽度（设计 06 §2：2.2pt）。
@@ -72,6 +103,7 @@ public struct WDCheckbox: View {
 private struct WDCheckboxToggleStyle: ToggleStyle {
   private typealias Metrics = WDCheckbox.Metrics
 
+  let size: WDCheckboxSize
   let isIndeterminate: Bool
 
   @Environment(\.wdColors) private var colors
@@ -101,7 +133,8 @@ private struct WDCheckboxToggleStyle: ToggleStyle {
   }
 
   private func box(_ configuration: Configuration) -> some View {
-    WDCheckboxBox(isChecked: configuration.isOn, isIndeterminate: isIndeterminate)
+    WDCheckboxBox(
+      isChecked: configuration.isOn, isIndeterminate: isIndeterminate, size: size)
   }
 }
 
@@ -109,13 +142,24 @@ private struct WDCheckboxToggleStyle: ToggleStyle {
 struct WDCheckboxBox: View {
   let isChecked: Bool
   var isIndeterminate: Bool = false
+  var size: WDCheckboxSize = .standard
 
   @Environment(\.wdColors) private var colors
 
   private typealias Metrics = WDCheckbox.Metrics
 
+  /// 方框边长：标准 26、紧凑 22。
+  private var side: CGFloat {
+    size == .standard ? Metrics.box : Metrics.compactBox
+  }
+
+  /// 方框圆角：标准 9、紧凑 7。
+  private var corner: CGFloat {
+    size == .standard ? Metrics.corner : Metrics.compactCorner
+  }
+
   var body: some View {
-    let shape = RoundedRectangle(cornerRadius: Metrics.corner, style: .continuous)
+    let shape = RoundedRectangle(cornerRadius: corner, style: .continuous)
     ZStack {
       if isIndeterminate || isChecked {
         shape.fill(WDGradient.mid.linearGradient)
@@ -129,12 +173,12 @@ struct WDCheckboxBox: View {
         shape.stroke(colors.borderHairlineStrong, lineWidth: Metrics.stroke)
       }
     }
-    .frame(width: Metrics.box, height: Metrics.box)
+    .frame(width: side, height: side)
   }
 
   /// 已选：白色描边勾（5×10 L，rotate 42°，与画廊 06 一致）。
   private var check: some View {
-    let side = WDSize.iconSm
+    let iconSide = WDSize.iconSm
     return WDCheckmarkShape()
       .trim(from: 0, to: 1)
       .stroke(
@@ -142,7 +186,7 @@ struct WDCheckboxBox: View {
         style: StrokeStyle(
           lineWidth: Metrics.checkStroke, lineCap: .butt, lineJoin: .miter)
       )
-      .frame(width: side, height: side)
+      .frame(width: iconSide, height: iconSide)
   }
 
   /// 半选：12 × 2.4 白色横杠（设计 06 §5）。

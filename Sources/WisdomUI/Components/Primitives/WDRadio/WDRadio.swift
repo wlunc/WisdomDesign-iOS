@@ -19,29 +19,70 @@ public struct WDRadioOption: Identifiable, Sendable, Equatable {
   }
 }
 
+/// 单选尺寸档（设计 07 §3）。
+public enum WDRadioSize: String, CaseIterable, Sendable, Equatable {
+  /// 标准档：外圆 26、内点 12、标签 `subheadline`。
+  case standard
+  /// 紧凑档：外圆 22、内点 10、标签 `footnote`。
+  case compact
+}
+
+/// 档位几何（internal 供单测断言；不进入公开 API）。
+struct WDRadioGeometry: Sendable, Equatable {
+  let indicatorSize: CGFloat
+  let innerDot: CGFloat
+  let textStyle: WDTextStyle
+
+  /// 按档位解析几何（设计 07 §3；描边 1.5 与组内间距 12 两档共用）。
+  static func of(_ size: WDRadioSize) -> WDRadioGeometry {
+    switch size {
+    case .standard:
+      return WDRadioGeometry(
+        indicatorSize: 26,  // wd-structure-check:disable R7 — 设计 07 §3
+        innerDot: 12,  // wd-structure-check:disable R7 — 设计 07 §3
+        textStyle: WDType.subheadline)
+    case .compact:
+      return WDRadioGeometry(
+        indicatorSize: 22,  // wd-structure-check:disable R7 — 设计 07 §3
+        innerDot: 10,  // wd-structure-check:disable R7 — 设计 07 §3
+        textStyle: WDType.footnote)
+    }
+  }
+}
+
 /// 单选组（SPEC §2.10-#07；M5）。
 ///
 /// 设计口径（设计 07）：
-/// - 标准外圆 **26**、内圆点 **12**、标签 `subheadline` 15；
+/// - 标准档外圆 **26**、内圆点 **12**、标签 `subheadline` 15；
+/// - 紧凑档外圆 **22**、内圆点 **10**、标签 `footnote` 13；
 /// - 未选 = 1.5pt `border.hairline-strong` 描边 + `fill.field`；已选 = `gradient.mid` + 白内点；
 /// - 组内互斥、点击已选项**不重复回调**、不可取消；热区 ≥44；组内间距 12。
 ///
-/// 冻结签名只有 `selection` + `label` + `options`（ID = String；无紧凑档 22）⇒
-/// 只做标准档；紧凑档与 `radiogroup`/`radio` 角色（SwiftUI 无对应 trait）差异登记在
+/// 既有 `selection` + `label` + `options` 构造保持标准档；紧凑档走带 `size` 的构造。
+/// `radiogroup`/`radio` 角色（SwiftUI 无对应 trait）差异仍登记在
 /// `docs/M5-EXIT-REPORT.md`。
 public struct WDRadio: View {
   @Binding private var selection: String
   private let label: Text
+  private let size: WDRadioSize
   private let options: [WDRadioOption]
 
   @Environment(\.wdColors) private var colors
   @Environment(\.isEnabled) private var isEnabled
   @Environment(\.wdEffectsBudget) private var budget
 
-  /// 构造：受控值 + 组标签 + 选项数组。
+  /// 构造：受控值 + 组标签 + 选项数组（标准档）。
   public init(selection: Binding<String>, label: Text, options: [WDRadioOption]) {
+    self.init(selection: selection, label: label, size: .standard, options: options)
+  }
+
+  /// 构造：受控值 + 组标签 + 尺寸档 + 选项数组。
+  public init(
+    selection: Binding<String>, label: Text, size: WDRadioSize, options: [WDRadioOption]
+  ) {
     self._selection = selection
     self.label = label
+    self.size = size
     self.options = options
   }
 
@@ -62,17 +103,18 @@ public struct WDRadio: View {
 
   private func row(_ option: WDRadioOption) -> some View {
     let isSelected = option.id == selection
+    let geometry = WDRadioGeometry.of(size)
     return Button {
       guard isEnabled, !isSelected else { return }
       selection = option.id
       WDHaptics.shared.play(.toggle, budget: budget)
     } label: {
       HStack(alignment: option.detail == nil ? .center : .top, spacing: WDSpacing.s3) {
-        indicator(isSelected: isSelected)
+        indicator(isSelected: isSelected, geometry: geometry)
         VStack(alignment: .leading, spacing: WDSpacing.s1) {
           option.label
-            .wdFont(WDType.subheadline)
-            .wdLineBox(WDType.subheadline)
+            .wdFont(geometry.textStyle)
+            .wdLineBox(geometry.textStyle)
             .foregroundStyle(colors.textPrimary)
           if let detail = option.detail {
             detail
@@ -90,14 +132,16 @@ public struct WDRadio: View {
     .accessibilityAddTraits(isSelected ? .isSelected : [])
   }
 
-  @ViewBuilder private func indicator(isSelected: Bool) -> some View {
+  @ViewBuilder private func indicator(
+    isSelected: Bool, geometry: WDRadioGeometry
+  ) -> some View {
     ZStack {
       if isSelected {
         Circle()
           .fill(WDGradient.mid.linearGradient)
         Circle()
           .fill(colors.textOnDark)
-          .frame(width: Self.innerDot, height: Self.innerDot)
+          .frame(width: geometry.innerDot, height: geometry.innerDot)
       } else {
         Circle()
           .fill(colors.fillField)
@@ -105,7 +149,7 @@ public struct WDRadio: View {
           .stroke(colors.borderHairlineStrong, lineWidth: Self.stroke)
       }
     }
-    .frame(width: Self.indicatorSize, height: Self.indicatorSize)
+    .frame(width: geometry.indicatorSize, height: geometry.indicatorSize)
     .animation(.easeOut(duration: WDMotion.Duration.fast), value: isSelected)
   }
 
@@ -114,11 +158,7 @@ public struct WDRadio: View {
     WDState.disabledAlpha / Self.percentScale
   }
 
-  /// 外圆直径 26（设计 07 §3；`WDSize.checkbox` 同值，但 R9 禁在 `frame` 里绑令牌）。
-  private static let indicatorSize: CGFloat = 26  // wd-structure-check:disable R7 — 设计值
-  /// 内圆点 12（设计 07 §3）。
-  private static let innerDot: CGFloat = 12  // wd-structure-check:disable R7 — 设计值
-  /// 未选描边 1.5（设计 07 §5）。
+  /// 未选描边 1.5（设计 07 §5；两档共用）。
   private static let stroke: CGFloat = 1.5  // wd-structure-check:disable R7 — 设计值
   /// 组内上限 5（设计 07 §6）。
   private static let maxOptions = 5  // wd-structure-check:disable R7 — 设计 07 §6 的上限

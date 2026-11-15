@@ -61,6 +61,8 @@ public struct WDFAB: View {
   @Environment(\.wdEffectsBudget) private var budget
 
   @State private var isExpanded = false
+  /// 展开时把读屏焦点移到第一个子操作（设计 36 §10）。
+  @AccessibilityFocusState private var focusedActionID: String?
 
   /// 构造：主图标 + 读屏标签 + 尺寸/形状 + 子操作/主操作。
   public init(
@@ -106,6 +108,14 @@ public struct WDFAB: View {
       } else {
         withAnimation(WDMotion.Spring.gentle) {
           isExpanded.toggle()
+        }
+        if isExpanded {
+          Task { @MainActor in
+            await Task.yield()
+            focusedActionID = actions.first?.id
+          }
+        } else {
+          focusedActionID = nil
         }
       }
     } label: {
@@ -166,6 +176,7 @@ public struct WDFAB: View {
       .contentShape(Capsule())
     }
     .buttonStyle(.plain)
+    .accessibilityFocused($focusedActionID, equals: child.id)
   }
 
   // MARK: - 几何

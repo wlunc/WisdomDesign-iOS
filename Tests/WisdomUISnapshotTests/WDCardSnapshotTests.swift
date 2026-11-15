@@ -41,6 +41,11 @@ struct WDCardSnapshotTests {
             .wdFont(WDType.body)
             .foregroundStyle(values.textPrimary)
         }
+        WDCard(style: .elevated, action: {}) {
+          Text(verbatim: "可点卡")
+            .wdFont(WDType.body)
+            .foregroundStyle(values.textPrimary)
+        }
       }
       .padding(WDSpacing.s5)
       .frame(maxWidth: .infinity, alignment: .leading)

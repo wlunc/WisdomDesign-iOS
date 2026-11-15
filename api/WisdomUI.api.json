@@ -1458,6 +1458,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(style: WDCardStyle = .elevated, action: @escaping () -> Void, @ViewBuilder content: () -> Content)",
+      "kind" : "swift.init",
+      "path" : "WDCard.init(style:action:content:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor init(style: WDCardStyle = .elevated, @ViewBuilder content: () -> Content)",
       "kind" : "swift.init",
       "path" : "WDCard.init(style:content:)"
@@ -1596,6 +1602,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(isChecked: Binding<Bool>, label: Text, size: WDCheckboxSize, isIndeterminate: Bool = false)",
+      "kind" : "swift.init",
+      "path" : "WDCheckbox.init(isChecked:label:size:isIndeterminate:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDCheckbox.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
@@ -1677,6 +1689,24 @@
       "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDCheckbox.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDCheckboxSize",
+      "kind" : "swift.enum",
+      "path" : "WDCheckboxSize"
+    },
+    {
+      "access" : "public",
+      "decl" : "case compact",
+      "kind" : "swift.enum.case",
+      "path" : "WDCheckboxSize.compact"
+    },
+    {
+      "access" : "public",
+      "decl" : "case standard",
+      "kind" : "swift.enum.case",
+      "path" : "WDCheckboxSize.standard"
     },
     {
       "access" : "public",
@@ -5532,6 +5562,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(selection: Binding<String>, label: Text, size: WDRadioSize, options: [WDRadioOption])",
+      "kind" : "swift.init",
+      "path" : "WDRadio.init(selection:label:size:options:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDRadio.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
@@ -5643,6 +5679,24 @@
       "decl" : "let label: Text",
       "kind" : "swift.property",
       "path" : "WDRadioOption.label"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDRadioSize",
+      "kind" : "swift.enum",
+      "path" : "WDRadioSize"
+    },
+    {
+      "access" : "public",
+      "decl" : "case compact",
+      "kind" : "swift.enum.case",
+      "path" : "WDRadioSize.compact"
+    },
+    {
+      "access" : "public",
+      "decl" : "case standard",
+      "kind" : "swift.enum.case",
+      "path" : "WDRadioSize.standard"
     },
     {
       "access" : "public",

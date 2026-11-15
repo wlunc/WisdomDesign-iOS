@@ -161,6 +161,12 @@ private struct RadioSample: View {
         options: [.init(id: "a", label: Text(verbatim: "不可修改"))]
       )
       .disabled(true)
+      WDRadio(
+        selection: .constant("self"), label: Text(verbatim: "紧凑组"), size: .compact,
+        options: [
+          .init(id: "self", label: Text(verbatim: "仅自己可见")),
+          .init(id: "family", label: Text(verbatim: "共享给全家")),
+        ])
     }
   }
 }

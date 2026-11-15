@@ -64,7 +64,7 @@ nightly **2026-11-14 复核**（金标 iPhone Air）：设备编译 **7.81 s** +
 | --- | --- | --- | --- |
 | ① | `WDSlider` 视觉载体 | **已修（2026-11-14，B 类遗留）**：手势与读屏改由 Internal `UISlider` 承载（系统拖拽/键盘/可调整语义；不自造 `DragGesture`），视觉改 SwiftUI 覆盖层——轨道 6（`border.hairline-strong`）、填充 `gradient.mid`、手柄 26（白 + 1pt hairline + `elevation.1`）、两端内缩 13、拖拽 1.15（100ms）、禁用 45%、RTL 由 leading 对齐自动镜像。**交互补齐**：点击轨道按触点换算目标值并做 200ms 过渡（Reduce Motion 瞬移）、松手按 `step` 吸附、拖到端点用 `rigid` 触觉（同一次操作仍只抖一次）。**残留**：聚焦光环、数值标签跟随、范围双手柄（后两者需签名扩展）；带刻度 = `step` 吸附（画廊无可见刻度点） | 已修（快照 8 张重录；PR **166 tests** / 1246 符号零 diff；demo **18 条 UITest / 265.44 s** 全绿，含滑块点击与 Toast 三条用例）；残留项仍登记 |
 | ② | `WDSearchField` 结果播报/防抖 | 300ms 防抖与结果数 polite 播报由调用方负责（库内零文案、无 announcer 注入点） | 调用方 / M6 前如需再议 |
-| ③ | `WDRadio` 角色与紧凑档 | 紧凑 22 不可表达；`radiogroup`/`radio` 角色与"第 n 项，共 m 项"SwiftUI 无对应 trait ⇒ 只加 `.isSelected` | M6 无障碍回归复核 |
+| ③ | `WDRadio` 角色与紧凑档 | **紧凑 22 已补（B7，2026-11-15）**：`WDRadioSize` + 22/10/footnote；`radiogroup`/`radio` 角色与"第 n 项，共 m 项"SwiftUI 无对应 trait ⇒ 仍只加 `.isSelected` | 紧凑档已闭合；角色待 M6 复核 |
 | ④ | `WDStepper` 字号/节奏 | 标准字号用 subheadline 15（设计 14，+1）；长按节奏取 0.45s/0.2s→0.06s（设计未给值）；紧凑档 30 视觉但整体布局 ≥44 | 已登记；设计给值后可改 |
 | ⑤ | `WDChip` 图标/溢出 | 图标用 token sm 16（设计 15，+1）；横向滚动/换行由调用方布局；删除键与芯片相邻（不重叠） | 已登记 |
 | ⑥ | `WDAvatarStack` | 描边色固定 `surfaceCard`（容器底色不可注入）；点击展开不可表达；sm 档图标仍 20 | M6 前如需可扩签名 |

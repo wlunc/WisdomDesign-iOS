@@ -62,6 +62,31 @@ struct M5ComponentsTests {
     #expect(three.height > two.height)
   }
 
+  @Test("WDRadio：标准 26/12、紧凑 22/10；紧凑档可构造且热区 ≥ 44")
+  func radioSizes() {
+    let standardGeometry = WDRadioGeometry.of(.standard)
+    #expect(standardGeometry.indicatorSize == 26)
+    #expect(standardGeometry.innerDot == 12)
+    #expect(standardGeometry.textStyle == WDType.subheadline)
+    let compactGeometry = WDRadioGeometry.of(.compact)
+    #expect(compactGeometry.indicatorSize == 22)
+    #expect(compactGeometry.innerDot == 10)
+    #expect(compactGeometry.textStyle == WDType.footnote)
+    #expect(WDRadioSize.allCases.map(\.rawValue) == ["standard", "compact"])
+
+    let standard = size(
+      WDRadio(
+        selection: .constant("a"), label: Text(verbatim: "可见范围"),
+        options: [.init(id: "a", label: Text(verbatim: "仅自己"))]))
+    let compact = size(
+      WDRadio(
+        selection: .constant("a"), label: Text(verbatim: "可见范围"), size: .compact,
+        options: [.init(id: "a", label: Text(verbatim: "仅自己"))]))
+    #expect(standard.height >= WDSize.touchTargetMin)
+    #expect(compact.height >= WDSize.touchTargetMin)
+    #expect(compact.height <= standard.height)
+  }
+
   // MARK: - WDSlider
 
   @Test("WDSlider：最小宽 120；标签增加高度；热区 >= 44")
