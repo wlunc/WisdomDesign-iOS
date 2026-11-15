@@ -936,16 +936,16 @@ extension View {
 | 02 | `WDIconButton` | `loading` / `isLoading` | `icon`,**a11y 标签（必填）** | `.plain` | — | ×1 | M2 |
 | 03 | `WDTextField` | `text` / `Binding<String>` ✓ | `label`,`prefix`,`accessory`,`helper` | `.inset` | 1 行 + 错误 1 行 | 错误出现时播报（assertive，一次） | M2 |
 | 04 | `WDSearchField` | `text` / `Binding<String>` ✓ | `placeholder`,`leadingIcon`,`label`（取消） | — | 1 行 | **结果数变化 polite**（阈值由调用方） | M5 |
-| 05 | `WDSwitch` | `on` / `isOn` ✓ | `label` | — | 1 行 | 切换轻 ×1 | M2 |
+| 05 | `WDSwitch` | `on` / `isOn` ✓ | `label` | `size = .standard`；`description = nil`（既有 `init(isOn:label:)` 等价） | 1 行 | 切换轻 ×1 | M2 |
 | 06 | `WDCheckbox` | `checked` / **`isChecked`** ✓ | `label` | — | 1 行 | 轻 ×1 | M2 |
 | 07 | `WDRadio` | `selection` ✓ | `label`（组）,`options` | — | 2 行允许 | 轻 ×1 | M5 |
 | 08 | `WDSlider` | `value` ✓ | `label` | — | 1 行 | **松手后播报一次** | M5 |
 | 09 | `WDStepper` | `value` ✓ | `label` | — | 1 行 | **高频不给触觉** | M5 |
 | 10 | `WDChip` | `selected` / `isSelected` ✓ | `label`,`leadingIcon` | 删除叉独立可达 | 1 行 | — | M5 |
-| 11 | `WDBadge` | — | `label` | 4 汉字 | 1 行 | 不播报 | M2 |
-| 12 | `WDAvatar` | — | `icon`,`label` | 直径锁死 | — | 读成员名 | M2 |
+| 11 | `WDBadge` | — | `label` | `variant = .shared`（既有重载）；`4 汉字` 作为状态胶囊文案策略保留 | 1 行 | 不播报 | M2 |
+| 12 | `WDAvatar` | — | `icon`,`label` | `size = .md`（五档 20/28/32/40/56）；`isOnline = false`；`isDisabled = false` | — | 读成员名 | M2 |
 | 13 | `WDAvatarStack` | — | `items` | `children: .combine` | — | 一次读完 | M5 |
-| 14 | `WDDivider` | — | 无 | 装饰：`accessibilityHidden` | — | 不进树 | M2 |
+| 14 | `WDDivider` | — | 无 | `style = .full`（`inset` 左缩进 62）；`accessibilityHidden` 保留 | — | 不进树 | M2 |
 | 15 | `WDProgressBar` | `value` | `label`,`valueText` | — | 1 行 | **只跨 25/50/75/100** | M4 |
 | 16 | `WDProgressRing` | `value` | 同上 | 环径锁死 | 1 行 | 同上 | M4 |
 | 17 | `WDCard` | — | `content` | `.elevated` | — | 容器 `contain` | M2 |
@@ -954,7 +954,7 @@ extension View {
 | 20 | `WDIcon` | — | `icon` | 装饰：不进树 | — | 不进树 | M2 |
 | 21 | `WDSegmentedControl` | `selection` ✓ | `items` | 容器 `contain` | 1 行 | 切换一次 | M5 |
 | 22 | `WDPicker` | `selection` ✓ | `label`,`options` | 空数组断言；**三形态（menu / wheel / inline）** | 1 行 | 自绘菜单浮层（44 行 / 14 圆角 / 翻转） | M5 |
-| 23 | `WDDatePicker` | `date` ✓ | `label` | locale 由系统 | 1 行 | — | M5 |
+| 23 | `WDDatePicker` | `date` ✓ | `label` | `mode = .date`（不变）；`range = nil`；`showsClearButton = false`；`clearAccessibilityLabel = nil`；`locale 由系统` | 1 行 | — | M5 |
 | 24 | `WDFormRow` | — | `label`,`control` | 标签关联（Q-A11Y-2 规则 1） | 2 行允许 | — | M5 |
 | 25 | `WDAlert` | `presented` / `isPresented` ✓ | `title`,`message`,`actions` | 焦点归入/归还 | — | `ScreenChanged` 归入 | M4 |
 | 26 | `WDBottomSheet` | `presented` / `isPresented` ✓ | `title`,`content`,`footer` | `.all`/`.half` | — | 焦点陷阱 + 归还 | M4 |
@@ -998,8 +998,8 @@ extension View {
 ```swift
 // Sources/WisdomUI/Components/Primitives/WDCard/WDCard.swift            ← M2 首批
 public enum WDCardStyle: String, CaseIterable, Sendable, Equatable {
-    case elevated, outlined, glass     // 契约名（canonical，小写）＝ elevated / outlined / glass
-    // Android 声明 = WDCardStyle{Elevated, Outlined, Glass}（大小写差异属 DIR-1，D01）
+    case elevated, outlined, glass, sunken     // 契约名（canonical，小写）＝ elevated / outlined / glass / sunken
+    // Android 声明 = WDCardStyle{Elevated, Outlined, Glass, Sunken}（canonical 小写：elevated / outlined / glass / sunken；大小写差异属 DIR-1，D01）
 }
 // Sources/WisdomUI/Components/Composites/WDToast/WDToast.swift          ← M4
 public enum WDToastVariant: String, CaseIterable, Sendable, Equatable {
@@ -1015,11 +1015,11 @@ public enum WDBannerVariant: String, CaseIterable, Sendable, Equatable {
 
 | 枚举 | iOS 声明（case，小写 rawValue） | 契约名（比较键） | Android 声明 | 默认值 | 批次 | 参数连接 | M0-5 落点 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `WDCardStyle` | `elevated`/`outlined`/`glass` | 同左 | `{Elevated, Outlined, Glass}` | **`.elevated`** | **M2**（#17） | `WDCard(style: WDCardStyle = .elevated, …)` | `contracts/WDCard.yaml` |
+| `WDCardStyle` | `elevated`/`outlined`/`glass`/`sunken` | 同左 | `{Elevated, Outlined, Glass, Sunken}` | **`.elevated`** | **M2**（#17） | `WDCard(style: WDCardStyle = .elevated, …)` | `contracts/WDCard.yaml` |
 | `WDToastVariant` | `neutral`/`success`/`warning`/`danger` | 同左 | `{Neutral, Success, Warning, Danger}` | **`.neutral`** | M4（#28） | `WDToast(variant: WDToastVariant = .neutral, …)` | `contracts/WDToast.yaml` |
 | `WDBannerVariant` | `info`/`warning`/`danger` | 同左 | `{Info, Warning, Danger}` | **`.info`** | M4（#29） | `WDBanner(variant: WDBannerVariant = .info, …)` | `contracts/WDBanner.yaml` |
 
-- **U2 单测（各 1 条，归一化后集合相等）**：`WDCardStyle.allCases.map(\.rawValue) == ["elevated","outlined","glass"]`；`WDToastVariant` = `["neutral","success","warning","danger"]`；`WDBannerVariant` = `["info","warning","danger"]`；默认值分别断言 `.elevated` / `.neutral` / `.info`（与 `contracts/<component>.yaml: params[].default` 逐字一致）。
+- **U2 单测（各 1 条，归一化后集合相等）**：`WDCardStyle.allCases.map(\.rawValue) == ["elevated","outlined","glass","sunken"]`；`WDToastVariant` = `["neutral","success","warning","danger"]`；`WDBannerVariant` = `["info","warning","danger"]`；默认值分别断言 `.elevated` / `.neutral` / `.info`（与 `contracts/<component>.yaml: params[].default` 逐字一致）。
 - **大小写（D01）**：iOS 小写 rawValue、Android PascalCase **都合法**；契约键取小写、两端断言用 `name.lowercase()` 归一化比较；**任一端不得改名形**（改名 = 改 U2）。
 - **落点纪律**：`WDCardStyle` 必须在 **M2 首批**（`WDCard` 是 M2 组件）；`WDToastVariant`/`WDBannerVariant` 的**类型声明与 case 在 M0-5 契约冻结时就进 `contracts/<component>.yaml`**（U2 靠契约锁默认值，API-5）。
 - **与 `03-ios-defaults-table.md` 的同步**：§2 的 E13/E14/E15 已列 case 与默认值，本轮把其“iOS 侧未声明类型”的备注改为**已声明（落点 = 本节）**；三个枚举的 `allCases` 断言进 M0-5 契约单测。

@@ -12,7 +12,7 @@
 params:
   - name: range
     ios: range
-    type: ClosedRange<Date>?
+    type: Binding<ClosedRange<Date>?>
     default: null          # 仅范围重载
   - name: showsClearButton
     ios: showsClearButton

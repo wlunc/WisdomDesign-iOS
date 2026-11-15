@@ -14,7 +14,7 @@ params:
   - name: variant
     ios: variant
     type: WDBadgeVariant
-    default: null        # 仅 init(label:variant:) 必填；既有重载保持无 variant
+    default: .shared    # 仅 init(label:variant:) 必填；既有重载语义默认 .shared
 
 enums:
   WDBadgeVariant: [shared, schedule, pending, success, warning, danger]
