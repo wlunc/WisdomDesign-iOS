@@ -8,6 +8,14 @@
 
 ### Added
 
+- **`WDAvatar` 五档 / 在线 / 停用（2026-11-15，B2；授权扩公开）**：新增公开 `WDAvatarSize`
+  （xs 20 / sm 28 / md 32 / lg 40 / xl 56，首字号 9/11/12/14/18）与
+  `init(value:size:isOnline:isDisabled:)`；既有 `init(value:)`（md 32）不变。在线点 10×10 +
+  2pt 描边，停用整体 50% 去饱和；图标档按直径近似（xs/sm 16、md 20、lg/xl 24，已登记）。
+  **API 1254 → 1261（+7）**。`avatar-*` 8 张扩展重录，受字号/图标档影响的 `avatarstack-*`、
+  `assigneepicker-*` 各 8 张同步重录（总 **360**）。**残留**：成员四色底色（缺 token）、照片形态、
+  在线状态读屏措辞（L-B）。契约增量见 `docs/B2-CONTRACT-CHANGE-REQUEST.md`（设计仓待落库）。
+
 - **`WDBadge` 六种状态变体（2026-11-14，B1；项目负责人授权扩公开）**：新增公开 `WDBadgeVariant`
   （shared / schedule / pending / success / warning / danger）与 `init(label:variant:)`；既有
   `init(label:)` / `init(value:)`、计数/圆点形态不变，**API 1246 → 1254（+8）**。**对比度优先**（DF-04）：

@@ -55,7 +55,7 @@ public struct WDAvatarStack: View {
   public var body: some View {
     HStack(spacing: -overlap) {
       ForEach(Array(visibleItems.enumerated()), id: \.element.id) { index, item in
-        WDAvatar(value: item.avatar, diameter: diameter)
+        WDAvatar(value: item.avatar, size: size == .sm ? .sm : .md)
           .overlay(Circle().stroke(colors.surfaceCard, lineWidth: Self.borderWidth))
           .zIndex(Double(index))
       }

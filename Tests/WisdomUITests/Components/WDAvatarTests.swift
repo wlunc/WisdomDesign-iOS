@@ -4,15 +4,23 @@ import UIKit
 
 import WisdomUI
 
-/// `WDAvatar`（M2）的组件级断言：直径锁死、固定字号（设计 12）、值类型可比较。
+/// `WDAvatar`（M2；B2 扩五档/在线/停用）的组件级断言：五档直径、固定字号（设计 12）、值类型可比较。
 @MainActor
 @Suite("WDAvatar（M2）")
 struct WDAvatarTests {
   private static func size(
-    _ value: WDAvatarValue, typeSize: DynamicTypeSize = .large
+    _ value: WDAvatarValue,
+    avatarSize: WDAvatarSize? = nil,
+    isOnline: Bool = false,
+    typeSize: DynamicTypeSize = .large
   ) -> CGSize {
+    let avatar =
+      avatarSize.map {
+        WDAvatar(value: value, size: $0, isOnline: isOnline)
+      } ?? WDAvatar(value: value)
     let controller = UIHostingController(
-      rootView: WDAvatar(value: value)
+      rootView:
+        avatar
         .environment(\.dynamicTypeSize, typeSize)
         .wdTheme(.light)
     )
@@ -27,6 +35,37 @@ struct WDAvatarTests {
     #expect(abs(label.height - 32) <= 1, "文字头像高度实测 \(label.height)")
     #expect(abs(icon.width - 32) <= 1, "图标头像宽度实测 \(icon.width)")
     #expect(abs(icon.height - 32) <= 1, "图标头像高度实测 \(icon.height)")
+  }
+
+  @Test("五档直径 20 / 28 / 32 / 40 / 56（±1）；rawValue 稳定")
+  func fiveSizes() {
+    #expect(
+      WDAvatarSize.allCases.map(\.rawValue) == ["xs", "sm", "md", "lg", "xl"])
+    let expected: [WDAvatarSize: CGFloat] = [
+      .xs: 20, .sm: 28, .md: 32, .lg: 40, .xl: 56,
+    ]
+    for size in WDAvatarSize.allCases {
+      let measured = Self.size(.init(label: Text(verbatim: "妈")), avatarSize: size)
+      let target = expected[size] ?? 0
+      #expect(abs(measured.width - target) <= 1, "\(size.rawValue) 宽 \(measured.width)")
+      #expect(abs(measured.height - target) <= 1, "\(size.rawValue) 高 \(measured.height)")
+    }
+  }
+
+  @Test("在线点只做 overlay，不改变头像尺寸")
+  func onlineKeepsSize() {
+    let plain = Self.size(.init(label: Text(verbatim: "妈")), avatarSize: .lg)
+    let online = Self.size(
+      .init(label: Text(verbatim: "妈")), avatarSize: .lg, isOnline: true)
+    #expect(plain == online)
+  }
+
+  @Test("已停用可构造（50% + 去饱和）")
+  func disabledConstructible() {
+    let avatar = WDAvatar(
+      value: .init(label: Text(verbatim: "妈")), size: .md, isDisabled: true)
+    let controller = UIHostingController(rootView: avatar.wdTheme(.light))
+    #expect(controller.sizeThatFits(in: CGSize(width: 200, height: 200)).width > 0)
   }
 
   @Test("AX5 下不放大：直径与首字号按设计固定（例外项，R7/R11 行内豁免）")

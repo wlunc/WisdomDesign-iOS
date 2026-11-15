@@ -286,7 +286,7 @@ public struct WDAssigneePicker: View {
           )
       }
       if let avatar {
-        WDAvatar(value: avatar, diameter: avatarDiameter)
+        WDAvatar(value: avatar, size: isCompact ? .md : .lg)
           .scaleEffect(bounce ? Self.selectedScale : 1)
       } else if unassigned {
         WDIcon(icon: .unassigned, size: .md)

@@ -11,9 +11,14 @@
           WDAvatar(value: .init(icon: .profile))
           WDAvatar(value: .init(icon: .unassigned))
         }
-        HStack(spacing: WDSpacing.s4) {
-          WDAvatar(value: .init(label: Text(verbatim: "林")))
-          WDAvatar(value: .init(label: Text(verbatim: "B")))
+        HStack(alignment: .bottom, spacing: WDSpacing.s4) {
+          ForEach(WDAvatarSize.allCases, id: \.self) { size in
+            WDAvatar(value: .init(label: Text(verbatim: "妈")), size: size)
+          }
+        }
+        HStack(alignment: .bottom, spacing: WDSpacing.s4) {
+          WDAvatar(value: .init(label: Text(verbatim: "林")), size: .lg, isOnline: true)
+          WDAvatar(value: .init(label: Text(verbatim: "B")), size: .lg, isDisabled: true)
         }
       }
       .padding(WDSpacing.s5)

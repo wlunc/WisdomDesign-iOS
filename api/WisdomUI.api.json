@@ -582,6 +582,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(value: WDAvatarValue, size: WDAvatarSize, isOnline: Bool = false, isDisabled: Bool = false)",
+      "kind" : "swift.init",
+      "path" : "WDAvatar.init(value:size:isOnline:isDisabled:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDAvatar.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
@@ -663,6 +669,42 @@
       "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDAvatar.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDAvatarSize",
+      "kind" : "swift.enum",
+      "path" : "WDAvatarSize"
+    },
+    {
+      "access" : "public",
+      "decl" : "case lg",
+      "kind" : "swift.enum.case",
+      "path" : "WDAvatarSize.lg"
+    },
+    {
+      "access" : "public",
+      "decl" : "case md",
+      "kind" : "swift.enum.case",
+      "path" : "WDAvatarSize.md"
+    },
+    {
+      "access" : "public",
+      "decl" : "case sm",
+      "kind" : "swift.enum.case",
+      "path" : "WDAvatarSize.sm"
+    },
+    {
+      "access" : "public",
+      "decl" : "case xl",
+      "kind" : "swift.enum.case",
+      "path" : "WDAvatarSize.xl"
+    },
+    {
+      "access" : "public",
+      "decl" : "case xs",
+      "kind" : "swift.enum.case",
+      "path" : "WDAvatarSize.xs"
     },
     {
       "access" : "public",
