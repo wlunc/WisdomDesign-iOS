@@ -660,10 +660,14 @@ extension WDButtonSize {
 }
 
 extension WDIconButtonVariant {
-  /// 图标按钮当前只有一档。
+  /// 图标按钮外观名。
   var demoTitle: String {
     switch self {
     case .plain: return "纯图标"
+    case .filled: return "实底"
+    case .tonal: return "柔色"
+    case .glass: return "玻璃"
+    case .outline: return "描边"
     }
   }
 }
@@ -686,6 +690,7 @@ extension WDCardStyle {
     case .elevated: return "浮起"
     case .outlined: return "描边"
     case .glass: return "玻璃"
+    case .sunken: return "下沉"
     }
   }
 }
