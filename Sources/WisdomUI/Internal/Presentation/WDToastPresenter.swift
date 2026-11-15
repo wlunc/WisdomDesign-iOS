@@ -11,6 +11,73 @@ enum WDToastLayout {
   static let enterDuration: TimeInterval = 0.32
   /// 消失 160ms。
   static let exitDuration: TimeInterval = 0.16
+
+  /// 浮层在宿主容器坐标系里的 frame：满宽、水平居中、贴安全区底部。
+  ///
+  /// 旋转 / 分屏 / 安全区变化后由 `WDToastHostingController` 重算；抽成纯函数便于单测。
+  ///
+  /// - Parameters:
+  ///   - bounds: 宿主容器（Top VC 的 view）当前 bounds；浮层与它同宽 ⇒ 水平天然居中。
+  ///   - safeAreaBottom: 宿主容器当前的安全区底部（Home Indicator / 分屏等）。
+  ///   - contentHeight: `sizeThatFits` 量出的内容高；低于最小字段高时按 `WDSize.fieldHeight` 取。
+  static func frame(
+    in bounds: CGRect,
+    safeAreaBottom: CGFloat,
+    contentHeight: CGFloat
+  ) -> CGRect {
+    let height = max(contentHeight, WDSize.fieldHeight)
+    return CGRect(
+      x: bounds.minX,
+      y: bounds.maxY - safeAreaBottom - bottomInset - height,
+      width: bounds.width,
+      height: height
+    )
+  }
+}
+
+/// 窗口层 Toast 的宿主控制器：父容器尺寸 / 安全区变化时重新计算自身 frame。
+///
+/// 只改自己的 bounds + center（不碰 alpha / transform），因此入场与退场动画、
+/// 点击穿透都不受影响；也不重复 addSubview / 注册观察者，避免泄漏。
+final class WDToastHostingController<Content: View>: UIHostingController<Content> {
+  /// 按当前父容器重排（父容器不存在或尚未有宽度时无操作）。
+  func layoutInParent() {
+    guard let container = parent?.view else { return }
+    let bounds = container.bounds
+    guard bounds.width > 0 else { return }
+    let size = sizeThatFits(in: CGSize(width: bounds.width, height: .greatestFiniteMagnitude))
+    let target = WDToastLayout.frame(
+      in: bounds,
+      safeAreaBottom: container.safeAreaInsets.bottom,
+      contentHeight: size.height
+    )
+    let center = CGPoint(x: target.midX, y: target.midY)
+    // 幂等：frame 没变就不写回，避免 layout 回环。
+    guard view.bounds.size != target.size || view.center != center else { return }
+    view.bounds = CGRect(origin: .zero, size: target.size)
+    view.center = center
+  }
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    layoutInParent()
+  }
+
+  override func viewSafeAreaInsetsDidChange() {
+    super.viewSafeAreaInsetsDidChange()
+    layoutInParent()
+  }
+
+  override func viewWillTransition(
+    to size: CGSize,
+    with coordinator: any UIViewControllerTransitionCoordinator
+  ) {
+    super.viewWillTransition(to: size, with: coordinator)
+    // 旋转 / 分屏的 bounds 变化可能晚于本回调，动画结束后再兜一次最终几何。
+    coordinator.animate(alongsideTransition: nil) { _ in
+      self.layoutInParent()
+    }
+  }
 }
 
 /// 窗口层 Toast 呈现：把浮层挂到当前 Top VC 的 view 上，只占 Toast 自身尺寸。
@@ -47,25 +114,17 @@ final class WDToastPresenter {
       .environment(\.wdTheme, theme)
       .environment(\.wdEffectsBudget, budget)
       .padding(.horizontal, WDSpacing.s9)
-    let controller = UIHostingController(rootView: rootView)
+    let controller = WDToastHostingController(rootView: rootView)
     controller.view.backgroundColor = .clear
     controller.overrideUserInterfaceStyle = colorScheme == .dark ? .dark : .light
+    // 宽度跟随容器 ⇒ 父容器 bounds 变化会触达宿主的 layout，从而重排（y / 高度在重排里算）。
+    controller.view.autoresizingMask = [.flexibleWidth]
 
     top.addChild(controller)
     top.view.addSubview(controller.view)
     controller.didMove(toParent: top)
+    controller.layoutInParent()
 
-    let bounds = top.view.bounds
-    let size = controller.sizeThatFits(
-      in: CGSize(width: bounds.width, height: .greatestFiniteMagnitude))
-    let height = max(size.height, WDSize.fieldHeight)
-    let safeBottom = top.view.safeAreaInsets.bottom
-    controller.view.frame = CGRect(
-      x: 0,
-      y: bounds.height - safeBottom - WDToastLayout.bottomInset - height,
-      width: bounds.width,
-      height: height
-    )
     controller.view.alpha = 0
     controller.view.transform = CGAffineTransform(translationX: 0, y: WDToastLayout.enterOffset)
     host = controller

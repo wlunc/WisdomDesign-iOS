@@ -80,4 +80,15 @@ struct WDBadgeTests {
     let second = WDBadgeValue(label: Text(verbatim: "3"))
     #expect(first == second)
   }
+
+  @Test("可朗读文本：label 用原 Text / count 数字与 99+ / 0 与 dot 无文本")
+  func readableText() {
+    let label = Text(verbatim: "已逾期")
+    #expect(WDBadgeValue(label: label).accessibilityText == label)
+    #expect(WDBadgeValue(count: 1).accessibilityText == Text(verbatim: "1"))
+    #expect(WDBadgeValue(count: 99).accessibilityText == Text(verbatim: "99"))
+    #expect(WDBadgeValue(count: 100).accessibilityText == Text(verbatim: "99+"))
+    #expect(WDBadgeValue(count: 0).accessibilityText == nil)
+    #expect(WDBadgeValue.dot.accessibilityText == nil)
+  }
 }

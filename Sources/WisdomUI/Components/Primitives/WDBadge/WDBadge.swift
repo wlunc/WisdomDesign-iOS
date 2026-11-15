@@ -42,6 +42,25 @@ public struct WDBadgeValue: Sendable, Equatable {
   private init(content: Content) {
     self.content = content
   }
+
+  /// 可朗读文本（内部；徽标不独立进焦点，由宿主并入整行朗读，设计 11 §10）。
+  ///
+  /// - `label`：原样回传调用方的 `Text`（库内零文案，`Text` 也无法取串）；
+  /// - `count`：复用计数文案（0 ⇒ 不渲染 ⇒ `nil`；>99 ⇒ `99+`）；
+  /// - `dot`：纯装饰 ⇒ `nil`。
+  ///
+  /// 拼接位置与分隔符由宿主决定（本属性不产出任何标点/词序）。
+  var accessibilityText: Text? {
+    switch content {
+    case .label(let label):
+      return label
+    case .count(let count):
+      guard count > 0 else { return nil }
+      return Text(verbatim: WDBadge.countText(count))  // wd-structure-check:disable R21 — 读屏
+    case .dot:
+      return nil
+    }
+  }
 }
 
 /// 徽标（SPEC §2.10-#11；M2；M5 扩计数/圆点）。

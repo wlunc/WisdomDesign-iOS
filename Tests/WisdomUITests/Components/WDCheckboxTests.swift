@@ -140,4 +140,44 @@ struct WDCheckboxTests {
       controller.sizeThatFits(in: CGSize(width: 320, height: CGFloat.infinity)).height
         >= WDSize.touchTargetMin - 0.5)
   }
+
+  @Test("光晕触发：仅未选 → 已选；取消选中、半选、禁用、Reduce Motion 不播")
+  func glowTriggerCondition() {
+    func shouldPlay(
+      from wasChecked: Bool,
+      to isChecked: Bool,
+      isIndeterminate: Bool = false,
+      isEnabled: Bool = true,
+      reduceMotion: Bool = false
+    ) -> Bool {
+      WDCheckbox.Glow.shouldPlay(
+        isChecked: isChecked,
+        wasChecked: wasChecked,
+        isIndeterminate: isIndeterminate,
+        isEnabled: isEnabled,
+        reduceMotion: reduceMotion)
+    }
+
+    #expect(shouldPlay(from: false, to: true), "未选 → 已选应播")
+    #expect(!shouldPlay(from: true, to: false), "取消选中不播")
+    #expect(!shouldPlay(from: true, to: true), "保持已选不重播")
+    #expect(!shouldPlay(from: false, to: false), "保持未选不播")
+    #expect(!shouldPlay(from: false, to: true, isEnabled: false), "禁用态不播")
+    #expect(!shouldPlay(from: false, to: true, isIndeterminate: true), "半选已是选中底，不播")
+    #expect(!shouldPlay(from: false, to: true, reduceMotion: true), "Reduce Motion 不播")
+  }
+
+  @Test("光晕参数：brand 42% → 透明、400ms、外扩到 44pt 热区（不参与布局）")
+  func glowMetrics() {
+    #expect(WDCheckbox.Glow.startOpacity == 0.42)
+    #expect(WDCheckbox.Glow.endOpacity == 0)
+    #expect(WDCheckbox.Glow.duration == 0.4)
+    #expect(WDCheckbox.Glow.startScale == 1)
+    let standard = WDCheckbox.Glow.endScale(boxSide: WDCheckbox.Metrics.box)
+    let compact = WDCheckbox.Glow.endScale(boxSide: WDCheckbox.Metrics.compactBox)
+    #expect(standard > WDCheckbox.Glow.startScale)
+    #expect(compact > standard, "紧凑方框更小，扩散倍数更大")
+    #expect(abs(WDCheckbox.Metrics.box * standard - WDSize.touchTargetMin) <= 0.5)
+    #expect(abs(WDCheckbox.Metrics.compactBox * compact - WDSize.touchTargetMin) <= 0.5)
+  }
 }

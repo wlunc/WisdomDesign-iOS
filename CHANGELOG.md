@@ -8,6 +8,13 @@
 
 ### Added
 
+- **B9 行为欠账（2026-11-15；API 零变化）**：`WDCheckbox` 选中光晕（`brand` 42% → 透明，
+  400ms 一次，Reduce Motion / 禁用 / 半选不播）；`WDSwitch` 支持拖动滑块实时跟随、松手吸附、
+  按下 1.06、轨道 260ms 线性 / 滑块 300ms 精确曲线；`WDToast` 旋转/分屏后按新 bounds 与安全区
+  重排；`WDListRow` 尾部徽标文本并入整行朗读（徽标仍不独立进焦点）。**API 1290 零变化**；
+  206 tests / 360 张快照零漂移；demo 18 条 UITest 全绿。**残留**：Checkbox 光晕观感与
+  Switch 拖动/ScrollView 竞争需真机确认；Toast 悬停仍待真机；ListRow 朗读需 VoiceOver 实测。
+
 - **B8 实现欠账（2026-11-15；授权扩公开）**：`WDIconButton` 新增 `WDIconButtonShape`
   （circle / roundedSquare，radius.sm）与 shape 重载；`WDCheckbox` 新增无标签重载（仅方框 +
   必填 accessibilityLabel，用于表头全选）；`WDDatePicker` 单日期早于今天时文字改用

@@ -13,6 +13,11 @@ public enum WDSwitchSize: String, CaseIterable, Sendable, Equatable {
 /// - 关 = border.hairline-strong 描边 + 白滑块；开 = gradient.mid；切换轻触觉 ×1；
 /// - 角色 = switch（由真 Toggle 提供），状态由系统朗读（库内零"开/关"文案）；
 /// - 描述位在标签下方一行 footnote / text.secondary。
+///
+/// 拖动（设计 05 §8/§9）：轨道可水平拖动，滑块实时跟随并按中心是否过半实时改写
+/// `isOn`；松手吸附到最近一端且只触发一次轻触觉。轨道变色 260ms 线性；滑块位移
+/// 300ms `cubic-bezier(.2, 1.5, .45, 1)`；拖动中滑块放大 1.06。两项时长尚未进令牌，
+/// 在本文件按设计值冻结（见 `WDSwitchMotion`）。
 public struct WDSwitch: View {
   @Binding private var isOn: Bool
   private let label: Text
@@ -71,6 +76,8 @@ public struct WDSwitch: View {
     static let knobTravel: CGFloat = 20  // wd-structure-check:disable R7 — 设计值
     /// 滑块与轨道的上下左右内边距（设计「各留 2」）。
     static let knobInset: CGFloat = 2  // wd-structure-check:disable R7 — 设计值
+    /// 拖动中滑块放大到 1.06（设计 05 §5）。
+    static let pressedKnobScale: CGFloat = 1.06  // wd-structure-check:disable R7 — 设计 05 §5
 
     /// 紧凑档轨道宽 40。
     static let compactTrackWidth: CGFloat = 40  // wd-structure-check:disable R7 — 设计值
@@ -112,6 +119,59 @@ public struct WDSwitch: View {
   private static let percentScale: CGFloat = 100  // wd-structure-check:disable R7 — 百分数分母
 }
 
+/// 拖动换算与吸附（设计 05 §8：实时跟随、松手按滑块中心是否过半吸附）。
+///
+/// 纯逻辑、无 SwiftUI 状态，便于单测覆盖左/右/中点/两端。
+enum WDSwitchDrag {
+  /// 是否由开关接管本次拖动：横向分量不弱于纵向。
+  ///
+  /// 手势优先级：开关只把拖动挂在轨道上，并以 `simultaneousGesture` 与父级
+  /// `ScrollView` 共存；纵向滚动继续交给父级，本方法过滤掉纵向位移，既不写
+  /// `isOn` 也不触发触觉。点击与拖动由 `ExclusiveGesture` 互斥，避免一次操作
+  /// 既切换又吸附。
+  static func shouldBegin(translation: CGSize) -> Bool {
+    abs(translation.width) >= abs(translation.height)
+  }
+
+  /// 拖动中的滑块偏移：起点偏移 + 水平位移，夹在 0…行程内。
+  static func knobOffset(startOffset: CGFloat, translation: CGFloat, travel: CGFloat) -> CGFloat {
+    guard travel > 0 else { return 0 }
+    return min(max(startOffset + translation, 0), travel)
+  }
+
+  /// 滑块中心（轨道坐标）。
+  static func knobCenterX(offset: CGFloat, metrics: WDSwitch.Metrics.SizeMetrics) -> CGFloat {
+    metrics.knobInset + metrics.knobDiameter / 2 + offset  // wd-structure-check:disable R7 — 半径
+  }
+
+  /// 中心严格过半 = 开；恰在中点归关（松手吸附最近端）。
+  static func isOn(knobCenterX: CGFloat, trackWidth: CGFloat) -> Bool {
+    knobCenterX > trackWidth / 2  // wd-structure-check:disable R7 — 轨道中点
+  }
+}
+
+/// WDSwitch 专用动效（设计 05 §9；两项时长尚未入令牌，按设计值本地冻结）。
+private enum WDSwitchMotion {
+  /// 轨道变色：260ms 线性。
+  static let track: Animation = .linear(duration: trackDuration)
+  /// 滑块位移：300ms cubic-bezier(.2, 1.5, .45, 1)。
+  static let knob: Animation = .timingCurve(
+    knobControl1X, knobControl1Y, knobControl2X, knobControl2Y, duration: knobDuration)
+
+  /// 轨道 260ms（设计 05 §9）。
+  private static let trackDuration: TimeInterval = 0.26  // wd-structure-check:disable R7 — 设计 05 §9
+  /// 滑块 300ms（设计 05 §9）。
+  private static let knobDuration: TimeInterval = 0.30  // wd-structure-check:disable R7 — 设计 05 §9
+  /// 曲线控制点 1 x（设计 05 §9）。
+  private static let knobControl1X: Double = 0.2  // wd-structure-check:disable R7 — 设计 05 §9
+  /// 曲线控制点 1 y（设计 05 §9）。
+  private static let knobControl1Y: Double = 1.5  // wd-structure-check:disable R7 — 设计 05 §9
+  /// 曲线控制点 2 x（设计 05 §9）。
+  private static let knobControl2X: Double = 0.45  // wd-structure-check:disable R7 — 设计 05 §9
+  /// 曲线控制点 2 y（设计 05 §9）。
+  private static let knobControl2Y: Double = 1
+}
+
 /// 自定义开关外观：真 Toggle 的样式（角色/状态由 Toggle 提供，库内不写"开/关"文案）。
 private struct WDSwitchToggleStyle: ToggleStyle {
   let size: WDSwitchSize
@@ -125,41 +185,129 @@ private struct WDSwitchToggleStyle: ToggleStyle {
   }
 
   func makeBody(configuration: Configuration) -> some View {
-    HStack(spacing: WDSpacing.s4) {
-      configuration.label
-        .foregroundStyle(colors.textPrimary)
-      Spacer(minLength: 0)
-      track(configuration)
+    HStack(spacing: 0) {
+      HStack(spacing: WDSpacing.s4) {
+        configuration.label
+          .foregroundStyle(colors.textPrimary)
+        Spacer(minLength: 0)
+      }
+      .padding(.trailing, WDSpacing.s4)
+      .frame(maxWidth: .infinity, minHeight: WDSize.touchTargetMin, alignment: .leading)
+      .contentShape(Rectangle())
+      .onTapGesture {
+        guard isEnabled else { return }
+        configuration.isOn.toggle()
+        WDHaptics.shared.play(.toggle, budget: budget)
+      }
+      WDSwitchTrack(isOn: configuration.$isOn, metrics: metrics)
     }
     .frame(minHeight: WDSize.touchTargetMin)
-    .contentShape(Rectangle())
-    .onTapGesture {
-      guard isEnabled else { return }
-      configuration.isOn.toggle()
-      WDHaptics.shared.play(.toggle, budget: budget)
-    }
     .accessibilityElement(children: .combine)
   }
+}
 
-  @ViewBuilder private func track(_ configuration: Configuration) -> some View {
+/// 轨道 + 滑块：拖动换算、松手吸附与动效。
+private struct WDSwitchTrack: View {
+  /// 受控开态（拖动中实时写入，松手写入吸附结果）。
+  @Binding var isOn: Bool
+  /// 当前档位几何。
+  let metrics: WDSwitch.Metrics.SizeMetrics
+
+  @Environment(\.wdColors) private var colors
+  @Environment(\.wdEffectsBudget) private var budget
+  @Environment(\.isEnabled) private var isEnabled
+
+  /// 拖动起点偏移（开始拖动时冻结，避免实时 `isOn` 反向污染换算）。
+  @State private var startOffset: CGFloat = 0
+  /// 已接管的水平位移；nil = 未开始或纵向滚动未接管。
+  @State private var translation: CGFloat?
+
+  /// 是否正在水平拖动（控制滑块 1.06 放大）。
+  private var isDragging: Bool { translation != nil }
+
+  /// 当前滑块偏移：拖动中跟随手指，否则取开态端点。
+  private var knobOffset: CGFloat {
+    guard let translation else {
+      return isOn ? metrics.knobTravel : 0
+    }
+    return WDSwitchDrag.knobOffset(
+      startOffset: startOffset, translation: translation, travel: metrics.knobTravel)
+  }
+
+  var body: some View {
     let shape = Capsule()
     ZStack(alignment: .leading) {
-      if configuration.isOn {
-        shape
-          .fill(WDGradient.mid.linearGradient)
-          .animation(.linear(duration: WDMotion.Duration.base), value: configuration.isOn)
-      } else {
-        shape
-          .fill(Color.clear)
-          .overlay(shape.stroke(colors.borderHairlineStrong, lineWidth: 1))
-      }
+      shape
+        .fill(WDGradient.mid.linearGradient)
+        .opacity(isOn ? 1 : 0)
+        .animation(WDSwitchMotion.track, value: isOn)
+      shape
+        .stroke(colors.borderHairlineStrong, lineWidth: 1)
+        .opacity(isOn ? 0 : 1)
+        .animation(WDSwitchMotion.track, value: isOn)
       Circle()
         .fill(colors.textOnDark)
         .frame(width: metrics.knobDiameter, height: metrics.knobDiameter)
         .padding(.leading, metrics.knobInset)
-        .offset(x: configuration.isOn ? metrics.knobTravel : 0)
-        .animation(WDMotion.Spring.gentle, value: configuration.isOn)
+        .scaleEffect(isDragging ? WDSwitch.Metrics.pressedKnobScale : 1)
+        .offset(x: knobOffset)
+        .animation(isDragging ? nil : WDSwitchMotion.knob, value: knobOffset)
+        .animation(.easeOut(duration: WDMotion.Duration.instant), value: isDragging)
     }
     .frame(width: metrics.trackWidth, height: metrics.trackHeight)
+    .contentShape(Rectangle())
+    .simultaneousGesture(trackGesture)
+  }
+
+  /// 点击与拖动互斥：轻点切换一次；拖动只在松手时触发一次触觉。
+  private var trackGesture: some Gesture {
+    dragGesture.exclusively(before: TapGesture().onEnded { _ in toggle() })
+  }
+
+  /// 水平拖动；`minimumDistance: 1` 让轻点仍归 TapGesture。
+  private var dragGesture: some Gesture {
+    DragGesture(minimumDistance: 1, coordinateSpace: .local)
+      .onChanged(handleDragChanged)
+      .onEnded(handleDragEnded)
+  }
+
+  /// 拖动中：实时更新滑块与 `isOn`（不触发触觉）。
+  private func handleDragChanged(_ value: DragGesture.Value) {
+    guard isEnabled else { return }
+    guard translation != nil || WDSwitchDrag.shouldBegin(translation: value.translation) else {
+      return
+    }
+    if translation == nil {
+      startOffset = isOn ? metrics.knobTravel : 0
+    }
+    translation = value.translation.width
+    let offset = WDSwitchDrag.knobOffset(
+      startOffset: startOffset, translation: value.translation.width, travel: metrics.knobTravel)
+    let center = WDSwitchDrag.knobCenterX(offset: offset, metrics: metrics)
+    let nextOn = WDSwitchDrag.isOn(knobCenterX: center, trackWidth: metrics.trackWidth)
+    if nextOn != isOn {
+      isOn = nextOn
+    }
+  }
+
+  /// 松手：按滑块中心是否过半吸附最近端，触觉只在此处触发一次。
+  private func handleDragEnded(_ value: DragGesture.Value) {
+    guard isEnabled, translation != nil else {
+      translation = nil
+      return
+    }
+    translation = nil
+    let offset = WDSwitchDrag.knobOffset(
+      startOffset: startOffset, translation: value.translation.width, travel: metrics.knobTravel)
+    let center = WDSwitchDrag.knobCenterX(offset: offset, metrics: metrics)
+    isOn = WDSwitchDrag.isOn(knobCenterX: center, trackWidth: metrics.trackWidth)
+    WDHaptics.shared.play(.toggle, budget: budget)
+  }
+
+  /// 点击切换（与拖动互斥）。
+  private func toggle() {
+    guard isEnabled else { return }
+    isOn.toggle()
+    WDHaptics.shared.play(.toggle, budget: budget)
   }
 }

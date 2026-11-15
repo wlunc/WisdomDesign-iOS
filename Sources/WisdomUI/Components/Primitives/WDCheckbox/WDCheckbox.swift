@@ -17,8 +17,8 @@ public enum WDCheckboxSize: String, CaseIterable, Sendable, Equatable {
 ///
 /// `isIndeterminate` 是**显示态**（表头全选等由调用方维护）；半选的朗读文案属调用方
 /// （L-B 零文案），需要时在外层加 `.accessibilityValue(_:)`。无标签变体（设计 06 §4）走
-/// `accessibilityLabel` 构造：仅渲染方框、读屏文案由调用方提供，只用于表头全选；光晕/按下缩放
-/// 仍不可表达，差异登记在 `docs/DEV-PLAN.md` §2.3。
+/// `accessibilityLabel` 构造：仅渲染方框、读屏文案由调用方提供，只用于表头全选；光晕随方框
+/// 统一生效，按下缩放仍不可表达，差异登记在 `docs/DEV-PLAN.md` §2.3。
 public struct WDCheckbox: View {
   @Binding private var isChecked: Bool
   /// 可见标签；nil = 无标签变体（只渲染方框）。
@@ -128,6 +128,32 @@ public struct WDCheckbox: View {
     static let barHeight: CGFloat = 2.4  // wd-structure-check:disable R7 — 设计值
   }
 
+  /// 选中光晕（设计 06 §5/§9）：仅"未选 → 已选"播放一次；纯逻辑部分可单测。
+  enum Glow {
+    /// 起始不透明度（设计 06 §5：`brand` 42%）。
+    static let startOpacity: Double = 0.42  // wd-structure-check:disable R7 — 设计值 42%
+    /// 结束不透明度（外扩到透明）。
+    static let endOpacity: Double = 0
+    /// 起始缩放（与方框同大）。
+    static let startScale: CGFloat = 1
+    /// 扩散时长（设计 06 §9：`motion.component.checkbox-glow` 400ms）。
+    static let duration: Double = 0.4  // wd-structure-check:disable R7 — 设计值 400ms
+    /// 扩散终点 = 44pt 热区（只做视觉外扩，不参与布局）。
+    static func endScale(boxSide: CGFloat) -> CGFloat {
+      WDSize.touchTargetMin / boxSide
+    }
+    /// 触发条件：仅启用态下由未选变已选；半选（已呈选中底）与 Reduce Motion 不播。
+    static func shouldPlay(
+      isChecked: Bool,
+      wasChecked: Bool,
+      isIndeterminate: Bool,
+      isEnabled: Bool,
+      reduceMotion: Bool
+    ) -> Bool {
+      isEnabled && !reduceMotion && !isIndeterminate && isChecked && !wasChecked
+    }
+  }
+
   /// 禁用态整体不透明度（`state.disabled.alpha` = 40，百分数换算）。
   private var disabledOpacity: CGFloat {
     WDState.disabledAlpha / Self.percentScale
@@ -196,6 +222,10 @@ struct WDCheckboxBox: View {
   var size: WDCheckboxSize = .standard
 
   @Environment(\.wdColors) private var colors
+  @Environment(\.isEnabled) private var isEnabled
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  /// 光晕触发计数：只在"未选 → 已选"时自增，取消选中不触发。
+  @State private var glowTrigger = 0
 
   private typealias Metrics = WDCheckbox.Metrics
 
@@ -212,6 +242,8 @@ struct WDCheckboxBox: View {
   var body: some View {
     let shape = RoundedRectangle(cornerRadius: corner, style: .continuous)
     ZStack {
+      // 光晕在最底层：不遮挡勾/横杠，也不改变布局与热区。
+      glow
       if isIndeterminate || isChecked {
         shape.fill(WDGradient.mid.linearGradient)
         if isIndeterminate {
@@ -225,6 +257,50 @@ struct WDCheckboxBox: View {
       }
     }
     .frame(width: side, height: side)
+    .onChange(of: isChecked) { wasChecked, isChecked in
+      guard
+        WDCheckbox.Glow.shouldPlay(
+          isChecked: isChecked,
+          wasChecked: wasChecked,
+          isIndeterminate: isIndeterminate,
+          isEnabled: isEnabled,
+          reduceMotion: reduceMotion)
+      else { return }
+      glowTrigger += 1
+    }
+  }
+
+  /// 选中光晕：`brand` 42% → 透明、scale 1 → 44pt 热区，400ms 只播一次。
+  ///
+  /// 用 `keyframeAnimator` 的 trigger 计数驱动，因此取消选中不会重启关键帧；静止态
+  /// （initialValue）透明，不影响首帧/快照。`scaleEffect` 不参与布局，命中测试交给方框。
+  private var glow: some View {
+    Circle()
+      .fill(
+        RadialGradient(
+          colors: [colors.textBrand, colors.textBrand.opacity(WDCheckbox.Glow.endOpacity)],
+          center: .center,
+          startRadius: 0,
+          endRadius: side / 2  // wd-structure-check:disable R7 — 半径 = 方框边长的一半
+        )
+      )
+      .frame(width: side, height: side)
+      .keyframeAnimator(initialValue: GlowFrame(), trigger: glowTrigger) { content, frame in
+        content
+          .scaleEffect(frame.scale)
+          .opacity(frame.opacity)
+      } keyframes: { _ in
+        KeyframeTrack(\.scale) {
+          MoveKeyframe(WDCheckbox.Glow.startScale)
+          LinearKeyframe(
+            WDCheckbox.Glow.endScale(boxSide: side), duration: WDCheckbox.Glow.duration)
+        }
+        KeyframeTrack(\.opacity) {
+          MoveKeyframe(WDCheckbox.Glow.startOpacity)
+          LinearKeyframe(WDCheckbox.Glow.endOpacity, duration: WDCheckbox.Glow.duration)
+        }
+      }
+      .allowsHitTesting(false)
   }
 
   /// 已选：白色描边勾（5×10 L，rotate 42°，与画廊 06 一致）。
@@ -246,6 +322,12 @@ struct WDCheckboxBox: View {
       .fill(colors.textOnDark)
       .frame(width: Metrics.barWidth, height: Metrics.barHeight)
   }
+}
+
+/// 光晕的关键帧值：静止态透明（opacity 0），触发后才出现 42% → 透明的扩散。
+private struct GlowFrame {
+  var scale: CGFloat = WDCheckbox.Glow.startScale
+  var opacity: Double = WDCheckbox.Glow.endOpacity
 }
 
 /// 勾（设计 06 §2：白色描边 2.2、rotate(42°)，与画廊 06 的 5×10 L 同形）。

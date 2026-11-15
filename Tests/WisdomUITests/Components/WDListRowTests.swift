@@ -46,6 +46,24 @@ struct WDListRowTests {
       "三行实测 \(Self.height(subtitle: true, trailingValue: true))")
   }
 
+  @Test("整行朗读：徽标文本并入 accessibilityValue，其它尾槽不产生值")
+  func rowBadgeAccessibilityValue() {
+    #expect(
+      WDListRow.badgeAccessibilityText(for: .badge(WDBadgeValue(count: 3)))
+        == Text(verbatim: "3"))
+    #expect(
+      WDListRow.badgeAccessibilityText(for: .badge(WDBadgeValue(label: Text(verbatim: "已逾期"))))
+        == Text(verbatim: "已逾期"))
+    #expect(WDListRow.badgeAccessibilityText(for: .badge(WDBadgeValue(count: 0))) == nil)
+    #expect(WDListRow.badgeAccessibilityText(for: .badge(.dot)) == nil)
+    #expect(WDListRow.badgeAccessibilityText(for: .value(Text(verbatim: "3 件"))) == nil)
+    #expect(
+      WDListRow.badgeAccessibilityText(for: .avatar(WDAvatarValue(label: Text(verbatim: "妈妈"))))
+        == nil)
+    #expect(WDListRow.badgeAccessibilityText(for: .none) == nil)
+    #expect(WDListRow.badgeAccessibilityText(for: .disclosure) == nil)
+  }
+
   @Test("compact：单行 44 / 双行 60 / 双行+尾部 76")
   func compactMatrix() {
     #expect(

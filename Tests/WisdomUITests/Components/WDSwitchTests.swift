@@ -4,7 +4,7 @@ import UIKit
 
 @testable import WisdomUI
 
-/// `WDSwitch`（M2）的组件级断言：几何自洽、触控下限、放大档不裁切。
+/// `WDSwitch`（M2）的组件级断言：几何自洽、触控下限、放大档不裁切、拖动换算与吸附。
 ///
 /// 几何口径（设计 05 §3）：轨道 51×31、滑块 27（轨道高 − 4）、行程 20。
 @MainActor
@@ -68,5 +68,40 @@ struct WDSwitchTests {
     let normal = Self.height(.large)
     let ax5 = Self.height(.accessibility5)
     #expect(ax5 > normal, "AX5 行高 \(ax5) 应大于默认档 \(normal)")
+  }
+
+  @Test("拖动换算：水平位移夹在两端，已在开态时可回拖")
+  func dragOffsetClampsAtEnds() {
+    let travel = WDSwitch.Metrics.knobTravel
+    #expect(WDSwitchDrag.knobOffset(startOffset: 0, translation: -8, travel: travel) == 0)
+    #expect(
+      WDSwitchDrag.knobOffset(startOffset: 0, translation: travel + 8, travel: travel) == travel)
+    #expect(
+      WDSwitchDrag.knobOffset(startOffset: travel, translation: -8, travel: travel) == travel - 8)
+  }
+
+  @Test("拖动吸附：左/右/中点/两端按滑块中心是否过半")
+  func dragSnapsAtHalfByKnobCenter() {
+    for size in WDSwitchSize.allCases {
+      let metrics = WDSwitch.Metrics.metrics(for: size)
+      let left = WDSwitchDrag.knobCenterX(offset: 0, metrics: metrics)
+      let right = WDSwitchDrag.knobCenterX(offset: metrics.knobTravel, metrics: metrics)
+      let middle = WDSwitchDrag.knobCenterX(
+        offset: metrics.knobTravel / 2, metrics: metrics)
+      #expect(middle == metrics.trackWidth / 2, "\(size) 中点应落在轨道中心")
+      #expect(!WDSwitchDrag.isOn(knobCenterX: left, trackWidth: metrics.trackWidth))
+      #expect(WDSwitchDrag.isOn(knobCenterX: right, trackWidth: metrics.trackWidth))
+      #expect(
+        !WDSwitchDrag.isOn(knobCenterX: middle, trackWidth: metrics.trackWidth),
+        "恰在中点归关，松手吸附到左端")
+      #expect(WDSwitchDrag.isOn(knobCenterX: middle + 1, trackWidth: metrics.trackWidth))
+    }
+  }
+
+  @Test("拖动方向判定：纵向交给父级 ScrollView，横向由开关接管")
+  func dragAxisGate() {
+    #expect(WDSwitchDrag.shouldBegin(translation: CGSize(width: 6, height: 1)))
+    #expect(!WDSwitchDrag.shouldBegin(translation: CGSize(width: 1, height: 6)))
+    #expect(WDSwitchDrag.shouldBegin(translation: CGSize(width: 0, height: 0)))
   }
 }

@@ -75,7 +75,7 @@
 
 - ①–④：`WDTextField` 播报归属 / 显隐切换 selection / 渲染器表 P17 / `WDA11yFocusID` 无公开构造器；
 - ⑤–⑦：`WDBadge` 变体、`WDDivider` 内缩档、`WDAvatar` 五档/配色/在线态；
-  **B1（2026-11-14）已闭合 ⑤**：`WDBadgeVariant` 六态 + `init(label:variant:)`；**B2（2026-11-15）已闭合 ⑦ 的五档/在线/停用**：`WDAvatarSize` + `init(value:size:isOnline:isDisabled:)`（成员四色底色与照片仍开放）；**B3（2026-11-15）已闭合 ⑥ 内缩档与 ⑩ 的 sunken**（Card media/可点仍开放）；**B4（2026-11-15）已闭合 ⑪ 的四个变体**（圆角方形/聚焦光环仍开放）；**B5（2026-11-15）已闭合 ⑧ 的紧凑档/描述位**（拖动/失败回弹仍开放）；**B6（2026-11-15）已闭合 ⑨ 的范围/清除**（范围+时间、清除回调仍开放）；**B7（2026-11-15）已闭合 ⑨ 的 Checkbox 紧凑档与 ⑩ 的可点卡**（光晕/media 仍开放）；**B8（2026-11-15）已闭合 ⑨ 的无标签档与 ⑪ 的圆角方形**（IconButton lg 方形视觉待复核）；记录见 `docs/B1-SIGNATURE-FREEZE.md`～`docs/B8-SIGNATURE-FREEZE.md`；
+  **B1（2026-11-14）已闭合 ⑤**：`WDBadgeVariant` 六态 + `init(label:variant:)`；**B2（2026-11-15）已闭合 ⑦ 的五档/在线/停用**：`WDAvatarSize` + `init(value:size:isOnline:isDisabled:)`（成员四色底色与照片仍开放）；**B3（2026-11-15）已闭合 ⑥ 内缩档与 ⑩ 的 sunken**（Card media/可点仍开放）；**B4（2026-11-15）已闭合 ⑪ 的四个变体**（圆角方形/聚焦光环仍开放）；**B5（2026-11-15）已闭合 ⑧ 的紧凑档/描述位**（拖动/失败回弹仍开放）；**B6（2026-11-15）已闭合 ⑨ 的范围/清除**（范围+时间、清除回调仍开放）；**B7（2026-11-15）已闭合 ⑨ 的 Checkbox 紧凑档与 ⑩ 的可点卡**（光晕/media 仍开放）；**B8（2026-11-15）已闭合 ⑨ 的无标签档与 ⑪ 的圆角方形**（IconButton lg 方形视觉待复核）；**B9（2026-11-15）已闭合 ⑨ 的光晕、⑧ 的拖动/曲线与 ListRow 徽标朗读**（真机手势/VoiceOver 待复核）；记录见 `docs/B1-SIGNATURE-FREEZE.md`～`docs/B8-SIGNATURE-FREEZE.md`；
 - ⑧–⑪：`WDSwitch` 紧凑档/描述位、`WDCheckbox` 半选/紧凑档、`WDCard` sunken/media/可点、
   `WDIconButton` 其余四变体；
 - ⑫–⑭：`WDButton` 字号/图标档近似与聚焦光环、`WDListRow` 徽标朗读合并/`selectionIndicator` 语义、

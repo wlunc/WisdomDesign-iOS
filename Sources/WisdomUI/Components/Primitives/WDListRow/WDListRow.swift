@@ -79,6 +79,9 @@ public struct WDListRow: View {
   }
 
   /// 行内容；可点时包真 `Button`（pressed 唯一来源），否则纯内容。
+  ///
+  /// 尾部徽标保持 `accessibilityHidden`（不独立进焦点），它的可朗读文本并入整行的
+  /// `accessibilityValue`（设计 11 §10 / 设计 18 §10）；标点与语序仍由调用方给。
   public var body: some View {
     Group {
       if let action {
@@ -95,6 +98,16 @@ public struct WDListRow: View {
     }
     .modifier(WDListRowSwipe(swipe: swipeAction))
     .modifier(WDListRowCustomAction(swipe: swipeAction))
+    .modifier(WDListRowBadgeAccessibilityValue(value: Self.badgeAccessibilityText(for: trailing)))
+  }
+
+  /// 整行朗读用的徽标文本（内部；`Text` 无法取串，故以 `Text?` 传递）。
+  ///
+  /// 非徽标尾槽（含 `.none`/`.value`/`.avatar`/`.disclosure`）⇒ `nil`，
+  /// 行语义完全保持 `accessibilityElement(children: .combine)` 的既有行为。
+  static func badgeAccessibilityText(for trailing: WDListRowTrailing) -> Text? {
+    guard case .badge(let value) = trailing else { return nil }
+    return value.accessibilityText
   }
 
   // MARK: - 内容
@@ -278,6 +291,22 @@ private struct WDListRowSwipe: ViewModifier {
       content.swipeActions(edge: .trailing, allowsFullSwipe: true) {
         Button(role: .destructive, action: onDelete) { title }
       }
+    } else {
+      content
+    }
+  }
+}
+
+/// 徽标朗读值：并入整行的 `accessibilityValue`（设计 11 §10 / 设计 18 §10）。
+///
+/// 徽标自身保持 `accessibilityHidden`，不会成为独立焦点元素；无可朗读文本
+/// （`.dot` / 计数 0 / 非徽标尾槽）时不附加任何语义，保持既有整行合并读行为。
+private struct WDListRowBadgeAccessibilityValue: ViewModifier {
+  let value: Text?
+
+  @ViewBuilder func body(content: Content) -> some View {
+    if let value {
+      content.accessibilityValue(value)
     } else {
       content
     }

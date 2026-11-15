@@ -54,7 +54,7 @@
 | # | 项 | 现状 | 时点 / owner |
 | --- | --- | --- | --- |
 | ① | **Alert 焦点归还** | **已修（2026-11-14，B 类遗留）**：出现前用 `UIAccessibility.focusedElement` 捕获当前读屏焦点元素，关闭后用 `.layoutChanged` 归还；不改公开签名（无需公开 `WDA11yFocusID` 构造器）。**未验证**：无真机 USB，VoiceOver 的实际焦点路径未人审 | 已修；真机 VoiceOver 人审待补 |
-| ② | Toast 悬停暂停 / 上滑关闭 | **已补（2026-11-14，B 类遗留）**：上滑（`DragGesture` 最小 10 / 阈值 16）立即关闭，demo XCUITest 通过；指针悬停用 `onHover` 冻结剩余时长、移出后按剩余时间恢复（设计 28 §5）。**窗口层（设计 28 §11）已补**：浮层挂 Top VC 的 view、只占自身尺寸，页面其余区域仍可交互；auto-dismiss / 上滑 / 非阻塞均有 demo XCUITest。**未验证**：模拟器无指针悬停，悬停暂停未人审；旋转期间不重排 frame（Toast 生命周期短，未处理） | 上滑/自动消失/非阻塞已验证；悬停待真机；旋转未处理 |
+| ② | Toast 悬停暂停 / 上滑关闭 | **已补（2026-11-14，B 类遗留）**：上滑（`DragGesture` 最小 10 / 阈值 16）立即关闭，demo XCUITest 通过；指针悬停用 `onHover` 冻结剩余时长、移出后按剩余时间恢复（设计 28 §5）。**窗口层（设计 28 §11）已补**：浮层挂 Top VC 的 view、只占自身尺寸，页面其余区域仍可交互；auto-dismiss / 上滑 / 非阻塞均有 demo XCUITest。**未验证**：模拟器无指针悬停，悬停暂停未人审。**B9（2026-11-15）已补旋转/分屏重排**：Toast hosting 在 bounds/安全区变化时按新宽度与 safeArea 重算 frame | 上滑/自动消失/非阻塞/旋转重排已验证；悬停待真机 |
 | ③ | Banner `success` 变体 | 按 Q1 **不纳入**（C-15/U2 的 Android 集合为 3 个）；设计 §4 的 success 用 info 表达 | 已记录（M4-SIGNATURE-FREEZE Q1） |
 | ④ | ProgressBar 分段变体 | **已补（2026-11-14，M6 期间；用户指出设计 15 缺口）**：新增 `init(segments:completed:...)`；同时补齐**不确定 1s 延迟**、**禁用 45%**、**完成 300ms**、**首次出现 3200ms**、**`accessibilityRepresentation`（progressbar 角色）**。**2026-11-14 复跑**：M4 快照 10 tests / 352 基线绿；PR 164 tests / 1246 符号（35.51 s）；nightly 快照 44 tests 75.64 s + demo 审计 14 tests 223.49 s = 302.62 s | 已修（已复跑） |
 | ⑤ | ProgressBar 填充色 | 设计的 `gradient.mid` 浅端在 `surface.tint` 上仅 **2.02:1**（<3:1）⇒ 改 `textBrand → statusInfo` 渐变（**3.91:1 / 6.71:1**） | 已记录（对比度优先） |
