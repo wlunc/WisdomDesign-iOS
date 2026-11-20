@@ -2,7 +2,15 @@
 
 > **这份文件回答三件事**：仓库里的文档**在哪**、**怎么读**、**哪些还没验证**。
 > 它**不是**开发计划本身——计划在 [`DEV-PLAN.md`](DEV-PLAN.md)，规格在 [`SPEC.md`](SPEC.md)，结构在 [`ARCHITECTURE.md`](ARCHITECTURE.md)，操作手册在 [`../AGENTS.md`](../AGENTS.md)。
-> 状态快照（**2026-11-15 上午**）：**M0–M4 已交付并判定通过**；**M5 已判定通过**（技术判据 6/6；nightly 2/3 按项目负责人 2026-11-14 先例豁免，记录 = `docs/M5-EXIT-REPORT.md`）。**M6 场景组件 `WDAssigneePicker` 已落地**：签名冻结 = `docs/M6-SIGNATURE-FREEZE.md`、契约 `contracts/WDAssigneePicker.yaml`、**8 张新基线（总 344）**、demo 扩到 **37 件**（审计视口含 M6 实例）；`Scripts/ci.sh pr` **163 tests / 1245 符号**、demo **14 条 UITest**（含四类目审计与 AssigneePicker 交互）全过。**2026-11-14 补丁**：`WDProgressBar` 补齐设计 15（分段 + 1s 延迟 + 禁用 45% + 完成 300ms + 首次 3200ms + progressbar 语义）；**B 类遗留推进**：`WDSlider` 自绘 + 点击 200ms/端点 rigid、`WDAlert` 焦点归还、`WDToast` 窗口层/悬停/上滑；**B1** `WDBadge` 六变体 + **B2** `WDAvatar` 五档/在线/停用 + **B3** `WDCard.sunken`/`WDDivider` 内缩 + **B4** `WDIconButton` 五变体 + **B5** `WDSwitch` 紧凑档/描述位 + **B6** `WDDatePicker` 范围/清除 + **B7** Card 可点/Checkbox/Radio 紧凑/FAB 焦点 + **B8** IconButton 方形/Checkbox 无标签/DatePicker 过期色 + **B9** Checkbox 光晕/Switch 拖动/Toast 重排/ListRow 徽标朗读 ⇒ 当前 **206 tests / 1290 符号 / 360 张基线**，demo **18 条 UITest / 265.44 s** 全绿；B1–B6 契约已于 2026-11-15 落库设计仓（`wisdomdesign/contracts/`）。**M6 出口待判**：真机 VoiceOver 走查 / Thinning 增量 / 真机 hitch 仍【未验证】，**双端 tag 待 Android 追平**。文档改动以 `git log` 为准。
+> 状态快照（**2026-11-15 上午**）：**M0–M4 已交付并判定通过**；**M5 已判定通过**（技术判据 6/6；nightly 2/3 按项目负责人 2026-11-14 先例豁免，记录 = `docs/M5-EXIT-REPORT.md`）。**M6 场景组件 `WDAssigneePicker` 已落地**：签名冻结 = `docs/M6-SIGNATURE-FREEZE.md`、契约 `contracts/WDAssigneePicker.yaml`、**8 张新基线（总 344）**、demo 扩到 **37 件**（审计视口含 M6 实例）；`Scripts/ci.sh pr` **163 tests / 1245 符号**、demo **14 条 UITest**（含四类目审计与 AssigneePicker 交互）全过。**2026-11-14 补丁**：`WDProgressBar` 补齐设计 15（分段 + 1s 延迟 + 禁用 45% + 完成 300ms + 首次 3200ms + progressbar 语义）；**B 类遗留推进**：`WDSlider` 自绘 + 点击 200ms/端点 rigid、`WDAlert` 焦点归还、`WDToast` 窗口层/悬停/上滑；**B1** `WDBadge` 六变体 + **B2** `WDAvatar` 五档/在线/停用 + **B3** `WDCard.sunken`/`WDDivider` 内缩 + **B4** `WDIconButton` 五变体 + **B5** `WDSwitch` 紧凑档/描述位 + **B6** `WDDatePicker` 范围/清除 + **B7** Card 可点/Checkbox/Radio 紧凑/FAB 焦点 + **B8** IconButton 方形/Checkbox 无标签/DatePicker 过期色 + **B9** Checkbox 光晕/Switch 拖动/Toast 重排/ListRow 徽标朗读 ⇒ 当前 **206 tests / 1290 符号 / 360 张基线**，demo **18 条 UITest / 265.44 s** 全绿；B1–B6 契约已于 2026-11-15 落库设计仓（`wisdomdesign/contracts/`）。**M6 出口待判**：真机 VoiceOver 走查 / Thinning 增量 / 真机 hitch 仍【未验证】，文档改动以 `git log` 为准。
+>
+> **2026-11-15 下午补丁（B10–B16）**：项目负责人「B. 纯代码可继续」清单的 **B1/B2 两段**已落地（B1 = 需扩公开：DatePicker `onClear`、AvatarStack `onOverflowTap`、PullRefresh 失败通道 + 10s 超时、Slider 数值标签 + 焦点光环、SearchField 播报注入点；B2 = 行为补齐：PullRefresh 三态文案/播报、FAB 滚动缩小/遮罩/TabBar 避让、NavigationBar 滚动联动、Switch 写入失败回弹、DatePicker 范围+时间），**B3 段（radio/listbox/option 角色、Picker 滚轮形态）按「平台限制」只记录不实现**。签名冻结 = `docs/B10-B16-SIGNATURE-FREEZE.md`、出口报告 = `docs/B10-B16-EXIT-REPORT.md`、平台限制 = `docs/B3-PLATFORM-LIMITS.md`、契约增量（待落库）= `docs/B10-B15-CONTRACT-CHANGE-REQUEST.md`。**API 1290 → 1320 符号**（+30，只增不改）。**注意：本轮执行环境为受限沙箱（不能跑 `xcodebuild` 编译/测试）⇒ 单测执行与 8 态快照零漂移均为【未验证】，台账见出口报告 §7。**
+>
+> **2026-11-20 补丁（B18 代码欠账收口）**：按 `docs/DEBT-LEDGER.md` 的 A 类清单补齐 —— `WDSlider` 焦点光环（此前是**死代码**）改为从表示层回写、松手播报（`announcementText`/`rangeAnnouncementText`，此前 SPEC 要求但未实现）；`WDButton` 按下亮度 96% / 悬停 98% / 聚焦光环；`WDIconButton` 聚焦光环；`WDCheckbox` 按下 0.90；`WDToolbar` 按下 0.94 + `fill.pressed` + 聚焦光环；`WDTabBar` 角标并入朗读；`WDProgressBar`/`WDProgressRing` 跨 25/50/75/100 播报；`WDToast`/`WDBanner` 出现 polite 播报；范围滑杆 / 滚动联动 / 日期过期提示补预览与 demo 场景（此前 demo 零使用）。签名冻结 = `docs/B18-SIGNATURE-FREEZE.md`、出口报告 = `docs/B18-EXIT-REPORT.md`、契约增量（待落库）= `docs/B18-CONTRACT-CHANGE-REQUEST.md`。**API 仍 1380（零 diff）**；**单测与快照本机仍未执行**（沙箱禁 PTY），台账见 B18 出口报告 §4。
+>
+> **2026-11-20 补丁（B17 遗留收口）**：承接 B10–B16 遗留台账。`WDTabBar.item.label` 显式挂 `accessibilityLabel`（U-B-9 闭合）；`WDFAB` 收起后读屏焦点归还主按钮；`WDDatePicker` 过期色改按系统 `NSCalendarDayChanged` + 回到前台刷新（**零计时器**），并补 `expiredAccessibilityHint` 注入点；`WDSlider` 补**范围双手柄** `init(range:…)`（两端不交叉 / 最小间隔 1 步长 / 两个可调整语义）。同时修复 B10–B16 完整环境首跑的 3 处红灯（Relay 读后未清、NavigationBar 折叠高度、AvatarStack 无障碍断言宿主限制）。签名冻结 = `docs/B17-SIGNATURE-FREEZE.md`、出口报告 = `docs/B17-EXIT-REPORT.md`、契约增量（待落库）= `docs/B17-CONTRACT-CHANGE-REQUEST.md`。**API 1290 → 1380 符号**（B10–B16 +89 经 `dump-api.sh` 规范化为 1379；B17 +1）。**单测复跑与快照仍【未验证】**（沙箱禁 PTY、full-access 审批本轮不可用），台账见 B17 出口报告 §6。
+
+> **2026-11-20 补丁（B19 验证层跑通 + 三处回归修复）**：台账 C-1～C-3 首次**实跑**（`danger-full-access` 下 PTY 可用，此前一律因沙箱禁 PTY 记【未验证】）：单测 **344 passed / 0 failed**、8 态快照 **45 tests / 360 张零漂移**、demo 无障碍审计 **18 tests / 0 failures**（262.3 s）、Foundation 覆盖率 **95.46%**。门禁当场抓出并修掉**三处真实回归**：① B18 的 `.accessibilityFocused` 会让 `ImageRenderer` 把整棵子树渲染成空白 ⇒ 新增 `WDA11yRuntime` 闸门（只在读屏运行时挂绑定）；② `WDNavigationBar` 的 `.inline`/`.standard` 模式标题整条透明（B15 引入，折叠进度乘到了本不该折叠的标题上）；③ `WDTabBar` 胶囊 `elevation.2` 阴影被容器 `.clipped()` 裁掉（B15 引入）。`WDFAB` 8 张基线重录（B15 的 18pt 底部留白 ⇒ 内容上移 36px，属基线滞后）。**API 仍 1380（零 diff）**。记录 = `docs/B19-EXIT-REPORT.md`、`docs/B19-SIGNATURE-FREEZE.md`。
 
 ---
 
@@ -20,6 +28,7 @@
 | [`M3-API-FREEZE.md`](M3-API-FREEZE.md) | **M3 公开 API 封板记录**（661 符号 / SHA-256 / 复跑命令） | 改公开面之前 | ~3 KB |
 | [`M6-SIGNATURE-FREEZE.md`](M6-SIGNATURE-FREEZE.md) | **M6 批前冻结**（`WDAssigneePicker` + D1–D9 默认执行项） | 改 M6 签名之前 | ~8 KB |
 | [`M6-EXIT-REPORT.md`](M6-EXIT-REPORT.md) | **M6 出口报告**（7 条判据 + 差异/未验证 + VoiceOver 走查清单） | 结 M6 / 1.0 发布前 | ~9 KB |
+| `DEBT-LEDGER.md` | **欠账台账**（A 代码 / B 契约 / C 验证 / D 平台限制，逐条给证据与解除条件） | 想一次看清「还差什么」 | ~7 KB |
 | `HANDOVER.md`（本文） | 交接说明 | 第一天接手 | — |
 
 > **评审覆盖范围（如实标注）**：`DEV-PLAN-REVIEW.md` 是针对**较早版本**（约 1,012 行）出具的 pass；当前版本已扩到约 1,829 行，并新增 **§19–§21**（设计查阅 / 逐组件溯源 / 从设计规格到实现）与两套「实现前自检十问」（§21.5/§21.6，共 370 条）。**这些增补尚未经独立复核**——通过前**不要把「文档已评审」当作对当前版本的结论**。
@@ -70,7 +79,8 @@
 | 工具链全链路 | ✅ **已回填**（2026-10-07；2026-11-10 复核全绿）：scheme/耗时/覆盖率/`-resultBundlePath` 均实测 |
 | 冒烟首发 | ✅ **已回填**：`#if WD_API_SMOKE` 随 `ci.sh pr` 的 PR-1a/PR-1b 实跑 |
 | 真机视觉 | **未验证**：真机自然行盒、AX3 与 2.0 档观感、玻璃真机观感（**需 USB 直连**，U-05） |
-| 快照基线 | M1 的 16 + M2 的 88 + M3 的 **32** + M4 的 **72** + M5 的 **128** + M6 的 **8** + ProgressBar 补齐 **8** = **352 张已入库** |
+| 快照基线 | M1 的 16 + M2 的 88 + M3 的 **32** + M4 的 **72** + M5 的 **128** + M6 的 **8** + ProgressBar 补齐 **8** = 352 张；再加 ProgressBar 不确定态的 **8** 张 = **360 张已入库**（`manifest.json` 已补齐这 8 条 + 刷新 16 处 sha256，2026-11-20 B19） |
+| 单测 / 快照 / demo 审计 | ✅ **已回填（2026-11-20 B19，首次在可跑环境执行）**：`344 passed / 0 failed`；快照 `45 tests / 360 张零漂移`；demo UITest `18 tests / 0 failures`。**前提 = 允许 PTY 的沙箱（`danger-full-access`）**，见 `docs/B19-EXIT-REPORT.md` |
 | 读屏 / 播报 | **未验证（人审）**：`WDSystemAnnouncer` 的音频效果无法机检；M6 已产出 VoiceOver 走查清单，**真机人审仍未验证** |
 | 体积 | **门槛已定（2026-11-12）**：E3-iOS-a 增量 P50 = 495,616 B、门槛 = 545,178 B（P50 × 1.10，未 Thinning）；**Thinning 增量仍【未验证】**，M6 发布前层 |
 | 分发 | SPM tag 实验、发布流程实操（M6） |

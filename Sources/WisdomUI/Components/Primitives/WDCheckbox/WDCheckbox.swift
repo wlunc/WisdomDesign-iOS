@@ -123,6 +123,8 @@ public struct WDCheckbox: View {
     static let tickHeight: CGFloat = 10  // wd-structure-check:disable R7 — 设计 06 画廊
     /// 勾的旋转角（设计 06 §2：rotate(42deg)；存弧度）。
     static let tickRotation: CGFloat = 42 * .pi / 180  // wd-structure-check:disable R7 — 设计值
+    /// 按下缩放（设计 06 §5：`motion.component.checkbox-press` = 0.90）。
+    static let pressedScale: CGFloat = 0.90  // wd-structure-check:disable R7 — 设计 06 §5
     /// 半选横杠（设计 06 §5：12 × 2.4）。
     static let barWidth: CGFloat = 12  // wd-structure-check:disable R7 — 设计值
     static let barHeight: CGFloat = 2.4  // wd-structure-check:disable R7 — 设计值
@@ -175,7 +177,15 @@ private struct WDCheckboxToggleStyle: ToggleStyle {
   @Environment(\.wdColors) private var colors
   @Environment(\.wdEffectsBudget) private var budget
   @Environment(\.isEnabled) private var isEnabled
+  /// 按下中（设计 06 §5 的 0.90 缩放）。
+  @State private var isPressing = false
 
+  /// 按下态（设计 06 §5：缩放 **0.90**，`motion.duration.instant`）。
+  ///
+  /// 用 `ToggleStyle` 的 `configuration.isPressed` 不可得（`Toggle` 的 configuration 没有该值），
+  /// 因此用「按下跟踪」手势包一层：`onLongPressGesture(minimumDuration: 0)` 的
+  /// `onPressingChanged` 是系统提供的按下跟踪，**不是**自造 `DragGesture`（SPEC §3.4 禁的是后者）。
+  /// 它不改命中判定 —— 点按仍由原地 `onTapGesture` 处理。
   func makeBody(configuration: Configuration) -> some View {
     let row =
       HStack(spacing: showsLabel ? WDSpacing.s3 : 0) {
@@ -189,11 +199,18 @@ private struct WDCheckboxToggleStyle: ToggleStyle {
       // 无标签时行内只有方框，仍保证 44×44 热区（设计 06 §3）。
       .frame(minWidth: WDSize.touchTargetMin, minHeight: WDSize.touchTargetMin)
       .contentShape(Rectangle())
+      .scaleEffect(isPressing ? WDCheckbox.Metrics.pressedScale : 1)
+      .animation(.easeOut(duration: WDMotion.Duration.instant), value: isPressing)
       .onTapGesture {
         guard isEnabled else { return }
         configuration.isOn = WDCheckbox.toggledValue(
           isOn: configuration.isOn, isIndeterminate: isIndeterminate)
         WDHaptics.shared.play(.toggle, budget: budget)
+      }
+      .onLongPressGesture(minimumDuration: .infinity) {
+        // 只为拿到按下态；长按不做任何事（设计 06 §8 没有长按语义）。
+      } onPressingChanged: { pressing in
+        isPressing = pressing && isEnabled
       }
       .accessibilityElement(children: .combine)
     return labeled(row)

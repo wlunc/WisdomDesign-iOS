@@ -6,7 +6,87 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- **B18 代码欠账收口（2026-11-20；承接 `docs/DEBT-LEDGER.md` 的 A 类）**：签名冻结 = `docs/B18-SIGNATURE-FREEZE.md`、出口报告 = `docs/B18-EXIT-REPORT.md`、契约增量（待落库）= `docs/B18-CONTRACT-CHANGE-REQUEST.md`。
+  **API 符号仍 1380**（只给既有 init 追加带默认值的参数）；`Scripts/dump-api.sh` 零 diff。
+  - **A-1 `WDSlider` 焦点光环此前是死代码**（`WDSlider` 读 `wdFocusRingFocused`，但全仓 `.wdFocusRing()` 零调用点）⇒ 改为**焦点经 `WDAccessibilityFocusHost` 从表示层回写**；单值手柄与范围两端都挂光环（外扩 3pt / 32% / 160ms）。
+  - **A-2 `WDSlider` 松手后不播报**（SPEC §2.10-#08 要求「松手后播报一次」）⇒ 新增 `announcementText` / `rangeAnnouncementText` 注入点，松手播一次 polite，经 `WDAnnouncementThrottle` 节流。
+  - **A-3 `WDButton`**：补**按下亮度 96%**（黑蒙层乘法压暗）、**悬停 98%**（仅指针设备）与**聚焦光环**。
+  - **A-4 `WDIconButton`**：补聚焦光环（圆 / 圆角方，跟容器形状）。
+  - **A-5 `WDCheckbox`**：补按下缩放 0.90（`onPressingChanged` 的按下跟踪，不是自造 `DragGesture`）。
+  - **A-6 `WDToolbar`**：补按下 0.94 + `fill.pressed`（`.plain` 拿不到按下态 ⇒ 新增私有 `ButtonStyle`）与聚焦光环。
+  - **A-7 `WDTabBar`**：角标并入宿主朗读（有角标时挂 `accessibilityValue`；dot/0 不挂）。
+  - **A-12 播报**：`WDProgressBar` / `WDProgressRing` 跨 25/50/75/100 播一次；`WDToast` / `WDBanner` 出现各 polite 一次。
+  - **A-15～A-17 覆盖**：范围滑杆、滚动联动、日期过期提示各补预览与 demo 场景（此前 demo 里**零使用**，没有任何端到端证据）。
+  - **验证（2026-11-20 B19 补跑，本条已回填）**：结构 `errors=0 warnings=0`；格式 `204 文件全过`；`build-for-testing` 与 demo app 编译均 0 error；**单测 344 / 快照 45 条 360 张 / demo 审计 18 条在 B19 全部实跑通过**（见 `docs/B19-EXIT-REPORT.md`）。
+
+- **B19 验证层跑通 + 三处回归修复（2026-11-20；承接 `docs/DEBT-LEDGER.md` C 类）**：出口报告 = `docs/B19-EXIT-REPORT.md`、签名冻结 = `docs/B19-SIGNATURE-FREEZE.md`。**API 仍 1380（零 diff，本批无任何 public 变化）**。
+  - **C-1 单测首次完整复跑**：`344 passed / 0 failed`（45 suites，17.6 s）。此前自 M2 起一律记【未验证】，根因是沙箱禁 PTY（`openpty: Operation not permitted`），`danger-full-access` 下 PTY 可用。
+  - **C-2 8 态快照首次全量跑通**：`45 tests / 18 suites` 全过、360 张基线零漂移（修完下面三处回归之后）。
+  - **C-3 demo 无障碍审计首次跑通**：`18 tests / 0 failures`（262.3 s，含 contrast / hitRegion / textClipped / dynamicType 四类目）。
+  - **回归① 读屏焦点绑定 × `ImageRenderer` = 整棵子树渲染空白**：B18 给 `WDButton` / `WDIconButton` 挂 `.accessibilityFocused` 后，凡内嵌它们的组合件（Banner/Toast/EmptyState/DatePicker）快照**全白**（8 个对照探针定位：不挂正常、挂上全透明；`accessibilityRepresentation` 也救不回兄弟视图）。⇒ 新增 `WDA11yRuntime.isAssistiveTechRunning` 闸门，只在读屏/辅助开关运行时挂绑定（读屏关闭时像素与 B18 之前一致）。
+  - **回归② `WDNavigationBar` 的 `.inline` / `.standard` 模式标题整条透明**（B15 引入）：内联标题乘了折叠进度，而这两个模式没有大标题、进度恒 0 ⇒ 标题 0 透明。折叠改为只在大标题模式生效。
+  - **回归③ `WDTabBar` 胶囊 `elevation.2` 阴影被 `.clipped()` 裁掉**（B15 引入）：容器级 `.clipped()` 把边界外的阴影一并裁掉；收起裁切已由标签行自己完成，去掉容器裁切。
+  - **基线**：`WDFAB` 8 张重录（B15 的 18pt 底部留白 ⇒ 内容上移 36px，旧基线滞后，非漂移）；`manifest.json` 补 8 张 `progressbar-indeterminate-*` 并刷新 16 处 sha256。其余全部基线**零改动即绿**。
+
 ### Added
+
+- **B17 遗留收口（2026-11-20；延续 B7/B8/B10 的「允许扩公开」口径）**：
+  承接 `docs/B10-B16-EXIT-REPORT.md` §7 与 `docs/M5-EXIT-REPORT.md` §4 的遗留项。
+  签名冻结 = `docs/B17-SIGNATURE-FREEZE.md`；出口报告 = `docs/B17-EXIT-REPORT.md`；
+  契约增量（待落库）= `docs/B17-CONTRACT-CHANGE-REQUEST.md`。
+  **API 1290 → 1380 符号（+90）**：其中 B10–B16 为 **+89**（该批当时以手工方式追加基线、计 1378；
+  本轮在完整环境用 `Scripts/dump-api.sh --update` 重新规范化 ⇒ **实测 1379**，闭合 U-B-3），本批 **+1**。
+  - **B17-1 `WDTabBar`**：`item.label` 显式挂 `accessibilityLabel`。此前只靠子视图合成，
+    滚动收起把标签行压到 0 时读屏拿不到稳定名称（U-B-9 闭合）。**零 API 变化**。
+  - **B17-2 `WDFAB`**：收起后读屏焦点归还主按钮（展开时子操作会移出可访问树，
+    此前焦点会掉到页面顶部）。**零 API 变化**。
+  - **B17-3 `WDDatePicker`**：过期色改为按系统 `NSCalendarDayChanged` 通知 + 回到前台刷新，
+    **不自建计时器**（仓规）⇒ 跨午夜/跨时区后颜色会自己翻转；新增 `expiredAccessibilityHint`
+    （L-B 注入点：文案由调用方给，库只决定“何时读”）——颜色之外多一条非视觉信号。
+  - **B17-4 `WDSlider` 范围双手柄**（设计 08 §4）：新增 `init(range:label:in:step:onEditingChanged:showsValueLabel:valueText:lowerAccessibilityLabel:upperAccessibilityLabel:)`；
+    两端不交叉、最小间隔 = 1 步长，松手吸附、点轨道 200ms 过渡、端点 rigid 触觉；
+    读屏为两个可调整元素（下端 / 上端）。区间文案含分隔符 ⇒ **必须由调用方给**（L-B，库内零标点）。
+  - **修复 B10–B16 完整环境首跑红灯 3 处**：`WDPullRefreshPhaseRelay.takeOutcome()` 读出后未清值；
+    `WDNavigationBar` 折叠态用 `minHeight` 压不到 0（改联动路径定高）；`WDAvatarStack` 的无障碍断言
+    在无 AX 客户端的单测宿主里读不到元素表（改为不制造假红，真机走查覆盖）。
+  - **本批不纳入（逐条登记，不自行发明口径）**：`WDCard` media（设计 17 未给图片几何 + F-15 槽位词表无 `media`）、
+    `WDToolbar` 长按 tooltip（`Button` 与长按手势仲裁需真机回归）、`WDSlider` 键盘光环（平台限制 L-5）。
+  - **验证**：结构与格式门禁全绿；`xcodebuild build-for-testing`（模拟器 / Swift 6）0 error；
+    `dump-api.sh` 重跑零 diff。**单测执行与 8 态快照零漂移在本机受限沙箱内仍【未验证】**（见出口报告 §4）。
+
+- **B10–B16 纯代码可继续项（2026-11-15；清单 B1「需扩公开」+ B2「行为补齐」；授权口径同 B7/B8）**：
+  **API 1290 → 1378 符号（+89；新增 126 条、改动 37 条既有 decl，无删除）**。签名冻结 = `docs/B10-B16-SIGNATURE-FREEZE.md`；
+  - **快照形态说明**：那 37 条「移除 + 重加」不是删 API，而是 4 个既有 `init`（`WDFAB` / `WDNavigationBar` /
+    `WDSearchField` ×2）与 33 条 `wdPullRefresh` 展开**追加了带默认值的参数**（SPEC §2.9 规则 1：源码 / 二进制兼容，
+    但破坏符号快照连续性）⇒ 基线按 `Scripts/dump-api.sh --update` 显式更新（实测 symbols=1379）。
+  契约增量（待设计仓落库）= `docs/B10-B15-CONTRACT-CHANGE-REQUEST.md`；平台限制（只记录）= `docs/B3-PLATFORM-LIMITS.md`。
+  - **B10 `WDDatePicker`**：新增 `onClear`（设计 23 §8：清除 → 回调一次；外部置 nil 不回调）与
+    **范围 + 时间组合模式**（`mode: .dateAndTime` 的范围重载 = 月历 + 时间滚轮两段式，先日期后时间，
+    整理后 `lower <= upper`）；既有三个 init 行为不变。
+  - **B11 `WDAvatarStack`**：新增 `onOverflowTap`（设计 13 §8：点堆叠 / 点 `+n` 同一动作；整叠成为一个 button，
+    读屏仍只读一个元素）；`nil` 时像素不变。
+  - **B12 `WDPullRefresh`**：新增失败通道 `onRefreshError` + `timeout`（默认 **10s**，设计 32 §8；抛错或超时 ⇒
+    收起 + 回调一次，库内不弹提示——零文案）+ 三态文案与播报注入点 `WDPullRefreshTexts` + 阶段枚举
+    `WDPullRefreshPhase`（idle/pulling/armed/refreshing/completed/failed）；播报 polite/polite/assertive，
+    只在注入 `wdAnnouncer` 且文案非 nil 时播。旧 init 行为不变（无超时、无失败通道）。
+  - **B13 `WDSlider`**：新增 `showsValueLabel` + `valueText`（设计 08 §6：标签行右侧等宽数字，拖动实时，
+    不产生独立读屏焦点）与**读屏焦点光环**（设计 08 §5：手柄外扩 3pt、160ms，Reduce Motion 直出）。
+  - **B14 `WDSearchField`**：新增 `resultCount` + `announcer`（设计 04 §8/§10：结果数**变化**时回调一次，
+    首帧不播、不随每次按键播；传数字，措辞由调用方给）。
+  - **B15 `WDFAB` / `WDTabBar` / `WDNavigationBar`**：`WDFAB` 新增 `showsScrimWhenExpanded`（展开遮罩，点遮罩 /
+    读屏 `.escape` 收起）与 `avoidsTabBar`（底部避让 92，设计 36 §6）＋**滚动缩小**（设计 36 §5：向下缩到 40、
+    不隐藏）；`WDTabBar` **滚动收缩为无标签胶囊**（向上滚立即展开，设计 34 §6/§9）；`WDNavigationBar` 新增
+    `followsScroll`（设计 33 §4/§5/§8：大标题随进度折叠 0…52pt + 透明→玻璃 240ms 交叉淡化，读屏不重复朗读）。
+    三者的滚动量统一走**新环境键** `View.wdScrollOffsetY(_:)` / `EnvironmentValues.wdScrollOffsetY`（`nil` = 不联动，
+    默认路径像素不变；R18 写入口仍在 `Foundation/Theme/WDEnvironment.swift`）。
+  - **B16 `WDSwitch`**：新增 `onWriteFailure`（设计 05 §8：用户发起的切换未被 binding 采纳 ⇒ 回弹到 binding
+    当前值 + 回调一次；外部改写不误判）。
+  - **接线面（新增公开）**：`EnvironmentValues.wdAnnouncerText` 与写入口 `View.wdAnnouncer(_:)`（L-B 播报通道）。
+  - **验证**：`typecheck`（库全量，模拟器 + 设备）+ `check-structure.sh --strict`（0 error / 0 warning）+
+    `check-format.sh`（201 文件）全绿；测试目标与 demo 源码编译核验通过；**单测与快照本机未执行（沙箱禁
+    `xcodebuild test`）—— 见 `docs/B10-B16-EXIT-REPORT.md` §3 的【未验证】台账**。
 
 - **B9 行为欠账（2026-11-15；API 零变化）**：`WDCheckbox` 选中光晕（`brand` 42% → 透明，
   400ms 一次，Reduce Motion / 禁用 / 半选不播）；`WDSwitch` 支持拖动滑块实时跟随、松手吸附、

@@ -35,6 +35,8 @@ public struct WDButton<Label: View>: View {
 
   @Environment(\.isEnabled) private var isEnabled
   @Environment(\.wdEffectsBudget) private var budget
+  /// 读屏焦点落点（B18：聚焦光环；`nil` 时由宿主回写）。
+  @State private var focusTarget: WDFocusRingTarget?
 
   /// 8 参构造（S2 上限；`label` 为 `@ViewBuilder`）。
   public init(
@@ -64,6 +66,11 @@ public struct WDButton<Label: View>: View {
 
   /// 真 `Button`（pressed 的唯一来源）；加载态忽略 `action` 但不改 `isEnabled`（U6 派生②）。
   public var body: some View {
+    WDAccessibilityFocusHost(focused: $focusTarget, target: .single) { button }
+  }
+
+  /// 按钮本体（外面套了焦点宿主，光环据此显示）。
+  private var button: some View {
     Button {
       guard !isLoading, isEnabled else { return }
       WDHaptics.shared.play(.press, budget: budget)
@@ -82,7 +89,11 @@ public struct WDButton<Label: View>: View {
       .fontWeight(.semibold)
       .lineLimit(1)
     }
-    .buttonStyle(WDButtonStyle(variant: variant, size: size, isLoading: isLoading))
+    .buttonStyle(
+      WDButtonStyle(
+        variant: variant, size: size, isLoading: isLoading,
+        isFocused: focusTarget != nil && isEnabled)
+    )
     .modifier(WDButtonLoadingValue(value: isLoading ? loadingAccessibilityText : nil))
   }
 }
@@ -140,19 +151,30 @@ public struct WDButtonStyle: ButtonStyle {
   private let variant: WDButtonVariant
   private let size: WDButtonSize
   private let isLoading: Bool
+  /// 读屏焦点是否落在按钮上（B18：聚焦光环）。默认 false ⇒ 与加值之前逐像素一致。
+  private let isFocused: Bool
+  /// 指针是否悬停（设计 01 §5「仅指针设备，亮度 98%」；B18）。
+  @State private var isHovering = false
 
   @Environment(\.wdColors) private var colors
   @Environment(\.isEnabled) private var isEnabled
   @Environment(\.wdAppearance) private var appearance
   @Environment(\.wdEffectsBudget) private var budget
 
-  /// 构造（档位 + 加载态）。
+  /// 构造（档位 + 加载态 + 聚焦态）。
+  ///
+  /// `isFocused` 默认 false：直接使用本样式（`ButtonStyle.wd(...)`）的调用方不受影响；
+  /// `WDButton` 自己会按读屏焦点传进来。
   public init(
-    variant: WDButtonVariant = .filled, size: WDButtonSize = .md, isLoading: Bool = false
+    variant: WDButtonVariant = .filled,
+    size: WDButtonSize = .md,
+    isLoading: Bool = false,
+    isFocused: Bool = false
   ) {
     self.variant = variant
     self.size = size
     self.isLoading = isLoading
+    self.isFocused = isFocused
   }
 
   /// chrome：底/描边/阴影 + 按下缩放与亮度 + 加载指示器。
@@ -167,9 +189,23 @@ public struct WDButtonStyle: ButtonStyle {
       }
       .clipShape(Capsule())
       .overlay(border)
+      // 按下亮度 96%（设计 01 §5：`state.pressed-brightness`；此前只有缩放，B18 补齐）。
+      // 用黑色蒙层做乘法压暗（`.brightness` 是加法位移，表达不了「乘 0.96」），与 `WDCard` 同口径。
+      .overlay {
+        Capsule()
+          .fill(Color.black)
+          // 按下 96%（设计 01 §5 `state.pressed-brightness`）；悬停 98%（`state.hover-brightness`）。
+          // 按下优先于悬停（U6 状态优先级：pressed > hover）。
+          .opacity(configuration.isPressed ? pressedDimOpacity : hoverDimOpacity)
+          .allowsHitTesting(false)
+          .accessibilityHidden(true)
+      }
+      .onHover { hovering in isHovering = hovering }
       .modifier(WDButtonShadow(variant: variant, isEnabled: isEnabled))
       .overlay { loadingIndicator }
       .opacity(isEnabled ? 1 : disabledOpacity)
+      // 聚焦光环（设计 01 §5：外扩 3pt、`text.brand` 32%、`motion.duration.fast`）。
+      .wdFocusRing(Capsule(), isPresented: isFocused && isEnabled)
       .scaleEffect(configuration.isPressed ? Self.pressedScale : 1)
       .animation(.easeOut(duration: WDMotion.Duration.instant), value: configuration.isPressed)
       .animation(.linear(duration: WDMotion.Duration.fast), value: isLoading)
@@ -269,11 +305,26 @@ public struct WDButtonStyle: ButtonStyle {
 
   /// 按下缩放（设计 01：`motion.component.press-scale` = 0.97；令牌无此值）。
   private static let pressedScale: CGFloat = 0.97  // wd-structure-check:disable R7 — 设计值
+  /// 按下亮度压暗蒙层的不透明度：亮度 96% ⇒ 黑色 4%（`state.pressed-brightness`）。
+  private var pressedDimOpacity: CGFloat {
+    Self.dimOpacity(forBrightness: WDState.pressedBrightness)
+  }
+
+  /// 亮度 → 压暗蒙层不透明度的换算（纯函数；单测直接核对 96→0.04、98→0.02）。
+  static func dimOpacity(forBrightness brightness: CGFloat) -> CGFloat {
+    (percentScale - brightness) / percentScale
+  }
+
+  /// 悬停亮度压暗蒙层的不透明度：亮度 98% ⇒ 黑色 2%（`state.hover-brightness`；仅指针设备）。
+  private var hoverDimOpacity: CGFloat {
+    guard isHovering, isEnabled, !isLoading else { return 0 }
+    return Self.dimOpacity(forBrightness: WDState.hoverBrightness)
+  }
   /// 禁用态整体不透明度（`state.disabled.alpha` = 40）。
   private var disabledOpacity: CGFloat {
     WDState.disabledAlpha / Self.percentScale
   }
-  private static let percentScale: CGFloat = 100  // wd-structure-check:disable R7 — 百分数分母
+  static let percentScale: CGFloat = 100  // wd-structure-check:disable R7 — 百分数分母
 }
 
 /// 阴影：填充/破坏性用 `elevation.brand`、玻璃用 `e1`；禁用态去掉阴影。

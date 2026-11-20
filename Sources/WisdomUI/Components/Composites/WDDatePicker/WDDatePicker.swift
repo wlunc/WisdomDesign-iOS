@@ -1,3 +1,4 @@
+import Combine
 import SwiftUI
 
 /// 日期选择模式（设计 23 §4：日期 / 时间 / 日期 + 时间；范围本轮不做）。
@@ -27,6 +28,16 @@ public struct WDDatePickerQuickOption: Identifiable, Sendable, Equatable {
   }
 }
 
+/// 弹层布局（纯逻辑取值；单日期与范围共用同一套三选一）。
+enum WDDatePickerSheetLayout: Sendable, Equatable {
+  /// 只有月历（`.date` / 纯日期范围）。
+  case calendar
+  /// 只有时间滚轮（`.time`）。
+  case timeWheel
+  /// 月历 + 分隔线 + 时间滚轮（`.dateAndTime` / 范围 + 时间）。
+  case calendarAndTime
+}
+
 /// 日期选择器（SPEC §2.10-#23；M5）。
 ///
 /// 设计口径（设计 23）：
@@ -47,12 +58,22 @@ public struct WDDatePicker: View {
   private let isRange: Bool
   private let showsClearButton: Bool
   private let clearAccessibilityLabel: Text?
+  private let onClear: (@MainActor @Sendable () -> Void)?
+  /// 已过期时附加的读屏提示（B17；L-B 注入点：文案由调用方给，库只决定“何时读”）。
+  private let expiredAccessibilityHint: Text?
 
   @Environment(\.wdColors) private var colors
   @Environment(\.isEnabled) private var isEnabled
+  @Environment(\.scenePhase) private var scenePhase
+  /// 过期判定的“今天”（B17：由系统「日变更」通知/回到前台刷新，**不自建计时器**）。
+  @State private var now = Date()
 
   @State private var showsSheet = false
   @State private var visibleMonth = Date()
+  /// 范围 + 时间：第一次点选后暂存的起点日（终点未定；每次打开弹层 / 清除时清空）。
+  @State private var pendingRangeStart: Date?
+  /// 范围 + 时间：第一次点选**之前**滚轮拨出的时刻（点选日尚未定，先存着给起点用）。
+  @State private var pendingRangeWheelTime: Date?
 
   private let calendar = Calendar.current
 
@@ -75,6 +96,8 @@ public struct WDDatePicker: View {
     self.isRange = false
     self.showsClearButton = false
     self.clearAccessibilityLabel = nil
+    self.onClear = nil
+    self.expiredAccessibilityHint = nil
   }
 
   /// 构造（B6 增量；单日期 + 可选清除按钮）。
@@ -98,6 +121,8 @@ public struct WDDatePicker: View {
     self.isRange = false
     self.showsClearButton = showsClearButton
     self.clearAccessibilityLabel = clearAccessibilityLabel
+    self.onClear = nil
+    self.expiredAccessibilityHint = nil
   }
 
   /// 构造（B6 增量；日期范围 + 可选清除按钮；仅日期模式）。
@@ -119,6 +144,69 @@ public struct WDDatePicker: View {
     self.isRange = true
     self.showsClearButton = showsClearButton
     self.clearAccessibilityLabel = clearAccessibilityLabel
+    self.onClear = nil
+    self.expiredAccessibilityHint = nil
+  }
+
+  /// 构造（B10 增量；单日期 + 清除回调）。
+  ///
+  /// 设计 23 §8「清除 → 触发一次 onChange(nil)」：`onClear` **只在**用户点清除按钮、
+  /// 且值确实从非空变空时调用**一次**；调用方自己把 binding 置 nil（外部清空）**不**回调。
+  public init(
+    date: Binding<Date?>,
+    label: Text,
+    mode: WDDatePickerMode = .date,
+    placeholder: Text? = nil,
+    quickOptions: [WDDatePickerQuickOption] = [],
+    in bounds: ClosedRange<Date>? = nil,
+    showsClearButton: Bool = false,
+    clearAccessibilityLabel: Text? = nil,
+    onClear: (@MainActor @Sendable () -> Void)? = nil,
+    expiredAccessibilityHint: Text? = nil
+  ) {
+    self._date = date
+    self._range = .constant(nil)
+    self.label = label
+    self.mode = mode
+    self.placeholder = placeholder
+    self.quickOptions = quickOptions
+    self.bounds = bounds
+    self.isRange = false
+    self.showsClearButton = showsClearButton
+    self.clearAccessibilityLabel = clearAccessibilityLabel
+    self.onClear = onClear
+    self.expiredAccessibilityHint = expiredAccessibilityHint
+  }
+
+  /// 构造（B10 增量；范围 + 时间：设计 23 §4「范围」与「日期 + 时间」组合，两段式，先日期后时间）。
+  ///
+  /// `mode` 只区分「要不要带时刻」：`.date` = 纯日期范围（与既有范围构造同形）；
+  /// `.dateAndTime` = 弹层为「月历 + 分隔线 + 时间滚轮」，两次点选成查后把**起点日 + 起点时刻**、
+  /// **终点日 + 终点时刻**合成 `ClosedRange<Date>` 且保证 `lower <= upper`；
+  /// `.time` 在范围里不成立 ⇒ 按 `.date` 处理（Debug 断言）。
+  public init(
+    range: Binding<ClosedRange<Date>?>,
+    label: Text,
+    placeholder: Text? = nil,
+    in bounds: ClosedRange<Date>? = nil,
+    showsClearButton: Bool = false,
+    clearAccessibilityLabel: Text? = nil,
+    onClear: (@MainActor @Sendable () -> Void)? = nil,
+    mode: WDDatePickerMode = .date
+  ) {
+    assert(mode != .time, Self.rangeTimeModeAssertionMessage)
+    self._date = .constant(nil)
+    self._range = range
+    self.label = label
+    self.mode = WDDateRangeComposition.effectiveMode(mode)
+    self.placeholder = placeholder
+    self.quickOptions = []
+    self.bounds = bounds
+    self.isRange = true
+    self.showsClearButton = showsClearButton
+    self.clearAccessibilityLabel = clearAccessibilityLabel
+    self.onClear = onClear
+    self.expiredAccessibilityHint = nil
   }
 
   /// 触发入口（+ 快捷 Chip）。
@@ -132,13 +220,23 @@ public struct WDDatePicker: View {
     .opacity(isEnabled ? 1 : disabledOpacity)
     .sheet(isPresented: $showsSheet) {
       sheetContent
-        .presentationDetents([.height(sheetHeight)])
+        .presentationDetents([.height(Self.sheetHeight(isRange: isRange, mode: mode))])
         .presentationDragIndicator(.visible)
     }
     .onChange(of: showsSheet) { _, presented in
       if presented {
         visibleMonth = date ?? range?.lowerBound ?? bounds?.lowerBound ?? Date()
+        pendingRangeStart = nil
+        pendingRangeWheelTime = nil
       }
+    }
+    // 跨午夜过期翻转（B17）：系统「日变更」通知是唯一的日历信号，**不自建计时器**；
+    // 回到前台再刷一次（覆盖时区/手动改时间等没有通知的场景）。
+    .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged)) { _ in
+      now = Date()
+    }
+    .onChange(of: scenePhase) { _, phase in
+      if phase == .active { now = Date() }
     }
   }
 
@@ -172,6 +270,8 @@ public struct WDDatePicker: View {
       .buttonStyle(.plain)
       .accessibilityLabel(label)
       .accessibilityValue(displayText ?? Text(verbatim: ""))
+      .modifier(
+        WDDatePickerExpiredHint(hint: isExpiredSelection ? expiredAccessibilityHint : nil))
 
       if showsClearButton, hasValue, let clearAccessibilityLabel {
         WDIconButton(
@@ -205,9 +305,18 @@ public struct WDDatePicker: View {
   }
 
   /// 清除当前值（清除按钮；调用方的 binding 即信号）。
+  ///
+  /// `onClear` 只在「用户点清除按钮」且「值确实从非空变空」时调一次；
+  /// 外部把 binding 置 nil 走不到这里 ⇒ 不回调（纯判定见 `WDDatePicker.shouldReportClear`）。
   private func clearSelection() {
+    let hadValue = hasValue
     date = nil
     range = nil
+    pendingRangeStart = nil
+    pendingRangeWheelTime = nil
+    if Self.shouldReportClear(wasFilled: hadValue, isFilled: hasValue) {
+      onClear?()
+    }
   }
 
   private var displayText: Text? {
@@ -235,11 +344,11 @@ public struct WDDatePicker: View {
   /// 单日期已过期（范围不适用；.time 不参与）。
   private var isExpiredSelection: Bool {
     guard !isRange, mode != .time, let date else { return false }
-    return Self.isExpired(date, now: Date(), calendar: calendar)
+    return Self.isExpired(date, now: now, calendar: calendar)
   }
 
   /// 纯逻辑：日期是否早于 now 所在日（按 startOfDay 比较；仅单日期语义）。
-  static func isExpired(_ date: Date, now: Date, calendar: Calendar) -> Bool {
+  nonisolated static func isExpired(_ date: Date, now: Date, calendar: Calendar) -> Bool {
     calendar.startOfDay(for: date) < calendar.startOfDay(for: now)
   }
 
@@ -274,20 +383,16 @@ public struct WDDatePicker: View {
   // MARK: - 弹层
 
   @ViewBuilder private var sheetContent: some View {
-    if isRange {
+    switch Self.sheetLayout(isRange: isRange, mode: mode) {
+    case .calendar:
       calendarView
-    } else {
-      switch mode {
-      case .date:
+    case .timeWheel:
+      timeWheel
+    case .calendarAndTime:
+      VStack(spacing: WDSpacing.s3) {
         calendarView
-      case .time:
+        Divider().overlay(colors.borderHairline)
         timeWheel
-      case .dateAndTime:
-        VStack(spacing: WDSpacing.s3) {
-          calendarView
-          Divider().overlay(colors.borderHairline)
-          timeWheel
-        }
       }
     }
   }
@@ -407,11 +512,47 @@ public struct WDDatePicker: View {
       .labelsHidden()
   }
 
+  /// 时间滚轮的受控值。
+  ///
+  /// - 单日期：沿用既有口径（年月日取 `date`，时分取滚轮）。
+  /// - 范围（`.dateAndTime`）：时间**只作用于当前正在选的那一端**（起点已定、终点未定 ⇒ 终点，否则起点）；
+  ///   改时间**不会**提前成查 —— 终点日仍由第二次点选决定。
   private var timeSelection: Binding<Date> {
     Binding(
-      get: { date ?? Date() },
-      set: { picked in date = mergedDate(daySource: date ?? picked, timeSource: picked) }
+      get: { rangeSelectionBase?.date ?? date ?? Date() },
+      set: { picked in
+        if let selection = rangeSelectionBase {
+          applyRangeTime(picked, selection: selection)
+        } else {
+          date = mergedDate(daySource: date ?? picked, timeSource: picked)
+        }
+      }
     )
+  }
+
+  /// 范围形态下时间滚轮此刻作用的那一端（nil = 范围形态下还没开始选）。
+  private var rangeSelectionBase: WDDateRangeComposition.Target? {
+    guard isRange, WDDateRangeComposition.usesTime(mode) else { return nil }
+    return WDDateRangeComposition.timeTarget(
+      range: range,
+      pendingStart: pendingRangeStart,
+      fallback: pendingRangeWheelTime ?? Date(),
+      calendar: calendar
+    )
+  }
+
+  /// 滚轮被拨动：只改**当前那一端**的时刻，不会提前成查（终点日仍由第二次点选决定）。
+  private func applyRangeTime(_ picked: Date, selection: WDDateRangeComposition.Target) {
+    let updated = WDDateRangeComposition.applyingTime(
+      picked,
+      to: range,
+      endpoint: selection.endpoint,
+      pendingStart: pendingRangeStart,
+      calendar: calendar
+    )
+    range = updated.range
+    pendingRangeStart = updated.pendingStart
+    pendingRangeWheelTime = updated.range == nil ? updated.pendingStart : nil
   }
 
   // MARK: - 日历计算
@@ -482,11 +623,7 @@ public struct WDDatePicker: View {
   private func select(_ day: Date) {
     guard isAllowed(day) else { return }
     if isRange {
-      let result = WDDateRangeSelection.applying(day, to: range, calendar: calendar)
-      range = result.range
-      if result.completed {
-        showsSheet = false
-      }
+      applyRangeTap(day)
       return
     }
     date = mergedDate(daySource: day, timeSource: date)
@@ -495,8 +632,101 @@ public struct WDDatePicker: View {
     }
   }
 
-  /// 把 `daySource` 的年月日与 `timeSource` 的时分合成一个日期。
-  private func mergedDate(daySource: Date, timeSource: Date?) -> Date {
+  /// 范围形态的一次点选（纯日期与「范围 + 时间」共用日级口径，差别只在时刻归宿）。
+  ///
+  /// - 纯日期：`WDDateRangeSelection` 的日级结果原样写入（行为与此前一致）。
+  /// - `.dateAndTime`：选日口径同样两步（起点日 → 终点日）；成查时把两端各自的时刻合回去 ——
+  ///   起点时刻取本轮写入的起点（含滚轮预置），终点时刻优先取滚轮预置值、其次取已写进单点范围的终点时刻，
+  ///   再交给 `normalized` 保证 `lower <= upper`。
+  private func applyRangeTap(_ day: Date) {
+    guard WDDateRangeComposition.usesTime(mode) else {
+      let result = WDDateRangeSelection.applying(day, to: range, calendar: calendar)
+      range = result.range
+      if result.completed {
+        showsSheet = false
+      }
+      pendingRangeStart = nil
+      pendingRangeWheelTime = nil
+      return
+    }
+
+    let isSameDay = { (lhs: Date, rhs: Date) in calendar.isDate(lhs, inSameDayAs: rhs) }
+    let dayOnly = calendar.startOfDay(for: day)
+    let tap = WDDateRangeComposition.applyTap(
+      dayOnly, to: range, pendingStart: pendingRangeStart, calendar: calendar)
+    if tap.completed {
+      // 起点：本轮起点（单点范围）保留它的时刻。
+      // 终点：第一次点选时滚轮给的预置时刻；若滚轮已写进范围的终点，就直接取它。
+      let startTime = range?.lowerBound ?? pendingRangeWheelTime ?? dayOnly
+      let endTime =
+        pendingRangeWheelTime
+        ?? range.map { isSameDay($0.lowerBound, $0.upperBound) ? $0.upperBound : $0.lowerBound }
+        ?? dayOnly
+      range = WDDateRangeComposition.normalized(
+        start: tap.range.lowerBound,
+        end: tap.range.upperBound,
+        startTime: startTime,
+        endTime: endTime,
+        calendar: calendar
+      )
+    } else {
+      // 起点日已定：把滚轮预置的时刻并在起点上，随后滚轮编辑的就是这条单点范围的起点。
+      let startTime = pendingRangeWheelTime ?? dayOnly
+      let start = WDDateRangeComposition.movingDay(
+        tap.range.lowerBound, onto: startTime, calendar: calendar)
+      range = WDDateRangeComposition.composed(
+        start: start,
+        end: start,
+        startTime: start,
+        endTime: start,
+        calendar: calendar
+      )
+    }
+    pendingRangeStart = tap.pendingStart
+    if !tap.completed {
+      pendingRangeWheelTime = nil
+    }
+    if tap.completed {
+      showsSheet = false
+    }
+  }
+
+  /// 弹层布局（纯逻辑）：范围 + `.dateAndTime` = 月历 + 分隔线 + 时间滚轮。
+  nonisolated static func sheetLayout(
+    isRange: Bool, mode: WDDatePickerMode
+  ) -> WDDatePickerSheetLayout {
+    if isRange {
+      return WDDateRangeComposition.usesTime(mode) ? .calendarAndTime : .calendar
+    }
+    switch mode {
+    case .date: return .calendar
+    case .time: return .timeWheel
+    case .dateAndTime: return .calendarAndTime
+    }
+  }
+
+  /// 弹层高度（纯逻辑）：范围 + 时间与单日期 + 时间共用「日期 + 时间」档位。
+  nonisolated static func sheetHeight(isRange: Bool, mode: WDDatePickerMode) -> CGFloat {
+    switch sheetLayout(isRange: isRange, mode: mode) {
+    case .calendar: return SheetHeights.date
+    case .timeWheel: return SheetHeights.time
+    case .calendarAndTime: return SheetHeights.dateAndTime
+    }
+  }
+
+  /// `onClear` 的触发条件（纯逻辑）：清除前是否有值、清除后是否为空。
+  ///
+  /// 设计 23 §8：只有「用户点清除按钮」且「值确实从非空变空」才回调一次。
+  nonisolated static func shouldReportClear(wasFilled: Bool, isFilled: Bool) -> Bool {
+    wasFilled && !isFilled
+  }
+
+  /// 把 `daySource` 的年月日与 `timeSource` 的时分合成一个日期（纯逻辑；Internal 侧复用同一口径）。
+  nonisolated static func mergeDate(
+    daySource: Date,
+    timeSource: Date?,
+    calendar: Calendar
+  ) -> Date {
     var components = calendar.dateComponents([.hour, .minute], from: timeSource ?? daySource)
     let day = calendar.dateComponents([.year, .month, .day], from: daySource)
     components.year = day.year
@@ -505,18 +735,12 @@ public struct WDDatePicker: View {
     return calendar.date(from: components) ?? daySource
   }
 
-  // MARK: - 状态/几何
-
-  private var sheetHeight: CGFloat {
-    if isRange {
-      return Self.dateSheetHeight
-    }
-    switch mode {
-    case .date: return Self.dateSheetHeight
-    case .time: return Self.timeSheetHeight
-    case .dateAndTime: return Self.dateTimeSheetHeight
-    }
+  /// 把 `daySource` 的年月日与 `timeSource` 的时分合成一个日期。
+  private func mergedDate(daySource: Date, timeSource: Date?) -> Date {
+    Self.mergeDate(daySource: daySource, timeSource: timeSource, calendar: calendar)
   }
+
+  // MARK: - 状态/几何
 
   /// 禁用态整体不透明度（`state.disabled.alpha` = 40，百分数换算）。
   private var disabledOpacity: CGFloat {
@@ -536,12 +760,32 @@ public struct WDDatePicker: View {
   private static let todayDotSize: CGFloat = 4  // wd-structure-check:disable R7 — 设计未给值
   /// 不可选日期透明度 30%（设计 23 §5）。
   private static let disabledDayOpacity: CGFloat = 0.3  // wd-structure-check:disable R7 — 设计值
-  /// 日期弹层高度。
-  private static let dateSheetHeight: CGFloat = 420  // wd-structure-check:disable R7 — 设计未给值，取默认
-  /// 时间弹层高度。
-  private static let timeSheetHeight: CGFloat = 300  // wd-structure-check:disable R7 — 设计未给值，取默认
-  /// 日期 + 时间弹层高度。
-  private static let dateTimeSheetHeight: CGFloat = 560  // wd-structure-check:disable R7 — 设计
+  /// 弹层高度档位（纯值；`sheetHeight` 是非隔离的纯函数，所以这些值也必须非隔离）。
+  private enum SheetHeights {
+    /// 日期弹层高度。
+    static let date: CGFloat = 420  // wd-structure-check:disable R7 — 设计未给值
+    /// 时间弹层高度。
+    static let time: CGFloat = 300  // wd-structure-check:disable R7 — 设计未给值
+    /// 日期 + 时间弹层高度。
+    static let dateAndTime: CGFloat = 560  // wd-structure-check:disable R7 — 设计
+  }
   /// 百分数换算的分母。
   private static let percentScale: CGFloat = 100  // wd-structure-check:disable R7 — 百分数
+  /// 范围重载收到 `.time` 时的 Debug 断言串（仅开发者可见，不渲染、不朗读）。
+  private static let rangeTimeModeAssertionMessage =  // wd-structure-check:disable R15 — Debug 断言文本
+    "datePicker range initializer does not support time mode"
+}
+
+/// 已过期时的读屏提示：只有调用方给了文案、且当前确实过期时才挂 hint。
+/// 文案由调用方给（L-B）；库只决定“何时读”（颜色以外还有一条非视觉信号）。
+private struct WDDatePickerExpiredHint: ViewModifier {
+  let hint: Text?
+
+  @ViewBuilder func body(content: Content) -> some View {
+    if let hint {
+      content.accessibilityHint(hint)
+    } else {
+      content
+    }
+  }
 }

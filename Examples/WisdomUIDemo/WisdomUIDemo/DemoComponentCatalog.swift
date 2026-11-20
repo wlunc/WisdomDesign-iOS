@@ -1014,5 +1014,24 @@ enum DemoScenarioCatalog {
       subtitle: "WDBottomSheet 里组合输入框、卡片、开关、进度与固定页脚",
       icon: .expand
     ),
+    // B18：为 B15/B17 的新能力补端到端可视证据（此前 demo 里零使用）。
+    DemoScenario(
+      id: "scrollLink",
+      title: "滚动联动",
+      subtitle: "大标题折叠、Tab 栏收起、FAB 缩小与遮罩",
+      icon: .sort
+    ),
+    DemoScenario(
+      id: "rangeSlider",
+      title: "范围滑杆",
+      subtitle: "两个手柄的区间取值：不交叉、最小间隔 1 步长",
+      icon: .sort
+    ),
+    DemoScenario(
+      id: "expiredDate",
+      title: "日期过期提示",
+      subtitle: "已过期用 danger 色，并挂调用方给的读屏提示",
+      icon: .calendar
+    ),
   ]
 }

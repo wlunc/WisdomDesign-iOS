@@ -124,11 +124,17 @@ struct WDToastContent: View {
   /// 上滑关闭阈值。
   private static let swipeDismissDistance: CGFloat = 16  // wd-structure-check:disable R7 — 手势阈值
 
+  @Environment(\.wdAnnouncerText) private var announcer
+
   var body: some View {
     WDToastCard(variant: variant, message: message, action: action, onAction: onDismiss)
       .onHover(perform: handleHover)
       .highPriorityGesture(swipeDismissGesture)
-      .onAppear(perform: startCountdown)
+      .onAppear {
+        startCountdown()
+        // 出现时 polite 播报一次（设计 28 §10；L-B：播的就是调用方给的 message，库内不拼字）。
+        announcer?(message, .polite)
+      }
       .task(id: timerRun) {
         await countdownIfNeeded()
       }

@@ -113,3 +113,53 @@ extension View {
     environment(\.wdTheme, WDTheme(colors: colors))
   }
 }
+
+// MARK: - B10–B16 接线面（播报通道 / 滚动量 / 读屏焦点）
+
+/// 播报通道环境键（B10–B16 的 L-B 注入点：组件只读，写入口 = `.wdAnnouncer(_:)`）。
+private struct WDAnnouncerKey: EnvironmentKey {
+  static let defaultValue: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)? = nil
+}
+
+/// 宿主纵向滚动量环境键（组件只读；写入口 = `.wdScrollOffsetY(_:)`）。nil = 不联动。
+private struct WDScrollOffsetKey: EnvironmentKey {
+  static let defaultValue: CGFloat? = nil
+}
+
+// B18：读屏焦点不再走环境键（`accessibilityRepresentation` 内部写的环境不会回传到宿主视图），
+// 改为 `Internal/A11y/WDFocusRing.swift` 的 `WDAccessibilityFocusHost` 用 Binding 回写。
+
+extension EnvironmentValues {
+  /// 播报通道（组件**只读**）。nil = 不播报。
+  ///
+  /// 形态是 `@MainActor @Sendable` 闭包（不是 `WDTextPlayback` 这类内部类型）：
+  /// 环境值要能装进 `Sendable`，且公开属性的类型必须是 public。
+  public var wdAnnouncerText: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)? {
+    get { self[WDAnnouncerKey.self] }
+    set { self[WDAnnouncerKey.self] = newValue }
+  }
+
+  /// 宿主纵向滚动量（pt；向下滚为正）。**nil = 不联动**（默认）。
+  public var wdScrollOffsetY: CGFloat? {
+    get { self[WDScrollOffsetKey.self] }
+    set { self[WDScrollOffsetKey.self] = newValue }
+  }
+
+}
+
+extension View {
+  /// 注入播报通道（写入口；组件内不得调用 —— R18）。nil = 不播报。
+  public func wdAnnouncer(
+    _ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?
+  ) -> some View {
+    environment(\.wdAnnouncerText, announcer)
+  }
+
+  /// 注入纵向滚动量（写入口；组件内不得调用 —— R18）。
+  ///
+  /// 调用方从 `ScrollView` 的 `.onScrollGeometryChange` 取 `contentOffset.y` 喂进来；
+  /// `WDFAB` / `WDTabBar` / `WDNavigationBar` 只读它做滚动联动。
+  public func wdScrollOffsetY(_ offset: CGFloat?) -> some View {
+    environment(\.wdScrollOffsetY, offset)
+  }
+}

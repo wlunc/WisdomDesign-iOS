@@ -23,6 +23,71 @@ enum WDSliderMetrics {
   static let edgeEpsilon: Double = 0.0001
   /// 1pt hairline（设计 08 §3 的手柄描边）。
   static let hairlineWidth: CGFloat = 1
+  /// 数值标签与标签行的基线对齐（设计 08 §6：两者同一行、值在右）。
+  static let valueLabelSpacing: CGFloat = WDSpacing.s3
+  /// 手柄聚焦光环宽度（= `state.focus.ring-width` 3pt；设计 08 §5「手柄外扩 3pt 光环」）。
+  static let focusRingWidth: CGFloat = WDState.focusRingWidth
+  /// 聚焦光环淡入 160ms（设计 08 §5/§9；= `motion.duration.fast`）。
+  static let focusRingFadeDuration: TimeInterval = WDMotion.Duration.fast
+
+  /// 数值标签的可读宽度（设计 08 §6：值在标签行右侧、等宽数字）。
+  ///
+  /// 取值 = 内容宽上限的 30%，并夹在 [96, 240]：
+  ///   · 下限 96 放得下 4 位等宽数字 + 小数（AX3 下约为默认档的 1.9 倍字宽仍可容纳）；
+  ///   · 上限 240 让超长 `valueText`（调用方注入的档位名一类）不把标签挤成多行。
+  static func valueLabelWidth(available: CGFloat) -> CGFloat {
+    min(max(available * 0.30, 96), 240)  // 设计 08 §6 未给值：按"值占标签行右侧约三成"取
+  }
+
+  /// 手柄聚焦光环的外扩半径（设计 08 §5）。
+  ///
+  /// 光环 = 手柄外扩 **3pt**：从可见手柄边缘再向外 3pt，所以半径 = 13 + 3 = 16。
+  /// 只有「聚焦且可用」时才画（U6：disabled 吞掉一切状态视觉；设计 08 §5 禁用态无光环）。
+  static func focusRingRadius(isFocused: Bool, isEnabled: Bool) -> CGFloat {
+    guard isFocused, isEnabled else { return 0 }
+    return thumbDiameter / 2 + focusRingWidth
+  }
+
+  /// 光环淡入动画：Reduce Motion 直出（nil = 不加动画），否则 160ms 淡入。
+  static func focusRingAnimation(reduceMotion: Bool) -> Animation? {
+    reduceMotion ? nil : .easeOut(duration: focusRingFadeDuration)
+  }
+
+  /// 是否呈现聚焦光环（与半径同源，保证圆环与显示/隐藏同步）。
+  static func showsFocusRing(isFocused: Bool, isEnabled: Bool) -> Bool {
+    focusRingRadius(isFocused: isFocused, isEnabled: isEnabled) > 0
+  }
+
+  /// 聚焦光环的直径（半径 × 2；不呈现时为 0 = 不画这一层）。
+  static func focusRingDiameter(isFocused: Bool, isEnabled: Bool) -> CGFloat {
+    focusRingRadius(isFocused: isFocused, isEnabled: isEnabled) * 2
+  }
+
+  /// 聚焦光环左上角相对热区左上角的偏移（光环与手柄同心：中心 = 手柄中心，竖直 = 热区中线）。
+  ///
+  /// 不呈现时返回 `.zero`（此时直径也是 0，调用方不会画）。
+  static func focusRingOrigin(
+    thumbCenterX: CGFloat, hotAreaHeight: CGFloat, isFocused: Bool, isEnabled: Bool
+  ) -> CGSize {
+    let radius = focusRingRadius(isFocused: isFocused, isEnabled: isEnabled)
+    guard radius > 0 else { return .zero }
+    return CGSize(width: thumbCenterX - radius, height: hotAreaHeight / 2 - radius)
+  }
+
+  /// 焦点环颜色透明度：`state.focus.ring-alpha` 32（百分数，令牌给 0–100）。
+  static var focusRingAlpha: CGFloat {
+    WDState.focusRingAlpha / percentScale
+  }
+
+  /// 百分数换算的分母（令牌里的 brightness/alpha 都是 0–100）。
+  static let percentScale: CGFloat = 100
+
+  /// 没注入 `valueText` 时的值文案格式：系统 Double 本地化（**不拼单位/百分号**）。
+  ///
+  /// 固定成 `Double` 而不是交给泛型推导：`Int` 值（如 0…4 的档位）会保留小数位，
+  /// 拖动时宽度不跳；小数位上限 4 防止浮点尾数在拖动中抖动。
+  static let valueFormat = FloatingPointFormatStyle<Double>.number
+    .precision(.fractionLength(0...4))
 }
 
 /// 点击轨道的位置换算（与覆盖层的 13pt 内缩、RTL 镜像保持一致）。

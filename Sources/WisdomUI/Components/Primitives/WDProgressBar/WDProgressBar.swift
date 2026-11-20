@@ -24,8 +24,12 @@ public struct WDProgressBar: View {
   @Environment(\.wdEffectsBudget) private var budget
   @Environment(\.isEnabled) private var isEnabled
   @Environment(\.wdInstantMotion) private var instantMotion
+  /// 播报通道（只读；B18：跨 25/50/75/100 播报一次）。
+  @Environment(\.wdAnnouncerText) private var announcer
 
   @State private var indeterminatePhase = false
+  /// 上一次播报的时刻（节流）。
+  @State private var lastAnnouncement: ContinuousClock.Instant?
   @State private var showsIndeterminate = false
   @State private var hasAppeared = false
   @State private var didComplete = false
@@ -68,6 +72,10 @@ public struct WDProgressBar: View {
     .opacity(isEnabled ? 1 : Self.disabledOpacity)
     .accessibilityRepresentation { accessibilityProgress }
     .onAppear(perform: reveal)
+    // 设计 15 §10 / §2.10-#15「只跨 25/50/75/100」：向上跨阈值时播一次（节流在 `WDAnnouncementThrottle`）。
+    .onChange(of: announcedProgress) { previous, current in
+      announceIfCrossedThreshold(from: previous, to: current)
+    }
     .onChange(of: isComplete) { _, complete in
       guard complete else {
         didComplete = false
@@ -292,6 +300,47 @@ public struct WDProgressBar: View {
     }
   }
 
+  // MARK: - 阈值播报（B18；设计 15 §10 的 25/50/75/100）
+
+  /// 参与阈值判定的进度（确定态/分段态用 0…1；不确定态不参与）。
+  private var announcedProgress: Double {
+    switch mode {
+    case .determinate(let value):
+      return min(max(value, 0), 1)
+    case .segmented(let segments, let completed):
+      return Double(completed) / Double(segments)
+    case .indeterminate:
+      return 0
+    }
+  }
+
+  /// 跨过阈值时播一次。
+  ///
+  /// 三条闸门：① 调用方注入了 `wdAnnouncer`；② `WDAnnouncementThrottle.shouldAnnounce` 判定
+  /// 「向上跨过」某个阈值（一次跨多个也只播一次）；③ 节流器的最小间隔（连点/动画插值不刷屏）。
+  /// 文案用 `accessibilityValueText`（调用方给优先），库内不拼任何单位或标点（L-B）。
+  private func announceIfCrossedThreshold(from previous: Double, to current: Double) {
+    guard let announcer else { return }
+    guard
+      WDAnnouncementThrottle.shouldAnnounce(
+        previous: previous, current: current, thresholds: Self.announcementThresholds)
+    else { return }
+    let now = ContinuousClock.now
+    guard WDAnnouncementThrottle.shouldAnnounceAfterRelease(now: now, last: lastAnnouncement)
+    else { return }
+    lastAnnouncement = now
+    announcer(accessibilityValueText, .polite)
+  }
+
+  /// 阈值（设计 15 §10：只在跨过 25/50/75/100 时播，最多 4 次）。
+  ///
+  /// 写成逐行的「分母 4 的分数」是为了让每个字面量都能带一行豁免（结构检查器按行判定）。
+  static let announcementThresholds: [Double] = [
+    0.25,  // wd-structure-check:disable R7 — 设计 15 §10 的 25%
+    0.5,  // wd-structure-check:disable R7 — 设计 15 §10 的 50%
+    0.75,  // wd-structure-check:disable R7 — 设计 15 §10 的 75%
+    1,
+  ]
   // MARK: - 常量（设计 15）
 
   /// 轨道高度 6（设计 15 §3）。

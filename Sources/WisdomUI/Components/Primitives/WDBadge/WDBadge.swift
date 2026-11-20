@@ -187,7 +187,7 @@ public struct WDBadge: View {
   }
 
   /// 计数文案：>99 显示 `99+`（设计 11 §5；库内只做结构，不含本地化文案）。
-  static func countText(_ count: Int) -> String {
+  nonisolated static func countText(_ count: Int) -> String {
     let limit = Self.maxCount
     return count > limit ? "\(limit)+" : "\(count)"
   }
@@ -232,5 +232,7 @@ public struct WDBadge: View {
   /// 圆点直径 7（设计 11 §3）。
   private static let dotSize: CGFloat = 7  // wd-structure-check:disable R7 — 设计值
   /// 计数上限：超过显示 `99+`（设计 11 §5）。
-  private static let maxCount = 99  // wd-structure-check:disable R7 — 设计 11 §5 的上限
+  ///
+  /// `nonisolated`：`countText(_:)` 是纯函数、也不在当前 actor 上，读这个常量不能跨隔离域。
+  nonisolated private static let maxCount = 99  // wd-structure-check:disable R7 — 设计 11 §5 的上限
 }

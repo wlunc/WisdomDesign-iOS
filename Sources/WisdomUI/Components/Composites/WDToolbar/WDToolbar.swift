@@ -47,6 +47,8 @@ public struct WDToolbar: View {
 
   @Environment(\.wdColors) private var colors
   @Environment(\.wdEffectsBudget) private var budget
+  /// 读屏焦点所在的项（B18：聚焦光环；按 id 记，同一时刻只有一个）。
+  @State private var focusedItemID: String?
 
   /// 构造：项数组 + 分组标签 + 溢出菜单标签。
   public init(
@@ -85,27 +87,45 @@ public struct WDToolbar: View {
   // MARK: - 零件
 
   private func itemButton(_ item: WDToolbarItem) -> some View {
-    Button {
-      guard item.isEnabled else { return }
-      WDHaptics.shared.play(.press, budget: budget)
-      item.action()
-    } label: {
-      WDIcon(icon: item.icon, size: .md)
-        .foregroundStyle(item.isSelected ? colors.textOnDark : colors.textPrimary)
-        .frame(minWidth: WDSize.touchTargetMin, minHeight: WDSize.touchTargetMin)
-        .background(
-          RoundedRectangle(cornerRadius: WDRadius.sm, style: .continuous)
-            .fill(
-              item.isSelected
-                ? AnyShapeStyle(WDGradient.mid.linearGradient) : AnyShapeStyle(Color.clear))
-        )
-        .contentShape(Rectangle())
+    WDAccessibilityFocusHost(
+      focused: Binding(
+        get: { focusedItemID == item.id ? .single : nil },
+        set: { newValue in
+          if newValue == nil {
+            if focusedItemID == item.id { focusedItemID = nil }
+          } else {
+            focusedItemID = item.id
+          }
+        }),
+      target: .single
+    ) {
+      Button {
+        guard item.isEnabled else { return }
+        WDHaptics.shared.play(.press, budget: budget)
+        item.action()
+      } label: {
+        WDIcon(icon: item.icon, size: .md)
+          .foregroundStyle(item.isSelected ? colors.textOnDark : colors.textPrimary)
+          .frame(minWidth: WDSize.touchTargetMin, minHeight: WDSize.touchTargetMin)
+          .background(
+            RoundedRectangle(cornerRadius: WDRadius.sm, style: .continuous)
+              .fill(
+                item.isSelected
+                  ? AnyShapeStyle(WDGradient.mid.linearGradient) : AnyShapeStyle(Color.clear))
+          )
+          .contentShape(Rectangle())
+      }
+      .buttonStyle(WDToolbarItemPressStyle())
+      // 聚焦光环（设计 35 §5「与 Button 一致」；B18 补齐，形状跟按钮的圆角方）。
+      .wdFocusRing(
+        RoundedRectangle(cornerRadius: WDRadius.sm, style: .continuous),
+        isPresented: focusedItemID == item.id && item.isEnabled
+      )
+      .disabled(!item.isEnabled)
+      .opacity(item.isEnabled ? 1 : disabledOpacity)
+      .accessibilityLabel(item.accessibilityLabel)
+      .accessibilityAddTraits(item.isSelected ? .isSelected : [])
     }
-    .buttonStyle(.plain)
-    .disabled(!item.isEnabled)
-    .opacity(item.isEnabled ? 1 : disabledOpacity)
-    .accessibilityLabel(item.accessibilityLabel)
-    .accessibilityAddTraits(item.isSelected ? .isSelected : [])
   }
 
   private func overflowMenu(_ label: Text) -> some View {
@@ -152,6 +172,31 @@ public struct WDToolbar: View {
   private static let verticalPadding: CGFloat = 2  // wd-structure-check:disable R7 — 热区推导
   /// 最多 7 个操作（设计 35 §7）。
   private static let maxVisibleItems = 7  // wd-structure-check:disable R7 — 设计值
+  /// 百分数换算的分母。
+  private static let percentScale: CGFloat = 100  // wd-structure-check:disable R7 — 百分数
+}
+
+/// 工具栏按钮的按下态（设计 35 §5：缩放 0.94 + `fill.pressed`；`motion.duration.instant`）。
+///
+/// 用 `ButtonStyle` 而不是 `configuration.isPressed`：`.plain` 拿不到按下态。
+private struct WDToolbarItemPressStyle: ButtonStyle {
+  /// 按下底色走环境色（R10：组件内不得用静态令牌入口 `WDColor.*`）。
+  @Environment(\.wdColors) private var colors
+
+  func makeBody(configuration: Configuration) -> some View {
+    configuration.label
+      .background {
+        RoundedRectangle(cornerRadius: WDRadius.sm, style: .continuous)
+          .fill(
+            configuration.isPressed
+              ? AnyShapeStyle(colors.fillPressed) : AnyShapeStyle(Color.clear))
+      }
+      .scaleEffect(configuration.isPressed ? pressedScale : 1)
+      .animation(.easeOut(duration: WDMotion.Duration.instant), value: configuration.isPressed)
+  }
+
+  /// 按下缩放 0.94（设计 35 §5）。
+  private var pressedScale: CGFloat { 0.94 }  // wd-structure-check:disable R7 — 设计 35 §5
   /// 百分数换算的分母。
   private static let percentScale: CGFloat = 100  // wd-structure-check:disable R7 — 百分数
 }

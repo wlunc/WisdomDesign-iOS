@@ -33,6 +33,8 @@ public struct WDBanner: View {
   private let dismissAccessibilityLabel: Text?
 
   @Environment(\.wdColors) private var colors
+  /// 播报通道（只读；B18：出现时 polite 播报一次）。
+  @Environment(\.wdAnnouncerText) private var announcer
 
   /// 构造。
   public init(
@@ -82,6 +84,8 @@ public struct WDBanner: View {
     .background(background)
     .clipShape(RoundedRectangle(cornerRadius: WDRadius.lg, style: .continuous))
     .accessibilityElement(children: .contain)
+    // 出现时 polite 播报一次（设计 29 §10；L-B：播的就是调用方给的 message）。
+    .onAppear { announcer?(message, .polite) }
   }
 
   private var background: some ShapeStyle {

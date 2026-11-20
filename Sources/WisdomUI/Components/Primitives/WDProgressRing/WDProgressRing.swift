@@ -19,9 +19,13 @@ public struct WDProgressRing: View {
   @Environment(\.wdColors) private var colors
   @Environment(\.wdAppearance) private var appearance
   @Environment(\.wdEffectsBudget) private var budget
+  /// 播报通道（只读；B18：跨 25/50/75/100 播报一次）。
+  @Environment(\.wdAnnouncerText) private var announcer
 
   @State private var animatedValue: Double = 0
   @State private var didComplete = false
+  /// 上一次播报的时刻（节流）。
+  @State private var lastAnnouncement: ContinuousClock.Instant?
 
   /// 构造。
   public init(
@@ -57,12 +61,49 @@ public struct WDProgressRing: View {
       animatedValue = clamped
       fireCompletionIfNeeded()
     }
-    .onChange(of: clamped) { _, newValue in
+    .onChange(of: clamped) { previous, newValue in
       animatedValue = newValue
       fireCompletionIfNeeded()
+      announceIfCrossedThreshold(from: previous, to: newValue)
     }
   }
 
+  // MARK: - 阈值播报（B18；与 `WDProgressBar` 同口径）
+
+  /// 跨过 25/50/75/100 时播一次（设计 16 §10 与进度条一致：不逐帧播）。
+  ///
+  /// 文案用 `valueText`（调用方给优先）或系统百分比，库内不拼单位（L-B）。
+  private func announceIfCrossedThreshold(from previous: Double, to current: Double) {
+    guard let announcer else { return }
+    guard
+      WDAnnouncementThrottle.shouldAnnounce(
+        previous: previous, current: current, thresholds: Self.announcementThresholds)
+    else { return }
+    let now = ContinuousClock.now
+    guard WDAnnouncementThrottle.shouldAnnounceAfterRelease(now: now, last: lastAnnouncement)
+    else { return }
+    lastAnnouncement = now
+    announcer(announcementText, .polite)
+  }
+
+  /// 播报文案（与 `accessibilityValue` 同源；调用方给了 `valueText` 就原样用）。
+  private var announcementText: Text {
+    if let valueText { return valueText }
+    return Text(verbatim: percentText)  // wd-structure-check:disable R21 — a11y 播报串
+  }
+
+  /// 读屏百分比（与 `accessibilityValue` 同源）。
+  private var percentText: String {
+    clamped.formatted(.percent.precision(.fractionLength(0)))
+  }
+
+  /// 阈值（设计 15 §10 的 25/50/75/100，环形沿用同一组）。
+  static let announcementThresholds: [Double] = [
+    0.25,  // wd-structure-check:disable R7 — 设计 15 §10 的 25%
+    0.5,  // wd-structure-check:disable R7 — 设计 15 §10 的 50%
+    0.75,  // wd-structure-check:disable R7 — 设计 15 §10 的 75%
+    1,
+  ]
   private var clamped: Double { min(max(value, 0), 1) }
   private var isComplete: Bool { clamped >= 1 }
   private var diameter: CGFloat {

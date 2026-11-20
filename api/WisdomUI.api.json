@@ -36,6 +36,12 @@
     },
     {
       "access" : "public",
+      "decl" : "var wdAnnouncerText: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)? { get set }",
+      "kind" : "swift.property",
+      "path" : "EnvironmentValues.wdAnnouncerText"
+    },
+    {
+      "access" : "public",
       "decl" : "var wdAppearance: WDAppearance { get }",
       "kind" : "swift.property",
       "path" : "EnvironmentValues.wdAppearance"
@@ -60,6 +66,12 @@
     },
     {
       "access" : "public",
+      "decl" : "var wdScrollOffsetY: CGFloat? { get set }",
+      "kind" : "swift.property",
+      "path" : "EnvironmentValues.wdScrollOffsetY"
+    },
+    {
+      "access" : "public",
       "decl" : "var wdTheme: WDTheme { get set }",
       "kind" : "swift.property",
       "path" : "EnvironmentValues.wdTheme"
@@ -81,6 +93,12 @@
       "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
       "kind" : "swift.method",
       "path" : "View.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "View.wdAnnouncer(_:)"
     },
     {
       "access" : "public",
@@ -114,9 +132,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "View.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "View.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "View.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -408,6 +432,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDAssigneePicker.wdColors(_:)"
@@ -438,9 +468,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDAssigneePicker.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDAssigneePicker.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAssigneePicker.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -606,6 +642,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDAvatar.wdColors(_:)"
@@ -636,9 +678,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDAvatar.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDAvatar.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatar.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -726,6 +774,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(items: [WDAvatarStackItem], accessibilityLabel: Text, size: WDAvatarStackSize = .md, onOverflowTap: (@MainActor @Sendable () -> Void)? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDAvatarStack.init(items:accessibilityLabel:size:onOverflowTap:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDAvatarStack.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
@@ -741,6 +795,12 @@
       "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
       "kind" : "swift.method",
       "path" : "WDAvatarStack.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatarStack.wdAnnouncer(_:)"
     },
     {
       "access" : "public",
@@ -774,9 +834,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDAvatarStack.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDAvatarStack.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDAvatarStack.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -918,6 +984,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDBadge.wdColors(_:)"
@@ -948,9 +1020,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDBadge.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDBadge.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBadge.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -1086,6 +1164,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDBanner.wdColors(_:)"
@@ -1116,9 +1200,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDBanner.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDBanner.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDBanner.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -1284,6 +1374,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDButton.wdColors(_:)"
@@ -1314,9 +1410,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDButton.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDButton.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDButton.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -1380,9 +1482,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor init(variant: WDButtonVariant = .filled, size: WDButtonSize = .md, isLoading: Bool = false)",
+      "decl" : "@MainActor init(variant: WDButtonVariant = .filled, size: WDButtonSize = .md, isLoading: Bool = false, isFocused: Bool = false)",
       "kind" : "swift.init",
-      "path" : "WDButtonStyle.init(variant:size:isLoading:)"
+      "path" : "WDButtonStyle.init(variant:size:isLoading:isFocused:)"
     },
     {
       "access" : "public",
@@ -1488,6 +1590,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDCard.wdColors(_:)"
@@ -1518,9 +1626,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDCard.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDCard.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCard.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -1632,6 +1746,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDCheckbox.wdColors(_:)"
@@ -1662,9 +1782,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDCheckbox.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDCheckbox.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDCheckbox.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -1764,6 +1890,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDChip.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDChip.wdColors(_:)"
@@ -1794,9 +1926,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDChip.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDChip.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDChip.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -2940,9 +3078,21 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(date: Binding<Date?>, label: Text, mode: WDDatePickerMode = .date, placeholder: Text? = nil, quickOptions: [WDDatePickerQuickOption] = [], in bounds: ClosedRange<Date>? = nil, showsClearButton: Bool = false, clearAccessibilityLabel: Text? = nil, onClear: (@MainActor @Sendable () -> Void)? = nil, expiredAccessibilityHint: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDDatePicker.init(date:label:mode:placeholder:quickOptions:in:showsClearButton:clearAccessibilityLabel:onClear:expiredAccessibilityHint:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor init(range: Binding<ClosedRange<Date>?>, label: Text, placeholder: Text? = nil, in bounds: ClosedRange<Date>? = nil, showsClearButton: Bool = false, clearAccessibilityLabel: Text? = nil)",
       "kind" : "swift.init",
       "path" : "WDDatePicker.init(range:label:placeholder:in:showsClearButton:clearAccessibilityLabel:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(range: Binding<ClosedRange<Date>?>, label: Text, placeholder: Text? = nil, in bounds: ClosedRange<Date>? = nil, showsClearButton: Bool = false, clearAccessibilityLabel: Text? = nil, onClear: (@MainActor @Sendable () -> Void)? = nil, mode: WDDatePickerMode = .date)",
+      "kind" : "swift.init",
+      "path" : "WDDatePicker.init(range:label:placeholder:in:showsClearButton:clearAccessibilityLabel:onClear:mode:)"
     },
     {
       "access" : "public",
@@ -2961,6 +3111,12 @@
       "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
       "kind" : "swift.method",
       "path" : "WDDatePicker.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDatePicker.wdAnnouncer(_:)"
     },
     {
       "access" : "public",
@@ -2994,9 +3150,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDDatePicker.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDDatePicker.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDatePicker.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -3126,6 +3288,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDDivider.wdColors(_:)"
@@ -3156,9 +3324,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDDivider.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDDivider.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDDivider.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -3360,6 +3534,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDEmptyState.wdColors(_:)"
@@ -3390,9 +3570,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDEmptyState.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDEmptyState.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDEmptyState.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -3468,9 +3654,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor init(icon: WDIconName, accessibilityLabel: Text, size: WDFABSize = .standard, shape: WDFABShape = .roundedSquare, actions: [WDFABAction] = [], action: (() -> Void)? = nil)",
+      "decl" : "@MainActor init(icon: WDIconName, accessibilityLabel: Text, size: WDFABSize = .standard, shape: WDFABShape = .roundedSquare, actions: [WDFABAction] = [], action: (() -> Void)? = nil, showsScrimWhenExpanded: Bool = false, avoidsTabBar: Bool = false)",
       "kind" : "swift.init",
-      "path" : "WDFAB.init(icon:accessibilityLabel:size:shape:actions:action:)"
+      "path" : "WDFAB.init(icon:accessibilityLabel:size:shape:actions:action:showsScrimWhenExpanded:avoidsTabBar:)"
     },
     {
       "access" : "public",
@@ -3489,6 +3675,12 @@
       "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
       "kind" : "swift.method",
       "path" : "WDFAB.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDFAB.wdAnnouncer(_:)"
     },
     {
       "access" : "public",
@@ -3522,9 +3714,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDFAB.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDFAB.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDFAB.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -3714,6 +3912,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDFormRow.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDFormRow.wdColors(_:)"
@@ -3744,9 +3948,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDFormRow.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDFormRow.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDFormRow.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -3996,6 +4206,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDIcon.wdColors(_:)"
@@ -4026,9 +4242,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDIcon.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDIcon.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIcon.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -4104,6 +4326,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDIconButton.wdColors(_:)"
@@ -4134,9 +4362,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDIconButton.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDIconButton.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDIconButton.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -4602,6 +4836,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDListRow.wdColors(_:)"
@@ -4632,9 +4872,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDListRow.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDListRow.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListRow.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -4800,6 +5046,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDListSection.wdColors(_:)"
@@ -4830,9 +5082,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDListSection.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDListSection.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDListSection.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -4998,9 +5256,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor init(title: Text, mode: WDNavigationBarMode = .standard, style: WDNavigationBarStyle = .transparent, backAccessibilityLabel: Text? = nil, onBack: (() -> Void)? = nil, actions: [WDNavigationBarAction] = [])",
+      "decl" : "@MainActor init(title: Text, mode: WDNavigationBarMode = .standard, style: WDNavigationBarStyle = .transparent, backAccessibilityLabel: Text? = nil, onBack: (() -> Void)? = nil, actions: [WDNavigationBarAction] = [], followsScroll: Bool = false)",
       "kind" : "swift.init",
-      "path" : "WDNavigationBar.init(title:mode:style:backAccessibilityLabel:onBack:actions:)"
+      "path" : "WDNavigationBar.init(title:mode:style:backAccessibilityLabel:onBack:actions:followsScroll:)"
     },
     {
       "access" : "public",
@@ -5019,6 +5277,12 @@
       "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
       "kind" : "swift.method",
       "path" : "WDNavigationBar.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDNavigationBar.wdAnnouncer(_:)"
     },
     {
       "access" : "public",
@@ -5052,9 +5316,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDNavigationBar.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDNavigationBar.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDNavigationBar.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -5202,6 +5472,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDPicker.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDPicker.wdColors(_:)"
@@ -5232,9 +5508,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDPicker.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDPicker.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDPicker.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -5370,6 +5652,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDProgressBar.wdColors(_:)"
@@ -5400,9 +5688,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDProgressBar.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDProgressBar.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressBar.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -5472,6 +5766,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDProgressRing.wdColors(_:)"
@@ -5502,9 +5802,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDProgressRing.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDProgressRing.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDProgressRing.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -5574,6 +5880,96 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void)",
+      "kind" : "swift.init",
+      "path" : "WDPullRefresh.init(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "enum WDPullRefreshPhase",
+      "kind" : "swift.enum",
+      "path" : "WDPullRefreshPhase"
+    },
+    {
+      "access" : "public",
+      "decl" : "case armed",
+      "kind" : "swift.enum.case",
+      "path" : "WDPullRefreshPhase.armed"
+    },
+    {
+      "access" : "public",
+      "decl" : "case completed",
+      "kind" : "swift.enum.case",
+      "path" : "WDPullRefreshPhase.completed"
+    },
+    {
+      "access" : "public",
+      "decl" : "case failed",
+      "kind" : "swift.enum.case",
+      "path" : "WDPullRefreshPhase.failed"
+    },
+    {
+      "access" : "public",
+      "decl" : "case idle",
+      "kind" : "swift.enum.case",
+      "path" : "WDPullRefreshPhase.idle"
+    },
+    {
+      "access" : "public",
+      "decl" : "case pulling",
+      "kind" : "swift.enum.case",
+      "path" : "WDPullRefreshPhase.pulling"
+    },
+    {
+      "access" : "public",
+      "decl" : "case refreshing",
+      "kind" : "swift.enum.case",
+      "path" : "WDPullRefreshPhase.refreshing"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDPullRefreshTexts",
+      "kind" : "swift.struct",
+      "path" : "WDPullRefreshTexts"
+    },
+    {
+      "access" : "public",
+      "decl" : "var completed: Text?",
+      "kind" : "swift.property",
+      "path" : "WDPullRefreshTexts.completed"
+    },
+    {
+      "access" : "public",
+      "decl" : "var failed: Text?",
+      "kind" : "swift.property",
+      "path" : "WDPullRefreshTexts.failed"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(pull: Text? = nil, release: Text? = nil, refreshing: Text? = nil, completed: Text? = nil, failed: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDPullRefreshTexts.init(pull:release:refreshing:completed:failed:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "var pull: Text?",
+      "kind" : "swift.property",
+      "path" : "WDPullRefreshTexts.pull"
+    },
+    {
+      "access" : "public",
+      "decl" : "var refreshing: Text?",
+      "kind" : "swift.property",
+      "path" : "WDPullRefreshTexts.refreshing"
+    },
+    {
+      "access" : "public",
+      "decl" : "var release: Text?",
+      "kind" : "swift.property",
+      "path" : "WDPullRefreshTexts.release"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor struct WDRadio",
       "kind" : "swift.struct",
       "path" : "WDRadio"
@@ -5616,6 +6012,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDRadio.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDRadio.wdColors(_:)"
@@ -5646,9 +6048,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDRadio.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDRadio.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDRadio.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -5802,15 +6210,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor init(text: Binding<String>, placeholder: Text, leadingIcon: WDIconName = .search, clearAccessibilityLabel: Text, cancelLabel: Text, onCancel: (() -> Void)? = nil, onSubmit: (() -> Void)? = nil)",
+      "decl" : "@MainActor init(text: Binding<String>, placeholder: Text, leadingIcon: WDIconName = .search, clearAccessibilityLabel: Text, cancelLabel: Text, onCancel: (() -> Void)? = nil, onSubmit: (() -> Void)? = nil, resultCount: Int? = nil, announcer: (@MainActor @Sendable (Int) -> Void)? = nil)",
       "kind" : "swift.init",
-      "path" : "WDSearchField.init(text:placeholder:leadingIcon:clearAccessibilityLabel:cancelLabel:onCancel:onSubmit:)"
+      "path" : "WDSearchField.init(text:placeholder:leadingIcon:clearAccessibilityLabel:cancelLabel:onCancel:onSubmit:resultCount:announcer:)"
     },
     {
       "access" : "public",
-      "decl" : "@MainActor init(text: Binding<String>, placeholder: Text, leadingIcon: WDIconName = .search, clearAccessibilityLabel: Text, onSubmit: (() -> Void)? = nil)",
+      "decl" : "@MainActor init(text: Binding<String>, placeholder: Text, leadingIcon: WDIconName = .search, clearAccessibilityLabel: Text, onSubmit: (() -> Void)? = nil, resultCount: Int? = nil, announcer: (@MainActor @Sendable (Int) -> Void)? = nil)",
       "kind" : "swift.init",
-      "path" : "WDSearchField.init(text:placeholder:leadingIcon:clearAccessibilityLabel:onSubmit:)"
+      "path" : "WDSearchField.init(text:placeholder:leadingIcon:clearAccessibilityLabel:onSubmit:resultCount:announcer:)"
     },
     {
       "access" : "public",
@@ -5829,6 +6237,12 @@
       "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
       "kind" : "swift.method",
       "path" : "WDSearchField.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSearchField.wdAnnouncer(_:)"
     },
     {
       "access" : "public",
@@ -5862,9 +6276,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDSearchField.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDSearchField.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSearchField.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -5934,6 +6354,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSegmentedControl.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDSegmentedControl.wdColors(_:)"
@@ -5964,9 +6390,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDSegmentedControl.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDSegmentedControl.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSegmentedControl.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -6330,6 +6762,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDSkeleton.wdColors(_:)"
@@ -6360,9 +6798,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDSkeleton.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDSkeleton.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSkeleton.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -6432,9 +6876,21 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(range: Binding<ClosedRange<Double>>, label: Text, in bounds: ClosedRange<Double> = 0...1, step: Double? = nil, onEditingChanged: ((Bool) -> Void)? = nil, showsValueLabel: Bool = false, rangeText: ((ClosedRange<Double>) -> Text)? = nil, lowerAccessibilityLabel: Text? = nil, upperAccessibilityLabel: Text? = nil, rangeAnnouncementText: ((ClosedRange<Double>) -> Text)? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDSlider.init(range:label:in:step:onEditingChanged:showsValueLabel:rangeText:lowerAccessibilityLabel:upperAccessibilityLabel:rangeAnnouncementText:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor init(value: Binding<Double>, label: Text, in bounds: ClosedRange<Double> = 0...1, step: Double? = nil, onEditingChanged: ((Bool) -> Void)? = nil)",
       "kind" : "swift.init",
       "path" : "WDSlider.init(value:label:in:step:onEditingChanged:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(value: Binding<Double>, label: Text, in bounds: ClosedRange<Double> = 0...1, step: Double? = nil, onEditingChanged: ((Bool) -> Void)? = nil, showsValueLabel: Bool = false, valueText: ((Double) -> Text)? = nil, announcementText: ((Double) -> Text)? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDSlider.init(value:label:in:step:onEditingChanged:showsValueLabel:valueText:announcementText:)"
     },
     {
       "access" : "public",
@@ -6453,6 +6909,12 @@
       "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
       "kind" : "swift.method",
       "path" : "WDSlider.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSlider.wdAnnouncer(_:)"
     },
     {
       "access" : "public",
@@ -6486,9 +6948,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDSlider.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDSlider.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSlider.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -6660,6 +7128,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDStepper.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDStepper.wdColors(_:)"
@@ -6690,9 +7164,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDStepper.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDStepper.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDStepper.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -6768,6 +7248,18 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(isOn: Binding<Bool>, label: Text, description: Text?, size: WDSwitchSize, onWriteFailure: (@MainActor @Sendable (Bool) -> Void)?)",
+      "kind" : "swift.init",
+      "path" : "WDSwitch.init(isOn:label:description:size:onWriteFailure:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(isOn: Binding<Bool>, label: Text, onWriteFailure: (@MainActor @Sendable (Bool) -> Void)?)",
+      "kind" : "swift.init",
+      "path" : "WDSwitch.init(isOn:label:onWriteFailure:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDSwitch.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
@@ -6783,6 +7275,12 @@
       "decl" : "@MainActor func wdAlert<Content>(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View where Content : View",
       "kind" : "swift.method",
       "path" : "WDSwitch.wdAlert(isPresented:title:message:actions:onDismiss:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdAnnouncer(_:)"
     },
     {
       "access" : "public",
@@ -6816,9 +7314,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDSwitch.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDSwitch.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDSwitch.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -6924,6 +7428,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTabBar.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDTabBar.wdColors(_:)"
@@ -6954,9 +7464,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDTabBar.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDTabBar.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTabBar.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -7062,6 +7578,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDTextField.wdColors(_:)"
@@ -7092,9 +7614,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDTextField.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDTextField.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDTextField.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",
@@ -7560,6 +8088,12 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor func wdAnnouncer(_ announcer: (@MainActor @Sendable (Text, WDAnnouncementPriority) -> Void)?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDToolbar.wdAnnouncer(_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdColors(_ colors: WDColorValues) -> some View",
       "kind" : "swift.method",
       "path" : "WDToolbar.wdColors(_:)"
@@ -7590,9 +8124,15 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefresh: @escaping @Sendable () async -> Void) -> some View",
+      "decl" : "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
       "kind" : "swift.method",
-      "path" : "WDToolbar.wdPullRefresh(isRefreshing:label:onRefresh:)"
+      "path" : "WDToolbar.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor func wdScrollOffsetY(_ offset: CGFloat?) -> some View",
+      "kind" : "swift.method",
+      "path" : "WDToolbar.wdScrollOffsetY(_:)"
     },
     {
       "access" : "public",

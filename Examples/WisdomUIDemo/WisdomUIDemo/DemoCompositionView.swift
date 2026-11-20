@@ -278,7 +278,185 @@ struct DemoBottomSheetCompositionView: View {
 
 // MARK: - 组合页通用件
 
-private struct DemoCompositionHeader: View {
+// MARK: - B18 覆盖场景：滚动联动 + 范围滑杆 + 过期提示
+
+/// 滚动联动场景（B15 的三个组件此前在 demo 里**零使用** ⇒ 没有任何端到端证据）。
+///
+/// 这里用真实 `ScrollView` + `.onScrollGeometryChange` 把 offset 喂给 `.wdScrollOffsetY(_:)`，
+/// 于是：大标题随滚动折叠（设计 33）、Tab 栏收起为无标签胶囊（设计 34）、FAB 缩小并显示遮罩（设计 36）
+/// 全部可以在模拟器里肉眼核对，也能被 demo 的无障碍审计覆盖。
+struct DemoScrollLinkCompositionView: View {
+  @State private var offset: CGFloat = 0
+  @State private var selection = "today"
+
+  @Environment(\.wdColors) private var colors
+
+  var body: some View {
+    VStack(spacing: 0) {
+      WDNavigationBar(
+        title: Text(verbatim: "家庭"),
+        mode: .largeTitle,
+        style: .transparent,
+        backAccessibilityLabel: Text(verbatim: "返回"),
+        actions: [
+          .init(id: "edit", icon: .edit, accessibilityLabel: Text(verbatim: "编辑"), action: {})
+        ],
+        followsScroll: true
+      )
+
+      ScrollView {
+        VStack(alignment: .leading, spacing: WDSpacing.s5) {
+          DemoCompositionHeader(
+            icon: .sort,
+            title: "滚动联动",
+            subtitle: "向下滚动：大标题折叠、Tab 栏收起、FAB 缩小；向上滚立即展开。",
+            tags: ["WDNavigationBar", "WDTabBar", "WDFAB"]
+          )
+          ForEach(0..<12, id: \.self) { index in
+            Text(verbatim: "第 \(index + 1) 行 · 滚动这一段来观察顶栏与底栏联动")
+              .wdFont(WDType.body)
+              .foregroundStyle(colors.textSecondary)
+              .frame(maxWidth: .infinity, alignment: .leading)
+              .padding(.vertical, WDSpacing.s3)
+          }
+        }
+        .padding(WDSpacing.s5)
+        .padding(.bottom, 96)
+      }
+      .modifier(DemoScrollOffsetFeed(offset: $offset))
+
+      WDTabBar(
+        items: [
+          .init(id: "today", icon: .home, label: Text(verbatim: "今天")),
+          .init(id: "tasks", icon: .todo, label: Text(verbatim: "任务")),
+          .init(id: "family", icon: .members, label: Text(verbatim: "家庭")),
+        ],
+        selection: $selection
+      )
+    }
+    .overlay(alignment: .bottomTrailing) {
+      WDFAB(
+        icon: .add,
+        accessibilityLabel: Text(verbatim: "新建任务"),
+        actions: [
+          .init(id: "task", icon: .task, label: Text(verbatim: "任务"), action: {}),
+          .init(id: "chore", icon: .chore, label: Text(verbatim: "家务"), action: {}),
+        ],
+        showsScrimWhenExpanded: true,
+        avoidsTabBar: true
+      )
+      .padding(.trailing, WDSpacing.s5)
+    }
+    .wdScrollOffsetY(offset)
+  }
+}
+
+/// 把 `ScrollView` 的纵向 offset 喂给 `.wdScrollOffsetY(_:)`（B18 demo 场景专用）。
+///
+/// `onScrollGeometryChange` 是 iOS 18 API，而本库部署目标是 iOS 17 ⇒ 用版本分支包一层；
+/// iOS 17 上退回「用滑杆手动喂 offset」，这样滚动联动在旧系统上也能被人工核对。
+private struct DemoScrollOffsetFeed: ViewModifier {
+  @Binding var offset: CGFloat
+
+  @ViewBuilder func body(content: Content) -> some View {
+    if #available(iOS 18.0, *) {
+      content.onScrollGeometryChange(for: CGFloat.self) { geometry in
+        geometry.contentOffset.y + geometry.contentInsets.top
+      } action: { _, newValue in
+        offset = newValue
+      }
+    } else {
+      content
+    }
+  }
+}
+
+/// 范围滑杆场景（B17-4 的形态此前只有单测，没有任何可视证据）。
+struct DemoRangeSliderCompositionView: View {
+  @State private var budget = 200.0...800.0
+  @State private var ratio = 0.4...0.9
+
+  @Environment(\.wdColors) private var colors
+
+  var body: some View {
+    ScrollView {
+      VStack(alignment: .leading, spacing: WDSpacing.s6) {
+        DemoCompositionHeader(
+          icon: .sort,
+          title: "范围滑杆",
+          subtitle: "两个手柄，两端不允许交叉，最小间隔 = 1 步长；松手吸附。",
+          tags: ["WDSlider"]
+        )
+
+        DemoSection("预算区间（连续）", subtitle: "0–1000，无步长；区间文案由调用方给") {
+          WDSlider(
+            range: $budget,
+            label: Text(verbatim: "预算"),
+            in: 0...1000,
+            showsValueLabel: true,
+            rangeText: { Text(verbatim: "¥\(Int($0.lowerBound))–\(Int($0.upperBound))") },
+            lowerAccessibilityLabel: Text(verbatim: "预算下限"),
+            upperAccessibilityLabel: Text(verbatim: "预算上限")
+          )
+        }
+
+        DemoSection("完成比例（步长 0.1）", subtitle: "两端最小间隔 0.1；拖动时活动手柄放大") {
+          WDSlider(
+            range: $ratio,
+            label: Text(verbatim: "完成比例"),
+            in: 0...1,
+            step: 0.1,
+            showsValueLabel: true,
+            rangeText: {
+              Text(verbatim: "\(Int($0.lowerBound * 100))%–\(Int($0.upperBound * 100))%")
+            },
+            lowerAccessibilityLabel: Text(verbatim: "下限"),
+            upperAccessibilityLabel: Text(verbatim: "上限")
+          )
+        }
+      }
+      .padding(WDSpacing.s5)
+    }
+  }
+}
+
+/// 日期过期提示场景（B17-3）。
+struct DemoExpiredDatePickerCompositionView: View {
+  @State private var lastDone: Date? = Calendar.current.date(byAdding: .day, value: -5, to: Date())
+  @State private var nextDue: Date? = Calendar.current.date(byAdding: .day, value: 3, to: Date())
+
+  var body: some View {
+    ScrollView {
+      VStack(alignment: .leading, spacing: WDSpacing.s6) {
+        DemoCompositionHeader(
+          icon: .sort,
+          title: "日期过期提示",
+          subtitle: "已过期的日期用 status.danger，并挂调用方给的读屏提示；跨午夜由系统日变更通知自己翻转。",
+          tags: ["WDDatePicker"]
+        )
+
+        DemoSection("已过期（5 天前）", subtitle: "文字色 = status.danger，读屏 hint =「已过期」") {
+          WDDatePicker(
+            date: $lastDone,
+            label: Text(verbatim: "上次完成"),
+            expiredAccessibilityHint: Text(verbatim: "已过期")
+          )
+        }
+
+        DemoSection("未过期（3 天后）", subtitle: "同一构造，未过期 ⇒ 正常文字色、不挂 hint") {
+          WDDatePicker(
+            date: $nextDue,
+            label: Text(verbatim: "下次到期"),
+            expiredAccessibilityHint: Text(verbatim: "已过期")
+          )
+        }
+      }
+      .padding(WDSpacing.s5)
+    }
+  }
+}
+/// 组合场景的页头（B18 起跨文件复用 ⇒ 由 file-private 提为 internal）。
+struct DemoCompositionHeader: View {
   let icon: WDIconName
   let title: String
   let subtitle: String

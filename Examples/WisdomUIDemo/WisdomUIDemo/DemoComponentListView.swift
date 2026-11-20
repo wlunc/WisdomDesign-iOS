@@ -191,6 +191,12 @@ private struct DemoCompositionSection: View {
       DemoCardCompositionView()
     case "bottomSheet":
       DemoBottomSheetCompositionView()
+    case "scrollLink":
+      DemoScrollLinkCompositionView()
+    case "rangeSlider":
+      DemoRangeSliderCompositionView()
+    case "expiredDate":
+      DemoExpiredDatePickerCompositionView()
     default:
       EmptyView()
     }

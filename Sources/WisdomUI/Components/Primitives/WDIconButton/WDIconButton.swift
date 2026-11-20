@@ -50,6 +50,8 @@ public struct WDIconButton: View {
   @Environment(\.wdEffectsBudget) private var budget
   @Environment(\.isEnabled) private var isEnabled
   @Environment(\.colorScheme) private var colorScheme
+  /// 读屏焦点落点（B18：聚焦光环；由焦点宿主回写）。
+  @State private var focusTarget: WDFocusRingTarget?
 
   /// 构造（accessibilityLabel 必填；库内零文案）；形态固定 `circle`，与既有行为一致。
   public init(
@@ -92,6 +94,11 @@ public struct WDIconButton: View {
 
   /// 容器 + 图标；视觉尺寸内画底/描边，外层补 44 热区。
   public var body: some View {
+    WDAccessibilityFocusHost(focused: $focusTarget, target: .single) { button }
+  }
+
+  /// 按钮本体（外面套了焦点宿主，光环据此显示）。
+  private var button: some View {
     Button {
       guard !isLoading, isEnabled else { return }
       WDHaptics.shared.play(.press, budget: budget)
@@ -112,6 +119,8 @@ public struct WDIconButton: View {
       .contentShape(containerShape)
     }
     .buttonStyle(WDIconButtonPressStyle())
+    // 聚焦光环（设计 02 §5「与 Button 一致：聚焦 3pt 光环」；B18 补齐）。
+    .wdFocusRing(containerShape, isPresented: focusTarget != nil && isEnabled)
     .accessibilityLabel(accessibilityLabel)
     .opacity(isEnabled ? 1 : disabledOpacity)
   }
