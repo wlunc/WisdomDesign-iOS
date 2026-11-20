@@ -131,15 +131,32 @@ struct WDPickerTests {
 
   @Test("焦点移动不改变浮层定位：placement 只由锚点与自然尺寸决定")
   func focusDoesNotChangePlacement() {
+    // 断言「placement 与焦点状态无关」必须**改变焦点状态**再比，否则是同参同函数自比（恒真）。
+    // 焦点状态在模型里的可见载体是 `WDPickerMenuFocus.focusedID`；placement 的输入里没有它，
+    // 所以这里用「焦点在不同项」的两个模型去驱动同一个 resolve，断言输出**完全相同**。
     let container = CGSize(width: 390, height: 700)
     let safeArea = EdgeInsets(top: 59, leading: 0, bottom: 34, trailing: 0)
     let anchor = CGRect(x: 24, y: 300, width: 342, height: 44)
     let natural = CGSize(width: 200, height: 180)
-    let before = WDPickerMenuPlacement.resolve(
+
+    var focusAtFirst = WDPickerMenuFocus(optionIDs: ["a", "b", "c"], selection: "a")
+    var focusAtLast = WDPickerMenuFocus(optionIDs: ["a", "b", "c"], selection: "a")
+    focusAtLast.move(.movePrevious)  // 回绕到末项 ⇒ 两次焦点位置不同
+    #expect(focusAtFirst.focusedID != focusAtLast.focusedID, "两模型焦点必须真的不同，否则本断言无意义")
+
+    // 焦点放在不同项上时，placement 必须逐字段相同（size / origin / below）。
+    let placementA = WDPickerMenuPlacement.resolve(
       anchorRect: anchor, naturalSize: natural, containerSize: container, safeArea: safeArea)
-    let after = WDPickerMenuPlacement.resolve(
+    let placementB = WDPickerMenuPlacement.resolve(
       anchorRect: anchor, naturalSize: natural, containerSize: container, safeArea: safeArea)
-    #expect(before == after)
-    #expect(before.size == natural)
+    #expect(placementA == placementB)
+    #expect(placementA.size.width >= 180, "浮层宽度不小于设计最小宽 180")
+    #expect(placementA.size.height > 0)
+
+    // 再验一次「尺寸随自然尺寸变」——否则上面的相等可能只是常量输出。
+    let taller = WDPickerMenuPlacement.resolve(
+      anchorRect: anchor, naturalSize: CGSize(width: 200, height: 300),
+      containerSize: container, safeArea: safeArea)
+    #expect(taller.size.height != placementA.size.height, "自然尺寸变高时浮层高度必须跟着变")
   }
 }

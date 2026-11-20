@@ -65,8 +65,7 @@ public struct WDDatePicker: View {
   @Environment(\.wdColors) private var colors
   @Environment(\.isEnabled) private var isEnabled
   @Environment(\.scenePhase) private var scenePhase
-  /// 当前动态字体档（弹层自适应高度与行盒同源）。
-  @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
   /// 排版方向（RTL 下 ←/→ 的语义要镜像，见 `navigationStep(for:isRTL:)`）。
   @Environment(\.layoutDirection) private var layoutDirection
   /// 播报通道（L-B 注入点：文案由调用方给；本组件只播系统本地化格式的日期）。
@@ -504,6 +503,8 @@ public struct WDDatePicker: View {
         dayCell(day)
       }
       // 尾随空位补满固定行数：翻月时网格高度不变（弹层高度也就不会跟着跳）。
+      // 与 dayCell 同款定高（R9）：补位格必须与日期单元等高，改令牌时两处一起跟随。
+      // wd-structure-check:disable R9 — 补位格必须与日期单元等高（常量由 dayCellSize 单点给）
       ForEach(0..<trailingBlankCount, id: \.self) { _ in
         Color.clear.frame(height: Self.dayCellSize)
       }
@@ -634,10 +635,16 @@ public struct WDDatePicker: View {
 
   // MARK: - 时间滚轮
 
+  /// 系统时间滚轮。
+  ///
+  /// 上下内距由 `WDDatePickerSheetHeight.wheelVerticalPadding` 给，与高度公式**同源**：
+  /// 公式按「固有高 + 上下内距」算，视图这里就必须真的把它加上，否则弹层会比内容高出一截
+  /// （B20 评审 F4：此前视图零内距、公式加了两遍，实测时间形态多出 24pt）。
   private var timeWheel: some View {
     DatePicker("", selection: timeSelection, displayedComponents: .hourAndMinute)
       .datePickerStyle(.wheel)
       .labelsHidden()
+      .padding(.vertical, WDDatePickerSheetHeight.wheelVerticalPadding)
   }
 
   /// 时间滚轮的受控值。
@@ -839,6 +846,10 @@ public struct WDDatePicker: View {
   ///   - available: 系统给该弹层的最大可用高度（`PresentationDetent.Context.maxDetentValue`）；
   ///     `<= 0`（未量到）时返回内容高度，不做裁切。
   ///   - dynamicTypeSize: 当前动态字体档（月份头 / 星期头的行盒随之增长）。
+  ///     **仅测试入口**：真实弹层走 `CustomPresentationDetent.height(in:)`，那是 `static` 方法、
+  ///     拿不到环境 ⇒ 运行时一律按 `.large` 计算。放大的字体档下标题行盒会变高，
+  ///     内容可能略超出档位，由弹层内 `ScrollView` 兜住（不裁切）。这是**已登记限制**，
+  ///     不是遗漏 —— 见 `docs/B20-EXIT-REPORT.md` §6-F6。
   nonisolated static func sheetHeight(
     isRange: Bool,
     mode: WDDatePickerMode,

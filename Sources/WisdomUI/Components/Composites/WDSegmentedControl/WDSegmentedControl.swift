@@ -181,9 +181,16 @@ public struct WDSegmentedControl: View {
   }
 
   /// 手指 x → 目标段下标（跟手与吸附共用一个换算）。
+  ///
+  /// **RTL 必须镜像**：`WDSegmentedControlLayout` 的 `placeSubviews` 在 RTL 下会被系统整体镜像
+  /// （第 0 段出现在视觉最右），而 `DragGesture.location.x` 始终是未镜像的物理坐标。
+  /// 若这里不镜像，RTL 下「拖到最右」会选中下标 0（视觉最左），与点击/方向键的映射不一致。
   private func segmentIndex(at x: CGFloat) -> Int {
     WDSegmentedControlInteraction.segmentIndex(
-      at: x, width: segmentAreaWidth, count: items.count)
+      at: x,
+      width: segmentAreaWidth,
+      count: items.count,
+      isRTL: layoutDirection == .rightToLeft)
   }
 
   /// 拖动中：指示块跟随手指所在段（只改跟手状态，不写 `selection`）。
@@ -361,9 +368,16 @@ enum WDSegmentedControlInteraction {
   ///
   /// 拖动中（指示块跟手）与松手（吸附并提交）**用同一函数**，所以"跟到哪段就吸附到哪段"。
   /// `count == 0` 或 `width <= 0`（首帧未量到宽）⇒ 0（调用方另有 `width > 0` 闸门）。
-  static func segmentIndex(at x: CGFloat, width: CGFloat, count: Int) -> Int {
+  /// `isRTL` 时把物理 x 翻到逻辑轴再换算（见调用点注释：布局在 RTL 下被系统整体镜像）。
+  static func segmentIndex(
+    at x: CGFloat,
+    width: CGFloat,
+    count: Int,
+    isRTL: Bool = false
+  ) -> Int {
     guard count > 0, width > 0 else { return 0 }
-    let raw = Int((x / (width / CGFloat(count))).rounded(.down))
+    let logicalX = isRTL ? width - x : x
+    let raw = Int((logicalX / (width / CGFloat(count))).rounded(.down))
     return clampedIndex(raw, count: count)
   }
 

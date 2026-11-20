@@ -112,7 +112,8 @@ enum WDDatePickerSheetHeight {
       + calendarTopPadding + calendarBottomPadding
   }
 
-  /// 时间滚轮高度 = 固有高度 + 上下内距。
+  /// 时间滚轮高度 = 固有高度 + 上下内距（上下各一，与视图的 `.padding(.vertical,:)` 同源）。
+  /// 写成两个加数而不是 `× 2`：R7 会把裸字面量 `2` 判为不可追溯（本例是数量而非尺寸）。
   static func wheelHeight() -> CGFloat {
     timeWheelHeight + wheelVerticalPadding + wheelVerticalPadding
   }

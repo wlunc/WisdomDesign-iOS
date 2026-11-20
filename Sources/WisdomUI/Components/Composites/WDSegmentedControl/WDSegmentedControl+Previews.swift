@@ -31,6 +31,18 @@
           selection: .constant("a")
         )
         .disabled(true)
+        // 位置文案（L-B 注入点）：措辞与分隔符都由调用方给，库内不拼任何字。
+        // 评审 F7：本项此前在预览/demo 里零调用点 ⇒ 读屏位置文案从未被目视核对过。
+        WDSegmentedControl(
+          items: [
+            .init(id: "today", label: Text(verbatim: "今天")),
+            .init(id: "week", label: Text(verbatim: "本周")),
+            .init(id: "all", label: Text(verbatim: "全部")),
+          ],
+          selection: $solid,
+          positionText: { index, total in Text(verbatim: "\(index)/\(total)") },
+          positionSeparator: Text(verbatim: "，")
+        )
       }
       .padding(WDSpacing.s5)
     }

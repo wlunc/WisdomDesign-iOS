@@ -53,15 +53,38 @@ struct WDSegmentedControlTests {
     #expect(WDSegmentedControlInteraction.segmentIndex(at: 100, width: 360, count: 0) == 0)
   }
 
+  @Test("RTL：拖动换算镜像（视觉最右 = 第 0 段），与 LTR 对称")
+  func segmentIndexMirrorsInRTL() {
+    func index(_ x: CGFloat, _ rtl: Bool) -> Int {
+      WDSegmentedControlInteraction.segmentIndex(
+        at: x, width: 360, count: 3, isRTL: rtl)
+    }
+    // LTR：x=0 是第 0 段（视觉最左），x=359 是末段。
+    #expect(index(0, false) == 0)
+    #expect(index(359, false) == 2)
+    // RTL：布局被系统整体镜像 ⇒ 视觉最左是末段、视觉最右是第 0 段。
+    #expect(index(359, true) == 0)
+    #expect(index(0, true) == 2)
+    // 对称性：RTL 的 x 与 LTR 的 (width − x) 必须落在同一段。
+    for x in stride(from: CGFloat(0), through: 360, by: 12) {
+      #expect(index(360 - x, false) == index(x, true))
+    }
+  }
   @Test("松手吸附：跟手与吸附共用同一换算（跟到哪段就吸附到哪段）")
   func releaseSnapMatchesFollow() {
-    // 拖动轨迹上的每个位置：跟手段 == 松手段（一次拖动中途只在段变化的边界处换段）。
+    // 断言对象是**换算本身的性质**，不是「同一函数同一实参比两次」（那种恒真）。
+    // ① 每个落点都落在合法段内（不越界）；
     for x in stride(from: CGFloat(-20), through: 380, by: 10) {
       let follow = WDSegmentedControlInteraction.segmentIndex(at: x, width: 360, count: 3)
-      let snap = WDSegmentedControlInteraction.segmentIndex(at: x, width: 360, count: 3)
-      #expect(follow == snap)
       #expect((0...2).contains(follow))
     }
+    // ② 段边界处的换算必须可预期：360 宽 3 段 ⇒ 每段 120，边界 120/240。
+    #expect(WDSegmentedControlInteraction.segmentIndex(at: 0, width: 360, count: 3) == 0)
+    #expect(WDSegmentedControlInteraction.segmentIndex(at: 119, width: 360, count: 3) == 0)
+    #expect(WDSegmentedControlInteraction.segmentIndex(at: 120, width: 360, count: 3) == 1)
+    #expect(WDSegmentedControlInteraction.segmentIndex(at: 239, width: 360, count: 3) == 1)
+    #expect(WDSegmentedControlInteraction.segmentIndex(at: 240, width: 360, count: 3) == 2)
+    #expect(WDSegmentedControlInteraction.segmentIndex(at: 359, width: 360, count: 3) == 2)
     // 中途不跳段：x 递增时段下标单调不减（不会在段之间来回跳）。
     var previous = 0
     for x in stride(from: CGFloat(0), through: 360, by: 1) {

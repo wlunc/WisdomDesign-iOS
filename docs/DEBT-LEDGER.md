@@ -11,7 +11,7 @@
 
 | 类别 | 条数 | 能不能纯代码推进 |
 | --- | --- | --- |
-| A · 代码欠账 | 17 | B18 已闭合 **9 条**（A-1～A-7、A-12、A-16、A-17），A-15 部分（缺快照）；仍开放 6 条 |
+| A · 代码欠账 | 17 | 已闭合 **11 条**（A-1～A-7、A-12、A-15、A-16、A-17）；部分闭合 **3 条**（A-8 缺 `tablist`/`tab` 角色与玻璃档、A-9 缺滚轮形态先选后确认、A-10 真机键盘与极端尺寸未走查）；仍开放 **3 条**（A-11 成员配色/照片、A-13 `WDCard.media`、A-14 长按 tooltip） |
 | B · 契约欠账（要设计仓落库） | 3 | 不能（跨仓只读） |
 | C · 验证欠账（要完整环境 / 真机） | 6 | 不能（环境） |
 | D · 平台限制（不投入，只登记） | 5 | 不能（系统能力） |
@@ -36,7 +36,7 @@
 | A-5 ✅ | `WDCheckbox` 按下缩放 **0.90**（设计 06 §5）未实现 | `grep ButtonStyle|isPressed` in `WDCheckbox.swift` = 0（B9 只补了选中光晕） | `M2-DEVIATIONS.md` ⑨；B7/B9 未闭合该项 |
 | A-6 ✅ | `WDToolbar` 按钮按下 **0.94 缩放 + `fill.pressed`** 未实现 | `WDToolbar.swift:104` 是 `.buttonStyle(.plain)`，无按下样式 | `M5-EXIT-REPORT.md` §4-⑭ |
 | A-7 ✅ | `WDTabBar` **角标未并入宿主朗读**（`accessibilityHidden` 的 `WDBadge` 内容读不到） | `WDTabBar.swift:96` 渲染 badge 无 a11yValue；对比 `WDListRow.swift:101` 已有徽标合并 | `M5-EXIT-REPORT.md` §4-⑬（同 M2 ⑬ 口径） |
-| A-8 ✅ | `WDSegmentedControl` 无 `tablist`/`tab` 与位置文案；**不支持段间横向拖动**；玻璃档实为纯色 | **B20（2026-11-20）已补**：段间横向拖动（`DragGesture(minimumDistance: 1)` + 横向占优判定，跟手用 `dragSegmentIndex`、松手吸附走与点击同一条 `commit`）、`WDSemantics.positional` 位置文案（措辞/分隔符由调用方注入）、方向键 ←/→ 即时切换（设计 21 §8）。**仍开放**：`tablist`/`tab` 角色（平台限制 L-3）、玻璃档纯色 | 角色与玻璃档仍登记 |
+| A-8 ◐ | `WDSegmentedControl` 无 `tablist`/`tab` 与位置文案；**不支持段间横向拖动**；玻璃档实为纯色 | **B20（2026-11-20）已补**：段间横向拖动（`DragGesture(minimumDistance: 1)` + 横向占优判定，跟手用 `dragSegmentIndex`、松手吸附走与点击同一条 `commit`）、`WDSemantics.positional` 位置文案（措辞/分隔符由调用方注入）、方向键 ←/→ 即时切换（设计 21 §8）。**仍开放**：`tablist`/`tab` 角色（平台限制 L-3）、玻璃档纯色 | 角色与玻璃档仍登记 |
 | A-9 ◐ | `WDPicker` 滚轮形态即时提交（设计指定系统载体）、菜单无键盘环形焦点 | **B20（2026-11-20）已补菜单键盘导航**：方向键环形移动（`WDPickerMenuFocus`，首尾回绕、分组标题跳过）、Enter/Space 提交、Esc 关闭不改值；弹出层 `.focusable()` + `.focused()` 接键。**仍开放**：滚轮形态即时提交 = 平台限制 L-4 | 滚轮形态登记为 L-4，不动 |
 | A-10 ◐ | `WDDatePicker` 二维方向键网格导航、弹层自适应高度未实现 | **B20（2026-11-20）已补**：`WDDatePickerGrid`（←/→ ±1 天、↑/↓ ±7 天，RTL 镜像，跨月自动翻页，越界归一为最近可选日）+ 弹层改为 `CustomPresentationDetent` 按内容量高并夹在可用高度内（`WDDatePickerSheetHeight`）。三项自适应：仅月历 / 仅时间 / 月历+时间 | 已闭合；真机键盘行为仍待走查 |
 | A-11 | `WDAvatar` **成员配色 / 照片形态**未实现（恒 `surfaceTint`） | `WDAvatar.swift:72` `Circle().fill(colors.surfaceTint)` | `M2-EXIT-REPORT.md:78`（B2 只闭合五档/在线/停用） |
