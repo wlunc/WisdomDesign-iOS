@@ -36,9 +36,9 @@
 | A-5 ✅ | `WDCheckbox` 按下缩放 **0.90**（设计 06 §5）未实现 | `grep ButtonStyle|isPressed` in `WDCheckbox.swift` = 0（B9 只补了选中光晕） | `M2-DEVIATIONS.md` ⑨；B7/B9 未闭合该项 |
 | A-6 ✅ | `WDToolbar` 按钮按下 **0.94 缩放 + `fill.pressed`** 未实现 | `WDToolbar.swift:104` 是 `.buttonStyle(.plain)`，无按下样式 | `M5-EXIT-REPORT.md` §4-⑭ |
 | A-7 ✅ | `WDTabBar` **角标未并入宿主朗读**（`accessibilityHidden` 的 `WDBadge` 内容读不到） | `WDTabBar.swift:96` 渲染 badge 无 a11yValue；对比 `WDListRow.swift:101` 已有徽标合并 | `M5-EXIT-REPORT.md` §4-⑬（同 M2 ⑬ 口径） |
-| A-8 | `WDSegmentedControl` 无 `tablist`/`tab` 与位置文案；**不支持段间横向拖动**；玻璃档实为纯色 | `WDSegmentedControl.swift` 无 `WDSemantics.positional` 调用 | `M5-EXIT-REPORT.md` §4-⑦；`B3-PLATFORM-LIMITS.md` L-3（只解释角色） |
-| A-9 | `WDPicker` 滚轮形态即时提交（设计指定系统载体）、菜单无键盘环形焦点 | `WDPickerMenu.swift` 只有 `.escape` | `M5-EXIT-REPORT.md` §4-㉑ |
-| A-10 | `WDDatePicker` 二维方向键网格导航、弹层自适应高度未实现 | `grep onKeyPress|moveCommand` = 0；`sheetHeight` 为固定三档 | `M5-EXIT-REPORT.md` §4-⑨ |
+| A-8 ✅ | `WDSegmentedControl` 无 `tablist`/`tab` 与位置文案；**不支持段间横向拖动**；玻璃档实为纯色 | **B20（2026-11-20）已补**：段间横向拖动（`DragGesture(minimumDistance: 1)` + 横向占优判定，跟手用 `dragSegmentIndex`、松手吸附走与点击同一条 `commit`）、`WDSemantics.positional` 位置文案（措辞/分隔符由调用方注入）、方向键 ←/→ 即时切换（设计 21 §8）。**仍开放**：`tablist`/`tab` 角色（平台限制 L-3）、玻璃档纯色 | 角色与玻璃档仍登记 |
+| A-9 ◐ | `WDPicker` 滚轮形态即时提交（设计指定系统载体）、菜单无键盘环形焦点 | **B20（2026-11-20）已补菜单键盘导航**：方向键环形移动（`WDPickerMenuFocus`，首尾回绕、分组标题跳过）、Enter/Space 提交、Esc 关闭不改值；弹出层 `.focusable()` + `.focused()` 接键。**仍开放**：滚轮形态即时提交 = 平台限制 L-4 | 滚轮形态登记为 L-4，不动 |
+| A-10 ◐ | `WDDatePicker` 二维方向键网格导航、弹层自适应高度未实现 | **B20（2026-11-20）已补**：`WDDatePickerGrid`（←/→ ±1 天、↑/↓ ±7 天，RTL 镜像，跨月自动翻页，越界归一为最近可选日）+ 弹层改为 `CustomPresentationDetent` 按内容量高并夹在可用高度内（`WDDatePickerSheetHeight`）。三项自适应：仅月历 / 仅时间 / 月历+时间 | 已闭合；真机键盘行为仍待走查 |
 | A-11 | `WDAvatar` **成员配色 / 照片形态**未实现（恒 `surfaceTint`） | `WDAvatar.swift:72` `Circle().fill(colors.surfaceTint)` | `M2-EXIT-REPORT.md:78`（B2 只闭合五档/在线/停用） |
 | A-12 ✅ | `WDProgressBar` / `WDProgressRing` **25/50/75/100 阈值播报**未实现；`WDToast` / `WDBanner` 的 polite 播报也未实现 | 三者均无 `wdAnnouncerText` 引用（全仓仅 `WDPullRefresh` 有） | `M4-EXIT-REPORT.md` §4-⑥（只对 ProgressBar 记「调用方」）；Toast/Banner 在 §32 记「播报标签由调用方注入」，但 **SPEC §2.10 的 #28/#29 播报列仍写 polite** ⇒ 规格与实现口径不一致，需回写 |
 
@@ -46,7 +46,7 @@
 
 | # | 项 | 证据（2026-11-20 实测） | 影响 |
 | --- | --- | --- | --- |
-| A-15 ◐ | **范围滑杆（B17-4）无预览、无 demo、无快照** | `WDSlider+Previews.swift` 三个样例全是单值；`Examples` 与 `Tests/WisdomUISnapshotTests` 里 `range:` 命中 0（仅单测有）。**B18 已补预览与 demo 场景**，**基线仍不含范围形态**（B19 复跑 360 张 = 45 条快照测试全绿，仍无 `slider-range-*` 基线） | 快照层仍缺范围形态的视觉核对；补基线属下一批（要新增快照用例与 8 张基线） |
+| A-15 ✅ | **范围滑杆（B17-4）无预览、无 demo、无快照** | **B20（2026-11-20）已闭合**：B18 补了预览与 demo，B20 补了 8 态快照 —— `WDSliderRangeSnapshotTests`（`verifyHierarchy` 渲染器）+ 8 张 `slider-range-*` 基线，总基线 360 → **368**；既有 360 张零改动，manifest 纯追加 8 条 | 已闭合 |
 | A-16 ✅ | **B15 滚动联动在 demo 里零使用** | `followsScroll` / `wdScrollOffsetY` / `showsScrimWhenExpanded` / `avoidsTabBar` 在 `Examples` 命中 **0** | 大标题折叠、TabBar 收起、FAB 缩小/遮罩这条链**没有任何端到端验证**（U-B-6 的直接原因） |
 | A-17 ✅ | **B17-3 过期提示无样例** | `expiredAccessibilityHint` 在 `Examples` 与 `*+Previews.swift` 命中 **0** | 视觉上一无所见；读屏提示只能靠真机手测 |
 
@@ -114,7 +114,8 @@
 | --- | --- | --- |
 | **B18（已完成，2026-11-20）** | A-1 焦点光环接线、A-2 松手播报、A-3～A-6 按下/聚焦反馈、A-7 角标朗读、A-12 阈值与 polite 播报、A-15～A-17 覆盖 | 记录见 `docs/B18-EXIT-REPORT.md` |
 | **B19（已完成，2026-11-20）** | **首次跑通验证层**（C-1 单测 344 全过 / C-2 快照 45 条 360 张零漂移 / C-3 demo 审计 18 条全过）+ 修 §1.5 的三处回归 + 启用此前 `.disabled` 的尺寸断言 | 记录见 `docs/B19-EXIT-REPORT.md`；**不新增 API**（符号仍 1380） |
-| **下一批候选** | A-8 段间拖动、A-9 菜单键盘环形焦点、A-10 日期方向键网格、A-11 成员配色/照片 | 都能纯代码做，但都需要各自的手势/键盘回归条件 |
+| **B20（已完成，2026-11-20）** | A-8 段间拖动 + 位置文案 + 方向键、A-9 菜单键盘环形焦点、A-10 日期方向键网格 + 弹层自适应高度、A-15 范围滑杆 8 态基线 | 记录见 `docs/B20-EXIT-REPORT.md`；符号数仍 **1380**，但 `WDSegmentedControl.init` **追加 2 个带默认值参数**（源码兼容、快照已显式更新） |
+| **下一批候选** | A-11 `WDAvatar` 成员配色 / 照片形态 | 纯代码可做，但**成员四色设计 token 缺 4 组色值**，需设计给值或按 `WDColorSlot` 已有时序推导（见 A-11 登记） |
 | **待设计** | A-13 `WDCard.media`、A-14 长按 tooltip | 缺设计值或需真机手势回归 |
 | **待架构师** | B-1 / B-3 契约落库与播报 fixtures | 跨仓只读 |
 
@@ -125,8 +126,8 @@
 | 指标 | 值 |
 | --- | --- |
 | API 符号 | **1380**（`Scripts/dump-api.sh` 零 diff，B19 复跑实测） |
-| 单测声明 / 实跑 | **344 条**（`Tests/WisdomUITests`）／**344 passed / 0 failed**（2026-11-20 B19 实测） |
-| 快照测试 / 基线 | **45 条 / 360 张** ／ **45 tests 全过、零漂移**（2026-11-20 B19 实测） |
+| 单测声明 / 实跑 | **377 条**（`Tests/WisdomUITests`，B20 +33）／**377 passed / 0 failed**（2026-11-20 B20 实测） |
+| 快照测试 / 基线 | **46 条 / 368 张** ／ **46 tests 全过、零漂移**（2026-11-20 B20 实测；含新增 `slider-range-*` 8 张） |
 | demo UITest | **18 条**（此前记 19 条为笔误；2026-11-20 实测 `Executed 18 tests, with 0 failures`，262.3 s） |
 | 工作区未提交 | **68 个文件**（B19 后实测：40 modified + 28 untracked，含 B10–B19 全部改动与文档） |
 | 结构/格式门禁 | `files=188 errors=0 warnings=0` / `204 文件全过` |

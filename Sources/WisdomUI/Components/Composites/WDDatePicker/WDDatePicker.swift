@@ -65,11 +65,23 @@ public struct WDDatePicker: View {
   @Environment(\.wdColors) private var colors
   @Environment(\.isEnabled) private var isEnabled
   @Environment(\.scenePhase) private var scenePhase
+  /// 当前动态字体档（弹层自适应高度与行盒同源）。
+  @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+  /// 排版方向（RTL 下 ←/→ 的语义要镜像，见 `navigationStep(for:isRTL:)`）。
+  @Environment(\.layoutDirection) private var layoutDirection
+  /// 播报通道（L-B 注入点：文案由调用方给；本组件只播系统本地化格式的日期）。
+  @Environment(\.wdAnnouncerText) private var announcer
   /// 过期判定的“今天”（B17：由系统「日变更」通知/回到前台刷新，**不自建计时器**）。
   @State private var now = Date()
 
   @State private var showsSheet = false
   @State private var visibleMonth = Date()
+  /// 月历里的焦点日（方向键的起点；nil = 打开弹层时按当前值/边界初始化）。
+  @State private var focusedDay: Date?
+  /// 网格是否吃硬件键盘（方向键导航的前提）。
+  @FocusState private var isGridFocused: Bool
+  /// 读屏焦点跟随的日期（跨月翻页后把焦点交接给新单元格）。
+  @AccessibilityFocusState private var a11yFocusedDay: Date?
   /// 范围 + 时间：第一次点选后暂存的起点日（终点未定；每次打开弹层 / 清除时清空）。
   @State private var pendingRangeStart: Date?
   /// 范围 + 时间：第一次点选**之前**滚轮拨出的时刻（点选日尚未定，先存着给起点用）。
@@ -219,15 +231,16 @@ public struct WDDatePicker: View {
     }
     .opacity(isEnabled ? 1 : disabledOpacity)
     .sheet(isPresented: $showsSheet) {
-      sheetContent
-        .presentationDetents([.height(Self.sheetHeight(isRange: isRange, mode: mode))])
-        .presentationDragIndicator(.visible)
+      sheetBody
     }
     .onChange(of: showsSheet) { _, presented in
       if presented {
         visibleMonth = date ?? range?.lowerBound ?? bounds?.lowerBound ?? Date()
         pendingRangeStart = nil
         pendingRangeWheelTime = nil
+        focusedDay = initialFocusedDay
+      } else {
+        focusedDay = nil
       }
     }
     // 跨午夜过期翻转（B17）：系统「日变更」通知是唯一的日历信号，**不自建计时器**；
@@ -382,31 +395,55 @@ public struct WDDatePicker: View {
 
   // MARK: - 弹层
 
-  @ViewBuilder private var sheetContent: some View {
+  /// 弹层容器：高度按内容自适应，并夹在系统给该弹层的可用高度里（`maxDetentValue`）。
+  ///
+  /// 三个分支各自挂一个**不同静态类型**的自适应档位（`CustomPresentationDetent` 的
+  /// `height(in:)` 是静态方法，只能用类型传布局）；内容再包一层 `ScrollView`：
+  /// 可用高度比内容小时（小屏 / 横屏 / 超大字号）滚动兜住 ⇒ **不裁切、不溢出安全区**。
+  @ViewBuilder private var sheetBody: some View {
     switch Self.sheetLayout(isRange: isRange, mode: mode) {
     case .calendar:
-      calendarView
+      sheetScroll { calendarView }
+        .presentationDetents([.custom(WDDatePickerCalendarOnlyDetent.self)])
+        .presentationDragIndicator(.visible)
     case .timeWheel:
-      timeWheel
+      sheetScroll { timeWheel }
+        .presentationDetents([.custom(WDDatePickerTimeOnlyDetent.self)])
+        .presentationDragIndicator(.visible)
     case .calendarAndTime:
-      VStack(spacing: WDSpacing.s3) {
-        calendarView
-        Divider().overlay(colors.borderHairline)
-        timeWheel
+      sheetScroll {
+        VStack(spacing: WDDatePickerSheetHeight.sectionSpacing) {
+          calendarView
+          Divider().overlay(colors.borderHairline)
+          timeWheel
+        }
       }
+      .presentationDetents([.custom(WDDatePickerCalendarAndTimeDetent.self)])
+      .presentationDragIndicator(.visible)
     }
+  }
+
+  /// 弹层内容（可滚动；内容高度 == 档位高度时完全不滚动）。
+  private func sheetScroll<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+    ScrollView(.vertical) {
+      content()
+        .frame(maxWidth: .infinity)
+    }
+    .scrollBounceBehavior(.basedOnSize)
+    .background(colors.surfaceCardSolid)
   }
 
   // MARK: - 自建月历
 
   private var calendarView: some View {
-    VStack(spacing: WDSpacing.s2) {
+    VStack(spacing: WDDatePickerSheetHeight.calendarSpacing) {
       monthHeader
       weekdayHeader
       dayGrid
     }
     .padding(.horizontal, WDSpacing.s5)
-    .padding(.top, WDSpacing.s4)
+    .padding(.top, WDDatePickerSheetHeight.calendarTopPadding)
+    .padding(.bottom, WDDatePickerSheetHeight.calendarBottomPadding)
     .background(colors.surfaceCardSolid)
   }
 
@@ -430,6 +467,9 @@ public struct WDDatePicker: View {
         return
       }
       visibleMonth = next
+      // 方向键的起点跟着翻月走：焦点落到新月份里最接近的可选日（整月不可选时退回边界日）。
+      focusedDay = WDDatePickerGrid.firstSelectableDay(
+        inMonthOf: next, bounds: bounds, calendar: calendar)
     } label: {
       WDIcon(icon: icon, size: .sm)
         .foregroundStyle(colors.textBrand)
@@ -463,8 +503,84 @@ public struct WDDatePicker: View {
       ForEach(monthDays, id: \.self) { day in
         dayCell(day)
       }
+      // 尾随空位补满固定行数：翻月时网格高度不变（弹层高度也就不会跟着跳）。
+      ForEach(0..<trailingBlankCount, id: \.self) { _ in
+        Color.clear.frame(height: Self.dayCellSize)
+      }
     }
     .accessibilityElement(children: .contain)
+    // 硬件键盘：网格可聚焦后接管方向键（←/→ 一天，↑/↓ 一周）。
+    .focusable()
+    .focusEffectDisabled()
+    .focused($isGridFocused)
+    .onKeyPress(keys: [.leftArrow, .rightArrow, .upArrow, .downArrow]) { press in
+      handleArrowKey(press.key)
+    }
+    .onAppear {
+      // 弹层刚出现就把键盘焦点给网格：外接键盘用户不必先 Tab 一圈才能用方向键。
+      isGridFocused = true
+    }
+  }
+
+  /// 方向键 → 箭头语义（`KeyEquivalent` 只在这里出现，其余逻辑走纯函数）。
+  private func arrowKey(for key: KeyEquivalent) -> WDDatePickerArrowKey? {
+    switch key {
+    case .leftArrow: return .left
+    case .rightArrow: return .right
+    case .upArrow: return .up
+    case .downArrow: return .down
+    default: return nil
+    }
+  }
+
+  private func handleArrowKey(_ key: KeyEquivalent) -> KeyPress.Result {
+    guard let arrow = arrowKey(for: key) else { return .ignored }
+    let step = WDDatePickerGrid.step(for: arrow, isRTL: layoutDirection == .rightToLeft)
+    moveFocus(by: step)
+    // 只监听 .down / .repeat（`onKeyPress(keys:)` 的默认相位）⇒ 命中即消费，弹层不滚动。
+    return .handled
+  }
+
+  /// 焦点按步进移动：跨月时翻页，焦点跟到目标日，并把新日期读/聚焦出来。
+  private func moveFocus(by step: WDDatePickerGridStep) {
+    let base = focusedDay ?? initialFocusedDay
+    let target = WDDatePickerGrid.moved(
+      from: base,
+      by: step.dayOffset,
+      bounds: bounds,
+      calendar: calendar
+    )
+    focusedDay = target
+    if !calendar.isDate(target, equalTo: visibleMonth, toGranularity: .month) {
+      visibleMonth = WDDatePickerGrid.monthStart(containing: target, calendar: calendar)
+    }
+    // 读屏：跨月后网格被重建，焦点要交接给目标日；同时在读屏下补一次完整日期朗读。
+    if WDA11yRuntime.isAssistiveTechRunning {
+      a11yFocusedDay = target
+      announceDay(target, priority: .polite)
+    }
+  }
+
+  /// 打开弹层时的焦点日：当前值 → 范围起点 → 边界下界 → 今天（全部归一到可选范围与当日零点）。
+  private var initialFocusedDay: Date {
+    let seed = date ?? range?.lowerBound ?? bounds?.lowerBound ?? now
+    return WDDatePickerGrid.clamped(seed, in: bounds, calendar: calendar)
+  }
+
+  /// 网格尾随空位数（补满固定 6 行）。
+  private var trailingBlankCount: Int {
+    WDDatePickerGrid.trailingBlanks(
+      leadingBlanks: leadingBlankCount,
+      dayCount: monthDays.count,
+      rowCapacity: WDDatePickerGrid.rowCapacity
+    )
+  }
+
+  /// 朗读完整日期（系统本地化格式；库内零文案）。
+  private func announceDay(_ day: Date, priority: WDAnnouncementPriority) {
+    guard let announcer else { return }
+    let text = day.formatted(Self.dayAccessibilityFormat)
+    announcer(Text(verbatim: text), priority)  // wd-structure-check:disable R21 — 读屏
   }
 
   private func dayCell(_ day: Date) -> some View {
@@ -472,14 +588,18 @@ public struct WDDatePicker: View {
     let inRange = isInRange(day)
     let allowed = isAllowed(day)
     let today = calendar.isDateInToday(day)
+    let isFocusedDay = isKeyboardFocusedDay(day)
     let dayNumber = calendar.component(.day, from: day)
     return Button {
+      focusedDay = day
       select(day)
     } label: {
       ZStack {
         if selected {
           Circle().fill(colors.textBrand)
         } else if inRange {
+          Circle().fill(colors.surfaceTint)
+        } else if isFocusedDay {
           Circle().fill(colors.surfaceTint)
         }
         VStack(spacing: 1) {
@@ -502,6 +622,14 @@ public struct WDDatePicker: View {
     .opacity(allowed ? 1 : Self.disabledDayOpacity)
     .accessibilityLabel(dayAccessibilityLabel(day))
     .accessibilityAddTraits(selected ? .isSelected : [])
+    // 读屏焦点跟随：跨月翻页 / 方向键移动后把焦点交接给目标日（只在读屏运行时挂，见 WDA11yRuntime）。
+    .wdAccessibilityFocused($a11yFocusedDay, equals: calendar.startOfDay(for: day))
+  }
+
+  /// 方向键焦点是否落在本单元格（用高亮圈提示「下一步会选中谁」）。
+  private func isKeyboardFocusedDay(_ day: Date) -> Bool {
+    guard let focusedDay else { return false }
+    return calendar.isDate(focusedDay, inSameDayAs: day)
   }
 
   // MARK: - 时间滚轮
@@ -705,13 +833,23 @@ public struct WDDatePicker: View {
     }
   }
 
-  /// 弹层高度（纯逻辑）：范围 + 时间与单日期 + 时间共用「日期 + 时间」档位。
-  nonisolated static func sheetHeight(isRange: Bool, mode: WDDatePickerMode) -> CGFloat {
-    switch sheetLayout(isRange: isRange, mode: mode) {
-    case .calendar: return SheetHeights.date
-    case .timeWheel: return SheetHeights.time
-    case .calendarAndTime: return SheetHeights.dateAndTime
-    }
+  /// 弹层高度（纯逻辑）：按内容量高后夹进可用高度（A-10：不再有固定三档）。
+  ///
+  /// - Parameters:
+  ///   - available: 系统给该弹层的最大可用高度（`PresentationDetent.Context.maxDetentValue`）；
+  ///     `<= 0`（未量到）时返回内容高度，不做裁切。
+  ///   - dynamicTypeSize: 当前动态字体档（月份头 / 星期头的行盒随之增长）。
+  nonisolated static func sheetHeight(
+    isRange: Bool,
+    mode: WDDatePickerMode,
+    available: CGFloat,
+    dynamicTypeSize: DynamicTypeSize = .large
+  ) -> CGFloat {
+    WDDatePickerSheetHeight.detentHeight(
+      layout: sheetLayout(isRange: isRange, mode: mode),
+      metrics: WDDatePickerSheetHeight.Metrics(dynamicTypeSize: dynamicTypeSize),
+      available: available
+    )
   }
 
   /// `onClear` 的触发条件（纯逻辑）：清除前是否有值、清除后是否为空。
@@ -751,24 +889,15 @@ public struct WDDatePicker: View {
   private static let dayAccessibilityFormat = Date.FormatStyle.dateTime.year().month(.wide).day()
     .weekday(.wide)
   /// 每周 7 天。
-  private static let weekdayCount = 7  // wd-structure-check:disable R7 — 设计
+  private static let weekdayCount = WDDatePickerGrid.weekLength
   /// 日历列数 7。
   private static let columnCount = 7  // wd-structure-check:disable R7 — 设计 23 §3 的 7 列
-  /// 日期单元 44（设计 23 §3）。
-  private static let dayCellSize: CGFloat = 44  // wd-structure-check:disable R7 — 设计值
+  /// 日期单元 44×44（设计 23 §3；取触控下限令牌，不写字面量）。
+  private static let dayCellSize = WDDatePickerGrid.cellSize
   /// 今天圆点 4（设计 23 §5 的标记，规格未给尺寸）。
   private static let todayDotSize: CGFloat = 4  // wd-structure-check:disable R7 — 设计未给值
   /// 不可选日期透明度 30%（设计 23 §5）。
   private static let disabledDayOpacity: CGFloat = 0.3  // wd-structure-check:disable R7 — 设计值
-  /// 弹层高度档位（纯值；`sheetHeight` 是非隔离的纯函数，所以这些值也必须非隔离）。
-  private enum SheetHeights {
-    /// 日期弹层高度。
-    static let date: CGFloat = 420  // wd-structure-check:disable R7 — 设计未给值
-    /// 时间弹层高度。
-    static let time: CGFloat = 300  // wd-structure-check:disable R7 — 设计未给值
-    /// 日期 + 时间弹层高度。
-    static let dateAndTime: CGFloat = 560  // wd-structure-check:disable R7 — 设计
-  }
   /// 百分数换算的分母。
   private static let percentScale: CGFloat = 100  // wd-structure-check:disable R7 — 百分数
   /// 范围重载收到 `.time` 时的 Debug 断言串（仅开发者可见，不渲染、不朗读）。

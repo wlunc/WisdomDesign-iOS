@@ -6330,9 +6330,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor init(items: [WDSegmentedControlItem], selection: Binding<String>, style: WDSegmentedControlStyle = .solid)",
+      "decl" : "@MainActor init(items: [WDSegmentedControlItem], selection: Binding<String>, style: WDSegmentedControlStyle = .solid, positionText: ((Int, Int) -> Text)? = nil, positionSeparator: Text = Text(verbatim: \"\"))",
       "kind" : "swift.init",
-      "path" : "WDSegmentedControl.init(items:selection:style:)"
+      "path" : "WDSegmentedControl.init(items:selection:style:positionText:positionSeparator:)"
     },
     {
       "access" : "public",

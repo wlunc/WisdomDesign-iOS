@@ -138,17 +138,246 @@ struct WDDatePickerTests {
     #expect(WDDatePicker.sheetLayout(isRange: false, mode: .dateAndTime) == .calendarAndTime)
   }
 
-  @Test("弹层高度：按模式给档位；范围 + 时间与单日期 + 时间同档")
+  @Test("弹层高度：按内容量高；范围 + 时间与单日期 + 时间同高（同一套内容）")
   func sheetHeightByMode() {
-    let calendarHeight = WDDatePicker.sheetHeight(isRange: false, mode: .date)
-    let wheelHeight = WDDatePicker.sheetHeight(isRange: false, mode: .time)
-    let combined = WDDatePicker.sheetHeight(isRange: false, mode: .dateAndTime)
-    // 档位递进：时间滚轮（300）< 月历（420）< 月历 + 滚轮（560）。
+    let available: CGFloat = 2000
+    let calendarHeight = WDDatePicker.sheetHeight(
+      isRange: false, mode: .date, available: available)
+    let wheelHeight = WDDatePicker.sheetHeight(isRange: false, mode: .time, available: available)
+    let combined = WDDatePicker.sheetHeight(
+      isRange: false, mode: .dateAndTime, available: available)
+    // 内容递进：时间滚轮 < 月历 < 月历 + 滚轮。
     #expect(wheelHeight < calendarHeight)
     #expect(wheelHeight < combined)
-    #expect(WDDatePicker.sheetHeight(isRange: true, mode: .date) == calendarHeight)
-    #expect(WDDatePicker.sheetHeight(isRange: true, mode: .time) == calendarHeight)
-    #expect(WDDatePicker.sheetHeight(isRange: true, mode: .dateAndTime) == combined)
+    #expect(calendarHeight < combined)
+    #expect(
+      WDDatePicker.sheetHeight(isRange: true, mode: .date, available: available) == calendarHeight)
+    #expect(
+      WDDatePicker.sheetHeight(isRange: true, mode: .time, available: available) == calendarHeight)
+    #expect(
+      WDDatePicker.sheetHeight(isRange: true, mode: .dateAndTime, available: available) == combined)
+  }
+
+  // MARK: - 二维方向键（A-10）
+
+  @Test("方向键步进：←/→ 一天，↑/↓ 一周；RTL 下左右镜像、上下不镜像")
+  func arrowSteps() {
+    #expect(WDDatePickerGrid.step(for: .left, isRTL: false) == .previousDay)
+    #expect(WDDatePickerGrid.step(for: .right, isRTL: false) == .nextDay)
+    #expect(WDDatePickerGrid.step(for: .up, isRTL: false) == .previousWeek)
+    #expect(WDDatePickerGrid.step(for: .down, isRTL: false) == .nextWeek)
+    #expect(WDDatePickerGrid.step(for: .left, isRTL: true) == .nextDay)
+    #expect(WDDatePickerGrid.step(for: .right, isRTL: true) == .previousDay)
+    #expect(WDDatePickerGrid.step(for: .up, isRTL: true) == .previousWeek)
+    #expect(WDDatePickerGrid.step(for: .down, isRTL: true) == .nextWeek)
+    // 日偏移量：按周 = ±7 天。
+    #expect(WDDatePickerGridStep.previousDay.dayOffset == -1)
+    #expect(WDDatePickerGridStep.nextDay.dayOffset == 1)
+    #expect(WDDatePickerGridStep.previousWeek.dayOffset == -7)
+    #expect(WDDatePickerGridStep.nextWeek.dayOffset == 7)
+  }
+
+  @Test("日偏移：前后一天 / 前后一周落在正确的日期上")
+  func dayOffsets() {
+    let calendar = Self.calendar
+    let base = Self.day(2026, 3, 10)
+    #expect(
+      WDDatePickerGrid.moved(from: base, by: -1, bounds: nil, calendar: calendar)
+        == Self.day(2026, 3, 9))
+    #expect(
+      WDDatePickerGrid.moved(from: base, by: 1, bounds: nil, calendar: calendar)
+        == Self.day(2026, 3, 11))
+    #expect(
+      WDDatePickerGrid.moved(from: base, by: -7, bounds: nil, calendar: calendar)
+        == Self.day(2026, 3, 3))
+    #expect(
+      WDDatePickerGrid.moved(from: base, by: 7, bounds: nil, calendar: calendar)
+        == Self.day(2026, 3, 17))
+    // 带时刻的输入先归一到当日零点（焦点日永远是整日）。
+    let withClock = Self.date(2026, 3, 10, 18, 45)
+    #expect(
+      WDDatePickerGrid.moved(from: withClock, by: 1, bounds: nil, calendar: calendar)
+        == Self.day(2026, 3, 11))
+  }
+
+  @Test("跨月换算：月末 → 次月 1 日、月初 → 上月最后一天；目标月份随之翻页")
+  func crossMonthConversion() {
+    let calendar = Self.calendar
+    let january31 = Self.day(2026, 1, 31)
+    let forward = WDDatePickerGrid.moved(from: january31, by: 1, bounds: nil, calendar: calendar)
+    #expect(forward == Self.day(2026, 2, 1))
+    #expect(
+      WDDatePickerGrid.monthStart(containing: forward, calendar: calendar)
+        == Self.day(2026, 2, 1))
+
+    let march1 = Self.day(2026, 3, 1)
+    let backward = WDDatePickerGrid.moved(from: march1, by: -1, bounds: nil, calendar: calendar)
+    #expect(backward == Self.day(2026, 2, 28))
+    #expect(
+      WDDatePickerGrid.monthStart(containing: backward, calendar: calendar)
+        == Self.day(2026, 2, 1))
+
+    // 跨年：12/31 → 次年 1/1，月份头也跟着翻年。
+    let december31 = Self.day(2026, 12, 31)
+    let nextYear = WDDatePickerGrid.moved(from: december31, by: 1, bounds: nil, calendar: calendar)
+    #expect(nextYear == Self.day(2027, 1, 1))
+    #expect(
+      WDDatePickerGrid.monthStart(containing: nextYear, calendar: calendar)
+        == Self.day(2027, 1, 1))
+    // 整月翻页：从 3/31 走一周 → 4/7，落在 4 月。
+    let week = WDDatePickerGrid.moved(
+      from: Self.day(2026, 3, 31), by: 7, bounds: nil, calendar: calendar)
+    #expect(week == Self.day(2026, 4, 7))
+    #expect(
+      WDDatePickerGrid.monthStart(containing: week, calendar: calendar) == Self.day(2026, 4, 1))
+  }
+
+  @Test("不可选日归一：越界取最接近的可选日，不越界不崩溃")
+  func boundsNormalization() {
+    let calendar = Self.calendar
+    let bounds = Self.day(2026, 3, 10)...Self.day(2026, 3, 20)
+    // 从下界往前一天 ⇒ 仍停在下界。
+    #expect(
+      WDDatePickerGrid.moved(
+        from: Self.day(2026, 3, 10), by: -1, bounds: bounds, calendar: calendar)
+        == Self.day(2026, 3, 10))
+    // 从上界往后一周 ⇒ 仍停在上界。
+    #expect(
+      WDDatePickerGrid.moved(from: Self.day(2026, 3, 20), by: 7, bounds: bounds, calendar: calendar)
+        == Self.day(2026, 3, 20))
+    // 大幅越界（±400 天）同样归一，且不倒挂。
+    #expect(
+      WDDatePickerGrid.moved(
+        from: Self.day(2026, 3, 15), by: -400, bounds: bounds, calendar: calendar)
+        == Self.day(2026, 3, 10))
+    #expect(
+      WDDatePickerGrid.moved(
+        from: Self.day(2026, 3, 15), by: 400, bounds: bounds, calendar: calendar)
+        == Self.day(2026, 3, 20))
+    // 范围内正常步进不受影响。
+    #expect(
+      WDDatePickerGrid.moved(from: Self.day(2026, 3, 15), by: 1, bounds: bounds, calendar: calendar)
+        == Self.day(2026, 3, 16))
+  }
+
+  @Test("归一化：clamped 只做日归一与边界夹取；月初取当月第一个可选日")
+  func clampedAndFirstSelectable() {
+    let calendar = Self.calendar
+    #expect(
+      WDDatePickerGrid.clamped(Self.date(2026, 3, 10, 23, 59), in: nil, calendar: calendar)
+        == Self.day(2026, 3, 10))
+    let bounds = Self.day(2026, 3, 12)...Self.day(2026, 4, 5)
+    #expect(
+      WDDatePickerGrid.clamped(Self.day(2026, 3, 1), in: bounds, calendar: calendar)
+        == Self.day(2026, 3, 12))
+    #expect(
+      WDDatePickerGrid.clamped(Self.day(2026, 5, 1), in: bounds, calendar: calendar)
+        == Self.day(2026, 4, 5))
+    // 整月都不可选（下界在月中）⇒ 退回该月最接近的可选日 = 下界。
+    #expect(
+      WDDatePickerGrid.firstSelectableDay(
+        inMonthOf: Self.day(2026, 3, 20), bounds: bounds, calendar: calendar)
+        == Self.day(2026, 3, 12))
+    // 完全可选 ⇒ 就是当月 1 号。
+    #expect(
+      WDDatePickerGrid.firstSelectableDay(
+        inMonthOf: Self.day(2026, 6, 18), bounds: nil, calendar: calendar)
+        == Self.day(2026, 6, 1))
+  }
+
+  @Test("网格几何：固定 6 行（翻月不跳高度），尾随空位补满")
+  func gridGeometry() {
+    // 2026-02 从周日开始、28 天 ⇒ 前置 0、占 4 行 ⇒ 尾随 14 个空位（补到 6 行）。
+    #expect(WDDatePickerGrid.rowCount(leadingBlanks: 0, dayCount: 28) == 4)
+    #expect(WDDatePickerGrid.trailingBlanks(leadingBlanks: 0, dayCount: 28, rowCapacity: 6) == 14)
+    // 前置 6 + 31 天 = 37 格 ⇒ 6 行，尾随 5。
+    #expect(WDDatePickerGrid.rowCount(leadingBlanks: 6, dayCount: 31) == 6)
+    #expect(WDDatePickerGrid.trailingBlanks(leadingBlanks: 6, dayCount: 31, rowCapacity: 6) == 5)
+    // 已经占满（或超出）⇒ 不产生负空位。
+    #expect(WDDatePickerGrid.trailingBlanks(leadingBlanks: 6, dayCount: 31, rowCapacity: 5) == 0)
+    #expect(WDDatePickerGrid.trailingBlanks(leadingBlanks: 0, dayCount: 31, rowCapacity: 6) == 11)
+    // 日期单元 44×44（设计 23 §3）：取令牌，不是字面量。
+    #expect(WDDatePickerGrid.cellSize == 44)
+    #expect(WDDatePickerGrid.cellSize == WDSize.touchTargetMin)
+  }
+
+  // MARK: - 弹层自适应高度（A-10）
+
+  @Test("自适应高度：三种组合（无滚轮 / 有滚轮 / 范围+时间）高度各不相同")
+  func adaptiveHeightsDiffer() {
+    let metrics = WDDatePickerSheetHeight.Metrics(dynamicTypeSize: .large)
+    let calendarOnly = WDDatePickerSheetHeight.detentHeight(
+      layout: .calendar, metrics: metrics, available: 5000)
+    let wheelOnly = WDDatePickerSheetHeight.detentHeight(
+      layout: .timeWheel, metrics: metrics, available: 5000)
+    let combined = WDDatePickerSheetHeight.detentHeight(
+      layout: .calendarAndTime, metrics: metrics, available: 5000)
+    #expect(calendarOnly != wheelOnly)
+    #expect(wheelOnly != combined)
+    #expect(calendarOnly != combined)
+    #expect(wheelOnly < calendarOnly)
+    #expect(calendarOnly < combined)
+    // 「范围 + 时间」与「日期 + 时间」同布局 ⇒ 同高（内容一模一样）。
+    #expect(
+      WDDatePicker.sheetHeight(isRange: true, mode: .dateAndTime, available: 5000)
+        == WDDatePicker.sheetHeight(isRange: false, mode: .dateAndTime, available: 5000))
+  }
+
+  @Test("自适应高度：可用高度不足时夹到可用高度（小屏 / 横屏不溢出）")
+  func adaptiveHeightsClampToAvailable() {
+    let metrics = WDDatePickerSheetHeight.Metrics(dynamicTypeSize: .large)
+    let content = WDDatePickerSheetHeight.contentHeight(layout: .calendar, metrics: metrics)
+    let smallScreen: CGFloat = 300
+    let clamped = WDDatePickerSheetHeight.detentHeight(
+      layout: .calendar, metrics: metrics, available: smallScreen)
+    #expect(clamped == smallScreen)
+    #expect(clamped < content)
+    // 组合布局在同样的可用高度下同样被夹住（不会顶出安全区）。
+    #expect(
+      WDDatePickerSheetHeight.detentHeight(
+        layout: .calendarAndTime, metrics: metrics, available: smallScreen) == smallScreen)
+    // 极小可用高度（横屏 200）也只服从可用高度，不反过来把内容顶出去。
+    #expect(
+      WDDatePickerSheetHeight.detentHeight(
+        layout: .calendarAndTime, metrics: metrics, available: 200) == 200)
+  }
+
+  @Test("自适应高度：夹取口径 = min(max(content, minimum), available)；未量到可用高度时不裁")
+  func heightClampFormula() {
+    #expect(
+      WDDatePickerSheetHeight.clamped(contentHeight: 400, minimum: 300, available: 1000) == 400)
+    #expect(
+      WDDatePickerSheetHeight.clamped(contentHeight: 400, minimum: 300, available: 350) == 350)
+    #expect(
+      WDDatePickerSheetHeight.clamped(contentHeight: 400, minimum: 300, available: 200) == 200)
+    #expect(
+      WDDatePickerSheetHeight.clamped(contentHeight: 250, minimum: 300, available: 1000) == 300)
+    // available <= 0 = 还没量到 ⇒ 返回内容自然高度（不裁）。
+    #expect(WDDatePickerSheetHeight.clamped(contentHeight: 400, minimum: 300, available: 0) == 400)
+
+    let metrics = WDDatePickerSheetHeight.Metrics(dynamicTypeSize: .large)
+    for layout in [WDDatePickerSheetLayout.calendar, .timeWheel, .calendarAndTime] {
+      let natural = WDDatePickerSheetHeight.contentHeight(layout: layout, metrics: metrics)
+      let minimum = WDDatePickerSheetHeight.minimumHeight(layout: layout, metrics: metrics)
+      #expect(minimum <= natural)
+      // 可用高度恰好等于自然高度 ⇒ 不裁不缩。
+      #expect(
+        WDDatePickerSheetHeight.detentHeight(
+          layout: layout, metrics: metrics, available: natural) == natural)
+    }
+  }
+
+  @Test("自适应高度：动态字体放大后月历变高（不是固定字面量）")
+  func adaptiveHeightsGrowWithDynamicType() {
+    let regular = WDDatePickerSheetHeight.Metrics(dynamicTypeSize: .large)
+    let accessibility = WDDatePickerSheetHeight.Metrics(dynamicTypeSize: .accessibility3)
+    #expect(
+      WDDatePickerSheetHeight.contentHeight(layout: .calendar, metrics: accessibility)
+        > WDDatePickerSheetHeight.contentHeight(layout: .calendar, metrics: regular))
+    // 时间滚轮是系统控件，高度不随字体变化（只有月历的头部行盒会长）。
+    #expect(
+      WDDatePickerSheetHeight.contentHeight(layout: .timeWheel, metrics: accessibility)
+        == WDDatePickerSheetHeight.contentHeight(layout: .timeWheel, metrics: regular))
   }
 
   // MARK: - 滚轮作用端

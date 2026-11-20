@@ -32,6 +32,14 @@
 
 ### Added
 
+- **B20 台账剩余可纯代码项收口（2026-11-20）**：出口报告 = `docs/B20-EXIT-REPORT.md`。**API 符号数仍 1380**；但 A-8 给 `WDSegmentedControl.init` **追加两个带默认值参数**（`positionText` / `positionSeparator`，位置文案的 L-B 注入点）⇒ 源码兼容、符号数不变、**符号快照连续性被破坏**，基线已按 `dump-api.sh --update` 显式更新（SPEC §2.9 规则 1）。
+  - **A-8 `WDSegmentedControl`**：补**段间横向拖动**（`DragGesture(minimumDistance: 1)` + 横向占优判定；拖动只改视觉 `dragSegmentIndex`，松手吸附并走与点击同一条 `commit`）、**位置文案**（`WDSemantics.positional`，措辞与分隔符由调用方注入）、**方向键 ←/→ 即时切换**（设计 21 §8，端点不环绕、RTL 镜像）。
+  - **A-9 `WDPicker` 菜单**：补**硬件键盘环形焦点**（`WDPickerMenuFocus`：首尾回绕、分组标题跳过、初始落选中项；↓/↑ 移动并滚动、Enter/Space 提交一次、Esc 关闭不改值）。滚轮形态的即时提交仍为平台限制 L-4。
+  - **A-10 `WDDatePicker`**：补**二维方向键网格导航**（`WDDatePickerGrid`：±1 天 / ±7 天、跨月自动翻页、越界归一为最近可选日、RTL 镜像）与**弹层自适应高度**（`WDDatePickerSheetHeight` + `CustomPresentationDetent`：按内容量高并夹在可用高度内，三种组合各自高度）。
+  - **A-15 范围滑杆快照闭合**：新增 `WDSliderRangeSnapshotTests`（`verifyHierarchy`）+ 8 张 `slider-range-*` 基线，总基线 360 → **368**；既有 360 张零改动、manifest 纯追加 8 条。
+  - **验证**：单测 **377 passed / 0 failed**（+33）、快照 **46 tests / 368 张零漂移**、结构与格式门禁全绿、`dump-api` 零 diff。
+  - **过程说明**：本批由 agent 团队并行执行，中途全体遭遇上游 429 限流，4 个成员在任务中途终止；captain 逐项核查已落盘工作（编译 / 单测 / 接线 / 独立探针 / 全量快照）后据实补记，详见出口报告 §0。**真机硬件键盘行为与独立评审 verdict 仍【未验证】**。
+
 - **B17 遗留收口（2026-11-20；延续 B7/B8/B10 的「允许扩公开」口径）**：
   承接 `docs/B10-B16-EXIT-REPORT.md` §7 与 `docs/M5-EXIT-REPORT.md` §4 的遗留项。
   签名冻结 = `docs/B17-SIGNATURE-FREEZE.md`；出口报告 = `docs/B17-EXIT-REPORT.md`；

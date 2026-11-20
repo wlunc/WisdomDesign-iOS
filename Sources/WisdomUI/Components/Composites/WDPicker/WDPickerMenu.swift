@@ -7,6 +7,90 @@ struct WDPickerMenuSection: Identifiable, Equatable {
   let options: [WDPickerOption]
 }
 
+/// 菜单的硬件键盘动作（内部）：设计 22 §8 的交互表 + §10「展开后焦点进入弹出层、Esc 关闭」。
+enum WDPickerMenuKeyAction: Equatable {
+  /// 方向键 ↓：焦点移到下一项（末项回到首项）。
+  case moveNext
+  /// 方向键 ↑：焦点移到上一项（首项去末项）。
+  case movePrevious
+  /// Enter / Space：选中当前焦点项并关闭（= 点击选项，触发一次 onChange）。
+  case commit
+  /// Esc：关闭，不改变当前值。
+  case cancel
+
+  /// 需要拦截的按键集合（其余按键交还系统，不吞输入）。
+  static let keys: Set<KeyEquivalent> = [.upArrow, .downArrow, .return, .space, .escape]
+
+  /// 按键 → 动作；不在 `keys` 内的按键返回 nil（交还系统）。
+  static func action(for key: KeyEquivalent) -> WDPickerMenuKeyAction? {
+    switch key {
+    case .downArrow: return .moveNext
+    case .upArrow: return .movePrevious
+    case .`return`, .space: return .commit
+    case .escape: return .cancel
+    default: return nil
+    }
+  }
+}
+
+/// 菜单键盘焦点（内部）：在「可聚焦项」序列上做环形推进（A-9）。
+///
+/// 分组标题不是选项（`WDPickerMenuSection.header` 与 `options` 分开存），展开时只收 `options`
+/// ⇒ 方向键天然跳过标题：上一组末项 ↓ 落到下一组的首项，而不是落在标题上。
+struct WDPickerMenuFocus: Equatable {
+  /// 可聚焦项 id（按视觉顺序；不含分组标题）。
+  let optionIDs: [String]
+  /// 当前焦点下标；空列表 = nil（没有可聚焦项）。
+  private(set) var index: Int?
+
+  /// 构造：初始焦点 = 选中项；未选（或选中项已不在列表里）= 第一项（设计 22 §8）。
+  init(sections: [WDPickerMenuSection], selection: String?) {
+    self.init(optionIDs: sections.flatMap { $0.options.map(\.id) }, selection: selection)
+  }
+
+  /// 构造：同上，直接给 id 序列（单测覆盖环形推进与空/单项）。
+  init(optionIDs: [String], selection: String?) {
+    self.optionIDs = optionIDs
+    if let selection, let found = optionIDs.firstIndex(of: selection) {
+      index = found
+    } else {
+      index = optionIDs.isEmpty ? nil : 0
+    }
+  }
+
+  /// 当前焦点项 id（nil = 无）。
+  var focusedID: String? {
+    guard let index, optionIDs.indices.contains(index) else {
+      return nil
+    }
+    return optionIDs[index]
+  }
+
+  /// 按动作推进焦点：方向键环形移动；提交/取消不改焦点。
+  mutating func move(_ action: WDPickerMenuKeyAction) {
+    switch action {
+    case .moveNext:
+      index = Self.advancedIndex(index, count: optionIDs.count, by: 1)
+    case .movePrevious:
+      index = Self.advancedIndex(index, count: optionIDs.count, by: -1)
+    case .commit, .cancel:
+      break
+    }
+  }
+
+  /// 环形下标的纯函数：末项 +1 回首项、首项 −1 去末项；越界下标按第一项算。
+  static func advancedIndex(_ index: Int?, count: Int, by step: Int) -> Int? {
+    guard count > 0 else {
+      return nil
+    }
+    guard let index, (0..<count).contains(index) else {
+      return 0
+    }
+    let offset = index + step
+    return ((offset % count) + count) % count
+  }
+}
+
 /// 菜单浮层的几何口径（设计 22 §3/§5/§6；内部暴露给单测）。
 enum WDPickerMenuMetrics {
   /// 选项行高（设计 22 §3：44）。
@@ -97,6 +181,17 @@ struct WDPickerMenuLayer: View {
   @State private var naturalSize: CGSize = .zero
   @State private var appeared = false
   @State private var closing = false
+  /// 硬件键盘焦点（nil = 还没按过方向键；展开时按选中项初始化）。
+  @State private var keyFocus: WDPickerMenuFocus?
+  /// 本次呈现是否已经提交过选中（保证一次呈现只发一次 `onSelect`）。
+  @State private var hasCommitted = false
+  /// 弹出层是否持有硬件键盘焦点（展开后焦点进入弹出层，设计 22 §10）。
+  @FocusState private var isPanelFocused: Bool
+
+  /// 当前键盘焦点：未按键时按「选中项，否则第一项」推出来（设计 22 §8）。
+  private var focus: WDPickerMenuFocus {
+    keyFocus ?? WDPickerMenuFocus(sections: sections, selection: selection)
+  }
 
   private var placement: WDPickerMenuPlacement {
     WDPickerMenuPlacement.resolve(
@@ -147,15 +242,24 @@ struct WDPickerMenuLayer: View {
     let layout = placement
     return ScrollViewReader { proxy in
       ScrollView {
-        WDPickerOptionList(sections: sections, selection: selection) { id in
-          onSelect(id)
-          dismiss()
+        WDPickerOptionList(
+          sections: sections,
+          selection: selection,
+          focusedID: keyFocus?.focusedID
+        ) { id in
+          select(id)
         }
         .padding(WDPickerMenuMetrics.panelPadding)
       }
       .scrollIndicators(.hidden)
       .frame(width: layout.size.width, height: layout.size.height)
       .background(colors.surfaceCardSolid)
+      .focusable()
+      .focusEffectDisabled()
+      .focused($isPanelFocused)
+      .onKeyPress(keys: WDPickerMenuKeyAction.keys) { press in
+        handle(press.key, proxy: proxy)
+      }
       .clipShape(RoundedRectangle(cornerRadius: WDRadius.md, style: .continuous))
       .overlay(
         RoundedRectangle(cornerRadius: WDRadius.md, style: .continuous)
@@ -174,6 +278,7 @@ struct WDPickerMenuLayer: View {
       .offset(x: layout.origin.x, y: layout.origin.y)
       .onAppear {
         scrollToSelection(proxy)
+        focusPanelForKeyboard()
       }
     }
   }
@@ -221,6 +326,52 @@ struct WDPickerMenuLayer: View {
     }
   }
 
+  /// 展开后让弹出层接住硬件键盘（设计 22 §10「展开后焦点进入弹出层」）。
+  ///
+  /// 只有拿到焦点，`.onKeyPress` 才会收到按键；触摸设备上焦点不可见、不影响遮罩点击。
+  private func focusPanelForKeyboard() {
+    DispatchQueue.main.async {
+      isPanelFocused = true
+    }
+  }
+
+  /// 弹出层里的硬件键盘按键（设计 22 §8 的交互表）。
+  ///
+  /// 方向键只改焦点并在列表内部滚动（不改浮层定位/尺寸，避免布局跳动）；
+  /// Enter / Space 等价于点击当前焦点项（选中 + 关闭，`onSelect` 只发一次）；Esc 关闭不改值。
+  private func handle(_ key: KeyEquivalent, proxy: ScrollViewProxy) -> KeyPress.Result {
+    guard let action = WDPickerMenuKeyAction.action(for: key), !closing else {
+      return .ignored
+    }
+    var next = focus
+    next.move(action)
+    keyFocus = next
+    switch action {
+    case .moveNext, .movePrevious:
+      if let target = next.focusedID {
+        proxy.scrollTo(target)
+      }
+    case .commit:
+      guard let target = next.focusedID else {
+        return .ignored
+      }
+      select(target)
+    case .cancel:
+      dismiss()
+    }
+    return .handled
+  }
+
+  /// 提交一次选中：一次呈现只认第一次（点击行与 Enter/Space 可能同时到达）。
+  private func select(_ id: String) {
+    guard !hasCommitted else {
+      return
+    }
+    hasCommitted = true
+    onSelect(id)
+    dismiss()
+  }
+
   private func reveal() {
     guard !appeared else {
       return
@@ -253,6 +404,8 @@ struct WDPickerMenuLayer: View {
 struct WDPickerOptionList: View {
   let sections: [WDPickerMenuSection]
   let selection: String?
+  /// 硬件键盘焦点所在的选项 id（nil = 无键盘焦点；内联形态恒为 nil）。
+  var focusedID: String? = nil
   let onSelect: (String) -> Void
 
   @Environment(\.wdColors) private var colors
@@ -267,7 +420,8 @@ struct WDPickerOptionList: View {
           WDPickerOptionRow(
             option: option,
             isSelected: option.id == selection,
-            indented: section.header != nil
+            indented: section.header != nil,
+            isKeyboardFocused: option.id == focusedID
           ) {
             onSelect($0)
           }
@@ -295,6 +449,8 @@ struct WDPickerOptionRow: View {
   let option: WDPickerOption
   let isSelected: Bool
   let indented: Bool
+  /// 硬件键盘焦点是否落在本行（画一圈光环；不参与布局）。
+  var isKeyboardFocused: Bool = false
   let onSelect: (String) -> Void
 
   @Environment(\.wdColors) private var colors
@@ -320,6 +476,10 @@ struct WDPickerOptionRow: View {
       .contentShape(Rectangle())
     }
     .buttonStyle(WDPickerOptionRowStyle(isSelected: isSelected))
+    .wdFocusRing(
+      RoundedRectangle(cornerRadius: WDRadius.xs, style: .continuous),
+      isPresented: isKeyboardFocused
+    )
     .accessibilityAddTraits(isSelected ? .isSelected : [])
   }
 
