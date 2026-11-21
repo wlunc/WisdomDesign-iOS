@@ -451,6 +451,104 @@ struct M5ComponentsTests {
     #expect(abs(overflow.height - compact.height) <= 1)
   }
 
+  // MARK: - A-14 · WDToolbar 长按仲裁（设计 14 §3.3）
+
+  /// 仲裁阈值（与令牌 WDSize.tooltipPressDuration 同值；测试直接引用令牌防漂移）。
+  private static let arbitrationThreshold: TimeInterval = WDSize.tooltipPressDuration
+
+  @Test("仲裁：500ms 内抬手 → 执行 action（普通点击，无提示）")
+  func arbitrationQuickReleasePerformsAction() {
+    let t0: TimeInterval = 10.0
+    var phase = WDToolbarArbitration.Phase.idle
+    // 按下
+    let (d0, p0) = WDToolbarArbitration.decide(
+      .press(at: t0), in: phase, threshold: Self.arbitrationThreshold)
+    #expect(d0 == .pressed)
+    phase = p0
+    // 300ms 后抬手（< 500ms）→ 唯一判断点：执行 action
+    let (d1, p1) = WDToolbarArbitration.decide(
+      .release(at: t0 + 0.3), in: phase, threshold: Self.arbitrationThreshold)
+    #expect(d1 == .performAction, "500ms 内抬手必须执行 action，实测 \(d1)")
+    #expect(p1 == .idle)
+  }
+
+  @Test("仲裁：达到阈值后抬手 → 不执行 action（吞掉点击）")
+  func arbitrationLateReleaseSwallowsClick() {
+    let t0: TimeInterval = 10.0
+    var phase = WDToolbarArbitration.Phase.idle
+    _ = WDToolbarArbitration.decide(.press(at: t0), in: phase, threshold: Self.arbitrationThreshold)
+    phase = .pressing(since: t0)
+    // 阈值到点 → 显示提示 + 取消按下态
+    let (d1, p1) = WDToolbarArbitration.decide(
+      .thresholdFired, in: phase, threshold: Self.arbitrationThreshold)
+    #expect(d1 == .showTooltip)
+    phase = p1
+    #expect(phase == .tooltipShown)
+    // 超阈值后抬手 → 不执行 action，只收尾
+    let (d2, p2) = WDToolbarArbitration.decide(
+      .release(at: t0 + 0.8), in: phase, threshold: Self.arbitrationThreshold)
+    #expect(d2 != .performAction, "超阈值抬手绝不能执行 action（设计 §3.3 第 4 行）")
+    #expect(d2 == .none)
+    #expect(p2 == .consumed)
+  }
+
+  @Test("仲裁：阈值边界 —— 恰好 500ms 时抬手按「超阈值」处理（吞点击）")
+  func arbitrationThresholdBoundary() {
+    let t0: TimeInterval = 0
+    var phase = WDToolbarArbitration.Phase.pressing(since: t0)
+    let (d, _) = WDToolbarArbitration.decide(
+      .release(at: t0 + Self.arbitrationThreshold), in: phase, threshold: Self.arbitrationThreshold)
+    #expect(d != .performAction, "恰好等于阈值时按「已达到」处理，吞掉点击")
+  }
+
+  @Test("仲裁：500ms 后滑出热区 → 手势作废（不执行 action，提示消失）")
+  func arbitrationDragOutVoidsGesture() {
+    let t0: TimeInterval = 10.0
+    var phase = WDToolbarArbitration.Phase.pressing(since: t0)
+    // 阈值后滑出（提示显示中或按下中都一样作废）
+    let (d, p) = WDToolbarArbitration.decide(
+      .dragOut(at: t0 + 0.6), in: phase, threshold: Self.arbitrationThreshold)
+    #expect(d == .voidGesture)
+    #expect(p == .consumed)
+    // consumed 后抬手也不会执行 action
+    let (d2, _) = WDToolbarArbitration.decide(
+      .release(at: t0 + 0.9), in: p, threshold: Self.arbitrationThreshold)
+    #expect(d2 != .performAction)
+  }
+
+  @Test("仲裁：tooltipShown 期间的抬手只收尾，不重复收尾也不执行 action")
+  func arbitrationTooltipShownReleaseIsNoop() {
+    let t0: TimeInterval = 10.0
+    var phase = WDToolbarArbitration.Phase.pressing(since: t0)
+    _ = WDToolbarArbitration.decide(
+      .thresholdFired, in: phase, threshold: Self.arbitrationThreshold)
+    phase = .tooltipShown
+    let (d, p) = WDToolbarArbitration.decide(
+      .release(at: t0 + 1.0), in: phase, threshold: Self.arbitrationThreshold)
+    #expect(d != .performAction)
+    #expect(p == .consumed)
+    // consumed 后再抬手：纯杂音
+    let (d2, p2) = WDToolbarArbitration.decide(
+      .release(at: t0 + 1.2), in: p, threshold: Self.arbitrationThreshold)
+    #expect(d2 == .none)
+    #expect(p2 == .consumed)
+  }
+
+  @Test("showsTooltips 默认 false：零仲裁构造可用（既有调用点语义不变）")
+  func toolbarTooltipsDefaultOff() {
+    let items = (1...4).map {
+      WDToolbarItem(id: "\($0)", icon: .task, accessibilityLabel: Text(verbatim: "工具"), action: {})
+    }
+    // 既有构造（不带 showsTooltips）编译可用 = 兼容；尺寸与 B20 前一致（容器 48）。
+    let measured = size(WDToolbar(items: items, accessibilityLabel: Text(verbatim: "编辑工具")))
+    #expect(abs(measured.height - 48) <= 1)
+    // 新构造带 false 也一致
+    let explicit = size(
+      WDToolbar(
+        items: items, accessibilityLabel: Text(verbatim: "编辑工具"), showsTooltips: false))
+    #expect(abs(explicit.height - 48) <= 1)
+  }
+
   // MARK: - WDFAB
 
   @Test("WDFAB：标准 56 / 大 64 / 小热区 ≥ 44；展开增高")

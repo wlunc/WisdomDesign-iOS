@@ -1,6 +1,6 @@
 // 本文件由 wisdomdesign/tools/token-build/build.js 生成，请勿手改。
 // 修改请编辑 wisdomdesign/tokens/wisdom.tokens.json 后重新生成。
-// tokens v1.0.0 · sha256:e552bb87e270
+// tokens v1.1.0 · sha256:953044a85a8e
 
 import SwiftUI
 

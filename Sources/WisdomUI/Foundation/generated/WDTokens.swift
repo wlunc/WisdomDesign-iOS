@@ -1,6 +1,6 @@
 // 本文件由 wisdomdesign/tools/token-build/build.js 生成，请勿手改。
 // 修改请编辑 wisdomdesign/tokens/wisdom.tokens.json 后重新生成。
-// tokens v1.0.0 · sha256:e552bb87e270
+// tokens v1.1.0 · sha256:953044a85a8e
 
 import SwiftUI
 
@@ -120,6 +120,35 @@ public enum WDGradient {
     )
 }
 
+/// 成员头像四色（A-11）。组件私有调色板，不进 `WDColor`（U12 槽位冻结在 32）。
+/// 每个 tone = 底 + 首字色一对；分配按成员 ID 的 FNV-1a 再 mod 4（见 docs/14-member-tones-media-tooltip.md §1.3）。
+public enum WDMemberTone: String, CaseIterable, Sendable {
+    case tone1 = "tone-1"
+    case tone2 = "tone-2"
+    case tone3 = "tone-3"
+    case tone4 = "tone-4"
+
+    /// 底色（随外观解析）。
+    public var fill: Color {
+        switch self {
+        case .tone1: return Color(wdLight: 0xB0D5DF, dark: 0x97CBD8)
+        case .tone2: return Color(wdLight: 0x7EC4CF, dark: 0x6BBBC7)
+        case .tone3: return Color(wdLight: 0x1A7BA3, dark: 0x4193B4)
+        case .tone4: return Color(wdLight: 0x065279, dark: 0x356997)
+        }
+    }
+
+    /// 首字色（随外观解析）。
+    public var ink: Color {
+        switch self {
+        case .tone1: return Color(wdLight: 0x0A1B24, dark: 0x0A1B24)
+        case .tone2: return Color(wdLight: 0x0A1B24, dark: 0x0A1B24)
+        case .tone3: return Color(wdLight: 0xFFFFFF, dark: 0x0A1B24)
+        case .tone4: return Color(wdLight: 0xFFFFFF, dark: 0xFFFFFF)
+        }
+    }
+}
+
 /// 间距，基准 4pt。
 public enum WDSpacing {
     public static let s1: CGFloat = 2
@@ -148,6 +177,7 @@ public enum WDRadius {
 }
 
 /// 组件尺寸。U8：触控只生成本端常量（iOS 44）。
+/// `$type: duration` 的叶子按秒给 `Double`（与 WDMotion.Duration 同口径），其余为 pt。
 public enum WDSize {
     public static let controlSm: CGFloat = 32
     public static let controlMd: CGFloat = 44
@@ -170,6 +200,13 @@ public enum WDSize {
     public static let avatarLg: CGFloat = 40
     public static let avatarXl: CGFloat = 56
     public static let avatarXxl: CGFloat = 72
+    public static let avatarRing: CGFloat = 2
+    public static let cardMediaAspectRatio: CGFloat = 1.78
+    public static let cardMediaMinHeight: CGFloat = 96
+    public static let tooltipHeight: CGFloat = 28
+    public static let tooltipMaxWidth: CGFloat = 200
+    public static let tooltipOffset: CGFloat = 8
+    public static let tooltipPressDuration: Double = 0.500
     public static let sheetDetentHalf: CGFloat = 0.5
     public static let sheetDetentLarge: CGFloat = 0.92
     public static let sheetMaxWidth: CGFloat = 480

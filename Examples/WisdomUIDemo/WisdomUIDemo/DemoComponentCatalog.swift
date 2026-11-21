@@ -691,6 +691,7 @@ extension WDCardStyle {
     case .outlined: return "描边"
     case .glass: return "玻璃"
     case .sunken: return "下沉"
+    case .media: return "媒体"
     }
   }
 }

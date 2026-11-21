@@ -44,21 +44,32 @@ public struct WDToolbar: View {
   private let items: [WDToolbarItem]
   private let accessibilityLabel: Text
   private let overflowAccessibilityLabel: Text?
+  /// 长按提示开关（A-14；设计 14 §3）。默认 `false` = 既有"长按无响应"行为，零快照影响。
+  private let showsTooltips: Bool
 
   @Environment(\.wdColors) private var colors
   @Environment(\.wdEffectsBudget) private var budget
   /// 读屏焦点所在的项（B18：聚焦光环；按 id 记，同一时刻只有一个）。
   @State private var focusedItemID: String?
+  /// 长按提示可见的项（A-14；同一时刻至多一个 —— 按住谁显示谁）。
+  @State private var tooltipItemID: String?
 
   /// 构造：项数组 + 分组标签 + 溢出菜单标签。
+  ///
+  /// - Parameters:
+  ///   - showsTooltips: 长按 500ms 显示文字提示（A-14；设计 14 §3）。默认 `false`。
+  ///     启用时：长按达到阈值即显示提示并**吞掉本次点击**（抬手不执行 action）；
+  ///     500ms 内抬手 = 普通点击。文案与 `accessibilityLabel` 同源（§3.5），不新增字段。
   public init(
     items: [WDToolbarItem],
     accessibilityLabel: Text,
-    overflowAccessibilityLabel: Text? = nil
+    overflowAccessibilityLabel: Text? = nil,
+    showsTooltips: Bool = false
   ) {
     self.items = items
     self.accessibilityLabel = accessibilityLabel
     self.overflowAccessibilityLabel = overflowAccessibilityLabel
+    self.showsTooltips = showsTooltips
   }
 
   /// 胶囊容器 + 按钮 / 溢出菜单。
@@ -115,7 +126,26 @@ public struct WDToolbar: View {
           )
           .contentShape(Rectangle())
       }
-      .buttonStyle(WDToolbarItemPressStyle())
+      // A-14：长按仲裁。提示启用时按钮的 action 由仲裁状态机把关 ——
+      // 「抬手是否执行 action」的唯一判断点在 WDToolbarArbitration.decide(.release)，
+      // 见 WDToolbarItemTooltipStyle（禁用 .simultaneousGesture 的原因见该类型注释）。
+      .buttonStyle(
+        WDToolbarItemPressStyle(
+          arbitration: showsTooltips && item.isEnabled
+            ? WDToolbarItemArbitrationContext(
+              itemID: item.id,
+              threshold: WDSize.tooltipPressDuration,
+              onAction: { item.action() },
+              onTooltip: { id in tooltipItemID = id },
+              onTooltipEnd: { id in if tooltipItemID == id { tooltipItemID = nil } })
+            : nil
+        )
+      )
+      // 长按提示气泡（A-14；只对可见按钮，溢出菜单项不加 —— 设计 §3.1-C5）。
+      .wdToolbarTooltip(
+        text: item.accessibilityLabel,
+        isVisible: showsTooltips && tooltipItemID == item.id
+      )
       // 聚焦光环（设计 35 §5「与 Button 一致」；B18 补齐，形状跟按钮的圆角方）。
       .wdFocusRing(
         RoundedRectangle(cornerRadius: WDRadius.sm, style: .continuous),
@@ -178,12 +208,25 @@ public struct WDToolbar: View {
 
 /// 工具栏按钮的按下态（设计 35 §5：缩放 0.94 + `fill.pressed`；`motion.duration.instant`）。
 ///
-/// 用 `ButtonStyle` 而不是 `configuration.isPressed`：`.plain` 拿不到按下态。
+/// A-14 起：无仲裁参数时走既有路径（`plainBody`），行为逐帧一致；
+/// 带仲裁参数时走长按仲裁路径（见 `WDToolbarItemArbitrationContext`）。
 private struct WDToolbarItemPressStyle: ButtonStyle {
+  /// nil = 零仲裁（既有路径）；非 nil = 提示启用（A-14）。
+  let arbitration: WDToolbarItemArbitrationContext?
+
   /// 按下底色走环境色（R10：组件内不得用静态令牌入口 `WDColor.*`）。
   @Environment(\.wdColors) private var colors
 
   func makeBody(configuration: Configuration) -> some View {
+    if let arbitration {
+      arbitedBody(configuration: configuration, arbitration: arbitration)
+    } else {
+      plainBody(configuration: configuration)
+    }
+  }
+
+  /// 既有路径（提示关闭）：按下 0.94 + fill.pressed，无仲裁 —— 与改造前逐帧一致。
+  private func plainBody(configuration: Configuration) -> some View {
     configuration.label
       .background {
         RoundedRectangle(cornerRadius: WDRadius.sm, style: .continuous)
@@ -195,8 +238,72 @@ private struct WDToolbarItemPressStyle: ButtonStyle {
       .animation(.easeOut(duration: WDMotion.Duration.instant), value: configuration.isPressed)
   }
 
+  /// 仲裁路径（提示开启）：按下态与计时由同一个状态机驱动。
+  @State private var phase: WDToolbarArbitration.Phase = .idle
+  @State private var thresholdTask: Task<Void, Never>?
+
+  private func arbitedBody(
+    configuration: Configuration,
+    arbitration: WDToolbarItemArbitrationContext
+  ) -> some View {
+    let isPressedVisually: Bool = {
+      if case .pressing = phase { return true }
+      return false
+    }()
+    return configuration.label
+      .background {
+        RoundedRectangle(cornerRadius: WDRadius.sm, style: .continuous)
+          .fill(isPressedVisually ? AnyShapeStyle(colors.fillPressed) : AnyShapeStyle(Color.clear))
+      }
+      .scaleEffect(isPressedVisually ? pressedScale : 1)
+      .animation(.easeOut(duration: WDMotion.Duration.instant), value: isPressedVisually)
+      // 阈值计时：按下后 500ms 喂 thresholdFired；抬手/作废即取消（一次性延时，非轮询）。
+      .onChange(of: configuration.isPressed) { _, pressed in
+        handlePressChange(pressed, arbitration: arbitration)
+      }
+  }
+
+  /// 按下/抬手 → 状态机事件。视图层喂事件的唯一入口。
+  private func handlePressChange(
+    _ pressed: Bool,
+    arbitration: WDToolbarItemArbitrationContext
+  ) {
+    thresholdTask?.cancel()
+    thresholdTask = nil
+    if pressed {
+      let (decision, next) = WDToolbarArbitration.decide(
+        .press(at: ProcessInfo.processInfo.systemUptime), in: phase,
+        threshold: arbitration.threshold)
+      phase = next
+      guard decision == .pressed else { return }
+      // 一次性阈值延时（500ms）：到点喂 thresholdFired。抬手时上方已 cancel。
+      thresholdTask = Task { @MainActor in
+        try? await Task.sleep(for: .seconds(arbitration.threshold))
+        guard !Task.isCancelled else { return }
+        let (d, p) = WDToolbarArbitration.decide(
+          .thresholdFired, in: phase, threshold: arbitration.threshold)
+        phase = p
+        if d == .showTooltip {
+          arbitration.onTooltip(arbitration.itemID)
+        }
+      }
+    } else {
+      // 抬手：**唯一判断点** —— 状态机决定执行 action 还是收尾提示。
+      let (decision, next) = WDToolbarArbitration.decide(
+        .release(at: ProcessInfo.processInfo.systemUptime), in: phase,
+        threshold: arbitration.threshold)
+      phase = next
+      switch decision {
+      case .performAction:
+        arbitration.onAction()
+      case .hideTooltip:
+        arbitration.onTooltipEnd(arbitration.itemID)
+      default:
+        break
+      }
+    }
+  }
+
   /// 按下缩放 0.94（设计 35 §5）。
   private var pressedScale: CGFloat { 0.94 }  // wd-structure-check:disable R7 — 设计 35 §5
-  /// 百分数换算的分母。
-  private static let percentScale: CGFloat = 100  // wd-structure-check:disable R7 — 百分数
 }

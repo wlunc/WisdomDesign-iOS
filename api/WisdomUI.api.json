@@ -5172,6 +5172,48 @@
     },
     {
       "access" : "public",
+      "decl" : "enum WDMemberTone",
+      "kind" : "swift.enum",
+      "path" : "WDMemberTone"
+    },
+    {
+      "access" : "public",
+      "decl" : "var fill: Color { get }",
+      "kind" : "swift.property",
+      "path" : "WDMemberTone.fill"
+    },
+    {
+      "access" : "public",
+      "decl" : "var ink: Color { get }",
+      "kind" : "swift.property",
+      "path" : "WDMemberTone.ink"
+    },
+    {
+      "access" : "public",
+      "decl" : "case tone1",
+      "kind" : "swift.enum.case",
+      "path" : "WDMemberTone.tone1"
+    },
+    {
+      "access" : "public",
+      "decl" : "case tone2",
+      "kind" : "swift.enum.case",
+      "path" : "WDMemberTone.tone2"
+    },
+    {
+      "access" : "public",
+      "decl" : "case tone3",
+      "kind" : "swift.enum.case",
+      "path" : "WDMemberTone.tone3"
+    },
+    {
+      "access" : "public",
+      "decl" : "case tone4",
+      "kind" : "swift.enum.case",
+      "path" : "WDMemberTone.tone4"
+    },
+    {
+      "access" : "public",
       "decl" : "enum WDMotion",
       "kind" : "swift.enum",
       "path" : "WDMotion"
@@ -6552,6 +6594,12 @@
     },
     {
       "access" : "public",
+      "decl" : "static let avatarRing: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.avatarRing"
+    },
+    {
+      "access" : "public",
       "decl" : "static let avatarSm: CGFloat",
       "kind" : "swift.type.property",
       "path" : "WDSize.avatarSm"
@@ -6573,6 +6621,18 @@
       "decl" : "static let avatarXxl: CGFloat",
       "kind" : "swift.type.property",
       "path" : "WDSize.avatarXxl"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let cardMediaAspectRatio: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.cardMediaAspectRatio"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let cardMediaMinHeight: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.cardMediaMinHeight"
     },
     {
       "access" : "public",
@@ -6717,6 +6777,30 @@
       "decl" : "static let tabbarHeight: CGFloat",
       "kind" : "swift.type.property",
       "path" : "WDSize.tabbarHeight"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let tooltipHeight: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.tooltipHeight"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let tooltipMaxWidth: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.tooltipMaxWidth"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let tooltipOffset: CGFloat",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.tooltipOffset"
+    },
+    {
+      "access" : "public",
+      "decl" : "static let tooltipPressDuration: Double",
+      "kind" : "swift.type.property",
+      "path" : "WDSize.tooltipPressDuration"
     },
     {
       "access" : "public",

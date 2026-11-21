@@ -6,6 +6,19 @@
 
 ## [Unreleased]
 
+### Added
+
+- **令牌 v1.0.0 → v1.1.0 的公开符号入基线（2026-11-21）**：设计仓交付 `docs/14-member-tones-media-tooltip.md`（A-11 / A-13 / A-14 三条约数），生成器随之产出新的公开面；
+  本轮按 `docs/SPEC.md` §1.5.3 用 `Scripts/dump-api.sh --update` **显式更新符号快照**。
+  **API 1380 → 1394 符号（+14，零删除）**，`dump-api.sh` 复跑零 diff。
+  - **新增 `WDMemberTone`（1 枚举 + 4 case + 2 属性）**：成员头像四色（`tone1`…`tone4`）的 `fill` 与 `ink` 成对，随外观解析（浅/深各一套）。
+    组件私有调色板，**不进 `WDColor` 的 32 槽位**（U12 冻结不变，F-04 口径不受影响）。
+  - **`WDSize` 新增 7 个尺寸/时长常量**：`avatarRing`(2)、`cardMediaAspectRatio`(1.78)、`cardMediaMinHeight`(96)、
+    `tooltipHeight`(28)、`tooltipMaxWidth`(200)、`tooltipOffset`(8)、`tooltipPressDuration`(0.500，`Double`/秒)。
+  - **兼容性**：**纯追加**（无改名、无删符号、无默认值变更）⇒ 源码兼容；但**破坏符号快照连续性**，故按 §2.9 规则 1 走一次显式基线更新。
+  - **跨仓自证**：`check-structure.sh --tokens-trace` 全绿（`version=1.1.0`、`sha12=953044a85a8e`、manifest 覆盖 iOS 3 条产物）。
+  - **范围说明**：本提交**只**更新符号快照（§1.5.3 要求基线变更与成因同提交）；`WDMemberTone` / `WDCard.media` / `WDToolbar` tooltip 的**组件侧实现**（A-11 / A-13 / A-14）仍开放，见 `docs/DEBT-LEDGER.md` §1.2/§1.4。
+
 ### Fixed
 
 - **B18 代码欠账收口（2026-11-20；承接 `docs/DEBT-LEDGER.md` 的 A 类）**：签名冻结 = `docs/B18-SIGNATURE-FREEZE.md`、出口报告 = `docs/B18-EXIT-REPORT.md`、契约增量（待落库）= `docs/B18-CONTRACT-CHANGE-REQUEST.md`。

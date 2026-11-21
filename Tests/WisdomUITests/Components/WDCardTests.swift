@@ -59,17 +59,17 @@ struct WDCardTests {
     return count(root)
   }
 
-  @Test("内边距固定 16：内容 50 高 ⇒ 卡 82 高（所有变体一致）")
+  @Test("内边距固定 16：内容 50 高 ⇒ 卡 82 高（文字区变体一致；media 是图片带+文字区，另测）")
   func paddingIs16() {
-    for style in WDCardStyle.allCases {
+    for style in WDCardStyle.allCases where style != .media {
       let measured = Self.height(style)
       #expect(abs(measured - 82) <= 1, "\(style.rawValue) 实测高度 \(measured)，应为 82 ± 1")
     }
   }
 
-  @Test("四档齐：elevated（默认）/ outlined / glass / sunken")
+  @Test("五档齐：elevated（默认）/ outlined / glass / sunken / media（A-13）")
   func styles() {
-    #expect(WDCardStyle.allCases == [.elevated, .outlined, .glass, .sunken])
+    #expect(WDCardStyle.allCases == [.elevated, .outlined, .glass, .sunken, .media])
   }
 
   @Test("可点卡：action 可构造，内边距仍 16（内容 50 高 ⇒ 卡 82 高）")
@@ -84,6 +84,65 @@ struct WDCardTests {
     let clickableCard = WDCard(style: .elevated, action: {}) { Text(verbatim: "可点卡") }
     #expect(!staticCard.isClickable)
     #expect(clickableCard.isClickable)
+  }
+
+  // MARK: - A-13 · media 图片带（设计 14 §2）
+
+  /// 媒体卡的实测高度（给定卡宽；content 高度固定 50）。
+  private static func mediaHeight(width: CGFloat) -> CGFloat {
+    let content = Rectangle()
+      .fill(Color.clear)
+      .frame(width: 100, height: 50)
+    let controller = UIHostingController(
+      rootView: WDCard(style: .media, media: nil) { content }
+        .wdTheme(.light)
+    )
+    return controller.sizeThatFits(in: CGSize(width: width, height: CGFloat.infinity)).height
+  }
+
+  @Test("media 几何：343 宽 ⇒ 带高 ≈193；171 宽 ⇒ 带高 = 96（最小高夹紧）")
+  func mediaBandGeometry() {
+    // 343 / 1.78 ≈ 192.7 → 卡高 = 带 192.7 + 文字区（16 + 50 + 16）= 274.7（±1 容差）
+    let wide = Self.mediaHeight(width: 343)
+    #expect(abs(wide - (343 / WDSize.cardMediaAspectRatio + 82)) <= 1, "343 宽卡高实测 \(wide)")
+    // 171 / 1.78 ≈ 96.06 → 触发最小高：带高 = 96（171 宽在夹紧边界上，容差放宽到 2）
+    let narrow = Self.mediaHeight(width: 171)
+    #expect(abs(narrow - (96 + 82)) <= 2, "171 宽应触发最小高 96，卡高实测 \(narrow)")
+    // 更窄（120）：带高仍 = 96（居中裁切），不小于 96
+    let narrower = Self.mediaHeight(width: 120)
+    #expect(abs(narrower - (96 + 82)) <= 2, "120 宽带高应仍为 96，卡高实测 \(narrower)")
+  }
+
+  @Test("media 占位：image nil 时卡高 = 最小带高 + 文字区（灰底档不塌）")
+  func mediaPlaceholderKeepsHeight() {
+    let withNil = Self.mediaHeight(width: 343)
+    #expect(withNil > 96 + 50, "灰底占位档不应塌成 0 高，实测 \(withNil)")
+  }
+
+  @Test("media 可点卡可构造；isClickable 语义不变")
+  func mediaClickableConstructs() {
+    let card = WDCard(style: .media, media: WDCardMedia(nil), action: {}) {
+      Text(verbatim: "可点媒体卡")
+    }
+    #expect(card.isClickable)
+    let staticCard = WDCard(style: .media, media: WDCardMedia(nil)) {
+      Text(verbatim: "静态媒体卡")
+    }
+    #expect(!staticCard.isClickable)
+  }
+
+  @Test("media 与 glass/sunken 互斥：非 media 构造不产生图片带（media == nil 路径）")
+  func mediaMutuallyExclusive() {
+    // 设计 §2.6：media 与 glass 互斥（图片带不做模糊）、与 sunken 不组合。
+    // 实现口径：只有 init(style:media:...) 且 style == .media 才挂载荷；
+    // 其余构造的 media 恒 nil（internal 只读属性，@testable 可见）。
+    let glass = WDCard(style: .glass) { Text(verbatim: "玻璃卡") }
+    #expect(glass.style != .media)
+    let elevatedWithMediaParam = WDCard(style: .elevated, media: WDCardMedia(nil)) {
+      Text(verbatim: "误用 media 参数")
+    }
+    #expect(elevatedWithMediaParam.style == .elevated)
+    #expect(elevatedWithMediaParam.media == nil, "非 media 档即使传了 media 参数也不得挂载图片带")
   }
 
   @Test("静态卡不是按钮：无障碍树中无 button 特征")

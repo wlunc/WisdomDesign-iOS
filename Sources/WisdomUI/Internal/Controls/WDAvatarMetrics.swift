@@ -30,4 +30,8 @@ enum WDAvatarMetrics {
   static let onlineBorderWidth: CGFloat = 2
   /// 已停用整体 50%（设计 12 §5）。
   static let disabledOpacity: CGFloat = 0.5
+  /// 照片形态描边 2pt（设计 14 §1.4；令牌 size.avatar.ring）。
+  static let photoRingWidth: CGFloat = WDSize.avatarRing
+  /// 照片加载完成淡入 160ms（设计 14 §1.4 / 设计 12 §9；令牌 motion.duration.fast）。
+  static let photoFadeDuration: Double = WDMotion.Duration.fast
 }
