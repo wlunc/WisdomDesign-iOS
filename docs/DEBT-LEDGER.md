@@ -126,7 +126,7 @@
 | 指标 | 值 |
 | --- | --- |
 | API 符号 | **1380**（`Scripts/dump-api.sh` 零 diff，B19 复跑实测） |
-| 单测声明 / 实跑 | **377 条**（`Tests/WisdomUITests`，B20 +33）／**377 passed / 0 failed**（2026-11-20 B20 实测） |
+| 单测声明 / 实跑 | **378 条**（`Tests/WisdomUITests`）／**378 passed / 0 failed**（2026-11-21 复跑；+1 为 B20-C 的 RTL 对称性用例） |
 | 快照测试 / 基线 | **46 条 / 368 张** ／ **46 tests 全过、零漂移**（2026-11-20 B20 实测；含新增 `slider-range-*` 8 张） |
 | demo UITest | **18 条**（此前记 19 条为笔误；2026-11-20 实测 `Executed 18 tests, with 0 failures`，262.3 s） |
 | 工作区未提交 | **68 个文件**（B19 后实测：40 modified + 28 untracked，含 B10–B19 全部改动与文档） |

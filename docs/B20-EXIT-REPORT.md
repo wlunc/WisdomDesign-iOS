@@ -79,7 +79,7 @@
 | U-B20-3 | 日期弹层在**小屏 / 横屏 / AX5** 下的夹取效果 | 【未验证】纯函数有单测，真实 detent 在极端尺寸下的表现未跑 | 真机走查 |
 | U-B20-4 | 范围滑杆 8 张新基线的**真机观感**（双色段/描边） | 【未验证】快照已入库且零漂移，真机未看 | 真机走查 |
 | U-B20-5 | 字面命令复跑 + 独立评审 verdict | ✅ **已补齐**：verifier 的两条字面命令由 captain 在 danger-full-access 下跑通（377 tests / 46 tests，均 TEST SUCCEEDED）；评审给出 **needs_revision + 8 条 findings**，已逐条修复（见 §4.2） | — |
-| U-B20-6 | **F1–F8 修复后的完整门禁复跑** | 【未验证】**修复已完成、host 门禁全绿**（`files=193 errors=0 warnings=0` / `209 文件格式全过`），但**编译与测试未能执行**：本轮执行后期 `danger-full-access` 提权通道持续挂起（连 `echo` 都在 90s 超时），xcodebuild 无法运行。**不得据此判为已通过** | 下次提权通道恢复后，按 §5 命令复跑 |
+| U-B20-6 | F1–F8 修复后的完整门禁复跑 | ✅ **已回填（2026-11-21 09:2x）**：提权通道恢复后按 §5 命令全部跑通 —— `Scripts/ci.sh pr` **全绿**（378 单测 / API 零 diff / Foundation 覆盖率 95.46%）、快照 **46 tests 全过 368 张零漂移**、demo UITest **24 tests / 6 skipped / 0 failures** | — |
 | U-B20-7 | `DynamicTypeSamplingTests.swift` 未注册进 UITest target | 【待办】该文件 1 条 `func test` 从未被执行过（pbxproj 零命中）；这解释了 demo UITest 长期为 18 条而非 19 条。**不属 B20 范围，未修** | 单独批次 |
 
 ---
@@ -150,6 +150,24 @@ captain 实跑发现它们的前提假设错，但**刻意保留原样**，明�
 | F8 | 低 | 尾随补位格 `.frame(height: dayCellSize)` 属 R9 形态，检查器因不认常量名未拦（0 error 是规则盲区） | **已修**：按 `dayCell` 同款补 R9 同行豁免 + 理由 |
 
 **评审同时确认的真实现**（非假实现）：A-8 拖动真驱动 `indicatorIndex` → Layout `selectedIndex` → `placeSubviews`；A-9 `onKeyPress` 真挂在可聚焦容器；A-10 真换成 `CustomPresentationDetent`（旧三档已删）；A-15 的 8 态矩阵与 `verifyHierarchy` 成立、manifest 360→368 纯追加。
+
+---
+
+## 4.3 F1–F8 修复后的门禁复跑结果（2026-11-21 提权恢复后）
+
+| # | 门禁 | 命令 | 结果 |
+| --- | --- | --- | --- |
+| ① | PR 门禁全链路 | `Scripts/ci.sh pr` | **全绿**，合计 **47.30 s** |
+| ①a | 结构 | — | `files=193 rules=22 errors=0 warnings=0` |
+| ①b | 格式 | — | `209 文件全部通过 --strict` |
+| ①c | 编译 + 冒烟 | — | `build-for-testing` exit 0（含 `WD_API_SMOKE`） |
+| ①d | 单测 | — | **378 passed / 0 failed**（47 suites；+1 为 F1 新增的 RTL 对称性用例） |
+| ①e | API 基线 | `Scripts/dump-api.sh` | **零 diff（symbols=1380）** |
+| ①f | 覆盖率 | — | Foundation **95.46%**（610/639，门槛 80%） |
+| ② | 8 态快照 | `xcodebuild test -only-testing:WisdomUISnapshotTests` | **46 tests / 19 suites 全过**，368 张**零漂移** |
+| ③ | demo UITest | `xcodebuild test -project … -only-testing:WisdomUIDemoUITests` | **24 tests / 6 skipped / 0 failures**（261.3 s） |
+
+**结论**：F1–F8 八条修复**未引入任何回归** —— 单测 378 全过、368 张快照零漂移（F1 的 RTL 镜像与 F4 的 24pt 内距若改错，RTL 快照与 datepicker 快照必然漂移，实测未漂移）。
 
 ---
 
