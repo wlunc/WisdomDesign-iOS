@@ -303,33 +303,33 @@ struct WDCardMediaBand: View {
     // 带高：按宽度走 16:9（.aspectRatio 由布局系统按可用宽算），
     // 并夹到最小高 96 以上（设计 §2.1-C5：宽 < 171 时按 96 渲染并居中裁切）。
     // 不用 GeometryReader：它在 VStack 里不占高，卡片高度也会因此塌掉。
-    ZStack {
-      Color(colors.surfaceCardSunken)  // 占位底：加载中/失败/无图与图片层同框，淡入盖住它
-      if let image = media.image {
-        image
-          .resizable()
-          .scaledToFill()
-          .opacity(appeared ? 1 : 0)
+    Color(colors.surfaceCardSunken)  // 占位底：加载中/失败/无图与图片层同框，淡入盖住它
+      .aspectRatio(WDSize.cardMediaAspectRatio, contentMode: .fit)
+      .overlay {
+        if let image = media.image {
+          image
+            .resizable()
+            .scaledToFill()
+            .opacity(appeared ? 1 : 0)
+        }
       }
-    }
-    .aspectRatio(WDSize.cardMediaAspectRatio, contentMode: .fill)
-    .frame(minHeight: WDSize.cardMediaMinHeight)
-    .frame(maxWidth: .infinity)
-    .clipped()
-    // 淡入挂在「就绪」这个可观察变化上（设计 §2.3 主数据流：先灰底占位 → 图片就绪后传入新值）。
-    // onAppear 只兜底「band 首帧就已带图」的退化路径；nil → ready 的转换由 onChange 驱动
-    //（band 结构身份不变，onAppear 不会再触发 —— 只靠 onAppear 时 appeared 恒 false，图片永不可见）。
-    .onAppear {
-      guard media.image != nil else { return }
-      withAnimation(.easeOut(duration: WDMotion.Duration.fast)) { appeared = true }
-    }
-    .onChange(of: media.image != nil) { _, isReady in
-      guard isReady else { return }
-      withAnimation(.easeOut(duration: WDMotion.Duration.fast)) { appeared = true }
-    }
-    .accessibilityHidden(media.accessibilityLabel == nil)
-    .accessibilityElement(children: .ignore)
-    .modifier(WDCardMediaBandLabel(label: media.accessibilityLabel))
+      .frame(minHeight: WDSize.cardMediaMinHeight)
+      .frame(maxWidth: .infinity)
+      .clipped()
+      // 淡入挂在「就绪」这个可观察变化上（设计 §2.3 主数据流：先灰底占位 → 图片就绪后传入新值）。
+      // onAppear 只兜底「band 首帧就已带图」的退化路径；nil → ready 的转换由 onChange 驱动
+      //（band 结构身份不变，onAppear 不会再触发 —— 只靠 onAppear 时 appeared 恒 false，图片永不可见）。
+      .onAppear {
+        guard media.image != nil else { return }
+        withAnimation(.easeOut(duration: WDMotion.Duration.fast)) { appeared = true }
+      }
+      .onChange(of: media.image != nil) { _, isReady in
+        guard isReady else { return }
+        withAnimation(.easeOut(duration: WDMotion.Duration.fast)) { appeared = true }
+      }
+      .accessibilityHidden(media.accessibilityLabel == nil)
+      .accessibilityElement(children: .ignore)
+      .modifier(WDCardMediaBandLabel(label: media.accessibilityLabel))
   }
 }
 

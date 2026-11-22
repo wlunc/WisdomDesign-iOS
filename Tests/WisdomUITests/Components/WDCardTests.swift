@@ -128,7 +128,9 @@ struct WDCardTests {
       Text(verbatim: "占位")
     }
     let readyCard = WDCard(style: .media, media: WDCardMedia(Image(systemName: "photo"))) {
-      Text(verbatim: "就绪")
+      Rectangle()
+        .fill(Color.clear)
+        .frame(width: 100, height: 50)
     }
     #expect(nilCard.isClickable == false)
     #expect(readyCard.isClickable == false)

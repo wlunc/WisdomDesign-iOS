@@ -7,18 +7,18 @@
     "module" : "WisdomUI",
     "notes" : "只保留 kind/path/decl/access；丢弃 usr/location/docComment/mixins/relationships/accessibility/spi",
     "sdk" : {
-      "name" : "iphonesimulator26.5"
+      "name" : "iphonesimulator27.2"
     },
     "sourceRoots" : [
       "Sources/WisdomUI"
     ],
     "swift" : {
-      "version" : "6.3.3"
+      "version" : "6.4.2"
     },
     "target" : "arm64-apple-ios17.0-simulator",
     "xcode" : {
-      "build" : "17F113",
-      "version" : "26.6"
+      "build" : "27B52",
+      "version" : "27.2"
     }
   },
   "symbols" : [
