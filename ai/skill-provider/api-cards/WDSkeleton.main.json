@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDSkeleton",
+  "canonicalParam": "loading",
+  "symbol": "WDSkeleton.init(variant:lineCount:accessibilityLabel:)",
+  "signature": "@MainActor init(variant: WDSkeletonVariant = .text, lineCount: Int = 3, accessibilityLabel: Text? = nil)",
+  "callShape": "WDSkeleton(variant: .list, lineCount: 3)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDSkeleton.init(variant:lineCount:accessibilityLabel:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: variant/lineCount/accessibilityLabel"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "pageSpec": "../../../../wisdomdesign/ai/skill/page-spec/examples/task-list.valid.json",
+  "canonicalComponents": [
+    "WDListSection",
+    "WDFAB"
+  ],
+  "recommendedPublicComponents": [
+    "WDListRow",
+    "WDEmptyState",
+    "WDSkeleton",
+    "WDBanner"
+  ],
+  "viewExtensions": [
+    "View.wdTheme(_:)",
+    "View.wdFont(_:)",
+    "View.wdLineBox(_:lines:)",
+    "View.wdAnnouncer(_:)",
+    "View.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)",
+    "View.wdEffectsBudget(_:)"
+  ],
+  "searchHints": [
+    "task list",
+    "collection",
+    "safe area",
+    "tab bar",
+    "pull to refresh"
+  ],
+  "note": "Overlay adds retrieval/composition hints only; it does not copy design token values."
+}

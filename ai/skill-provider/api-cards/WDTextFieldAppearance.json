@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDTextField",
+  "canonicalParam": "appearance",
+  "symbol": "WDTextFieldAppearance.init(variant:placeholder:prefix:accessory:helper:isSecure:submitLabel:)",
+  "signature": "init(variant: WDTextFieldVariant = .inset, placeholder: Text? = nil, prefix: WDTextFieldPrefix = .none, accessory: WDTextFieldAccessory = .none, helper: WDTextFieldHelper = .none, isSecure: Bool = false, submitLabel: SubmitLabel = .done)",
+  "callShape": "WDTextFieldAppearance(variant: .inset)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDTextFieldAppearance.init(variant:placeholder:prefix:accessory:helper:isSecure:submitLabel:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: variant/placeholder/prefix/accessory/helper/isSecure/submitLabel"
+  ]
+}

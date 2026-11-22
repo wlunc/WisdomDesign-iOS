@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDSkeleton",
+  "canonicalParam": "loading",
+  "symbol": "WDSkeletonVariant.list",
+  "signature": "case list",
+  "callShape": "WDSkeleton(variant: .list)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDSkeletonVariant.list",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: enum case list"
+  ]
+}

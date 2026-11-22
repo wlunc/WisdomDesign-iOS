@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "task": "t6",
+  "page": "task-list",
+  "updatedAt": "2026-11-22T10:32:00+08:00",
+  "attempts": [
+    {
+      "id": "ios-ui-matrix-debug",
+      "phase": "pre-fix (unit-test target)",
+      "simulator": {
+        "runtime": "iOS 26.5",
+        "device": "iPhone Air",
+        "udid": "711BF16D-9565-4AA5-B355-807419954B4D"
+      },
+      "command": "xcodebuild test -project AIStarter/AIStarter.xcodeproj -scheme AIStarter -destination platform=iOS\\ Simulator,id=711BF16D-9565-4AA5-B355-807419954B4D -derivedDataPath .build/dd-ai-starter -only-testing:GoldenPageMatrixTests -resultBundlePath .build/ai-starter-t6.xcresult CODE_SIGNING_ALLOWED=NO",
+      "status": "failed",
+      "reason": "Debug build of WisdomUI failed: PreviewsMacros.SwiftUIView external macro implementation could not be found; swift-plugin-server produced malformed response under the workspace sandbox.",
+      "result": "0 passed, 0 failed, 0 tests; build failed before test execution"
+    },
+    {
+      "id": "ios-ui-matrix-release",
+      "phase": "pre-fix (unit-test target)",
+      "simulator": {
+        "runtime": "iOS 26.5",
+        "device": "iPhone Air",
+        "udid": "711BF16D-9565-4AA5-B355-807419954B4D"
+      },
+      "command": "xcodebuild test -project AIStarter/AIStarter.xcodeproj -scheme AIStarter -configuration Release -destination platform=iOS\\ Simulator,id=711BF16D-9565-4AA5-B355-807419954B4D -derivedDataPath .build/dd-ai-starter-rel -only-testing:GoldenPageMatrixTests -resultBundlePath .build/ai-starter-t6-rel.xcresult CODE_SIGNING_ALLOWED=NO",
+      "status": "failed",
+      "reason": "Release build of the consumer app failed at link with Undefined symbol: _main (misconfigured unit-test target).",
+      "result": "0 passed, 0 failed, 0 tests; build failed before test execution"
+    },
+    {
+      "id": "ios-ui-matrix-release-ui-testing",
+      "phase": "post-fix (bundle.ui-testing + TEST_TARGET_NAME + app dependency)",
+      "simulator": {
+        "runtime": "iOS 17.5",
+        "device": "iPhone 15 Pro",
+        "udid": "CE28D919-7BEB-46B2-86A7-1D063E54303F"
+      },
+      "command": "CFFIXED_USER_HOME=$PWD/iOS/.build/home xcodebuild test -project iOS/AIStarter/AIStarter.xcodeproj -scheme AIStarter -configuration Release -destination 'platform=iOS Simulator,id=CE28D919-7BEB-46B2-86A7-1D063E54303F' -derivedDataPath iOS/.build/dd-ai-starter-test -only-testing:GoldenPageMatrixTests CODE_SIGNING_ALLOWED=NO",
+      "status": "blocked",
+      "exitCode": 65,
+      "reason": "Build succeeded and produced GoldenPageMatrixTests-Runner.app. Test runner launch failed: Pseudo Terminal Setup Error (Operation not permitted).",
+      "result": "0 passed, 0 failed, 0 tests; 0 UI assertions executed",
+      "xcresult": "iOS/.build/dd-ai-starter-test/Logs/Test/Test-AIStarter-2026.11.22_10-31-35-+0800.xcresult",
+      "priorXcresult": "iOS/.build/ai-starter-t6.xcresult (2026-11-21 18:45:29-18:46:35, same Pseudo Terminal Setup Error)"
+    }
+  ],
+  "targetConfig": {
+    "productType": "com.apple.product-type.bundle.ui-testing",
+    "testTargetName": "AIStarter",
+    "dependency": "GoldenPageMatrixTests -> AIStarter",
+    "note": "Unit-test misconfiguration fixed in t6 (F7): the test target now builds a UI-test Runner and launches the consumer app; only the sandbox PTY launch is blocked."
+  },
+  "matrix": {
+    "loading": "blocked-sandbox-pseudo-terminal",
+    "contentShort": "blocked-sandbox-pseudo-terminal",
+    "contentLong": "blocked-sandbox-pseudo-terminal",
+    "empty": "blocked-sandbox-pseudo-terminal",
+    "error": "blocked-sandbox-pseudo-terminal",
+    "defaultText": "blocked-sandbox-pseudo-terminal",
+    "AX3": "blocked-sandbox-pseudo-terminal",
+    "light": "not-run",
+    "dark": "not-run",
+    "systemBack": "not-run",
+    "safeAreaTab": "not-run",
+    "keyboardScroll": "not-run",
+    "voiceOver": "not-run",
+    "device": "not-run",
+    "hostLoad": "not-run",
+    "designReview": "not-run"
+  },
+  "unverified": [
+    "visual snapshot matrix",
+    "AX3 no-clipping result",
+    "light/dark contrast result",
+    "VoiceOver focus order",
+    "system back/state restoration",
+    "safe-area tab occlusion",
+    "keyboard+scroll",
+    "real device behavior",
+    "host load",
+    "independent design review"
+  ],
+  "evidencePolicy": "No verified claim: the final Release attempt built a valid UI-test Runner but failed at test-runner launch under the sandbox (Pseudo Terminal Setup Error, 0 assertions). Only deterministic source checks and direct Swift typecheck passed."
+}

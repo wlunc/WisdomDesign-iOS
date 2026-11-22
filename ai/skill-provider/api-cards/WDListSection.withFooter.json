@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDListSection",
+  "canonicalParam": "items",
+  "symbol": "WDListSection.init(items:selection:header:headerAction:row:footer:)",
+  "signature": "@MainActor init(items: [Item], selection: Set<Item.ID> = [], header: Text, headerAction: WDListSectionAction? = nil, @ViewBuilder row: @escaping (Item, WDListSectionRowContext) -> Row, @ViewBuilder footer: () -> Footer)",
+  "callShape": "WDListSection(items: items, header: header, row: { ... }, footer: { ... })",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDListSection.init(items:selection:header:headerAction:row:footer:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: items/selection/header/headerAction/@ViewBuilder row/@ViewBuilder footer",
+    "Generic Item: Identifiable, Row: View, Footer: View."
+  ]
+}

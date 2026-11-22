@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDListRow",
+  "canonicalParam": "leading",
+  "symbol": "WDListRowLeading.icon(_:)",
+  "signature": "case icon(WDIconName)",
+  "callShape": ".icon(.task)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDListRowLeading.icon(_:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: enum case icon(WDIconName)"
+  ]
+}

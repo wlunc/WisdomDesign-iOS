@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDTextStyle",
+  "canonicalParam": "typography",
+  "symbol": "View.wdFont(_:)",
+  "signature": "@MainActor func wdFont(_ style: WDTextStyle) -> some View",
+  "callShape": "view.wdFont(WDType.body)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#View.wdFont(_:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: wdFont(_ style:)"
+  ]
+}

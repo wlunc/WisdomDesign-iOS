@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDPullRefresh",
+  "canonicalParam": "refresh",
+  "symbol": "View.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)",
+  "signature": "@MainActor func wdPullRefresh(isRefreshing: Binding<Bool>, label: Text? = nil, onRefreshError: (@MainActor @Sendable (any Error) -> Void)? = nil, timeout: Duration = .seconds(10), texts: WDPullRefreshTexts? = nil, onRefresh: @escaping @MainActor @Sendable () async throws -> Void) -> some View",
+  "callShape": "view.wdPullRefresh(isRefreshing: $refreshing, onRefresh: {})",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#View.wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: wdPullRefresh(isRefreshing:label:onRefreshError:timeout:texts:onRefresh:)",
+    "onRefresh is async throws."
+  ]
+}

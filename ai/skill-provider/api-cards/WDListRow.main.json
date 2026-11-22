@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDListRow",
+  "canonicalParam": "title",
+  "symbol": "WDListRow.init(title:subtitle:leading:trailing:isSelected:swipeAction:showsSeparator:action:)",
+  "signature": "@MainActor init(title: Text, subtitle: Text? = nil, leading: WDListRowLeading = .none, trailing: WDListRowTrailing = .none, isSelected: Bool = false, swipeAction: WDListRowSwipeAction = .none, showsSeparator: Bool = true, action: (() -> Void)? = nil)",
+  "callShape": "WDListRow(title: Text(verbatim: title), trailing: .disclosure) {}",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDListRow.init(title:subtitle:leading:trailing:isSelected:swipeAction:showsSeparator:action:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: title/subtitle/leading/trailing/isSelected/swipeAction/showsSeparator/action"
+  ]
+}

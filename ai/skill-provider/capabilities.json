@@ -1,0 +1,189 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "groups": {
+    "runtime": {
+      "status": "supported",
+      "evidence": "example-compiled",
+      "sourceRefs": [
+        "Package.swift",
+        "api/WisdomUI.api.json#manifest",
+        "ai/skill-provider/verification.json#ios-minimal-typecheck"
+      ],
+      "values": {
+        "minimumOS": "iOS 17",
+        "deploymentTargetFromPackage": ".iOS(.v17)",
+        "sdkUsedForSnapshot": "iphonesimulator26.5",
+        "languageMode": "Swift 6",
+        "uiFramework": "SwiftUI",
+        "buildGate": "xcodebuild + simulator",
+        "hostSwiftBuildGate": false
+      },
+      "verifiedBy": "verification.json#ios-consumer-xcodebuild-release: xcodebuild Release build -destination 'generic/platform=iOS Simulator' (exit 0, 2026-11-22 re-run)",
+      "notVerified": [
+        "device runtime behavior",
+        "iOS 26 runtime visual behavior"
+      ]
+    },
+    "navigation": {
+      "status": "partial",
+      "evidence": "discovered",
+      "sourceRefs": [
+        "api/WisdomUI.api.json#WDNavigationBar.init(title:mode:style:backAccessibilityLabel:onBack:actions:followsScroll:)",
+        "api/WisdomUI.api.json#WDFAB.init(icon:accessibilityLabel:size:shape:actions:action:showsScrimWhenExpanded:avoidsTabBar:)"
+      ],
+      "values": {
+        "systemBack": "SwiftUI NavigationStack provides system back; no library override found in public API",
+        "modal": "SwiftUI sheet/fullScreenCover remain host-owned",
+        "state恢复": "host-owned; provider does not claim restoration",
+        "tabRoot": "host-owned TabView navigation; WDFAB exposes avoidsTabBar:true",
+        "knownLimitation": "No public SwiftUI radio/tab/listbox accessibility traits in this codebase"
+      },
+      "verifiedBy": "public symbol graph + source review",
+      "notVerified": [
+        "system-back state restoration UI test",
+        "modal transition UI test"
+      ]
+    },
+    "layout": {
+      "status": "partial",
+      "evidence": "discovered",
+      "sourceRefs": [
+        "api/WisdomUI.api.json#WDFAB.init(icon:accessibilityLabel:size:shape:actions:action:showsScrimWhenExpanded:avoidsTabBar:)",
+        "AIStarter/AIStarter/TaskListView.swift"
+      ],
+      "values": {
+        "safeArea": "SwiftUI safe-area insets; template uses ScrollView content margins and avoidsTabBar:true for FAB",
+        "sizeClasses": "SwiftUI @Environment(\\.horizontalSizeClass) available to host",
+        "landscapeSplitView": "not verified by golden page",
+        "keyboardScroll": "ScrollView + WDTextField onEditingChanged host hook; no keyboard dodge claim"
+      },
+      "notVerified": [
+        "tab occlusion snapshot",
+        "landscape/split view matrix",
+        "keyboard-plus-scroll UI test"
+      ]
+    },
+    "typography": {
+      "status": "supported",
+      "evidence": "example-compiled",
+      "sourceRefs": [
+        "Sources/WisdomUI/Foundation/Typography/WDFont.swift",
+        "Sources/WisdomUI/Foundation/Typography/WDFontMetrics.swift",
+        "api/WisdomUI.api.json#View.wdFont(_:)",
+        "ai/skill-provider/verification.json#ios-minimal-typecheck"
+      ],
+      "values": {
+        "entryPoint": "wdFont(_:) only; do not use .font(.system(...))",
+        "lineBoxEntryPoint": "wdLineBox(_:lines:)",
+        "dynamicType": "system DynamicTypeSize drives WDFontMetrics; AX3 requires UI test",
+        "fixedMode": "Mode.Fixed and lineHeightMultiple forbidden by platform rules"
+      },
+      "verifiedBy": "minimal example compile",
+      "notVerified": [
+        "AX3 no-clipping UI test",
+        "long-text AX3 snapshot"
+      ]
+    },
+    "input": {
+      "status": "partial",
+      "evidence": "discovered",
+      "sourceRefs": [
+        "api/WisdomUI.api.json#WDTextField.init(text:label:appearance:isEditable:onSubmit:onEditingChanged:)",
+        "api/WisdomUI.api.json#WDFormRow.init(label:layout:helper:error:requiredLabel:control:)"
+      ],
+      "values": {
+        "keyboard": "WDTextField onSubmit/onEditingChanged hooks; submitLabel comes from WDTextFieldAppearance",
+        "focus": "SwiftUI @FocusState host-owned",
+        "touchTarget": "platform rules require >=44pt on iOS; assertion not executed here",
+        "gestureConflict": "WDPullRefresh + scroll host coordination not verified"
+      },
+      "notVerified": [
+        "keyboard visible/focused field UI test",
+        "touch-target audit"
+      ]
+    },
+    "accessibility": {
+      "status": "partial",
+      "evidence": "discovered",
+      "sourceRefs": [
+        "Sources/WisdomUI/Foundation/A11y/WDSemantics.swift",
+        "Sources/WisdomUI/Foundation/A11y/WDAnnouncement.swift",
+        "api/WisdomUI.api.json#View.wdAnnouncer(_:)",
+        "iOS/docs/B3-PLATFORM-LIMITS.md"
+      ],
+      "values": {
+        "screenReader": "WDSystemAnnouncer uses iOS17 AccessibilityNotification; injected wdAnnouncer closure available",
+        "focusOrder": "visual order from Page Spec; VoiceOver focus UI test not executed",
+        "contrast": "4.5:1 / 3:1 from platform rules; not asserted here",
+        "reduceMotion": "Appearance.reduceMotion read from system; wdEffectsBudget can lower effects",
+        "limitations": [
+          "SwiftUI has no radio/radiogroup/tablist/listbox/option traits in this codebase (B3-L1..L3)"
+        ]
+      },
+      "notVerified": [
+        "VoiceOver focus order",
+        "contrast audit",
+        "reduce-motion runtime matrix"
+      ]
+    },
+    "rendering": {
+      "status": "partial",
+      "evidence": "discovered",
+      "sourceRefs": [
+        "Sources/WisdomUI/Foundation/Material/WDGlass.swift",
+        "Sources/WisdomUI/Foundation/Material/WDEffectsBudget.swift",
+        "api/WisdomUI.api.json#WDGlass.resolve(textLevel:appearance:capabilities:budget:level:)"
+      ],
+      "values": {
+        "iOS17Baseline": "package minimum; no glass/Material blur (DF-10 default opaque)",
+        "iOS 26Capability": "WDGlassCapabilities(supportsGlass:true) enables glass resolution when budget/accessibility allow",
+        "effectsBudget": "WDEffectsBudget has 7 hard fields: blurSurfaces/washes/sheens/skeletonShimmers/strongElevations/animatedRings/hapticsPerAction",
+        "degradePolicy": "reduceTransparency, increased contrast, unsupported capability, or zero blur budget resolve to opaque"
+      },
+      "notVerified": [
+        "iOS 26 glass rendering UI matrix",
+        "dark-mode Tab bar opaque degradation snapshot",
+        "reduce-transparency snapshot"
+      ]
+    },
+    "verification": {
+      "status": "partial",
+      "evidence": "example-compiled",
+      "sourceRefs": [
+        "ai/skill-provider/verification.json",
+        "Scripts/ci.sh"
+      ],
+      "values": {
+        "compileCommand": "xcodebuild build -scheme AIStarter -configuration Release -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO (cwd=repo root; verification.json#ios-consumer-xcodebuild-release)",
+        "platformGate": "Scripts/ci.sh pr (package library gate)",
+        "runtimeMatrix": "blocked-sandbox-pseudo-terminal (2026-11-22 re-run: TEST FAILED exit 65, 0 assertions; xcresult Test-AIStarter-2026.11.22_10-15-50)"
+      },
+      "verifiedBy": "minimal compile example exit 0",
+      "notVerified": [
+        "snapshot/UI matrix",
+        "device run",
+        "host load",
+        "independent design review",
+        "remaining 27/37 catalog components have no API cards in the M2 vertical slice"
+      ]
+    }
+  },
+  "componentCoverage": {
+    "specOnly": [],
+    "experimental": [
+      "WDBanner",
+      "WDButton",
+      "WDEmptyState",
+      "WDFAB",
+      "WDFormRow",
+      "WDListRow",
+      "WDListSection",
+      "WDPullRefresh",
+      "WDSkeleton",
+      "WDTextField"
+    ],
+    "verified": [],
+    "unsupported": []
+  }
+}

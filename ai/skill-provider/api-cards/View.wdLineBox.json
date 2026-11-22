@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDTextStyle",
+  "canonicalParam": "typography",
+  "symbol": "View.wdLineBox(_:lines:)",
+  "signature": "@MainActor func wdLineBox(_ style: WDTextStyle, lines: Int = 1) -> some View",
+  "callShape": "view.wdLineBox(WDType.body, lines: 2)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#View.wdLineBox(_:lines:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: wdLineBox(_ style:lines:)"
+  ]
+}

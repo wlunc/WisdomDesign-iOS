@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDEmptyState",
+  "canonicalParam": "title",
+  "symbol": "WDEmptyState.init(icon:title:message:action:)",
+  "signature": "@MainActor init(icon: WDIconName? = nil, title: Text, message: Text? = nil, action: WDEmptyStateAction? = nil)",
+  "callShape": "WDEmptyState(icon: .task, title: Text(verbatim: \"No tasks\"))",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDEmptyState.init(icon:title:message:action:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: icon/title/message/action"
+  ]
+}

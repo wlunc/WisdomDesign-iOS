@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDGlass",
+  "canonicalParam": "effectResolution",
+  "symbol": "WDGlass.resolve(textLevel:appearance:capabilities:budget:level:)",
+  "signature": "static func resolve(textLevel: WDTextLevel, appearance: WDAppearance, capabilities: WDGlassCapabilities, budget: WDEffectsBudget, level: WDGlassLevel? = nil) -> WDGlassResolution",
+  "callShape": "WDGlass.resolve(textLevel: .primary, appearance: appearance, capabilities: caps, budget: budget)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDGlass.resolve(textLevel:appearance:capabilities:budget:level:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: static func resolve(textLevel:appearance:capabilities:budget:level:)"
+  ]
+}

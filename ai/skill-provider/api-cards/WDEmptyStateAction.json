@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDEmptyState",
+  "canonicalParam": "action",
+  "symbol": "WDEmptyStateAction.init(label:isLoading:action:)",
+  "signature": "init(label: Text, isLoading: Bool = false, action: @escaping () -> Void)",
+  "callShape": "WDEmptyStateAction(label: Text(verbatim: \"Retry\"), action: {})",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDEmptyStateAction.init(label:isLoading:action:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: label/isLoading/action"
+  ]
+}

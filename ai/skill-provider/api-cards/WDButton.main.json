@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDButton",
+  "canonicalParam": "label",
+  "symbol": "WDButton.init(_:variant:size:isLoading:loadingAccessibilityText:leadingIcon:trailingIcon:action:)",
+  "signature": "@MainActor init(_ text: LocalizedStringKey, variant: WDButtonVariant = .filled, size: WDButtonSize = .md, isLoading: Bool = false, loadingAccessibilityText: Text? = nil, leadingIcon: WDIconName? = nil, trailingIcon: WDIconName? = nil, action: @escaping () -> Void)",
+  "callShape": "WDButton(\"新建\", variant: .filled, action: {})",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDButton.init(_:variant:size:isLoading:loadingAccessibilityText:leadingIcon:trailingIcon:action:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: unlabeled LocalizedStringKey + real labels",
+    "Three real overloads exist; this is the LocalizedStringKey overload."
+  ]
+}

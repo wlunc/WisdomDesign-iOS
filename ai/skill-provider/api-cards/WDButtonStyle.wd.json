@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDButton",
+  "canonicalParam": "variant",
+  "symbol": "ButtonStyle.wd(_:size:)",
+  "signature": "@MainActor static func wd(_ variant: WDButtonVariant, size: WDButtonSize = .md) -> WDButtonStyle",
+  "callShape": "ButtonStyle.wd(.filled, size: .md)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#ButtonStyle.wd(_:size:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: static func wd(_ variant:size:)"
+  ]
+}

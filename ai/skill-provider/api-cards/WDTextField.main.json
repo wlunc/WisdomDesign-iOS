@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDTextField",
+  "canonicalParam": "text",
+  "symbol": "WDTextField.init(text:label:appearance:isEditable:onSubmit:onEditingChanged:)",
+  "signature": "@MainActor init(text: Binding<String>, label: Text, appearance: WDTextFieldAppearance = .init(), isEditable: Bool = true, onSubmit: (() -> Void)? = nil, onEditingChanged: ((Bool) -> Void)? = nil)",
+  "callShape": "WDTextField(text: $query, label: Text(verbatim: \"Search\"))",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDTextField.init(text:label:appearance:isEditable:onSubmit:onEditingChanged:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: text/label/appearance/isEditable/onSubmit/onEditingChanged",
+    "label is required on iOS."
+  ]
+}

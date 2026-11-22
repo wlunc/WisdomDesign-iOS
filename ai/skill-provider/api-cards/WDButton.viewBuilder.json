@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDButton",
+  "canonicalParam": "label",
+  "symbol": "WDButton.init(variant:size:isLoading:loadingAccessibilityText:leadingIcon:trailingIcon:action:label:)",
+  "signature": "@MainActor init(variant: WDButtonVariant = .filled, size: WDButtonSize = .md, isLoading: Bool = false, loadingAccessibilityText: Text? = nil, leadingIcon: WDIconName? = nil, trailingIcon: WDIconName? = nil, action: @escaping () -> Void, @ViewBuilder label: () -> Label)",
+  "callShape": "WDButton(variant: .tonal) { Text(verbatim: label) }",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDButton.init(variant:size:isLoading:loadingAccessibilityText:leadingIcon:trailingIcon:action:label:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: @ViewBuilder label closure"
+  ]
+}

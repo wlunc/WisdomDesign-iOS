@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDEffectsBudget",
+  "canonicalParam": "effectsBudget",
+  "symbol": "View.wdEffectsBudget(_:)",
+  "signature": "@MainActor func wdEffectsBudget(_ budget: WDEffectsBudget) -> some View",
+  "callShape": "view.wdEffectsBudget(.minimal)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#View.wdEffectsBudget(_:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: wdEffectsBudget(_:)",
+    "Only lowers the current budget."
+  ]
+}

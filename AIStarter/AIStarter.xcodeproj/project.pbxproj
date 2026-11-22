@@ -1,0 +1,410 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2A0000000000000000000031 /* AIStarterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A000000000000000000000A /* AIStarterApp.swift */; };
+		2A0000000000000000000032 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A00000000000000000000000B2 /* ContentView.swift */; };
+		2A000000000000000000001C /* APIMinimalExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A000000000000000000001A /* APIMinimalExample.swift */; };
+		2A000000000000000000001D /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A000000000000000000001B /* TaskListView.swift */; };
+		2A00000000000000000000D0 /* WisdomUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2A00000000000000000000D1 /* WisdomUI */; };
+		2A0000000000000000000030 /* GoldenPageMatrixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000000000000000000020 /* GoldenPageMatrixTests.swift */; };
+		2A0000000000000000000033 /* WisdomUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2A00000000000000000000D1 /* WisdomUI */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2A00000000000000000000E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A0000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2A0000000000000000000004;
+			remoteInfo = AIStarter;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2A0000000000000000000006 /* AIStarter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIStarter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A0000000000000000000007 /* GoldenPageMatrixTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GoldenPageMatrixTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A000000000000000000000A /* AIStarterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIStarterApp.swift; sourceTree = "<group>"; };
+		2A000000000000000000000B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2A000000000000000000001A /* APIMinimalExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIMinimalExample.swift; sourceTree = "<group>"; };
+		2A000000000000000000001B /* TaskListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListView.swift; sourceTree = "<group>"; };
+		2A0000000000000000000020 /* GoldenPageMatrixTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoldenPageMatrixTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2A0000000000000000000107 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A00000000000000000000D0 /* WisdomUI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A0000000000000000000132 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A0000000000000000000033 /* WisdomUI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2A0000000000000000000002 = {
+			isa = PBXGroup;
+			children = (
+				2A0000000000000000000009 /* AIStarter */,
+				2A0000000000000000000008 /* GoldenPageMatrixTests */,
+				2A0000000000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2A0000000000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2A0000000000000000000006 /* AIStarter.app */,
+				2A0000000000000000000007 /* GoldenPageMatrixTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2A0000000000000000000009 /* AIStarter */ = {
+			isa = PBXGroup;
+			children = (
+				2A000000000000000000000A /* AIStarterApp.swift */,
+				2A000000000000000000000B /* ContentView.swift */,
+				2A000000000000000000001A /* APIMinimalExample.swift */,
+				2A000000000000000000001B /* TaskListView.swift */,
+			);
+			path = AIStarter;
+			sourceTree = "<group>";
+		};
+		2A0000000000000000000008 /* GoldenPageMatrixTests */ = {
+			isa = PBXGroup;
+			children = (
+				2A0000000000000000000020 /* GoldenPageMatrixTests.swift */,
+			);
+			path = GoldenPageMatrixTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2A0000000000000000000004 /* AIStarter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2A000000000000000000000F /* Build configuration list for PBXNativeTarget "AIStarter" */;
+			buildPhases = (
+				2A0000000000000000000106 /* Sources */,
+				2A0000000000000000000107 /* Frameworks */,
+				2A0000000000000000000108 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AIStarter;
+			packageProductDependencies = (
+				2A00000000000000000000D1 /* WisdomUI */,
+			);
+			productName = AIStarter;
+			productReference = 2A0000000000000000000006 /* AIStarter.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2A0000000000000000000005 /* GoldenPageMatrixTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2A0000000000000000000019 /* Build configuration list for PBXNativeTarget "GoldenPageMatrixTests" */;
+			buildPhases = (
+				2A0000000000000000000131 /* Sources */,
+				2A0000000000000000000132 /* Frameworks */,
+				2A0000000000000000000109 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2A00000000000000000000E1 /* PBXTargetDependency */,
+			);
+			name = GoldenPageMatrixTests;
+			packageProductDependencies = (
+				2A00000000000000000000D1 /* WisdomUI */,
+			);
+			productName = GoldenPageMatrixTests;
+			productReference = 2A0000000000000000000007 /* GoldenPageMatrixTests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2A0000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					2A0000000000000000000004 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					2A0000000000000000000005 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = 2A0000000000000000000004;
+					};
+				};
+			};
+			buildConfigurationList = 2A000000000000000000000E /* Build configuration list for PBXProject "AIStarter" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2A0000000000000000000002;
+			packageReferences = (
+				2A00000000000000000000D2 /* XCLocalSwiftPackageReference ".." */,
+			);
+			productRefGroup = 2A0000000000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2A0000000000000000000004 /* AIStarter */,
+				2A0000000000000000000005 /* GoldenPageMatrixTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2A0000000000000000000108 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A0000000000000000000109 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2A0000000000000000000106 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A0000000000000000000031 /* AIStarterApp.swift in Sources */,
+				2A0000000000000000000032 /* ContentView.swift in Sources */,
+				2A000000000000000000001C /* APIMinimalExample.swift in Sources */,
+				2A000000000000000000001D /* TaskListView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A0000000000000000000131 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A0000000000000000000030 /* GoldenPageMatrixTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2A00000000000000000000E1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2A0000000000000000000004 /* AIStarter */;
+			targetProxy = 2A00000000000000000000E0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2A0000000000000000000010 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		2A0000000000000000000011 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2A0000000000000000000012 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.aistarter;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2A0000000000000000000013 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.aistarter;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		2A0000000000000000000017 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.aistarter.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AIStarter;
+			};
+			name = Debug;
+		};
+		2A0000000000000000000018 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.aistarter.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AIStarter;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2A000000000000000000000E /* Build configuration list for PBXProject "AIStarter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A0000000000000000000010 /* Debug */,
+				2A0000000000000000000011 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2A000000000000000000000F /* Build configuration list for PBXNativeTarget "AIStarter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A0000000000000000000012 /* Debug */,
+				2A0000000000000000000013 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2A0000000000000000000019 /* Build configuration list for PBXNativeTarget "GoldenPageMatrixTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A0000000000000000000017 /* Debug */,
+				2A0000000000000000000018 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+/* Begin XCLocalSwiftPackageReference section */
+		2A00000000000000000000D2 /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "..";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2A00000000000000000000D1 /* WisdomUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WisdomUI;
+		};
+/* End XCSwiftPackageProductDependency section */
+
+	};
+	rootObject = 2A0000000000000000000001 /* Project object */;
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDSemantics",
+  "canonicalParam": "announcements",
+  "symbol": "WDSemantics.positional(label:positionText:separator:)",
+  "signature": "static func positional(label: Text, positionText: Text, separator: Text) -> Text",
+  "callShape": "WDSemantics.positional(label: name, positionText: position, separator: Text(verbatim: \", \"))",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDSemantics.positional(label:positionText:separator:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: static func positional(label:positionText:separator:)"
+  ]
+}

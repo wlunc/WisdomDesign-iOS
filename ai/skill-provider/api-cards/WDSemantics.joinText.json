@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDSemantics",
+  "canonicalParam": "announcements",
+  "symbol": "WDSemantics.join(_:separator:)",
+  "signature": "static func join(_ parts: [String], separator: String) -> String | static func join(_ parts: [Text], separator: Text) -> Text",
+  "callShape": "WDSemantics.join([label, value], separator: Text(verbatim: \" \"))",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDSemantics.join(_:separator:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: static func join(_ parts: [Text], separator: Text)",
+    "Text and String overloads both exist."
+  ]
+}

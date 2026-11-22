@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDFormRow",
+  "canonicalParam": "label",
+  "symbol": "WDFormRow.init(label:layout:helper:error:requiredLabel:control:)",
+  "signature": "@MainActor init(label: Text, layout: WDFormRowLayout = .horizontal, helper: Text? = nil, error: Text? = nil, requiredLabel: Text? = nil, @ViewBuilder control: () -> Control)",
+  "callShape": "WDFormRow(label: label) { control }",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDFormRow.init(label:layout:helper:error:requiredLabel:control:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: label/layout/helper/error/requiredLabel/@ViewBuilder control",
+    "Generic Control: View."
+  ]
+}

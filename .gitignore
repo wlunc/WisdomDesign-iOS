@@ -10,7 +10,3 @@ Examples/WisdomUIDemo/Config/Demo.local.xcconfig
 
 # 本地 IDE 配置
 .vscode/
-
-# 本地工具/模板产物（非库源码；2026-11-21 出现，污染 format 门禁 —— R2-F6）
-/AIStarter/
-/ai/

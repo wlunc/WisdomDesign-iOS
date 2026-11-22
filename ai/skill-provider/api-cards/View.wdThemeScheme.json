@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDTheme",
+  "canonicalParam": "colorScheme",
+  "symbol": "View.wdTheme(scheme:)",
+  "signature": "@ViewBuilder @MainActor func wdTheme(scheme: String) -> some View",
+  "callShape": "view.wdTheme(scheme: \"dark\")",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#View.wdTheme(scheme:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: wdTheme(scheme:)",
+    "Unknown scheme is a no-op."
+  ]
+}

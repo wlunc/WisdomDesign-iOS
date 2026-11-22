@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDBanner",
+  "canonicalParam": "error",
+  "symbol": "WDBanner.init(isVisible:variant:message:action:dismissAccessibilityLabel:)",
+  "signature": "@MainActor init(isVisible: Binding<Bool>, variant: WDBannerVariant = .info, message: Text, action: WDBannerAction? = nil, dismissAccessibilityLabel: Text? = nil)",
+  "callShape": "WDBanner(isVisible: $errorVisible, variant: .danger, message: message)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDBanner.init(isVisible:variant:message:action:dismissAccessibilityLabel:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: isVisible/variant/message/action/dismissAccessibilityLabel"
+  ]
+}

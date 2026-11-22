@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDButton",
+  "canonicalParam": "label",
+  "symbol": "WDButton.init(verbatim:variant:size:isLoading:loadingAccessibilityText:leadingIcon:trailingIcon:action:)",
+  "signature": "@MainActor init(verbatim text: String, variant: WDButtonVariant = .filled, size: WDButtonSize = .md, isLoading: Bool = false, loadingAccessibilityText: Text? = nil, leadingIcon: WDIconName? = nil, trailingIcon: WDIconName? = nil, action: @escaping () -> Void)",
+  "callShape": "WDButton(verbatim: dynamicTitle, action: {})",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDButton.init(verbatim:variant:size:isLoading:loadingAccessibilityText:leadingIcon:trailingIcon:action:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: verbatim String"
+  ]
+}

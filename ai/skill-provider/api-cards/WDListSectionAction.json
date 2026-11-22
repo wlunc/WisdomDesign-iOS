@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDListSection",
+  "canonicalParam": "headerAction",
+  "symbol": "WDListSectionAction.init(label:action:)",
+  "signature": "init(label: Text, action: @escaping () -> Void)",
+  "callShape": "WDListSectionAction(label: Text(verbatim: \"Clear\"), action: {})",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDListSectionAction.init(label:action:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: label/action"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDFAB",
+  "canonicalParam": "primaryAction",
+  "symbol": "WDFAB.init(icon:accessibilityLabel:size:shape:actions:action:showsScrimWhenExpanded:avoidsTabBar:)",
+  "signature": "@MainActor init(icon: WDIconName, accessibilityLabel: Text, size: WDFABSize = .standard, shape: WDFABShape = .roundedSquare, actions: [WDFABAction] = [], action: (() -> Void)? = nil, showsScrimWhenExpanded: Bool = false, avoidsTabBar: Bool = false)",
+  "callShape": "WDFAB(icon: .add, accessibilityLabel: label, avoidsTabBar: true, action: {})",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDFAB.init(icon:accessibilityLabel:size:shape:actions:action:showsScrimWhenExpanded:avoidsTabBar:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: icon/accessibilityLabel/size/shape/actions/action/showsScrimWhenExpanded/avoidsTabBar",
+    "avoidsTabBar is the real iOS label for tab-safe-area."
+  ]
+}

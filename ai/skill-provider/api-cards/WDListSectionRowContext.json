@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDListSection",
+  "canonicalParam": "itemPattern",
+  "symbol": "WDListSectionRowContext",
+  "signature": "struct WDListSectionRowContext",
+  "callShape": "row closure receives (Item, WDListSectionRowContext)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDListSectionRowContext",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: let isSelected: Bool; let isLast: Bool"
+  ]
+}
