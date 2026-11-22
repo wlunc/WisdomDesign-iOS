@@ -119,6 +119,29 @@ struct WDCardTests {
     #expect(withNil > 96 + 50, "灰底占位档不应塌成 0 高，实测 \(withNil)")
   }
 
+  @Test("media 就绪：先 nil 后 ready —— 灰底档也能挂载就绪图（F6 主数据流）")
+  func mediaReadyAfterPlaceholderConstructs() throws {
+    // 主数据流（设计 §2.3）：先占位（WDCardMedia(nil) 灰底），图片就绪后传入新值。
+    // band 是同一结构身份（WDCardMediaBand 输入更新）⇒ 淡入只能由 onChange 驱动，
+    // 构造必须可用且卡高不塌（几何与占位档一致 = 灰底兜底 + 就绪图同框）。
+    let nilCard = WDCard(style: .media, media: WDCardMedia(nil)) {
+      Text(verbatim: "占位")
+    }
+    let readyCard = WDCard(style: .media, media: WDCardMedia(Image(systemName: "photo"))) {
+      Text(verbatim: "就绪")
+    }
+    #expect(nilCard.isClickable == false)
+    #expect(readyCard.isClickable == false)
+    // 载荷更新前后都是 .media 档：结构身份不变，只是输入从 nil 换成就绪图。
+    let controller = UIHostingController(
+      rootView: readyCard.wdTheme(.light)
+    )
+    let measured = controller.sizeThatFits(in: CGSize(width: 343, height: CGFloat.infinity)).height
+    #expect(
+      abs(measured - (343 / WDSize.cardMediaAspectRatio + 82)) <= 1,
+      "就绪图档带高应仍按 16:9，实测 \(measured)")
+  }
+
   @Test("media 可点卡可构造；isClickable 语义不变")
   func mediaClickableConstructs() {
     let card = WDCard(style: .media, media: WDCardMedia(nil), action: {}) {

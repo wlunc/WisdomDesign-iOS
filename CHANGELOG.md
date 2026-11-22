@@ -8,6 +8,16 @@
 
 ### Added
 
+- **A-11 / A-13 / A-14 三条欠账收口（2026-11-21；来源 = 设计仓 `docs/14-member-tones-media-tooltip.md` 定稿 v1.0）**：成员四色 + `WDCard.media` 图片带 + `WDToolbar` 长按提示落地。
+  **API 1394 → 1404 符号（+12 / −2，见下）**，`Scripts/dump-api.sh --update` 显式更新，复跑零 diff。
+  执行过程：agent 团队并行实现，遭遇上游 429 限流与 MAX_TOKENS 多轮中断；reviewer-glm round-1 给出 needs_revision（1 blocker + 5 high），repair round-2 全修后 round-2 复审 **pass**（报告 = `docs/.review-temp/` 误记 → 实为 `iOS/.review-temp/A11-A13-A14-REVIEW-R1/R2.md`）。
+  - **A-11 `WDAvatar`**：新增 `tone: WDMemberTone?`（nil 回落 surfaceTint，既有观感逐像素不变）、`hostColor: Color?`（照片/在线点描边色，默认 surfaceCardSolid）；照片形态 `WDAvatarImage` + `WDAvatarValue.init(image:label:icon:accessibilityLabel:)`；回退链硬顺序 照片→文字→图标（设计 §1.4）；`WDMemberTone.assign(memberID:)` FNV1a32（五 fixture 对拍设计 §1.3）。
+  - **A-13 `WDCard`**：`WDCardStyle` 新增 **`.media`** —— **源级 breaking**（穷尽 switch 破，F-20：minor + Breaking 段）。迁移片段：既有 `switch style` 补 `case .media:`。新增 `WDCardMedia` 值类型与 `init(style:media:content:)` / `init(style:media:action:content:)`；图片带通栏 + 16:9 + 最小高 96 + 灰底占位（`surface.card-sunken`）+ 160ms 淡入；与 glass 互斥（构造层强制）。
+  - **A-14 `WDToolbar`**：`showsTooltips: Bool = false`（默认关，既有行为不变）；开启时长按 500ms（`WDSize.tooltipPressDuration`）显示提示气泡（28 高/200 宽/距 8/圆角 8/e2 阴影），**门闩仲裁保证长按抬手不执行 action**（Button 原生闭包 = 唯一执行路径，`WDToolbarArbitrationLatch` 共享判定），滑出热区作废。
+  - **符号 −2 说明**：`WDAvatar.init(value:size:isOnline:isDisabled:)` 与 `WDToolbar.init(items:accessibilityLabel:overflowAccessibilityLabel:)` 因追加带默认值参数而升级为新签名（`…tone:hostColor:` / `…showsTooltips:`）——Swift 符号路径变化，**非功能删除**：既有调用点全部照常编译（新参数全带默认值）。
+  - **契约增量（待设计仓落库）**：`contracts/WDAvatar.yaml` 需补 `hostColor` 参数、`WDAvatarImage` 类型与照片 init 签名（round-1 finding F7；跨仓只读，待设计侧处理）。
+  - **验证**：结构 0/0（196 文件）、格式 212 全过、build-for-testing SUCCEEDED；评审 round-2 pass（R2-F1 测试期望已修）+ round-3 pass（窄域字节绑定）。验证 round-2 重采 27 条：26 ✅ / 1 ❌（#22 气泡纵向几何）——**已修**：`position(y:)` 定位的是中心，原实现用 `-gapAboveButton`(8) 导致气泡下边缘侵入按钮热区 2pt；改为**下边锚定**——`alignmentGuide(.top)` 读气泡自身 bottom + 8，并**必须外包一层 `Color.clear.overlay(alignment: .topLeading)`**（`alignmentGuide` 只有被父容器消费才生效；直接挂在 `GeometryReader` 内容上是死代码，会把气泡压回按钮左上角）；位移改为「起点偏低、稳态归零」（稳态 0 / 入场 +4 / RM 恒 0）。实测 h=28/36/44 × 普通/RM 五种情形下边缘**恒为 8pt**（像素探针，误差 0），大字号压缩隐患（R2 §8.4）一并闭合。**单测执行 / 8 态快照 / 真机长按回归**：本机 PTY 耗尽 + 无真机，全部**【未验证】**。
+
 - **令牌 v1.0.0 → v1.1.0 的公开符号入基线（2026-11-21）**：设计仓交付 `docs/14-member-tones-media-tooltip.md`（A-11 / A-13 / A-14 三条约数），生成器随之产出新的公开面；
   本轮按 `docs/SPEC.md` §1.5.3 用 `Scripts/dump-api.sh --update` **显式更新符号快照**。
   **API 1380 → 1394 符号（+14，零删除）**，`dump-api.sh` 复跑零 diff。

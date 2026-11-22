@@ -488,7 +488,7 @@ struct M5ComponentsTests {
     let (d2, p2) = WDToolbarArbitration.decide(
       .release(at: t0 + 0.8), in: phase, threshold: Self.arbitrationThreshold)
     #expect(d2 != .performAction, "超阈值抬手绝不能执行 action（设计 §3.3 第 4 行）")
-    #expect(d2 == .none)
+    #expect(d2 == .hideTooltip, "tooltipShown 后抬手应收尾提示（R2-F1：与状态机修复同步）")
     #expect(p2 == .consumed)
   }
 
@@ -516,8 +516,8 @@ struct M5ComponentsTests {
     #expect(d2 != .performAction)
   }
 
-  @Test("仲裁：tooltipShown 期间的抬手只收尾，不重复收尾也不执行 action")
-  func arbitrationTooltipShownReleaseIsNoop() {
+  @Test("仲裁：tooltipShown 期间的抬手 → hideTooltip 收尾，不执行 action")
+  func arbitrationTooltipShownReleaseHidesTooltip() {
     let t0: TimeInterval = 10.0
     var phase = WDToolbarArbitration.Phase.pressing(since: t0)
     _ = WDToolbarArbitration.decide(

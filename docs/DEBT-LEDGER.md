@@ -11,7 +11,7 @@
 
 | 类别 | 条数 | 能不能纯代码推进 |
 | --- | --- | --- |
-| A · 代码欠账 | 17 | 已闭合 **11 条**（A-1～A-7、A-12、A-15、A-16、A-17）；部分闭合 **3 条**（A-8 缺 `tablist`/`tab` 角色与玻璃档、A-9 缺滚轮形态先选后确认、A-10 真机键盘与极端尺寸未走查）；仍开放 **3 条**（A-11 成员配色/照片、A-13 `WDCard.media`、A-14 长按 tooltip） |
+| A · 代码欠账 | 17 | 已闭合 **14 条**（A-1～A-7、A-11、A-12、A-13、A-14、A-15、A-16、A-17，2026-11-21 B21 批闭合 A-11/A-13/A-14）；部分闭合 **3 条**（A-8 缺 `tablist`/`tab` 角色与玻璃档、A-9 缺滚轮形态先选后确认、A-10 真机键盘与极端尺寸未走查）；仍开放 **0 条** |
 | B · 契约欠账（要设计仓落库） | 3 | 不能（跨仓只读） |
 | C · 验证欠账（要完整环境 / 真机） | 6 | 不能（环境） |
 | D · 平台限制（不投入，只登记） | 5 | 不能（系统能力） |
@@ -39,7 +39,7 @@
 | A-8 ◐ | `WDSegmentedControl` 无 `tablist`/`tab` 与位置文案；**不支持段间横向拖动**；玻璃档实为纯色 | **B20（2026-11-20）已补**：段间横向拖动（`DragGesture(minimumDistance: 1)` + 横向占优判定，跟手用 `dragSegmentIndex`、松手吸附走与点击同一条 `commit`）、`WDSemantics.positional` 位置文案（措辞/分隔符由调用方注入）、方向键 ←/→ 即时切换（设计 21 §8）。**仍开放**：`tablist`/`tab` 角色（平台限制 L-3）、玻璃档纯色 | 角色与玻璃档仍登记 |
 | A-9 ◐ | `WDPicker` 滚轮形态即时提交（设计指定系统载体）、菜单无键盘环形焦点 | **B20（2026-11-20）已补菜单键盘导航**：方向键环形移动（`WDPickerMenuFocus`，首尾回绕、分组标题跳过）、Enter/Space 提交、Esc 关闭不改值；弹出层 `.focusable()` + `.focused()` 接键。**仍开放**：滚轮形态即时提交 = 平台限制 L-4 | 滚轮形态登记为 L-4，不动 |
 | A-10 ◐ | `WDDatePicker` 二维方向键网格导航、弹层自适应高度未实现 | **B20（2026-11-20）已补**：`WDDatePickerGrid`（←/→ ±1 天、↑/↓ ±7 天，RTL 镜像，跨月自动翻页，越界归一为最近可选日）+ 弹层改为 `CustomPresentationDetent` 按内容量高并夹在可用高度内（`WDDatePickerSheetHeight`）。三项自适应：仅月历 / 仅时间 / 月历+时间 | 已闭合；真机键盘行为仍待走查 |
-| A-11 | `WDAvatar` **成员配色 / 照片形态**未实现（恒 `surfaceTint`） | `WDAvatar.swift:72` `Circle().fill(colors.surfaceTint)` | `M2-EXIT-REPORT.md:78`（B2 只闭合五档/在线/停用） |
+| A-11 ✅ | `WDAvatar` **成员配色 / 照片形态** | **2026-11-21 闭合**：`tone: WDMemberTone?`（nil 回落 surfaceTint 逐像素不变）、`hostColor` 描边色、`WDAvatarImage` 照片形态 + 回退链（照片→文字→图标）、`WDMemberTone.assign` FNV1a32（五 fixture）。证据：`WDAvatar.swift:163-177/:259/:264`、`WDMemberTone+Assign.swift:20-42`；评审 R2 pass |
 | A-12 ✅ | `WDProgressBar` / `WDProgressRing` **25/50/75/100 阈值播报**未实现；`WDToast` / `WDBanner` 的 polite 播报也未实现 | 三者均无 `wdAnnouncerText` 引用（全仓仅 `WDPullRefresh` 有） | `M4-EXIT-REPORT.md` §4-⑥（只对 ProgressBar 记「调用方」）；Toast/Banner 在 §32 记「播报标签由调用方注入」，但 **SPEC §2.10 的 #28/#29 播报列仍写 polite** ⇒ 规格与实现口径不一致，需回写 |
 
 ### 1.3 新增能力的「零覆盖」缺口（B10–B17 落地但没人调用）
@@ -54,8 +54,8 @@
 
 | # | 项 | 状态 |
 | --- | --- | --- |
-| A-13 | `WDCard` `media` 变体 | 需设计给图片几何 + F-15 槽位词表增补（`B17-EXIT-REPORT.md` §5-①） |
-| A-14 | `WDToolbar` 长按 tooltip | 需手势仲裁回归（`B17-EXIT-REPORT.md` §5-②） |
+| A-13 ✅ | `WDCard` `media` 变体 | **2026-11-21 闭合**：`WDCardStyle.media`（**源级 breaking**，F-20 minor + Breaking 段）+ `WDCardMedia` + 图片带（通栏/16:9/最小高 96/灰底占位/160ms 淡入）。证据：`WDCard.swift:148-178/:269-327`、`WDCardMedia.swift`；评审 R2 pass |
+| A-14 ✅ | `WDToolbar` 长按 tooltip | **2026-11-21 闭合**：`showsTooltips`（默认 false）+ 500ms 门闩仲裁（Button 原生闭包 = 唯一执行路径，长按抬手不执行 action）+ 28 高气泡（全局坐标夹紧定位）。证据：`WDToolbarTooltip.swift:66-74` 判断点、`WDToolbar.swift:127-131` 吞点击；评审 R1 F1 blocker 与 F2-F4 全修，R2 pass。真机长按手势回归仍**【未验证】**（设计 §4.3 D-7） |
 
 ### 1.5 B19 复跑发现的回归（**照片层证据 → 已修**）
 
@@ -115,8 +115,9 @@
 | **B18（已完成，2026-11-20）** | A-1 焦点光环接线、A-2 松手播报、A-3～A-6 按下/聚焦反馈、A-7 角标朗读、A-12 阈值与 polite 播报、A-15～A-17 覆盖 | 记录见 `docs/B18-EXIT-REPORT.md` |
 | **B19（已完成，2026-11-20）** | **首次跑通验证层**（C-1 单测 344 全过 / C-2 快照 45 条 360 张零漂移 / C-3 demo 审计 18 条全过）+ 修 §1.5 的三处回归 + 启用此前 `.disabled` 的尺寸断言 | 记录见 `docs/B19-EXIT-REPORT.md`；**不新增 API**（符号仍 1380） |
 | **B20（已完成，2026-11-20）** | A-8 段间拖动 + 位置文案 + 方向键、A-9 菜单键盘环形焦点、A-10 日期方向键网格 + 弹层自适应高度、A-15 范围滑杆 8 态基线 | 记录见 `docs/B20-EXIT-REPORT.md`；符号数仍 **1380**，但 `WDSegmentedControl.init` **追加 2 个带默认值参数**（源码兼容、快照已显式更新） |
-| **下一批候选** | A-11 `WDAvatar` 成员配色 / 照片形态 | 纯代码可做，但**成员四色设计 token 缺 4 组色值**，需设计给值或按 `WDColorSlot` 已有时序推导（见 A-11 登记） |
-| **待设计** | A-13 `WDCard.media`、A-14 长按 tooltip | 缺设计值或需真机手势回归 |
+| **下一批候选** | ~~A-11 `WDAvatar` 成员配色 / 照片形态~~ | **2026-11-21 已闭合**（B21 批；设计值已随令牌 v1.1.0 交付） |
+| **待设计** | ~~A-13 `WDCard.media`、A-14 长按 tooltip~~ | **2026-11-21 已闭合**（B21 批；A-14 真机手势回归仍【未验证】） |
+| **待设计** | F7 契约登记 | `contracts/WDAvatar.yaml` 需补 `hostColor`/`WDAvatarImage`/照片 init（跨仓只读，待设计仓落库） |
 | **待架构师** | B-1 / B-3 契约落库与播报 fixtures | 跨仓只读 |
 
 ---

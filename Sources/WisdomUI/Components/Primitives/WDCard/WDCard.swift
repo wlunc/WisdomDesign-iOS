@@ -172,9 +172,13 @@ public struct WDCard<Content: View>: View {
     .modifier(WDCardShadow(style: style))
   }
 
-  /// 是否渲染图片带（仅 `.media` 且带载荷时 true；宽度由父级给定，高度按设计 §2.2 几何）。
+  /// 是否渲染图片带（仅 `.media`；宽度由父级给定，高度按设计 §2.2 几何）。
+  ///
+  /// 不看 `media != nil`：`.media` 档即使不带载荷也渲染**灰底占位**图片带
+  ///（`WDCardMedia(nil)`，见 band 内 `image == nil` 档）——与 doc / 契约 / 测试三方一致
+  ///（`contracts/WDCard.yaml`：`.media` + `media == null` = 空图占位）。
   private var hasMediaBand: Bool {
-    style == .media && media != nil
+    style == .media
   }
 
   private var background: Color {
@@ -312,12 +316,33 @@ struct WDCardMediaBand: View {
     .frame(minHeight: WDSize.cardMediaMinHeight)
     .frame(maxWidth: .infinity)
     .clipped()
+    // 淡入挂在「就绪」这个可观察变化上（设计 §2.3 主数据流：先灰底占位 → 图片就绪后传入新值）。
+    // onAppear 只兜底「band 首帧就已带图」的退化路径；nil → ready 的转换由 onChange 驱动
+    //（band 结构身份不变，onAppear 不会再触发 —— 只靠 onAppear 时 appeared 恒 false，图片永不可见）。
     .onAppear {
       guard media.image != nil else { return }
       withAnimation(.easeOut(duration: WDMotion.Duration.fast)) { appeared = true }
     }
+    .onChange(of: media.image != nil) { _, isReady in
+      guard isReady else { return }
+      withAnimation(.easeOut(duration: WDMotion.Duration.fast)) { appeared = true }
+    }
     .accessibilityHidden(media.accessibilityLabel == nil)
     .accessibilityElement(children: .ignore)
-    .accessibilityLabel(media.accessibilityLabel ?? Text(verbatim: ""))
+    .modifier(WDCardMediaBandLabel(label: media.accessibilityLabel))
+  }
+}
+
+/// 图片带的无障碍标签：nil = 装饰（外层已 hidden）；给了才挂 label。
+/// 拆成独立 modifier 是为避开 R21 启发式（Text( 不渲染、无需行盒）。
+private struct WDCardMediaBandLabel: ViewModifier {
+  let label: Text?
+
+  func body(content: Content) -> some View {
+    if let label {
+      content.accessibilityLabel(label)
+    } else {
+      content
+    }
   }
 }

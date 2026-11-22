@@ -5,7 +5,7 @@ import SwiftUI
 /// 工具栏按钮的长按仲裁：**纯函数**，输入事件序列输出决策。
 ///
 /// 为什么做成纯函数：设计 §3.3 的仲裁表（六行）必须能被单测**不依赖时序地**断言 ——
-/// 把状态与迁移放在这里，视图层（`WDToolbarTooltipButtonStyle`）只负责喂事件与执行决策。
+/// 把状态与迁移放在这里，视图层（`WDToolbarItemPressStyle` 的仲裁路径）只负责喂事件与执行决策。
 /// 「抬手是否执行 action」的**唯一判断点** = `decision(for: .release)` 一处（设计硬要求 2）。
 ///
 /// 仲裁表（设计 §3.3，逐行）：
@@ -77,9 +77,10 @@ enum WDToolbarArbitration {
     case (.thresholdFired, .pressing):
       return (.showTooltip, .tooltipShown)
 
-    // 提示显示期间的杂音抬手：本轮已被吞，只收尾。
+    // 提示显示期间抬手：不执行 action，只收尾 —— 气泡的 160ms 淡出由视图层
+    // 的 .animation(value: isVisible) 完成（设计 §3.3 第 4 行「提示保持到抬手后 160ms 淡出」）。
     case (.release, .tooltipShown):
-      return (.none, .consumed)
+      return (.hideTooltip, .consumed)
 
     // 滑出热区：提示消失、手势作废（§3.3 第 5 行）。
     case (.dragOut, .pressing), (.dragOut, .tooltipShown):
@@ -103,12 +104,19 @@ enum WDToolbarArbitration {
 
 /// 仲裁上下文：把纯状态机的决策接到视图层（WDToolbar 持有的回调）。
 /// 非 Sendable（回调都在 MainActor）——按钮样式本身就在 MainActor 上。
+/// 仲裁门闩（F1）：Button 的 action 闭包与仲裁样式共享的"本轮是否已吞"标记。
+/// 引用类型 —— 两侧看到同一份状态；每次按下时由样式复位。
+final class WDToolbarArbitrationLatch {
+  /// true = 本轮点击已被仲裁吞掉（长按达标/作废），Button 闭包必须直接 return。
+  var isConsumed = false
+}
+
 struct WDToolbarItemArbitrationContext {
   let itemID: String
   /// 长按阈值（秒；令牌 `WDSize.tooltipPressDuration` = 0.500）。
   let threshold: Double
-  /// 普通点击（500ms 内抬手）→ 执行原 action。
-  let onAction: () -> Void
+  /// 共享门闩（Button 闭包 ⇄ 样式状态机）。
+  let latch: WDToolbarArbitrationLatch
   /// 阈值到点 → 显示该项的提示。
   let onTooltip: (String) -> Void
   /// 提示收尾 → 隐藏该项的提示。
@@ -136,8 +144,9 @@ struct WDToolbarTooltip: View {
   static let disappearDuration: Double = WDMotion.Duration.fast
   /// 出现位移 4pt（Reduce Motion 下为 0；设计 §3.4）。
   static let appearOffset: CGFloat = 4  // wd-structure-check:disable R7 — 设计 14 §3.4 出现位移
-  /// 距按钮热区上边 8（令牌 WDSize.tooltipOffset）。
+  /// 距按钮热区上边 8（令牌 WDSize.tooltipOffset；设计 §3.2「距按钮热区上边 8」）。
   static let gapAboveButton: CGFloat = WDSize.tooltipOffset
+
   /// 水平越界时距安全区（屏幕缘）的内缩（设计 §3.2）。
   static let screenEdgeInset: CGFloat = WDSpacing.s3
 
@@ -158,9 +167,14 @@ struct WDToolbarTooltip: View {
           )
       )
       .modifier(WDToolbarTooltipShadow())
-      // 出现：120ms 淡入 + 上移 4pt（Reduce Motion 只淡入淡出）；消失：160ms 淡出。
+      // 出现：120ms 淡入 + 上移 4pt（Reduce Motion 只淡入淡出、无位移）；消失：160ms 淡出。
+      //
+      // 位移方向 = 「起点偏低、稳态归零」：稳态 offset = 0 ⇒ 气泡的真实下边缘由
+      // `WDToolbarTooltipAnchor` 的 alignmentGuide 锚在「距按钮热区上边 8」；
+      // 入场从 +4 上移到 0，**不预支进静态几何** ⇒ 普通 / Reduce Motion / 大字号三种情况
+      // 稳态间距恒为 8pt（R2 验证 #22 与 §8.4 的根因都在这条预支上）。
       .opacity(isVisible ? 1 : 0)
-      .offset(y: isVisible ? (reduceMotion ? 0 : -Self.appearOffset) : 0)
+      .offset(y: reduceMotion ? 0 : (isVisible ? 0 : Self.appearOffset))
       .animation(
         isVisible
           ? .easeOut(duration: Self.appearDuration)
@@ -189,19 +203,42 @@ struct WDToolbarTooltipAnchor: ViewModifier {
 
   func body(content: Content) -> some View {
     content.overlay(alignment: .top) {
+      // **下边锚定**（R2 验证 §8 requiredFix B）：气泡的真实下边缘距按钮热区上边
+      // `gapAboveButton`(8) —— 用 alignmentGuide 读气泡**自己**的 bottom，而不是
+      // 用「中心 - 固定半高」推算。好处：普通 / Reduce Motion / 动态字体放大后的可变高度
+      // 三种情况**恒为 8pt**，不会因为高度增长把间距吃掉（§8.4）。
+      //
+      // 横向仍走全局坐标夹紧（F4）：GeometryReader 读按钮全局 frame，夹紧后换算回局部。
+      //
+      // ⚠️ **必须插一层 \`Color.clear.overlay(alignment:)\`**（R2 验证 §9 V4-F1 blocker）：
+      // \`alignmentGuide\` 只是「向父容器声明对齐边」，**只有父容器消费该维度时才生效**。
+      // \`GeometryReader\` 把内容按 topLeading 摆放、不消费自定义导引 ⇒ 直接挂在 GR 内容上
+      // 的 guide 是死代码，气泡会压回按钮左上角（实测重叠 28–44pt）。
+      // 这层 overlay 是真正消费两轴 guide 的容器，且用 \`.topLeading\` 显式指定两维
+      //（不用 \`.top\` —— 它的横向维度是 .center，会与 .leading guide 打架，V4-F3）。
       GeometryReader { proxy in
-        let buttonMidX = proxy.size.width / 2  // wd-structure-check:disable R7 — 几何中点，非设计值
-        // 气泡实际半宽未知（文字自适应），按最大宽的一半做越界夹紧：
-        // 几何推导（除 2 取半），非设计令牌值：
+        let buttonFrame = proxy.frame(in: .global)
+        let buttonMidX = buttonFrame.midX
         let halfMax =
           WDSize.tooltipMaxWidth / 2  // wd-structure-check:disable R7 — 几何取半
           + WDToolbarTooltip.screenEdgeInset
-        // 水平居中于按钮；越界时平移进安全区（内侧留 8；设计 §3.2）。
-        let clampedMidX = min(
-          max(buttonMidX, halfMax), proxy.frame(in: .global).width - halfMax + buttonMidX)
-        WDToolbarTooltip(text: text, isVisible: isVisible)
-          .fixedSize(horizontal: true, vertical: true)
-          .position(x: clampedMidX, y: -WDToolbarTooltip.gapAboveButton)
+        let screenWidth = UIScreen.main.bounds.width
+        let clampedGlobalMidX = min(max(buttonMidX, halfMax), screenWidth - halfMax)
+        let localMidX = clampedGlobalMidX - buttonFrame.minX
+        Color.clear.overlay(alignment: .topLeading) {
+          WDToolbarTooltip(text: text, isVisible: isVisible)
+            .fixedSize(horizontal: true, vertical: true)
+            .alignmentGuide(.top) { dimensions in
+              // 气泡自身坐标系里：bottom = 高度；上移 (高度 + 间距) ⇒ 下边缘落在 -间距。
+              dimensions[.bottom] + WDToolbarTooltip.gapAboveButton
+            }
+            .alignmentGuide(.leading) { dimensions in
+              // 水平居中于按钮：气泡中心对齐 localMidX ⇒ leading = center − 宽度/2。
+              let halfWidth =
+                dimensions[.trailing] / 2  // wd-structure-check:disable R7 — 几何取半
+              return halfWidth - localMidX
+            }
+        }
       }
     }
   }

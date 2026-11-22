@@ -53,6 +53,9 @@ public struct WDToolbar: View {
   @State private var focusedItemID: String?
   /// 长按提示可见的项（A-14；同一时刻至多一个 —— 按住谁显示谁）。
   @State private var tooltipItemID: String?
+  /// 本轮按下的仲裁门闩（F1；Button 闭包 ⇄ 样式状态机共享。每项一个引用实例，
+  /// 按 itemID 记 —— 按下时由样式复位）。
+  @State private var arbitrationLatches: [String: WDToolbarArbitrationLatch] = [:]
 
   /// 构造：项数组 + 分组标签 + 溢出菜单标签。
   ///
@@ -97,6 +100,14 @@ public struct WDToolbar: View {
 
   // MARK: - 零件
 
+  /// 取该项的门闩（没有则建 —— 引用类型，跨 Button 闭包与样式状态机共享）。
+  private func latchFor(_ itemID: String) -> WDToolbarArbitrationLatch {
+    if let existing = arbitrationLatches[itemID] { return existing }
+    let fresh = WDToolbarArbitrationLatch()
+    arbitrationLatches[itemID] = fresh
+    return fresh
+  }
+
   private func itemButton(_ item: WDToolbarItem) -> some View {
     WDAccessibilityFocusHost(
       focused: Binding(
@@ -111,6 +122,13 @@ public struct WDToolbar: View {
       target: .single
     ) {
       Button {
+        // A-14/F1：门闩检查 —— 长按达标/作废的本轮点击在这里被吞（唯一执行路径 =
+        // Button 原生闭包；仲裁状态机只判定 + 置闩，不再自行执行 action）。
+        let latch = arbitrationLatches[item.id]
+        if showsTooltips && item.isEnabled, latch?.isConsumed == true {
+          latch?.isConsumed = false
+          return
+        }
         guard item.isEnabled else { return }
         WDHaptics.shared.play(.press, budget: budget)
         item.action()
@@ -126,16 +144,16 @@ public struct WDToolbar: View {
           )
           .contentShape(Rectangle())
       }
-      // A-14：长按仲裁。提示启用时按钮的 action 由仲裁状态机把关 ——
+      // A-14：长按仲裁。提示启用时按钮的 action 由仲裁状态机 + 门闩把关 ——
       // 「抬手是否执行 action」的唯一判断点在 WDToolbarArbitration.decide(.release)，
-      // 见 WDToolbarItemTooltipStyle（禁用 .simultaneousGesture 的原因见该类型注释）。
+      // 门闩见 WDToolbarArbitrationLatch（禁用 .simultaneousGesture 的原因见该类型注释）。
       .buttonStyle(
         WDToolbarItemPressStyle(
           arbitration: showsTooltips && item.isEnabled
             ? WDToolbarItemArbitrationContext(
               itemID: item.id,
               threshold: WDSize.tooltipPressDuration,
-              onAction: { item.action() },
+              latch: latchFor(item.id),
               onTooltip: { id in tooltipItemID = id },
               onTooltipEnd: { id in if tooltipItemID == id { tooltipItemID = nil } })
             : nil
@@ -257,6 +275,31 @@ private struct WDToolbarItemPressStyle: ButtonStyle {
       }
       .scaleEffect(isPressedVisually ? pressedScale : 1)
       .animation(.easeOut(duration: WDMotion.Duration.instant), value: isPressedVisually)
+      // F3：滑出热区 → 喂 .dragOut（手势作废）。minimumDistance ≥ 1 合仓规（SPEC §3.4），
+      // 零位移轻点不进拖动分支；按住后移出按钮 ⇒ 触发（系统 Button 的 isPressed 同步变 false，
+      // 顺序上 drag 先到 —— 门闩与作废相位都以状态机为准）。
+      .gesture(
+        DragGesture(minimumDistance: 1, coordinateSpace: .local)
+          .onChanged { value in
+            let inBounds =
+              value.startLocation.x >= 0 && value.startLocation.y >= 0
+              && value.location.x >= 0 && value.location.y >= 0
+            if phase != .consumed,
+              !inBounds
+                || value.translation.width.magnitude > WDSize.touchTargetMin
+                || value.translation.height.magnitude > WDSize.touchTargetMin
+            {
+              let (d, p) = WDToolbarArbitration.decide(
+                .dragOut(at: ProcessInfo.processInfo.systemUptime), in: phase,
+                threshold: arbitration.threshold)
+              phase = p
+              if d == .voidGesture {
+                arbitration.latch.isConsumed = true  // 作废：Button 闭包吞掉
+                arbitration.onTooltipEnd(arbitration.itemID)
+              }
+            }
+          }
+      )
       // 阈值计时：按下后 500ms 喂 thresholdFired；抬手/作废即取消（一次性延时，非轮询）。
       .onChange(of: configuration.isPressed) { _, pressed in
         handlePressChange(pressed, arbitration: arbitration)
@@ -264,6 +307,13 @@ private struct WDToolbarItemPressStyle: ButtonStyle {
   }
 
   /// 按下/抬手 → 状态机事件。视图层喂事件的唯一入口。
+  ///
+  /// F1 门闩口径：action 的**唯一执行路径 = Button 原生闭包**（见 WDToolbar.itemButton）。
+  /// 状态机不再自行执行 action：
+  /// - 按下：复位门闩（新一轮）；
+  /// - 阈值到点（showTooltip）：**置闩** —— 抬手时 Button 闭包读到闩 → 吞掉本次点击；
+  /// - 快速抬手（performAction）：闩保持 false —— Button 闭包正常执行一次；
+  /// - 作废/收尾：闩保持置位，Button 闭包吞掉并复位。
   private func handlePressChange(
     _ pressed: Bool,
     arbitration: WDToolbarItemArbitrationContext
@@ -271,6 +321,7 @@ private struct WDToolbarItemPressStyle: ButtonStyle {
     thresholdTask?.cancel()
     thresholdTask = nil
     if pressed {
+      arbitration.latch.isConsumed = false  // 新一轮：复位门闩
       let (decision, next) = WDToolbarArbitration.decide(
         .press(at: ProcessInfo.processInfo.systemUptime), in: phase,
         threshold: arbitration.threshold)
@@ -284,18 +335,21 @@ private struct WDToolbarItemPressStyle: ButtonStyle {
           .thresholdFired, in: phase, threshold: arbitration.threshold)
         phase = p
         if d == .showTooltip {
+          arbitration.latch.isConsumed = true  // 置闩：本轮点击已被吞
           arbitration.onTooltip(arbitration.itemID)
         }
       }
     } else {
-      // 抬手：**唯一判断点** —— 状态机决定执行 action 还是收尾提示。
+      // 抬手：**唯一判断点** —— 状态机只判定，不执行 action。
+      // performAction = 闩保持 false（Button 闭包正常执行一次）；
+      // 其余（hideTooltip/void/none）= 闩保持置位，Button 闭包吞掉并复位。
       let (decision, next) = WDToolbarArbitration.decide(
         .release(at: ProcessInfo.processInfo.systemUptime), in: phase,
         threshold: arbitration.threshold)
       phase = next
       switch decision {
       case .performAction:
-        arbitration.onAction()
+        break  // 闩为 false：Button 原生闭包执行（无双触发）
       case .hideTooltip:
         arbitration.onTooltipEnd(arbitration.itemID)
       default:

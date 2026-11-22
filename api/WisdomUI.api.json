@@ -618,9 +618,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor init(value: WDAvatarValue, size: WDAvatarSize, isOnline: Bool = false, isDisabled: Bool = false)",
+      "decl" : "@MainActor init(value: WDAvatarValue, size: WDAvatarSize, isOnline: Bool = false, isDisabled: Bool = false, tone: WDMemberTone? = nil, hostColor: Color? = nil)",
       "kind" : "swift.init",
-      "path" : "WDAvatar.init(value:size:isOnline:isDisabled:)"
+      "path" : "WDAvatar.init(value:size:isOnline:isDisabled:tone:hostColor:)"
     },
     {
       "access" : "public",
@@ -717,6 +717,18 @@
       "decl" : "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDAvatar.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "struct WDAvatarImage",
+      "kind" : "swift.struct",
+      "path" : "WDAvatarImage"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(_ image: Image, accessibilityLabel: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDAvatarImage.init(_:accessibilityLabel:)"
     },
     {
       "access" : "public",
@@ -924,9 +936,21 @@
     },
     {
       "access" : "public",
+      "decl" : "static func == (lhs: WDAvatarValue, rhs: WDAvatarValue) -> Bool",
+      "kind" : "swift.func.op",
+      "path" : "WDAvatarValue.==(_:_:)"
+    },
+    {
+      "access" : "public",
       "decl" : "init(icon: WDIconName)",
       "kind" : "swift.init",
       "path" : "WDAvatarValue.init(icon:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(image: Image?, label: Text? = nil, icon: WDIconName? = nil, accessibilityLabel: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDAvatarValue.init(image:label:icon:accessibilityLabel:)"
     },
     {
       "access" : "public",
@@ -1572,6 +1596,18 @@
     },
     {
       "access" : "public",
+      "decl" : "@MainActor init(style: WDCardStyle, media: WDCardMedia?, action: @escaping () -> Void, @ViewBuilder content: () -> Content)",
+      "kind" : "swift.init",
+      "path" : "WDCard.init(style:media:action:content:)"
+    },
+    {
+      "access" : "public",
+      "decl" : "@MainActor init(style: WDCardStyle, media: WDCardMedia?, @ViewBuilder content: () -> Content)",
+      "kind" : "swift.init",
+      "path" : "WDCard.init(style:media:content:)"
+    },
+    {
+      "access" : "public",
       "decl" : "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
       "kind" : "swift.method",
       "path" : "WDCard.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)"
@@ -1668,6 +1704,18 @@
     },
     {
       "access" : "public",
+      "decl" : "struct WDCardMedia",
+      "kind" : "swift.struct",
+      "path" : "WDCardMedia"
+    },
+    {
+      "access" : "public",
+      "decl" : "init(_ image: Image?, accessibilityLabel: Text? = nil)",
+      "kind" : "swift.init",
+      "path" : "WDCardMedia.init(_:accessibilityLabel:)"
+    },
+    {
+      "access" : "public",
       "decl" : "enum WDCardStyle",
       "kind" : "swift.enum",
       "path" : "WDCardStyle"
@@ -1683,6 +1731,12 @@
       "decl" : "case glass",
       "kind" : "swift.enum.case",
       "path" : "WDCardStyle.glass"
+    },
+    {
+      "access" : "public",
+      "decl" : "case media",
+      "kind" : "swift.enum.case",
+      "path" : "WDCardStyle.media"
     },
     {
       "access" : "public",
@@ -5178,6 +5232,12 @@
     },
     {
       "access" : "public",
+      "decl" : "static func assign(memberID: String) -> WDMemberTone",
+      "kind" : "swift.type.method",
+      "path" : "WDMemberTone.assign(memberID:)"
+    },
+    {
+      "access" : "public",
       "decl" : "var fill: Color { get }",
       "kind" : "swift.property",
       "path" : "WDMemberTone.fill"
@@ -8148,9 +8208,9 @@
     },
     {
       "access" : "public",
-      "decl" : "@MainActor init(items: [WDToolbarItem], accessibilityLabel: Text, overflowAccessibilityLabel: Text? = nil)",
+      "decl" : "@MainActor init(items: [WDToolbarItem], accessibilityLabel: Text, overflowAccessibilityLabel: Text? = nil, showsTooltips: Bool = false)",
       "kind" : "swift.init",
-      "path" : "WDToolbar.init(items:accessibilityLabel:overflowAccessibilityLabel:)"
+      "path" : "WDToolbar.init(items:accessibilityLabel:overflowAccessibilityLabel:showsTooltips:)"
     },
     {
       "access" : "public",

@@ -66,6 +66,11 @@ public struct WDAvatarValue: Sendable, Equatable {
   /// `image` 是可选的，回退链因此在**值构造处**就能表达完整：
   /// 图还没下载好 / 下载失败 ⇒ 传 `nil`（连同回退内容），渲染直接落到文字或图标档，
   /// 中间不存在"占位帧"或"破图帧"。照片就绪后再构造一个新值即可（160ms 淡入由组件负责）。
+  ///
+  /// F8 提示：`==` 不比较照片负载本身 —— 若调用方把本值用于 Equatable 驱动的 diff
+  ///（`.animation(value:)` / `EquatableView` / `ForEach`）且需要"同一人换了照片"触发更新，
+  /// 请在调用点换 `.id(...)`（如 `.id(memberID + photoVersion)`）；SwiftUI 结构化 diff
+  /// 不受影响（照片照常重渲染）。
   public init(
     image: Image?,
     label: Text? = nil,
