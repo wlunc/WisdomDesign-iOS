@@ -38,7 +38,8 @@ list_files() {
   {
     git ls-files '*.swift'
     git ls-files --others --exclude-standard '*.swift'
-  } | sort -u | grep -vE '/Foundation/[Gg]enerated/' | grep -v 'Scripts/Fixtures/structure/' || true
+  } | sort -u | grep -vE '/Foundation/[Gg]enerated/' | grep -v 'Scripts/Fixtures/structure/' \
+    | grep -vE '^(AIStarter|ai/skill-provider/templates)/' || true
 }
 
 if [ "${1:-}" = "--list" ]; then
