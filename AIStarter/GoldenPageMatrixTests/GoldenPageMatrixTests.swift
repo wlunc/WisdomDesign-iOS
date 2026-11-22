@@ -19,7 +19,7 @@ final class GoldenPageMatrixTests: XCTestCase {
         app.launchArguments = ["-UIPreferredContentSizeCategoryName", category]
         app.launchEnvironment = ["AISKILL_GOLDEN_SCENARIO": scenarioName]
         app.launch()
-        XCTAssertTrue(app.staticTexts["golden-task-list-root"].waitForExistence(timeout: 30) || app.otherElements["golden-task-list-root"].waitForExistence(timeout: 5), "\(scenarioName)/\(category)：根视图未渲染")
+        XCTAssertTrue(app.descendants(matching: .any)["golden-task-list-root"].waitForExistence(timeout: 30), "\(scenarioName)/\(category)：根视图未渲染")
         let identifier = Self.identifier(for: scenarioName)
         XCTAssertTrue(app.descendants(matching: .any)[identifier].waitForExistence(timeout: 15), "\(scenarioName)/\(category)：缺少 \(identifier)")
         let shot = XCUIScreen.main.screenshot()
