@@ -33,5 +33,5 @@
     "ai/skill-provider/SNAPSHOT.md": "Snapshot provenance, stale declaration, replay and dist audit.",
     "../wisdomdesign/ai/skill/m0/baseline.json": "Baseline commit and dirty-file isolation."
   },
-  "driftPolicy": "Regenerate API cards only from the pinned baseline snapshot: python3 ai/skill-provider/api-cards/generate_api_cards.py --api <baseline api>/WisdomUI.api.json --out ai/skill-provider/api-cards . The generator fails on pin mismatch; the current HEAD API file is intentionally rejected until the provider is re-baselined."
+  "driftPolicy": "Regenerate API cards only from the pinned baseline snapshot: node ai/skill-provider/api-cards/generate_api_cards.js --api <baseline api>/WisdomUI.api.json --out ai/skill-provider/api-cards . The generator fails on pin mismatch; the current HEAD API file is intentionally rejected until the provider is re-baselined."
 }

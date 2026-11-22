@@ -4,7 +4,7 @@
 
 - `AIStarter/APIMinimalExample.swift`：最小调用例。
 - `AIStarter/TaskListView.swift`：黄金任务列表页（模板 `ai-skill-provider/templates/task-list.swift` 的受控重命名副本）。
-- `copy_template.py`：白名单页面名 + 目标校验 + 默认拒绝覆盖；不执行模板内脚本、不清理其它文件。
+- `copy_template.js`：白名单页面名 + 目标校验 + 默认拒绝覆盖；不执行模板内脚本、不清理其它文件。
 - `GoldenPageMatrixTests/`：UI testing target（`com.apple.product-type.bundle.ui-testing`，`TEST_TARGET_NAME=AIStarter`，依赖 app target）。
 
 编译（cwd = 仓库根）：

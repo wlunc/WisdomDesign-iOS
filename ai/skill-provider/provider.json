@@ -18,7 +18,7 @@
     "contentHash": "2b531363126fca19b716637db1703ad0bc01c354e1baa3b08df81a0969884a1d"
   },
   "adapters": {
-    "api": "ai/skill-provider/api-cards/generate_api_cards.py (reads api/WisdomUI.api.json only)",
+    "api": "ai/skill-provider/api-cards/generate_api_cards.js (reads api/WisdomUI.api.json only)",
     "tokens": "read-only: ../wisdomdesign/tokens/wisdom.tokens.json is design truth; provider declares no token values",
     "templates": "ai/skill-provider/templates/task-list.swift",
     "verify": "ai/skill-provider/verification.json"
@@ -28,7 +28,7 @@
   "status": {
     "effective": "experimental",
     "declared": "experimental",
-    "reason": "Effective status is recomputed from evidence by ai/skill-provider/validate_provider.py (cards=discovered, consumer build+typecheck passed, UI matrix blocked, library gate not-run); provider snapshot pinned to c3c32f3 is stale vs HEAD 64539fe, see SNAPSHOT.md.",
+    "reason": "Effective status is recomputed from evidence by ai/skill-provider/validate_provider.js (cards=discovered, consumer build+typecheck passed, UI matrix blocked, library gate not-run); provider snapshot pinned to c3c32f3 is stale vs HEAD 64539fe, see SNAPSHOT.md.",
     "evidenceRefs": [
       "api/WisdomUI.api.json",
       "ai/skill-provider/api-cards/index.json",

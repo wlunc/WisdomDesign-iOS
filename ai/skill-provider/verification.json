@@ -4,7 +4,7 @@
   "apiEvidenceMinimum": "example-compiled",
   "apiEvidenceMinimumScope": "golden-page",
   "apiEvidenceMinimumNote": "The minimum applies to API usage in the golden page/consumer build; individual API cards remain 'discovered' (public symbol graph only).",
-  "statusPolicy": "effective status is recomputed by ai/skill-provider/validate_provider.py from card/capability/verification evidence; no self-verified claim.",
+  "statusPolicy": "effective status is recomputed by ai/skill-provider/validate_provider.js from card/capability/verification evidence; no self-verified claim.",
   "updatedAt": "2026-11-22T10:34:00+08:00",
   "commands": [
     {
@@ -28,7 +28,7 @@
     {
       "id": "ios-scaffold-safety",
       "cwd": ".",
-      "command": "python3 iOS/AIStarter/AIStarter/copy_template.py task-list <workspace-relative-destination>",
+      "command": "node iOS/AIStarter/AIStarter/copy_template.js task-list <workspace-relative-destination>",
       "purpose": "Scaffold refuses overwrite/escape and copies valid destination",
       "status": "passed",
       "exitCode": 0,
@@ -60,8 +60,8 @@
     "note": "Converted from bundle.unit-test during t6 (F7). The target now builds a UI-test Runner; the only observed blocker is the sandbox PTY error."
   },
   "statusComputation": {
-    "computedBy": "ai/skill-provider/validate_provider.py",
-    "command": "python3 iOS/ai/skill-provider/validate_provider.py",
+    "computedBy": "ai/skill-provider/validate_provider.js",
+    "command": "node iOS/ai/skill-provider/validate_provider.js",
     "cwd": ".",
     "computedAt": "2026-11-22T10:34:00+08:00",
     "derivedEffective": "experimental",
@@ -88,10 +88,10 @@
     "baselineApiSnapshotSha256": "123136bdf1f5299d740e1e220c7973eb82914c5df53eb093053ac51469158c34",
     "currentRepoHead": "64539fe78d9a036a6e34cbfa01c72e4430c0e2b0",
     "currentApiSnapshotSha256": "1d3be9d703f9ea54710905a6d90db2e9ef7c05b55ab8d8f529c9b2843b725348",
-    "replayCommand": "git -C iOS show c3c32f3:api/WisdomUI.api.json > /tmp/wisdom-api-baseline.json && python3 iOS/ai/skill-provider/api-cards/generate_api_cards.py --api /tmp/wisdom-api-baseline.json --out iOS/ai/skill-provider/api-cards",
+    "replayCommand": "git -C iOS show c3c32f3:api/WisdomUI.api.json > /tmp/wisdom-api-baseline.json && node iOS/ai/skill-provider/api-cards/generate_api_cards.js --api /tmp/wisdom-api-baseline.json --out iOS/ai/skill-provider/api-cards",
     "replayExitCode": 0,
     "staleReason": "iOS HEAD advanced from c3c32f3 to 64539fe after the provider snapshot; the current api/WisdomUI.api.json no longer matches the generator pin. Cards were replayed from the pinned baseline snapshot, so they remain reproducible at the declared snapshot but are stale relative to HEAD.",
-    "refresh": "After the iOS repo is re-baselined: bump EXPECTED_API_SHA in generate_api_cards.py, update provider.source (commit/dirty/dirtyFiles/contentHash) and SOURCES.json baseline, rerun generate+validate, then rebuild the package after the t4 review finishes."
+    "refresh": "After the iOS repo is re-baselined: bump EXPECTED_API_SHA in generate_api_cards.js, update provider.source (commit/dirty/dirtyFiles/contentHash) and SOURCES.json baseline, rerun generate+validate, then rebuild the package after the t4 review finishes."
   },
   "distAudit": {
     "auditedAt": "2026-11-22T10:32:00+08:00",
@@ -156,8 +156,8 @@
   },
   "ciIntegration": {
     "status": "exempt-registered",
-    "validator": "ai/skill-provider/validate_provider.py",
-    "runCommand": "python3 iOS/ai/skill-provider/validate_provider.py",
+    "validator": "ai/skill-provider/validate_provider.js",
+    "runCommand": "node iOS/ai/skill-provider/validate_provider.js",
     "cwd": ".",
     "exemptionReason": "wisdomdesign CI checks out only the wisdomdesign repo and cannot access the sibling iOS checkout; iOS provider validation is platform-owned. The explicit exemption and run command are registered here and in CI-INTEGRATION.md.",
     "registeredBy": "t6 / ios-reviewer",

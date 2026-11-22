@@ -4,11 +4,11 @@
 
 ```bash
 cd <workspace>   # 必须与 ../wisdomdesign 同级
-python3 iOS/ai/skill-provider/validate_provider.py
+node iOS/ai/skill-provider/validate_provider.js
 # exit 0 时打印 recomputed status 与 33 cards
 ```
 
-依赖：Python 3 标准库；需要同级 `wisdomdesign/` 提供 M0 provider schema、baseline 与 catalog。
+依赖：Node.js 标准库（零 npm 依赖）；需要同级 `wisdomdesign/` 提供 M0 provider schema、baseline 与 catalog。
 校验内容：provider/capabilities/api-card 三个 schema（含 additionalProperties）、index 与磁盘卡片一致、
 卡片/证据引用可解析、status 由证据重算并与 `provider.json` 一致、snapshot stale 声明与当前 API 哈希一致、
 组件覆盖声明（10/37）与 catalog 一致。
@@ -23,5 +23,5 @@ python3 iOS/ai/skill-provider/validate_provider.py
 
 - 责任：iOS Provider 所有者在**每次修改 provider 源、API 卡、capabilities 或 verification 之后**运行上述命令，并在提交/评审中附退出码。
 - 打包/发布前：流水线负责人应在打包前运行该命令（或读取 `verification.json#/statusComputation` 的 derivedEffective），不得只复制 `provider.json` 的静态字段。
-- 若未来 iOS 仓接入自己的 CI：在 iOS 仓 CI 增加 `python3 ai/skill-provider/validate_provider.py` 步骤即可；若 wisdomdesign CI 引入多仓 checkout，也可在该 checkout 下运行同命令。
+- 若未来 iOS 仓接入自己的 CI：在 iOS 仓 CI 增加 `node ai/skill-provider/validate_provider.js` 步骤即可；若 wisdomdesign CI 引入多仓 checkout，也可在该 checkout 下运行同命令。
 - 2026-11-22 本轮已运行：exit 0（33 cards, status=experimental）。
