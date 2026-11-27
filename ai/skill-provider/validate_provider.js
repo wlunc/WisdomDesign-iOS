@@ -528,14 +528,38 @@ function main() {
   ]) {
     requireCondition(typecheck.command.includes(token), "ios-minimal-typecheck command missing token: " + token);
   }
-  requireCondition(byId.get("ios-ui-matrix").status === "blocked" && byId.get("ios-ui-matrix").exitCode === 65,
-    "ios-ui-matrix must stay blocked with the observed exit 65");
-  requireCondition((verification.runtimeMatrix ?? {}).loading === "blocked-sandbox-pseudo-terminal",
-    "runtimeMatrix loading must stay blocked");
-  requireCondition(commands.some((item) => item.status === "not-run"),
-    "verification must preserve at least one not-run command");
+  // The matrix status is evidence-driven, not pinned: a passed run must be exit 0 and
+  // every runtimeMatrix entry must be passed; a blocked run must keep exit 65 and at
+  // least one blocked entry. This prevents both silent downgrades and fake greens.
+  const matrixCommand = byId.get("ios-ui-matrix");
+  const matrixEntries = Object.entries(verification.runtimeMatrix ?? {});
+  // Entries covered by this automated matrix. Interaction and device items
+  // (systemBack / safeAreaTab / keyboardScroll / voiceOver) are separate manual
+  // checks and must stay not-run here; they are listed in verification.unverified.
+  const AUTOMATED_MATRIX_ENTRIES = [
+    "loading", "content", "empty", "error", "light", "dark", "AX3", "shortText", "longText",
+  ];
+  const MANUAL_MATRIX_ENTRIES = ["systemBack", "safeAreaTab", "keyboardScroll", "voiceOver"];
+  if (matrixCommand.status === "passed") {
+    requireCondition(matrixCommand.exitCode === 0, "passed ios-ui-matrix must record exitCode 0");
+    const notPassed = AUTOMATED_MATRIX_ENTRIES.filter((key) => (verification.runtimeMatrix ?? {})[key] !== "passed");
+    requireCondition(notPassed.length === 0,
+      "passed ios-ui-matrix requires automated entries passed; still not passed: " + notPassed.join(", "));
+    const wronglyClaimed = MANUAL_MATRIX_ENTRIES.filter((key) => (verification.runtimeMatrix ?? {})[key] === "passed");
+    requireCondition(wronglyClaimed.length === 0,
+      "manual matrix entries must not be claimed as passed: " + wronglyClaimed.join(", "));
+  } else if (matrixCommand.status === "blocked") {
+    requireCondition(matrixCommand.exitCode === 65, "blocked ios-ui-matrix must record exit 65");
+    requireCondition(matrixEntries.some(([, value]) => value === "blocked-sandbox-pseudo-terminal"),
+      "blocked ios-ui-matrix requires at least one blocked runtimeMatrix entry");
+  } else {
+    requireCondition(false, "ios-ui-matrix status must be passed or blocked, got " + matrixCommand.status);
+  }
   requireCondition(commands.some((item) => item.status === "passed"),
     "verification must contain at least one passed command");
+  // What must never disappear is the honest declaration of what was NOT verified.
+  requireCondition((verification.unverified ?? []).length > 0,
+    "verification.unverified must stay non-empty: some checks are manual or environment-dependent");
 
   // 9. UI-test target configuration and final matrix report (F5/F7).
   const uiTarget = verification.uiMatrixTarget ?? {};
