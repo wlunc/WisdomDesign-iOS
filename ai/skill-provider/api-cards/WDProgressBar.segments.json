@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDProgressBar",
+  "canonicalParam": "segments",
+  "symbol": "WDProgressBar.init(segments:completed:label:valueText:)",
+  "signature": "@MainActor init(segments: Int, completed: Int, label: Text? = nil, valueText: Text? = nil)",
+  "callShape": "WDProgressBar(segments: 5, completed: 3, label: label)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDProgressBar.init(segments:completed:label:valueText:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: segments/completed/label/valueText"
+  ]
+}

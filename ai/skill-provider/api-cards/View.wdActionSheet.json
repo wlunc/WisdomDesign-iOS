@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDActionSheet",
+  "canonicalParam": "presented",
+  "symbol": "View.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)",
+  "signature": "@MainActor func wdActionSheet(isPresented: Binding<Bool>, title: Text? = nil, message: Text? = nil, items: [WDActionSheetItem], onSelect: @escaping (WDActionSheetItem.ID) -> Void, onCancel: (() -> Void)? = nil) -> some View",
+  "callShape": "view.wdActionSheet(isPresented: $showing, items: items, onSelect: { item in })",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#View.wdActionSheet(isPresented:title:message:items:onSelect:onCancel:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: isPresented/title/message/items/onSelect/onCancel"
+  ]
+}

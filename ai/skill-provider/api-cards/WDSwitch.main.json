@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDSwitch",
+  "canonicalParam": "isOn",
+  "symbol": "WDSwitch.init(isOn:label:)",
+  "signature": "@MainActor init(isOn: Binding<Bool>, label: Text)",
+  "callShape": "WDSwitch(isOn: $enabled, label: Text(verbatim: \"Enable\"))",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDSwitch.init(isOn:label:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: isOn/label"
+  ]
+}

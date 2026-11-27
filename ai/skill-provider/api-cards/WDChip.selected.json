@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDChip",
+  "canonicalParam": "isSelected",
+  "symbol": "WDChip.init(label:isSelected:leadingIcon:size:)",
+  "signature": "@MainActor init(label: Text, isSelected: Binding<Bool>, leadingIcon: WDIconName? = nil, size: WDChipSize = .standard)",
+  "callShape": "WDChip(label: label, isSelected: $selected)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDChip.init(label:isSelected:leadingIcon:size:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: label/isSelected/leadingIcon/size"
+  ]
+}

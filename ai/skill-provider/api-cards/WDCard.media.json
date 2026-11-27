@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDCard",
+  "canonicalParam": "media",
+  "symbol": "WDCard.init(style:media:action:content:)",
+  "signature": "@MainActor init(style: WDCardStyle, media: WDCardMedia?, action: @escaping () -> Void, @ViewBuilder content: () -> Content)",
+  "callShape": "WDCard(style: .media, media: WDCardMedia(image), action: { open() }) { content }",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDCard.init(style:media:action:content:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: style/media/action/@ViewBuilder content",
+    "media is nil for placeholder; .media requires this init."
+  ]
+}

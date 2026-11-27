@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDDivider",
+  "canonicalParam": "style",
+  "symbol": "WDDivider.init(style:)",
+  "signature": "@MainActor init(style: WDDividerStyle)",
+  "callShape": "WDDivider(style: .inset)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDDivider.init(style:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: style"
+  ]
+}

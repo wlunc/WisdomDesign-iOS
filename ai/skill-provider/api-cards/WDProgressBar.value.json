@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDProgressBar",
+  "canonicalParam": "value",
+  "symbol": "WDProgressBar.init(value:label:valueText:)",
+  "signature": "@MainActor init(value: Double, label: Text? = nil, valueText: Text? = nil)",
+  "callShape": "WDProgressBar(value: 0.6, label: label, valueText: valueText)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDProgressBar.init(value:label:valueText:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: value/label/valueText"
+  ]
+}

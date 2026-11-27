@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDChip",
+  "canonicalParam": "onDelete",
+  "symbol": "WDChip.init(label:leadingIcon:size:deleteAccessibilityLabel:onDelete:)",
+  "signature": "@MainActor init(label: Text, leadingIcon: WDIconName? = nil, size: WDChipSize = .standard, deleteAccessibilityLabel: Text, onDelete: @escaping () -> Void)",
+  "callShape": "WDChip(label: label, deleteAccessibilityLabel: label, onDelete: { remove() })",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDChip.init(label:leadingIcon:size:deleteAccessibilityLabel:onDelete:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: label/leadingIcon/size/deleteAccessibilityLabel/onDelete"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDSearchField",
+  "canonicalParam": "onCancel",
+  "symbol": "WDSearchField.init(text:placeholder:leadingIcon:clearAccessibilityLabel:cancelLabel:onCancel:onSubmit:resultCount:announcer:)",
+  "signature": "@MainActor init(text: Binding<String>, placeholder: Text, leadingIcon: WDIconName = .search, clearAccessibilityLabel: Text, cancelLabel: Text, onCancel: (() -> Void)? = nil, onSubmit: (() -> Void)? = nil, resultCount: Int? = nil, announcer: (@MainActor @Sendable (Int) -> Void)? = nil)",
+  "callShape": "WDSearchField(text: $query, placeholder: placeholder, clearAccessibilityLabel: clearLabel, cancelLabel: cancelLabel, onCancel: { dismiss() })",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDSearchField.init(text:placeholder:leadingIcon:clearAccessibilityLabel:cancelLabel:onCancel:onSubmit:resultCount:announcer:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: text/placeholder/leadingIcon/clearAccessibilityLabel/cancelLabel/onCancel/onSubmit"
+  ]
+}

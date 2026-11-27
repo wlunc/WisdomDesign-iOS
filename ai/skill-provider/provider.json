@@ -6,16 +6,10 @@
   "libraryVersion": "1.0.0 (source baseline c3c32f3c81f66444abd10614acfc0095f80aebd6)",
   "source": {
     "repository": "iOS",
-    "commit": "c3c32f3c81f66444abd10614acfc0095f80aebd6",
-    "dirty": true,
-    "dirtyFiles": [
-      "Sources/WisdomUI/Components/Composites/WDToolbar/WDToolbar.swift",
-      "Sources/WisdomUI/Components/Composites/WDToolbar/WDToolbarTooltip.swift",
-      "Sources/WisdomUI/Components/Primitives/WDAvatar/WDAvatar.swift",
-      "Sources/WisdomUI/Components/Primitives/WDCard/WDCard.swift",
-      "Tests/WisdomUITests/Components/WDCardTests.swift"
-    ],
-    "contentHash": "2b531363126fca19b716637db1703ad0bc01c354e1baa3b08df81a0969884a1d"
+    "commit": "ce8f39dce51b4d53c9ed870f29f1c68efd15ed8f",
+    "dirty": false,
+    "dirtyFiles": [],
+    "contentHash": "e4397bba7d64adde20670069001e60c294656247fd698662d3e8ea1565267a7f"
   },
   "adapters": {
     "api": "ai/skill-provider/api-cards/generate_api_cards.js (reads api/WisdomUI.api.json only)",

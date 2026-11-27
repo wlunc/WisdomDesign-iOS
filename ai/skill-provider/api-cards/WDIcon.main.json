@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDIcon",
+  "canonicalParam": "icon",
+  "symbol": "WDIcon.init(icon:size:)",
+  "signature": "@MainActor init(icon: WDIconName, size: WDIconSize = .md)",
+  "callShape": "WDIcon(icon: .calendar, size: .md)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDIcon.init(icon:size:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: icon/size"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDBadge",
+  "canonicalParam": "label",
+  "symbol": "WDBadge.init(label:)",
+  "signature": "@MainActor init(label: Text)",
+  "callShape": "WDBadge(label: Text(verbatim: \"3\"))",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDBadge.init(label:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: label"
+  ]
+}

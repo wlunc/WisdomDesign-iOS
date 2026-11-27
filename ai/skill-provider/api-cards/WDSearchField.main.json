@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDSearchField",
+  "canonicalParam": "text",
+  "symbol": "WDSearchField.init(text:placeholder:leadingIcon:clearAccessibilityLabel:onSubmit:resultCount:announcer:)",
+  "signature": "@MainActor init(text: Binding<String>, placeholder: Text, leadingIcon: WDIconName = .search, clearAccessibilityLabel: Text, onSubmit: (() -> Void)? = nil, resultCount: Int? = nil, announcer: (@MainActor @Sendable (Int) -> Void)? = nil)",
+  "callShape": "WDSearchField(text: $query, placeholder: Text(verbatim: \"Search\"), clearAccessibilityLabel: clearLabel)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDSearchField.init(text:placeholder:leadingIcon:clearAccessibilityLabel:onSubmit:resultCount:announcer:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: text/placeholder/leadingIcon/clearAccessibilityLabel/onSubmit"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDToast",
+  "canonicalParam": "presented",
+  "symbol": "View.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)",
+  "signature": "@MainActor func wdToast(isPresented: Binding<Bool>, variant: WDToastVariant = .neutral, message: Text, action: WDToastAction? = nil, durationMilliseconds: Int = 3000, onDismiss: (() -> Void)? = nil) -> some View",
+  "callShape": "view.wdToast(isPresented: $showing, variant: .success, message: message)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#View.wdToast(isPresented:variant:message:action:durationMilliseconds:onDismiss:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: isPresented/variant/message/action/durationMilliseconds/onDismiss"
+  ]
+}

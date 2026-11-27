@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDAvatar",
+  "canonicalParam": "value",
+  "symbol": "WDAvatar.init(value:)",
+  "signature": "@MainActor init(value: WDAvatarValue)",
+  "callShape": "WDAvatar(value: .init(label: Text(verbatim: \"Mom\")))",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDAvatar.init(value:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: value"
+  ]
+}

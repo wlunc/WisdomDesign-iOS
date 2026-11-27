@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDIconButton",
+  "canonicalParam": "icon",
+  "symbol": "WDIconButton.init(icon:accessibilityLabel:variant:size:isLoading:action:)",
+  "signature": "@MainActor init(icon: WDIconName, accessibilityLabel: Text, variant: WDIconButtonVariant = .plain, size: WDButtonSize = .md, isLoading: Bool = false, action: @escaping () -> Void)",
+  "callShape": "WDIconButton(icon: .more, accessibilityLabel: label) {}",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDIconButton.init(icon:accessibilityLabel:variant:size:isLoading:action:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: icon/accessibilityLabel/variant/size/isLoading/action",
+    "accessibilityLabel is required."
+  ]
+}

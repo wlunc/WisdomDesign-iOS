@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDChip",
+  "canonicalParam": "label",
+  "symbol": "WDChip.init(label:leadingIcon:size:)",
+  "signature": "@MainActor init(label: Text, leadingIcon: WDIconName? = nil, size: WDChipSize = .standard)",
+  "callShape": "WDChip(label: Text(verbatim: \"Filter\"))",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDChip.init(label:leadingIcon:size:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: label/leadingIcon/size"
+  ]
+}

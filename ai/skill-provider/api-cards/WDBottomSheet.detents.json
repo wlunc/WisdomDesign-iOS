@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDBottomSheet",
+  "canonicalParam": "detents",
+  "symbol": "WDBottomSheetDetents",
+  "signature": "enum WDBottomSheetDetents",
+  "callShape": "WDBottomSheetDetents.all",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDBottomSheetDetents",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: enum all / fixed(_:)",
+    "Presented through View.wdSheet, not a standalone view."
+  ]
+}

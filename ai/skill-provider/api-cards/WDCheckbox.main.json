@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDCheckbox",
+  "canonicalParam": "isChecked",
+  "symbol": "WDCheckbox.init(isChecked:label:isIndeterminate:)",
+  "signature": "@MainActor init(isChecked: Binding<Bool>, label: Text, isIndeterminate: Bool = false)",
+  "callShape": "WDCheckbox(isChecked: $checked, label: Text(verbatim: \"Done\"))",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDCheckbox.init(isChecked:label:isIndeterminate:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: isChecked/label"
+  ]
+}

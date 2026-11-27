@@ -455,7 +455,10 @@ function main() {
   // 6. Snapshot provenance: baseline pin, current API hash and stale declaration.
   const iosBaseline = baseline.repositories.ios;
   requireCondition(provider.source.commit === iosBaseline.commit, "provider source commit != M0 baseline");
-  requireCondition(provider.source.dirty === true, "provider source must declare the dirty baseline");
+  // The baseline may be captured clean (after committing) or dirty (isolated WIP).
+  // What must never drift is the declared state vs the baseline record.
+  requireCondition(provider.source.dirty === iosBaseline.dirty,
+    "provider source dirty flag != M0 baseline dirty flag");
   requireCondition(setsEqual(provider.source.dirtyFiles ?? [], iosBaseline.dirtyFiles),
     "provider source dirtyFiles drift");
   requireCondition(provider.source.contentHash === iosBaseline.trackedContentHash,
@@ -482,8 +485,10 @@ function main() {
   const pin = /EXPECTED_API_SHA = "([0-9a-f]{64})"/.exec(generatorSource);
   requireCondition(pin !== null && pin[1] === sources.baseline.apiSnapshotSha256,
     "generator EXPECTED_API_SHA != SOURCES.json baseline hash");
-  requireCondition(sources.baseline.stale === true && Boolean(sources.baseline.currentRepoHead),
-    "SOURCES.json baseline must declare stale + currentRepoHead");
+  requireCondition(typeof sources.baseline.stale === "boolean" && Boolean(sources.baseline.currentRepoHead),
+    "SOURCES.json baseline must declare stale flag + currentRepoHead");
+  requireCondition(sources.baseline.stale === (sources.baseline.apiSnapshotSha256 !== currentApiSha),
+    "SOURCES.json stale flag must match the actual snapshot comparison");
 
   // 7. Coverage declaration (10/37 catalog components + 5 Foundation entry points).
   const catalogIds = catalog.components.map((component) => component.id);

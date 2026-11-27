@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDBottomSheet",
+  "canonicalParam": "presented",
+  "symbol": "View.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)",
+  "signature": "@MainActor func wdSheet<Content, Footer>(isPresented: Binding<Bool>, detents: WDBottomSheetDetents = .all, initialDetent: WDBottomSheetDetent = .half, interactiveDismissDisabled: Bool = false, title: Text? = nil, closeButtonAccessibilityLabel: Text, onCloseButtonTap: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder footer: @escaping () -> Footer) -> some View where Content : View, Footer : View",
+  "callShape": "view.wdSheet(isPresented: $showing) { sheetContent }",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#View.wdSheet(isPresented:detents:initialDetent:interactiveDismissDisabled:title:closeButtonAccessibilityLabel:onCloseButtonTap:onDismiss:content:footer:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: isPresented/detents/initialDetent/interactiveDismissDisabled/title/closeButtonAccessibilityLabel/onCloseButtonTap/onDismiss/@ViewBuilder content/@ViewBuilder footer",
+    "Modifier on the anchor view; there is no WDBottomSheet view."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDTabBar",
+  "canonicalParam": "selection",
+  "symbol": "WDTabBar.init(items:selection:)",
+  "signature": "@MainActor init(items: [WDTabBarItem], selection: Binding<String>)",
+  "callShape": "WDTabBar(items: items, selection: $current)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDTabBar.init(items:selection:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: items/selection"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDBadge",
+  "canonicalParam": "variant",
+  "symbol": "WDBadge.init(label:variant:)",
+  "signature": "@MainActor init(label: Text, variant: WDBadgeVariant)",
+  "callShape": "WDBadge(label: label, variant: .shared)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDBadge.init(label:variant:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: label/variant"
+  ]
+}

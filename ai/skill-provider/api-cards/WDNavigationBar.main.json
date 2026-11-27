@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDNavigationBar",
+  "canonicalParam": "title",
+  "symbol": "WDNavigationBar.init(title:mode:style:backAccessibilityLabel:onBack:actions:followsScroll:)",
+  "signature": "@MainActor init(title: Text, mode: WDNavigationBarMode = .standard, style: WDNavigationBarStyle = .transparent, backAccessibilityLabel: Text? = nil, onBack: (() -> Void)? = nil, actions: [WDNavigationBarAction] = [], followsScroll: Bool = false)",
+  "callShape": "WDNavigationBar(title: Text(verbatim: \"Tasks\"), onBack: { dismiss() })",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDNavigationBar.init(title:mode:style:backAccessibilityLabel:onBack:actions:followsScroll:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: title/mode/style/backAccessibilityLabel/onBack/actions"
+  ]
+}

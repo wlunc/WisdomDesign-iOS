@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDSlider",
+  "canonicalParam": "value",
+  "symbol": "WDSlider.init(value:label:in:step:onEditingChanged:)",
+  "signature": "@MainActor init(value: Binding<Double>, label: Text, in bounds: ClosedRange<Double> = 0...1, step: Double? = nil, onEditingChanged: ((Bool) -> Void)? = nil)",
+  "callShape": "WDSlider(value: $level, label: label, in: 0...1)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDSlider.init(value:label:in:step:onEditingChanged:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: value/label/bounds/step/onEditingChanged"
+  ]
+}

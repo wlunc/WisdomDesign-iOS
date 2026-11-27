@@ -170,18 +170,46 @@
     }
   },
   "componentCoverage": {
-    "specOnly": [],
+    "specOnly": [
+      "WDAssigneePicker"
+    ],
     "experimental": [
+      "WDActionSheet",
+      "WDAlert",
+      "WDAvatar",
+      "WDAvatarStack",
+      "WDBadge",
       "WDBanner",
+      "WDBottomSheet",
       "WDButton",
+      "WDCard",
+      "WDCheckbox",
+      "WDChip",
+      "WDDatePicker",
+      "WDDivider",
       "WDEmptyState",
       "WDFAB",
       "WDFormRow",
+      "WDIcon",
+      "WDIconButton",
       "WDListRow",
       "WDListSection",
+      "WDNavigationBar",
+      "WDPicker",
+      "WDProgressBar",
+      "WDProgressRing",
       "WDPullRefresh",
+      "WDRadio",
+      "WDSearchField",
+      "WDSegmentedControl",
       "WDSkeleton",
-      "WDTextField"
+      "WDSlider",
+      "WDStepper",
+      "WDSwitch",
+      "WDTabBar",
+      "WDTextField",
+      "WDToast",
+      "WDToolbar"
     ],
     "verified": [],
     "unsupported": []

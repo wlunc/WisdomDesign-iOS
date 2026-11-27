@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDDivider",
+  "canonicalParam": "divider",
+  "symbol": "WDDivider.init()",
+  "signature": "@MainActor init()",
+  "callShape": "WDDivider()",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDDivider.init()",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: no arguments"
+  ]
+}

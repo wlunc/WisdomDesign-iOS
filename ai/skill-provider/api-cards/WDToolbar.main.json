@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDToolbar",
+  "canonicalParam": "items",
+  "symbol": "WDToolbar.init(items:accessibilityLabel:overflowAccessibilityLabel:showsTooltips:)",
+  "signature": "@MainActor init(items: [WDToolbarItem], accessibilityLabel: Text, overflowAccessibilityLabel: Text? = nil, showsTooltips: Bool = false)",
+  "callShape": "WDToolbar(items: items, accessibilityLabel: label)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDToolbar.init(items:accessibilityLabel:overflowAccessibilityLabel:showsTooltips:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: items/accessibilityLabel/overflowAccessibilityLabel/showsTooltips"
+  ]
+}

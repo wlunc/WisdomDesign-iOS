@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDStepper",
+  "canonicalParam": "value",
+  "symbol": "WDStepper.init(value:label:in:step:size:unit:)",
+  "signature": "@MainActor init(value: Binding<Int>, label: Text, in bounds: ClosedRange<Int>, step: Int = 1, size: WDStepperSize = .standard, unit: Text? = nil)",
+  "callShape": "WDStepper(value: $count, label: label, in: 1...99)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDStepper.init(value:label:in:step:size:unit:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: value/label/bounds/step/size/unit"
+  ]
+}

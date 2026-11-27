@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDAlert",
+  "canonicalParam": "presented",
+  "symbol": "View.wdAlert(isPresented:title:message:actions:onDismiss:)",
+  "signature": "@MainActor func wdAlert(isPresented: Binding<Bool>, title: Text, message: Text? = nil, actions: [WDAlertAction], onDismiss: (() -> Void)? = nil) -> some View",
+  "callShape": "view.wdAlert(isPresented: $showing, title: title, message: message, actions: actions)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#View.wdAlert(isPresented:title:message:actions:onDismiss:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: isPresented/title/message/actions/onDismiss",
+    "Content overload also exists."
+  ]
+}

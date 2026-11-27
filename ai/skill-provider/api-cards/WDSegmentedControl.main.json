@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDSegmentedControl",
+  "canonicalParam": "selection",
+  "symbol": "WDSegmentedControl.init(items:selection:style:positionText:positionSeparator:)",
+  "signature": "@MainActor init(items: [WDSegmentedControlItem], selection: Binding<String>, style: WDSegmentedControlStyle = .solid, positionText: ((Int, Int) -> Text)? = nil, positionSeparator: Text = Text(verbatim: \"\"))",
+  "callShape": "WDSegmentedControl(items: items, selection: $tab)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDSegmentedControl.init(items:selection:style:positionText:positionSeparator:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: items/selection/style/positionText/positionSeparator",
+    "selection is a String id."
+  ]
+}

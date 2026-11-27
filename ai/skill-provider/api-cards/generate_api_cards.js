@@ -23,7 +23,7 @@ const path = require("node:path");
 const ROOT = path.resolve(path.dirname(fs.realpathSync(__filename)), "..", "..", "..");
 const API = path.join(ROOT, "api", "WisdomUI.api.json");
 const OUT = path.join(ROOT, "ai", "skill-provider", "api-cards");
-const EXPECTED_API_SHA = "123136bdf1f5299d740e1e220c7973eb82914c5df53eb093053ac51469158c34";
+const EXPECTED_API_SHA = "58fb3291f1180552994c9c0ae81331d81adcdea50b0572e8a5837628164c4ce1";
 const EXPECTED_ICON_SHA = "0b2761c4d73ba7e3f5086e7e948e8944c23b9888cc44b97369052f182a6ff761";
 // All cards point at the same pinned snapshot evidence (M0 baseline); the
 // canonical per-card symbol evidence is the api/WisdomUI.api.json entry.

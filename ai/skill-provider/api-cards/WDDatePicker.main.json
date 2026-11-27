@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDDatePicker",
+  "canonicalParam": "date",
+  "symbol": "WDDatePicker.init(date:label:mode:placeholder:quickOptions:in:)",
+  "signature": "@MainActor init(date: Binding<Date?>, label: Text, mode: WDDatePickerMode = .date, placeholder: Text? = nil, quickOptions: [WDDatePickerQuickOption] = [], in bounds: ClosedRange<Date>? = nil)",
+  "callShape": "WDDatePicker(date: $date, label: label, mode: .date)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDDatePicker.init(date:label:mode:placeholder:quickOptions:in:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: date/label/mode/placeholder/quickOptions/bounds"
+  ]
+}

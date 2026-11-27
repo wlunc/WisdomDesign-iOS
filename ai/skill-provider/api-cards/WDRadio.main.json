@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDRadio",
+  "canonicalParam": "selection",
+  "symbol": "WDRadio.init(selection:label:options:)",
+  "signature": "@MainActor init(selection: Binding<String>, label: Text, options: [WDRadioOption])",
+  "callShape": "WDRadio(selection: $choice, label: label, options: options)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDRadio.init(selection:label:options:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: selection/label/options"
+  ]
+}

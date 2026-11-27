@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDProgressRing",
+  "canonicalParam": "value",
+  "symbol": "WDProgressRing.init(value:size:label:valueText:)",
+  "signature": "@MainActor init(value: Double, size: WDProgressRingSize = .standard, label: Text? = nil, valueText: Text? = nil)",
+  "callShape": "WDProgressRing(value: 0.8, size: .standard)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDProgressRing.init(value:size:label:valueText:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: value/size/label/valueText"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDCard",
+  "canonicalParam": "content",
+  "symbol": "WDCard.init(style:content:)",
+  "signature": "@MainActor init(style: WDCardStyle = .elevated, @ViewBuilder content: () -> Content)",
+  "callShape": "WDCard(style: .elevated) { content }",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDCard.init(style:content:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: style/@ViewBuilder content (default .elevated)",
+    "Three init overloads: plain, action, and media."
+  ]
+}

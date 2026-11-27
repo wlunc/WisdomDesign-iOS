@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDSlider",
+  "canonicalParam": "range",
+  "symbol": "WDSlider.init(range:label:in:step:onEditingChanged:showsValueLabel:rangeText:lowerAccessibilityLabel:upperAccessibilityLabel:rangeAnnouncementText:)",
+  "signature": "@MainActor init(range: Binding<ClosedRange<Double>>, label: Text, in bounds: ClosedRange<Double> = 0...1, step: Double? = nil, onEditingChanged: ((Bool) -> Void)? = nil, showsValueLabel: Bool = false, rangeText: ((ClosedRange<Double>) -> Text)? = nil, lowerAccessibilityLabel: Text? = nil, upperAccessibilityLabel: Text? = nil, rangeAnnouncementText: ((ClosedRange<Double>) -> Text)? = nil)",
+  "callShape": "WDSlider(range: $span, label: label, in: 0...1)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDSlider.init(range:label:in:step:onEditingChanged:showsValueLabel:rangeText:lowerAccessibilityLabel:upperAccessibilityLabel:rangeAnnouncementText:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: range/label/bounds/step/onEditingChanged/showsValueLabel",
+    "Use for a two-handle range."
+  ]
+}

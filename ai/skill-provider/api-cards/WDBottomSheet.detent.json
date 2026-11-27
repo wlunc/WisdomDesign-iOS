@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDBottomSheet",
+  "canonicalParam": "initialDetent",
+  "symbol": "WDBottomSheetDetent",
+  "signature": "enum WDBottomSheetDetent",
+  "callShape": "WDBottomSheetDetent.half",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDBottomSheetDetent",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: enum half / large"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "ios",
+  "component": "WDAvatar",
+  "canonicalParam": "size",
+  "symbol": "WDAvatar.init(value:size:isOnline:isDisabled:tone:hostColor:)",
+  "signature": "@MainActor init(value: WDAvatarValue, size: WDAvatarSize, isOnline: Bool = false, isDisabled: Bool = false, tone: WDMemberTone? = nil, hostColor: Color? = nil)",
+  "callShape": "WDAvatar(value: value, size: .md, isOnline: true)",
+  "evidence": "discovered",
+  "sourceRefs": [
+    "api/WisdomUI.api.json#WDAvatar.init(value:size:isOnline:isDisabled:tone:hostColor:)",
+    "ai/skill-provider/api-cards/SOURCES.json#/baseline/apiSnapshotSha256"
+  ],
+  "limitations": [
+    "Public symbol graph only; overloads and associated types preserved verbatim.",
+    "iOS label mapping: value/size/isOnline/isDisabled/tone/hostColor"
+  ]
+}
