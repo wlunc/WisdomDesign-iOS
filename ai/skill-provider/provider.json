@@ -3,7 +3,7 @@
   "id": "ios",
   "displayName": "WisdomDesign iOS SwiftUI Provider",
   "library": "WisdomUI",
-  "libraryVersion": "1.0.0 (source baseline c3c32f3c81f66444abd10614acfc0095f80aebd6)",
+  "libraryVersion": "0.0.1 (source baseline ce8f39dce51b4d53c9ed870f29f1c68efd15ed8f)",
   "source": {
     "repository": "iOS",
     "commit": "ce8f39dce51b4d53c9ed870f29f1c68efd15ed8f",
